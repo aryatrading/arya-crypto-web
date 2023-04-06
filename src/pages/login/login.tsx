@@ -5,8 +5,7 @@ import { useTheme } from "next-themes";
 
 const Login: FC = () => {
   const user = useSelector((state: UserState) => state);
-  const { systemTheme, theme, setTheme } = useTheme();
-  const currentTheme = theme === "system" ? systemTheme : theme;
+  const { theme, setTheme } = useTheme();
 
   return (
     <div>
