@@ -1,11 +1,20 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { UserState } from "../../types/user";
+import { User } from "../../types/user";
 import { useTheme } from "next-themes";
+import { getUser } from "../../controllers/user";
+import { fetchAsset } from "../../controllers/market";
 
 const Login: FC = () => {
-  const user = useSelector((state: UserState) => state);
+  const user = useSelector((state: User) => state);
   const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    (async () => {
+      // await fetchAsset("ETH", "1min");
+      getUser();
+    })();
+  }, []);
 
   return (
     <div>
