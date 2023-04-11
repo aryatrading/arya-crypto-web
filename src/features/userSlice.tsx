@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { UserState } from "../../types/user";
+import { User } from "../types/user";
 
-const initialState: UserState = {
+const initialState: User = {
   email: null,
   userId: null,
   firebaseId: null,
@@ -13,7 +13,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    addUser: (state: UserState, action) => {
+    addUser: (state: User, action) => {
       state.email = action.payload.email;
       state.userId = action.payload.user_id;
       state.firebaseId = action.payload.firebase_id;
