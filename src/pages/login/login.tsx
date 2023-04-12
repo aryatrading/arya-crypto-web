@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { User } from "../../types/user";
 import { useTheme } from "next-themes";
 import { getUser } from "../../controllers/user";
-import { fetchAsset } from "../../controllers/market";
 
 const Login: FC = () => {
   const user = useSelector((state: User) => state);
@@ -11,10 +10,13 @@ const Login: FC = () => {
 
   useEffect(() => {
     (async () => {
-      // await fetchAsset("ETH", "1min");
       getUser();
     })();
   }, []);
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   return (
     <div>

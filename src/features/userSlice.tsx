@@ -13,16 +13,16 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    addUser: (state: User, action) => {
-      state.email = action.payload.email;
-      state.userId = action.payload.user_id;
-      state.firebaseId = action.payload.firebase_id;
-      state.knownKeys = action.payload.known_keys;
-      state.subscription = action.payload.subscription;
+    setUser: (state: User, action) => {
+      state.email = action.payload.data.email;
+      state.userId = action.payload.data.user_id;
+      state.firebaseId = action.payload.data.firebase_id;
+      state.knownKeys = action.payload.data.known_keys;
+      state.subscription = action.payload.data.subscription;
     },
   },
 });
 
-export const { addUser } = userSlice.actions;
+export const { setUser } = userSlice.actions;
 
 export default userSlice.reducer;

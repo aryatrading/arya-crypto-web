@@ -3,6 +3,8 @@ import { store } from "./store/store";
 import { Provider } from "react-redux";
 import Login from "./pages/login/login";
 import { ThemeProvider } from "next-themes";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App: FC = () => {
   return (
@@ -10,6 +12,7 @@ const App: FC = () => {
       <Provider store={store}>
         <Login />
       </Provider>
+      <ToastContainer />
     </ThemeProvider>
   );
 };
