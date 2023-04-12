@@ -3,51 +3,48 @@ import { Provider } from "react-redux";
 import { NextPage } from "next";
 import { wrapper } from "../services/redux/store";
 import { AppProps } from "next/app";
-import "./index.css"
-import initAuth from '../initFirebaseAuth';
+import "./index.css";
+import initAuth from "../initFirebaseAuth";
 import { ThemeProvider } from "next-themes";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../services/firebase/auth/config";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Navbar from "../components/layout/navbar";
 
 /*
  *  Don't dispatch actions from pages/_app this mode is not compatible with Next.js 9's Auto Partial Static Export feature
-*/
+ */
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-    getLayout?: (page: ReactElement) => ReactNode
-}
-
+  getLayout?: (page: ReactElement) => ReactNode;
+};
 
 type AppPropsWithLayout = AppProps & {
-    Component: NextPageWithLayout
-}
+  Component: NextPageWithLayout;
+};
 
-initAuth()
-
+initAuth();
 
 try {
-    initializeApp(firebaseConfig);
+  initializeApp(firebaseConfig);
 } catch (err) {
-    console.error(err);
+  console.error(err);
 }
 
 export default function App({ Component, ...pageProps }: AppPropsWithLayout) {
+  const { store, props } = wrapper.useWrappedStore(pageProps);
 
-    const { store, props } = wrapper.useWrappedStore(pageProps);
+  // Use the layout defined at the page level, if available
+  const getLayout = Component.getLayout || ((page) => page);
 
-    // Use the layout defined at the page level, if available
-    const getLayout = Component.getLayout || ((page) => page)
-
-    return getLayout(
-        <Provider store={store}>
-            <ThemeProvider attribute="class">
-                <Component {...props.pageProps} />
-            </ThemeProvider>
+  return getLayout(
+    <Provider store={store}>
+      <ThemeProvider attribute="class">
+        <Navbar />
+        <Component {...props.pageProps} />
+      </ThemeProvider>
       <ToastContainer />
-        </Provider>
-    )
-};
-
+    </Provider>
+  );
+}
