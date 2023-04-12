@@ -8,6 +8,8 @@ import initAuth from '../initFirebaseAuth';
 import { ThemeProvider } from "next-themes";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../services/firebase/auth/config";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 /*
@@ -44,6 +46,7 @@ export default function App({ Component, ...pageProps }: AppPropsWithLayout) {
             <ThemeProvider attribute="class">
                 <Component {...props.pageProps} />
             </ThemeProvider>
+      <ToastContainer />
         </Provider>
     )
 };

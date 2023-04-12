@@ -1,15 +1,19 @@
 import axios from "axios";
+import { token } from "../constant";
 
-export let instance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
   timeout: 5000,
   headers: {
-    authorization: `Bearer {token here}`,
+    "Access-Control-Allow-Origin": "*",
+    // TODO: update token to read from firebase when integrated
+    authorization: `Bearer ${token}`,
+    "X-AryaCrypto-Version": "1 web",
   },
 });
 
 // Intercept request
-instance.interceptors.request.use(
+axiosInstance.interceptors.request.use(
   function (config) {
     return config;
   },
@@ -19,7 +23,7 @@ instance.interceptors.request.use(
 );
 
 // Intercept response
-instance.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
