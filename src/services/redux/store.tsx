@@ -1,7 +1,7 @@
 import { configureStore, ThunkAction, Action, Store } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 
-import userReducer from "./user/userSlice";
+import userReducer from "./userSlice";
 
 export function makeStore() {
   return configureStore({

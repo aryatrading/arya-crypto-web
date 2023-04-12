@@ -89,7 +89,7 @@ const Login: FC = () => {
                                 <p>Forgot Password?</p>
                             </Link>
                         </div>
-                        <Button className='bw-btn btn' type="submit" disabled={disabledBtn}>
+                        <Button className='bw-btn btn' type="submit" disabled={disabledBtn} isLoading={isSubmitting}>
                             <h5>
                                 Login
                             </h5>
