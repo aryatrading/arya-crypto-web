@@ -1,10 +1,13 @@
+import { toast } from "react-toastify";
 import { instance } from "../api";
+import { store } from "../store/store";
+import { setUser } from "../features/userSlice";
 
 export const getUser = async () => {
   try {
-    let user = await instance.get("/user/");
-    console.log(user);
+    let { data } = await instance.get("/user/");
+    store.dispatch(setUser({ data }));
   } catch (error: any) {
-    console.log(error);
+    toast.error(error.message);
   }
 };

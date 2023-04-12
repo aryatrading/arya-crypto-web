@@ -2,14 +2,13 @@ import axios from "axios";
 import { token } from "../constant";
 
 export const instance = axios.create({
-  // baseURL: process.env.REACT_APP_BASE_URL,
-  baseURL: "http://172.16.0.247:8080",
+  baseURL: process.env.REACT_APP_BASE_URL,
   timeout: 5000,
   headers: {
     "Access-Control-Allow-Origin": "*",
     // TODO: update token to read from firebase when integrated
     authorization: `Bearer ${token}`,
-    "X-Arya-Crypto-Version": "1.0.0 web",
+    "X-AryaCrypto-Version": "1 web",
   },
 });
 
