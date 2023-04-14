@@ -6,7 +6,7 @@ import { icons } from "../../assets/navbar_icons/icons";
 
 export default function Navbar() {
   return (
-    <div className="flex flex-wrap bg-[#171717] w-5/12 h-14 rounded-2xl items-center mx-auto px-4 justify-between fixed top-5 left-0 right-0">
+    <div className="flex flex-wrap bg-[#171717] w-5/12 h-14 rounded-2xl items-center mx-auto px-4 justify-between  mt-5">
       <div className="grid grid-flow-col gap-7 items-center">
         <Link href={"/login"}>
           <Image src={images.logoIcon} alt="logo" />
@@ -31,7 +31,7 @@ export default function Navbar() {
           }
         />
         <NavLinkItem
-          linkto="/home"
+          linkto="/market"
           navTitle="Market"
           navIcon={
             <Image src={icons.market} alt="logo" width={20} height={20} />
