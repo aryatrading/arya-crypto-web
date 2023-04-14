@@ -1,5 +1,4 @@
 import axios from "axios";
-import { token } from "../constant";
 
 export const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
@@ -7,7 +6,7 @@ export const axiosInstance = axios.create({
   headers: {
     "Access-Control-Allow-Origin": "*",
     // TODO: update token to read from firebase when integrated
-    authorization: `Bearer ${token}`,
+    authorization: `Bearer {token here}`,
     "X-AryaCrypto-Version": "1 web",
   },
 });
