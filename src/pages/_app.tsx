@@ -1,16 +1,19 @@
+import { appWithTranslation } from 'next-i18next';
 import { ReactNode, ReactElement } from "react";
-import { Provider } from "react-redux";
-import { NextPage } from "next";
-import { wrapper } from "../services/redux/store";
-import { AppProps } from "next/app";
-import "./index.css";
-import initAuth from "../initFirebaseAuth";
+import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "next-themes";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../services/firebase/auth/config";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Provider } from "react-redux";
+import { NextPage } from "next";
+import { AppProps } from "next/app";
 import Navbar from "../components/layout/navbar";
+import "react-toastify/dist/ReactToastify.css";
+
+import { firebaseConfig } from "../services/firebase/auth/config";
+import { wrapper } from "../services/redux/store";
+import initAuth from '../initFirebaseAuth';
+
+import "./index.css"
 
 /*
  *  Don't dispatch actions from pages/_app this mode is not compatible with Next.js 9's Auto Partial Static Export feature
@@ -32,11 +35,12 @@ try {
   console.error(err);
 }
 
-export default function App({ Component, ...pageProps }: AppPropsWithLayout) {
+function App({ Component, ...pageProps }: AppPropsWithLayout) {
+
   const { store, props } = wrapper.useWrappedStore(pageProps);
 
   // Use the layout defined at the page level, if available
-  const getLayout = Component.getLayout || ((page) => page);
+  const getLayout = Component.getLayout || ((page: any) => page)
 
   return getLayout(
     <Provider store={store}>
@@ -46,5 +50,7 @@ export default function App({ Component, ...pageProps }: AppPropsWithLayout) {
       </ThemeProvider>
       <ToastContainer />
     </Provider>
-  );
-}
+  )
+};
+
+export default appWithTranslation(App)
