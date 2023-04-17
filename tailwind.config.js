@@ -27,7 +27,8 @@ module.exports = {
       grey_four: "#2B3958",
       black_two: "#0E1421",
       black_one: "#030712",
-      yellow_one: "#F3BA2F"
+      yellow_one: "#F3BA2F",
+      white: "#F9FAFB"
     }
   },
   plugins: [
