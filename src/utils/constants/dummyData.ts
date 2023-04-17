@@ -2,7 +2,7 @@ export const dummyMarket = [
   {
     rank: 1,
     name: "Bitcoin BTC",
-    current: "$28,183.46",
+    currentPrice: "$28,183.46",
     price: "0.00001357",
     mrkCap: "$594,578,464,338",
     volume: "$20,092,156,991",
@@ -12,7 +12,7 @@ export const dummyMarket = [
   {
     rank: 2,
     name: "Ethereum ETH",
-    current: "$2,107.84",
+    currentPrice: "$2,107.84",
     price: "0.00001357",
     mrkCap: "$253,380,940,858",
     volume: "$17,906,517,818",
@@ -22,7 +22,7 @@ export const dummyMarket = [
   {
     rank: 3,
     name: "Tether USDT",
-    current: "$1",
+    currentPrice: "$1",
     price: "0.00001357",
     mrkCap: "$80,788,288,009",
     volume: "$36,593,694,260",
@@ -32,7 +32,7 @@ export const dummyMarket = [
   {
     rank: 4,
     name: "BNB BNB",
-    current: "$333.03",
+    currentPrice: "$333.03",
     price: "0.00001357",
     mrkCap: "$52,533,803,669",
     volume: "$598,280,771",
@@ -42,7 +42,7 @@ export const dummyMarket = [
   {
     rank: 1,
     name: "Bitcoin BTC",
-    current: "$28,183.46",
+    currentPrice: "$28,183.46",
     price: "0.00001357",
     mrkCap: "$594,578,464,338",
     volume: "$20,092,156,991",
@@ -52,7 +52,7 @@ export const dummyMarket = [
   {
     rank: 2,
     name: "Ethereum ETH",
-    current: "$2,107.84",
+    currentPrice: "$2,107.84",
     price: "0.00001357",
     mrkCap: "$253,380,940,858",
     volume: "$17,906,517,818",
@@ -62,7 +62,7 @@ export const dummyMarket = [
   {
     rank: 3,
     name: "Tether USDT",
-    current: "$1",
+    currentPrice: "$1",
     price: "0.00001357",
     mrkCap: "$80,788,288,009",
     volume: "$36,593,694,260",
@@ -72,7 +72,7 @@ export const dummyMarket = [
   {
     rank: 4,
     name: "BNB BNB",
-    current: "$333.03",
+    currentPrice: "$333.03",
     price: "0.00001357",
     mrkCap: "$52,533,803,669",
     volume: "$598,280,771",
@@ -82,7 +82,7 @@ export const dummyMarket = [
   {
     rank: 1,
     name: "Bitcoin BTC",
-    current: "$28,183.46",
+    currentPrice: "$28,183.46",
     price: "0.00001357",
     mrkCap: "$594,578,464,338",
     volume: "$20,092,156,991",
@@ -92,7 +92,7 @@ export const dummyMarket = [
   {
     rank: 2,
     name: "Ethereum ETH",
-    current: "$2,107.84",
+    currentPrice: "$2,107.84",
     price: "0.00001357",
     mrkCap: "$253,380,940,858",
     volume: "$17,906,517,818",
@@ -102,7 +102,7 @@ export const dummyMarket = [
   {
     rank: 3,
     name: "Tether USDT",
-    current: "$1",
+    currentPrice: "$1",
     price: "0.00001357",
     mrkCap: "$80,788,288,009",
     volume: "$36,593,694,260",
@@ -112,7 +112,7 @@ export const dummyMarket = [
   {
     rank: 4,
     name: "BNB BNB",
-    current: "$333.03",
+    currentPrice: "$333.03",
     price: "0.00001357",
     mrkCap: "$52,533,803,669",
     volume: "$598,280,771",
@@ -122,7 +122,7 @@ export const dummyMarket = [
   {
     rank: 1,
     name: "Bitcoin BTC",
-    current: "$28,183.46",
+    currentPrice: "$28,183.46",
     price: "0.00001357",
     mrkCap: "$594,578,464,338",
     volume: "$20,092,156,991",
@@ -132,7 +132,7 @@ export const dummyMarket = [
   {
     rank: 2,
     name: "Ethereum ETH",
-    current: "$2,107.84",
+    currentPrice: "$2,107.84",
     price: "0.00001357",
     mrkCap: "$253,380,940,858",
     volume: "$17,906,517,818",
@@ -142,7 +142,7 @@ export const dummyMarket = [
   {
     rank: 3,
     name: "Tether USDT",
-    current: "$1",
+    currentPrice: "$1",
     price: "0.00001357",
     mrkCap: "$80,788,288,009",
     volume: "$36,593,694,260",
@@ -152,7 +152,7 @@ export const dummyMarket = [
   {
     rank: 4,
     name: "BNB BNB",
-    current: "$333.03",
+    currentPrice: "$333.03",
     price: "0.00001357",
     mrkCap: "$52,533,803,669",
     volume: "$598,280,771",
@@ -162,7 +162,7 @@ export const dummyMarket = [
   {
     rank: 1,
     name: "Bitcoin BTC",
-    current: "$28,183.46",
+    currentPrice: "$28,183.46",
     price: "0.00001357",
     mrkCap: "$594,578,464,338",
     volume: "$20,092,156,991",
@@ -172,7 +172,7 @@ export const dummyMarket = [
   {
     rank: 2,
     name: "Ethereum ETH",
-    current: "$2,107.84",
+    currentPrice: "$2,107.84",
     price: "0.00001357",
     mrkCap: "$253,380,940,858",
     volume: "$17,906,517,818",
@@ -182,7 +182,7 @@ export const dummyMarket = [
   {
     rank: 3,
     name: "Tether USDT",
-    current: "$1",
+    currentPrice: "$1",
     price: "0.00001357",
     mrkCap: "$80,788,288,009",
     volume: "$36,593,694,260",
@@ -192,7 +192,7 @@ export const dummyMarket = [
   {
     rank: 4,
     name: "BNB BNB",
-    current: "$333.03",
+    currentPrice: "$333.03",
     price: "0.00001357",
     mrkCap: "$52,533,803,669",
     volume: "$598,280,771",
@@ -202,7 +202,7 @@ export const dummyMarket = [
   {
     rank: 1,
     name: "Bitcoin BTC",
-    current: "$28,183.46",
+    currentPrice: "$28,183.46",
     price: "0.00001357",
     mrkCap: "$594,578,464,338",
     volume: "$20,092,156,991",
@@ -212,7 +212,7 @@ export const dummyMarket = [
   {
     rank: 2,
     name: "Ethereum ETH",
-    current: "$2,107.84",
+    currentPrice: "$2,107.84",
     price: "0.00001357",
     mrkCap: "$253,380,940,858",
     volume: "$17,906,517,818",
@@ -222,7 +222,7 @@ export const dummyMarket = [
   {
     rank: 3,
     name: "Tether USDT",
-    current: "$1",
+    currentPrice: "$1",
     price: "0.00001357",
     mrkCap: "$80,788,288,009",
     volume: "$36,593,694,260",
@@ -232,7 +232,7 @@ export const dummyMarket = [
   {
     rank: 4,
     name: "BNB BNB",
-    current: "$333.03",
+    currentPrice: "$333.03",
     price: "0.00001357",
     mrkCap: "$52,533,803,669",
     volume: "$598,280,771",
@@ -242,7 +242,7 @@ export const dummyMarket = [
   {
     rank: 1,
     name: "Bitcoin BTC",
-    current: "$28,183.46",
+    currentPrice: "$28,183.46",
     price: "0.00001357",
     mrkCap: "$594,578,464,338",
     volume: "$20,092,156,991",
@@ -252,7 +252,7 @@ export const dummyMarket = [
   {
     rank: 2,
     name: "Ethereum ETH",
-    current: "$2,107.84",
+    currentPrice: "$2,107.84",
     price: "0.00001357",
     mrkCap: "$253,380,940,858",
     volume: "$17,906,517,818",
@@ -262,7 +262,7 @@ export const dummyMarket = [
   {
     rank: 3,
     name: "Tether USDT",
-    current: "$1",
+    currentPrice: "$1",
     price: "0.00001357",
     mrkCap: "$80,788,288,009",
     volume: "$36,593,694,260",
@@ -272,7 +272,7 @@ export const dummyMarket = [
   {
     rank: 4,
     name: "BNB BNB",
-    current: "$333.03",
+    currentPrice: "$333.03",
     price: "0.00001357",
     mrkCap: "$52,533,803,669",
     volume: "$598,280,771",
@@ -280,3 +280,6 @@ export const dummyMarket = [
     isFavorite: true,
   },
 ];
+function AssetType() {
+  throw new Error("Function not implemented.");
+}

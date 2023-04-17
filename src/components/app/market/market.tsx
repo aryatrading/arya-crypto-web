@@ -3,6 +3,10 @@ import { Col, Row } from "../../shared/layout/flex";
 import MarketStats from "../../shared/containers/marketStats";
 import { AssetsTable } from "../../shared/tables/assetsTable";
 import { SearchInput } from "../../shared/inputs/searchInputs";
+import { dummyMarket } from "../../../utils/constants/dummyData";
+import { AssetType } from "../../../types/asset";
+import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
+import { ShadowButton } from "../../shared/buttons/shadow_button";
 
 const Market: FC = () => {
   const [title, setTitle] = useState("Cryptocurrencies");
@@ -27,9 +31,15 @@ const Market: FC = () => {
         </Row>
         <Row className="w-2/4 justify-between mt-8 mb-2 align-center">
           <SearchInput onChange={() => console.log("d")} placeholder=":" />
-          <h1>toggle</h1>
+          <Row className="gap-2">
+            <ShadowButton title="All" />
+            <ShadowButton title="Favorites" />
+          </Row>
         </Row>
-        <AssetsTable />
+        {/* <AssetsTable
+          header={marketAssetsHeader}
+          assets={dummyMarket as unknown as AssetType}
+        /> */}
       </Col>
     </div>
   );

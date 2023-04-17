@@ -1,15 +1,21 @@
-import { dummyMarket } from "../../../utils/constants/dummyData";
+import { FC } from "react";
+import { AssetType } from "../../../types/asset";
 import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
 import AssetPnl from "../containers/assetPnl";
 import { Col } from "../layout/flex";
 
-export const AssetsTable = () => {
+type AssetsTableProps = {
+  assets: AssetType[];
+  header: String[];
+};
+
+export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
   return (
     <Col className="flex items-center justify-center flex-1 gap-10 w-2/4">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            {marketAssetsHeader.map((elm, index) => {
+            {header.map((elm, index) => {
               return (
                 <th
                   key={index}
@@ -29,7 +35,7 @@ export const AssetsTable = () => {
           </tr>
         </thead>
         <tbody>
-          {dummyMarket.map((elm, index) => {
+          {assets.map((elm, index) => {
             return (
               <tr key={index}>
                 <th
@@ -49,7 +55,7 @@ export const AssetsTable = () => {
                   />
                 </td>
                 <td className="font-medium leading-6 text-white">
-                  {elm.current}
+                  {elm.currentPrice}
                 </td>
                 <td className="font-medium leading-6 text-white">
                   {elm.price}
