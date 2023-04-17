@@ -48,10 +48,8 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                 <td>
                   <AssetPnl
                     value={elm.pnl > 0 ? `+${elm.pnl}` : elm.pnl}
-                    bgColor={elm.pnl <= 0 ? "bg-[#440C10]" : "bg-[#0E3F2D]"}
-                    textColor={
-                      elm.pnl <= 0 ? "text-[#F2323F]" : "text-[#22C55E]"
-                    }
+                    bgColor={elm.pnl <= 0 ? "bg-red_two" : "bg-green_two"}
+                    textColor={elm.pnl <= 0 ? "text-red_one" : "text-green_one"}
                   />
                 </td>
                 <td className="font-medium leading-6 text-white">
