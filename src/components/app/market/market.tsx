@@ -20,15 +20,16 @@ const Market: FC = () => {
         </p>
         {tab === "all" ? (
           <Row className="w-full items-center justify-center mb-10">
+            {/* TODO: update hardcoded color values */}
             <MarketStats
-              bgColor="bg-[#0E3F2D]"
-              textColor="text-[#22C55E]"
+              bgColor="bg-green_two"
+              textColor="text-green_one"
               value="+8.15"
               title="Market Cap"
             />
             <MarketStats
-              bgColor="bg-[#440C10]"
-              textColor="text-[#F2323F]"
+              bgColor="bg-red_two"
+              textColor="text-red_one"
               value="-3.75"
               title="Volume 24H"
             />
