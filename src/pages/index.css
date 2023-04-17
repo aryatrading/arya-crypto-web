@@ -3,7 +3,7 @@
 @tailwind utilities;
 @layer base {
   body {
-    @apply dark:bg-gray-800 bg-white;
+    @apply dark:dark:bg-black bg-white;
   }
 }
 
@@ -40,4 +40,8 @@ code {
 .bw-btn {
   background-color: #558AF2;
   color: white;
+}
+
+.header-label {
+  font-size: 24px;
 }
