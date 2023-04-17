@@ -4,10 +4,10 @@ import Layout from '../../components/layout/layout'
 import PageLoader from '../../components/shared/pageLoader/pageLoader'
 
 
-const LoginPage = () => {
+const LoginPage = (props: any) => {
   return (
     <Layout >
-      <Login/>
+      <Login />
     </Layout>
   )
 }
@@ -17,5 +17,5 @@ export default withAuthUser({
   // whenAuthed: AuthAction.REDIRECT_TO_APP,
   // whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
   // whenUnauthedAfterInit: AuthAction.RENDER,
-  LoaderComponent: PageLoader,
+  // LoaderComponent: PageLoader,
 })(LoginPage)
