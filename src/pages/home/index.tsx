@@ -1,9 +1,9 @@
 import { withAuthUser, AuthAction } from 'next-firebase-auth'
+import { getAuth, signOut } from 'firebase/auth'
 import Layout from '../../components/layout/layout'
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { GetStaticProps } from 'next';
-
 
 const HomePage = (props: any) => {
 
@@ -17,8 +17,8 @@ const HomePage = (props: any) => {
 }
 
 export default withAuthUser({
-    whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-    authPageURL: '/login/',
+    // whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+    // authPageURL: '/login/',
 })(HomePage)
 
 
