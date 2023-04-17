@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { Col, Row } from "../../shared/layout/flex";
 import MarketStats from "../../shared/containers/marketStats";
 import { AssetsTable } from "../../shared/tables/assetsTable";
+import { SearchInput } from "../../shared/inputs/searchInputs";
 
 const Market: FC = () => {
   const [title, setTitle] = useState("Cryptocurrencies");
@@ -23,6 +24,10 @@ const Market: FC = () => {
             value="-3.75"
             title="Volume 24H"
           />
+        </Row>
+        <Row className="w-2/4 justify-between mt-8 mb-2 align-center">
+          <SearchInput onChange={() => console.log("d")} placeholder=":" />
+          <h1>toggle</h1>
         </Row>
         <AssetsTable />
       </Col>
