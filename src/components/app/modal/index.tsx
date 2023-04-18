@@ -3,8 +3,8 @@ import { Modal } from 'flowbite';
 
 import Button from "../../shared/buttons/button";
 import { Col } from "../../shared/layout/flex";
-import Login from "../../../pages/login";
-import Signup from "../../../pages/signup";
+import Login from "../../../components/app/login/login";
+import Signup from "../../../components/app/signup/signup";
 
 const ModalComponent: FC = () => {
     const [modalTrigger, setModalTrigger] = useState<any>();

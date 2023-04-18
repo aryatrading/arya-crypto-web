@@ -3,6 +3,7 @@ import { ErrorMessage, Form, Formik } from "formik";
 import Image from "next/image";
 import Link from "next/link";
 import * as Yup from 'yup';
+import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
 import Button from "../../shared/buttons/button";
@@ -16,6 +17,7 @@ import { useAuthModal } from "../../../context/authModal.context";
 import styles from './login.module.scss';
 
 const Login: FC<any> = (props: any) => {
+    const {t} = useTranslation(['auth', 'common']);
     const {hideModal} = useAuthModal();
     const router = useRouter();
     const [is2FALoading, setIs2FALoading] = useState<boolean>(false)
@@ -74,11 +76,11 @@ const Login: FC<any> = (props: any) => {
                 {({ isSubmitting }) => (
                     <Form className="flex flex-col w-full gap-4">
                         <Col>
-                            <TextInput type="email" name="email" label="Email" />
+                            <TextInput type="email" name="email" label={t('common:email')} />
                             <ErrorMessage name="email" component="p" className="text-red-400" />
                         </Col>
                         <Col>
-                            <TextInput type="password" name="password" label="Password" />
+                            <TextInput type="password" name="password" label={t('common:password')} />
                             <ErrorMessage name="password" component="p" className="text-red-400" />
                         </Col>
                         <div className='wb-100 aife self-end font-semibold text-sm'>
@@ -86,15 +88,13 @@ const Login: FC<any> = (props: any) => {
                                 hideModal();
                                 router.push('/forgot-password');
                             }}>
-                                <p>Forgot Password?</p>
+                                <p>{t('forgetPassword')}</p>
                             </Button>
                         </div>
                         <Col className="items-center gap-4">
                             {errorForm && <span className='text-red-600'>{(errorForm || 'Invalid email or password!')}</span>}
                             <Button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
-                                <h5>
-                                    Sign In
-                                </h5>
+                                <h5>{t('common:signin')}</h5>
                             </Button>
                         </Col>
 
@@ -102,7 +102,7 @@ const Login: FC<any> = (props: any) => {
                 )}
             </Formik>
         )
-    }, [errorForm, hideModal, loginFormSchema, router])
+    }, [errorForm, hideModal, loginFormSchema, router, t])
 
     return (
         <Row className='h-full items-center justify-center'>
@@ -110,13 +110,13 @@ const Login: FC<any> = (props: any) => {
                 <Col className="justify-start w-full max-w-[400px] gap-8">
                     <Row className="items-center gap-4">
                         <Image src={images.logoIcon} alt="Arya_Crypto" />
-                        <h1 className="font-extrabold dark:text-white header-label">Login to ARYA Crypto</h1>
+                        <h1 className="font-extrabold dark:text-white header-label">{t('loginHeader')}</h1>
                     </Row>
                     {loginForm}
                     <Col className='gap-6 items-center justify-center'>
                         <Row className="w-full items-center gap-3">
                             <Col className={styles['left-border-side']} />
-                            <h6 className="font-semibold text-lg">OR</h6>
+                            <h6 className="font-semibold text-lg">{t('or')}</h6>
                             <Col className={styles['left-border-side']} />
                         </Row>
                         <Row className="gap-8">
@@ -130,11 +130,11 @@ const Login: FC<any> = (props: any) => {
                             </Button>
                         </Row>
                         <Row className="gap-1 font-semibold text-sm">
-                            <h5 className="">New to Arya crypto?</h5>
+                            <h5 className="">{t('newToCrypto')}</h5>
                             {props.changeSection ? 
-                            <Button onClick={() => props.changeSection('signup')} className={styles.signupLabel}><h5>Signup</h5></Button>
+                            <Button onClick={() => props.changeSection('signup')} className={styles.signupLabel}><h5>{t('common:signup')}</h5></Button>
                             :
-                                <Link href={'/signup'} className={styles.signupLabel}><h5>Signup</h5></Link>
+                                <Link href={'/signup'} className={styles.signupLabel}><h5>{t('common:signup')}</h5></Link>
                             }
                         </Row>
                     </Col>

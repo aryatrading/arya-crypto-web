@@ -1,7 +1,8 @@
-import { withAuthUser, AuthAction } from 'next-firebase-auth'
+import { GetStaticProps } from 'next'
+import { withAuthUser } from 'next-firebase-auth'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Login from '../../components/app/login/login'
 import Layout from '../../components/layout/layout'
-import PageLoader from '../../components/shared/pageLoader/pageLoader'
 
 
 const LoginPage = (props: any) => {
@@ -19,3 +20,13 @@ export default withAuthUser({
   // whenUnauthedAfterInit: AuthAction.RENDER,
   // LoaderComponent: PageLoader,
 })(LoginPage)
+
+export const getStaticProps: GetStaticProps<any> = async ({
+  locale,
+}) => ({
+  props: {
+      ...(await serverSideTranslations(locale ?? 'en', [
+          'common', 'auth',
+      ])),
+  },
+})
