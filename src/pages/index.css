@@ -3,13 +3,13 @@
 @tailwind utilities;
 @layer base {
   body {
-    @apply dark:bg-gray-800 bg-white;
+    @apply dark:bg-black_one bg-white;
   }
 }
 
 @layer components {
     #__next {
-        @apply h-full w-full;
+        @apply h-full w-full container flex flex-col gap-5 mx-auto;
     }
     html,
     body {

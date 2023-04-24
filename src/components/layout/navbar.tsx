@@ -6,7 +6,7 @@ import { icons } from "../../assets/navbar_icons/icons";
 
 export default function Navbar() {
   return (
-    <div className="flex flex-wrap bg-[#171717] w-5/12 h-14 rounded-2xl items-center mx-auto px-4 justify-between fixed top-5 left-0 right-0">
+    <div className="container flex flex-wrap bg-[#171717] w-full h-14 rounded-2xl items-center mx-auto mt-4 px-4 justify-between top-5 left-0 right-0">
       <div className="grid grid-flow-col gap-7 items-center">
         <Link href={"/login"}>
           <Image src={images.logoIcon} alt="logo" />

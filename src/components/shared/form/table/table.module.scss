@@ -1,0 +1,26 @@
+.table {
+
+    thead {
+        tr {
+            @apply bg-black_two;
+
+            th:first-child {
+                @apply rounded-l-md;
+
+            }
+
+            th:last-child {
+                @apply rounded-r-md;
+
+            }
+        }
+    }
+
+    th,
+    td {
+        height: 55px;
+        text-align: left;
+        padding: 0 20px;
+    }
+
+}
