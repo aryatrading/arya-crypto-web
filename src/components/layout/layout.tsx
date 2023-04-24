@@ -10,7 +10,5 @@ const poppins = Poppins({
 });
 
 export default function Layout({ children }: LayoutPropsType) {
-  return (
-    <div className={clsx("h-full w-full", poppins.className)}>{children}</div>
-  );
+  return <div className="h-full w-full container mx-auto">{children}</div>;
 }
