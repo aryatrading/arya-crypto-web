@@ -1,5 +1,5 @@
 import { appWithTranslation } from 'next-i18next';
-import { ReactNode, ReactElement } from "react";
+import { ReactNode, ReactElement, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "next-themes";
 import { initializeApp } from "firebase/app";
@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { firebaseConfig } from "../services/firebase/auth/config";
 import { wrapper } from "../services/redux/store";
 import initAuth from '../initFirebaseAuth';
+import { axiosInstance } from '../services/api/axiosConfig';
 
 import "./index.css"
 
@@ -36,6 +37,14 @@ try {
 }
 
 function App({ Component, ...pageProps }: AppPropsWithLayout) {
+  
+  useEffect(() => {
+    const localStorageToken = localStorage?.getItem("idToken");
+    if (localStorageToken) {
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${localStorageToken}`;
+    }
+}, [])
+
 
   const { store, props } = wrapper.useWrappedStore(pageProps);
 
