@@ -1,28 +1,30 @@
-import { FC, useMemo } from "react"
+import { FC, useEffect, useMemo, useState } from "react"
 import { Col, Row } from "../../shared/layout/flex"
-import { ArrowDownCircleIcon, PlusIcon } from "@heroicons/react/24/solid"
+import { PlusIcon } from "@heroicons/react/24/solid"
 import DoughnutChart from "../../shared/charts/doughnut/doughnut"
 import GraphChart from "../../shared/charts/graph/graph"
 import Button from "../../shared/buttons/button"
 import Table from "../../shared/form/table/table"
+import ExchangeSwitcher from "../../shared/exchange-switcher/exchangeSwitcher"
+import { getPortfolioSnapshots } from "../../../services/controllers/market"
 
 
 
 const Dashboard: FC = () => {
 
+    const [isLoadingPortfolioSnapshts, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
 
-    const exchangeSelector = useMemo(() => {
-        return (
-            <Col className="col-span-12 items-start">
-                <Row className="items-center justify-center gap-2">
-                    <h3 className="text-2xl font-bold">Overall portfolio</h3>
-                    <div><ArrowDownCircleIcon height="20px" width="20px" /></div>
-                </Row>
-                <Row>
-                    <h3 className="text-3xl font-bold">$1,250.57 <span className="text-base">USD</span></h3>
-                </Row>
-            </Col>
-        )
+    useEffect(() => {
+        setIsLoadingPortfolioSnapshots(true);
+        getPortfolioSnapshots(1).then((res) => {
+            console.log({ res });
+        })
+        .catch((error)=>{
+            console.error(error)
+        })
+        .finally(() => {
+            setIsLoadingPortfolioSnapshots(false);
+        })
     }, [])
 
 
@@ -83,8 +85,8 @@ const Dashboard: FC = () => {
                 <Row className="items-center justify-between w-full">
                     <h3 className="text-2xl font-bold">Your Holdings</h3>
                     <Button className="flex items-center gap-1 p-2 rounded-md bg-blue_three text-blue_one">
-                        <PlusIcon width={15}/>
-                        <p>
+                        <PlusIcon width={15} />
+                        <p className="font-bold">
                             Add Assets
                         </p>
                     </Button>
@@ -92,11 +94,11 @@ const Dashboard: FC = () => {
                 <Table></Table>
             </Col>
         )
-    }, [])
+    }, []);
 
     return (
         <Col className="grid grid-cols-12 gap-10">
-            {exchangeSelector}
+            <ExchangeSwitcher />
             {charts}
             {holdingsTable}
         </Col>

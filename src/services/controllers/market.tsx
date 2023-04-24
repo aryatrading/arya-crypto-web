@@ -8,3 +8,12 @@ export const fetchAsset = async (symbol: string, interval: string) => {
   const json = await response.json();
   console.log(json);
 };
+
+
+export const getPortfolioSnapshots = async (providerId: number) => {
+  // TODO: read providerId from state
+  return await axiosInstance.get(
+    `/trade-engine/portfolio-snapshots/`,
+    { params: { provider: providerId , range:"24h"} }
+  );
+};
