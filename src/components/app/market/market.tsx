@@ -3,17 +3,17 @@ import { Col, Row } from "../../shared/layout/flex";
 import MarketStats from "../../shared/containers/marketStats";
 import { AssetsTable } from "../../shared/tables/assetsTable";
 import { SearchInput } from "../../shared/inputs/searchInputs";
-import { dummyMarket } from "../../../utils/constants/dummyData";
-import { AssetType } from "../../../types/asset";
 import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
 import { ShadowButton } from "../../shared/buttons/shadow_button";
 import { StarIcon } from "@heroicons/react/24/outline";
+import { useSelector } from "react-redux";
+import { getMarketAssets } from "../../../services/redux/marketSlice";
 
 const Market: FC = () => {
   const [tab, setTab] = useState("all");
 
   return (
-    <div className="h-full items-center justify-center">
+    <div className="h-full items-center justify-center ">
       <Col className="flex items-center justify-center flex-1 mt-20">
         <p className="text-[#F9FAFB] font-medium text-4xl mb-10">
           {tab === "all" ? "Cryptocurrencies" : "Favorites"}
@@ -36,7 +36,7 @@ const Market: FC = () => {
           </Row>
         ) : null}
 
-        <Row className="w-2/4 justify-between mt-8 mb-2 align-center">
+        <Row className="w-full justify-between mt-8 mb-2 align-center">
           <SearchInput onChange={() => console.log("d")} placeholder=":" />
           <Row className="gap-0.5">
             <ShadowButton
@@ -60,7 +60,7 @@ const Market: FC = () => {
         </Row>
         <AssetsTable
           header={marketAssetsHeader}
-          assets={dummyMarket as unknown as AssetType}
+          assets={useSelector(getMarketAssets)}
         />
       </Col>
     </div>
