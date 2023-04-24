@@ -1,5 +1,5 @@
 import { GetStaticProps } from 'next'
-import { withAuthUser } from 'next-firebase-auth'
+import { AuthAction, withAuthUser } from 'next-firebase-auth'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Login from '../../components/app/login/login'
 import Layout from '../../components/layout/layout'
@@ -15,6 +15,7 @@ const LoginPage = (props: any) => {
 
 
 export default withAuthUser({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
 })(LoginPage)
 
 export const getStaticProps: GetStaticProps<any> = async ({
