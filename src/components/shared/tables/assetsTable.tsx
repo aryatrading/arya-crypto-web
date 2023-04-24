@@ -40,7 +40,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
               <tr key={index}>
                 <th
                   scope="row"
-                  className="px-6 py-4 font-medium leading-6 text-white"
+                  className="px-6 py-4 font-medium leading-6 text-white bg-sky-500 hover:bg-sky-700"
                 >
                   {elm.rank}
                 </th>

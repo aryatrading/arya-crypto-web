@@ -1,9 +1,5 @@
-import Navbar from './navbar'
-
-type LayoutPropsType = { children: any }
+type LayoutPropsType = { children: any };
 
 export default function Layout({ children }: LayoutPropsType) {
-    return <div className='h-full w-full'>
-        {children}
-    </div>;
+  return <div className="h-full w-full container">{children}</div>;
 }
