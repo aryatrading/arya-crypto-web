@@ -1,30 +1,27 @@
 import { FC, useCallback, useMemo, useState } from "react";
 import { ErrorMessage, Form, Formik } from "formik";
+import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import Link from "next/link";
 import * as Yup from 'yup';
-import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
 
 import Button from "../../shared/buttons/button";
 import { Col, Row } from "../../shared/layout/flex";
 import { MODE_DEBUG } from "../../../utils/constants/config";
-import { loginUserEmailPassword, appleAuth, googleAuth } from "../../../services/firebase/auth/auth";
+import { registerUser, appleAuth, googleAuth } from "../../../services/firebase/auth/auth";
 import TextInput from "../../shared/form/inputs/textInput/input";
 import { images } from '../../../assets/images';
-import { useAuthModal } from "../../../context/authModal.context";
 
-import styles from './login.module.scss';
+import styles from './signup.module.scss';
 
-const Login: FC<any> = (props: any) => {
+const Signup: FC<any> = (props: any) => {
     const { t } = useTranslation(['auth', 'common']);
-    const { hideModal } = useAuthModal();
-    const router = useRouter();
     const [is2FALoading, setIs2FALoading] = useState<boolean>(false)
     const [errorForm, setError] = useState<string | null>()
 
-    const loginFormSchema = useCallback(() => {
+    const signupValidationScheme = useCallback(() => {
         return Yup.object().shape({
+            name: Yup.string().min(2, t('common:nameErrorMsg').toString()).required(),
             email: Yup.string().email().required(t('common:required').toString()),
             password: Yup.string().min(2, t('common:passwordErrorMsg').toString()).required(),
         });
@@ -58,13 +55,13 @@ const Login: FC<any> = (props: any) => {
     }
 
 
-    const loginForm = useMemo(() => {
+    const signupForm = useMemo(() => {
         return (
             <Formik
-                initialValues={{ email: '', password: '' }}
-                validationSchema={loginFormSchema}
+                initialValues={{ email: '', password: '', name: '' }}
+                validationSchema={signupValidationScheme}
                 onSubmit={(values, { setSubmitting }) => {
-                    loginUserEmailPassword(values)
+                    registerUser(values)
                         .catch(err => {
                             setError(err.message);
                         })
@@ -76,6 +73,10 @@ const Login: FC<any> = (props: any) => {
                 {({ isSubmitting }) => (
                     <Form className="flex flex-col w-full gap-4">
                         <Col>
+                            <TextInput type="text" name="name" label={t('name')} placeholder={t('namePlaceholder') || ''} />
+                            <ErrorMessage name="name" component="p" className="text-red-400" />
+                        </Col>
+                        <Col>
                             <TextInput type="email" name="email" label={t('common:email')} />
                             <ErrorMessage name="email" component="p" className="text-red-400" />
                         </Col>
@@ -83,18 +84,10 @@ const Login: FC<any> = (props: any) => {
                             <TextInput type="password" name="password" label={t('common:password')} />
                             <ErrorMessage name="password" component="p" className="text-red-400" />
                         </Col>
-                        <div className='wb-100 aife self-end font-semibold text-sm'>
-                            <Button className="description-text" onClick={() => {
-                                hideModal();
-                                router.push('/forgot-password');
-                            }}>
-                                <p>{t('forgetPassword')}</p>
-                            </Button>
-                        </div>
                         <Col className="items-center gap-4">
                             {errorForm && <span className='text-red-600'>{(errorForm || 'Invalid email or password!')}</span>}
                             <Button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
-                                <h5>{t('common:signin')}</h5>
+                                <h5>{t('common:signup')}</h5>
                             </Button>
                         </Col>
 
@@ -102,7 +95,7 @@ const Login: FC<any> = (props: any) => {
                 )}
             </Formik>
         )
-    }, [errorForm, hideModal, loginFormSchema, router, t])
+    }, [errorForm, signupValidationScheme, t])
 
     return (
         <Row className='h-full items-center justify-center'>
@@ -110,9 +103,17 @@ const Login: FC<any> = (props: any) => {
                 <Col className="justify-start w-full max-w-[400px] gap-8">
                     <Row className="items-center gap-4">
                         <Image src={images.logoIcon} alt="Arya_Crypto" />
-                        <h1 className="font-extrabold dark:text-white header-label">{t('loginHeader')}</h1>
+                        <h1 className="font-extrabold dark:text-white header-label">{t('signupHeader')}</h1>
                     </Row>
-                    {loginForm}
+                    {signupForm}
+                    <Row className="gap-1 font-semibold text-sm self-center">
+                        <h5 className="">{t('haveAccount')}</h5>
+                        {props.changeSection ?
+                            <Button onClick={() => props.changeSection('login')} className={styles.signupLabel}><h5>{t('common:signin')}</h5></Button>
+                            :
+                            <Link href={'/login'} className={styles.signupLabel}><h5>{t('common:signin')}</h5></Link>
+                        }
+                    </Row>
                     <Col className='gap-6 items-center justify-center'>
                         <Row className="w-full items-center gap-3">
                             <Col className={styles['left-border-side']} />
@@ -129,14 +130,14 @@ const Login: FC<any> = (props: any) => {
                                 <Image src={images.apple} alt="Apple_Icon" />
                             </Button>
                         </Row>
-                        <Row className="gap-1 font-semibold text-sm">
-                            <h5 className="">{t('newToCrypto')}</h5>
-                            {props.changeSection ?
-                                <Button onClick={() => props.changeSection('signup')} className={styles.signupLabel}><h5>{t('common:signup')}</h5></Button>
-                                :
-                                <Link href={'/signup'} className={styles.signupLabel}><h5>{t('common:signup')}</h5></Link>
-                            }
-                        </Row>
+                        <Col className="font-semibold text-sm items-center">
+                            <h5 className="">{t('ByProceedingYouAgreeToARYACryptos')}</h5>
+                            <Row className="gap-1">
+                                <Button className={styles.signupLabel}><h5>{t('TU')}</h5></Button>
+                                &
+                                <Button className={styles.signupLabel}><h5>{t('Pp')}</h5></Button>
+                            </Row>
+                        </Col>
                     </Col>
                 </Col>
             </Col>
@@ -144,4 +145,4 @@ const Login: FC<any> = (props: any) => {
     )
 }
 
-export default Login;
+export default Signup;

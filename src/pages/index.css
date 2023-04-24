@@ -1,20 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   body {
-    @apply dark:bg-gray-800 bg-white;
+    @apply bg-black_one;
   }
 }
 
 @layer components {
-    #__next {
-        @apply h-full w-full;
-    }
-    html,
-    body {
-        @apply h-full w-full;
-    }
+  #__next {
+    @apply h-full w-full;
+  }
+
+  html,
+  body {
+    @apply h-full w-full;
+  }
 }
 
 body {
@@ -38,6 +40,10 @@ code {
 }
 
 .bw-btn {
-  background-color: #558AF2;
-  color: white;
+  background-color: theme('colors.blue_one');
+  color: theme('colors.white');
+}
+
+.header-label {
+  font-size: 24px;
 }

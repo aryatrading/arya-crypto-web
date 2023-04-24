@@ -1,10 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { images } from "../../assets/images/images";
+import { images } from "../../assets/images";
 import { NavLinkItem } from "../shared/navlink/navlinkitem";
 import { icons } from "../../assets/navbar_icons/icons";
+import { useAuthModal } from "../../context/authModal.context";
+import Button from "../shared/buttons/button";
 
 export default function Navbar() {
+  const {modalTrigger, setVisibleSection} = useAuthModal();
   return (
     <div className="flex flex-wrap bg-[#171717] w-5/12 h-14 rounded-2xl items-center mx-auto px-4 justify-between fixed top-5 left-0 right-0">
       <div className="grid grid-flow-col gap-7 items-center">
@@ -39,18 +42,28 @@ export default function Navbar() {
         />
       </div>
       <div className="grid grid-flow-col gap-2 items-center">
-        <NavLinkItem
+        <Button onClick={() => {
+            setVisibleSection('login');
+            modalTrigger.show();
+          }}>
+          <Image src={icons.settings} alt="logo" width={20} height={20} />
+        </Button>
+        <Button onClick={() => {
+            setVisibleSection('signup');
+            modalTrigger.show();
+          }}>
+        <Image src={icons.account} alt="logo" width={20} height={20} />
+        </Button>
+        {/* <NavLinkItem
           linkto="/login"
           navIcon={
-            <Image src={icons.settings} alt="logo" width={20} height={20} />
           }
-        />
-        <NavLinkItem
+        /> */}
+        {/* <NavLinkItem
           linkto="/home"
           navIcon={
-            <Image src={icons.account} alt="logo" width={20} height={20} />
           }
-        />
+        /> */}
       </div>
     </div>
   );
