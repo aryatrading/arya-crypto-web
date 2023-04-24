@@ -4,5 +4,9 @@
     "signup": "S'inscrire",
     "email": "E-mail",
     "password": "Mot de passe",
-    "signin": "S'identifier"
+    "signin": "S'identifier",
+    "nameErrorMsg": "Le nom doit comporter au moins 2 caractères",
+    "passwordErrorMsg": "Le mot de passe doit comporter au moins 2 caractères Le mot de passe doit comporter au moins 2 caractères",
+    "required": "Ce champ est obligatoire !",
+    "invalidEmail": "Format d'email non valide !"
 }

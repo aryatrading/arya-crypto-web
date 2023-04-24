@@ -8,25 +8,21 @@ import Signup from '../../components/app/signup/signup'
 const SignUpPage = () => {
   return (
     <Layout >
-      <Signup/>
+      <Signup />
     </Layout>
   )
 }
 
 
 export default withAuthUser({
-  // whenAuthed: AuthAction.REDIRECT_TO_APP,
-  // whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
-  // whenUnauthedAfterInit: AuthAction.RENDER,
-  // LoaderComponent: PageLoader,
 })(SignUpPage)
 
 export const getStaticProps: GetStaticProps<any> = async ({
   locale,
 }) => ({
   props: {
-      ...(await serverSideTranslations(locale ?? 'en', [
-          'common', 'auth',
-      ])),
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'common', 'auth',
+    ])),
   },
 })

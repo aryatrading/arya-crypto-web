@@ -21,9 +21,9 @@ const Signup: FC<any> = (props: any) => {
 
     const signupValidationScheme = useCallback(() => {
         return Yup.object().shape({
-            name: Yup.string().min(4).required(),
-            email: Yup.string().email().required(),
-            password: Yup.string().min(2).required(),
+            name: Yup.string().min(2, t('common:nameErrorMsg').toString()).required(),
+            email: Yup.string().email().required(t('common:required').toString()),
+            password: Yup.string().min(2, t('common:passwordErrorMsg').toString()).required(),
         });
     }, [])
 
@@ -73,7 +73,7 @@ const Signup: FC<any> = (props: any) => {
                 {({ isSubmitting }) => (
                     <Form className="flex flex-col w-full gap-4">
                         <Col>
-                            <TextInput type="text" name="name" label="Name" placeholder={t('namePlaceholder') || ''} />
+                            <TextInput type="text" name="name" label={t('name')} placeholder={t('namePlaceholder') || ''} />
                             <ErrorMessage name="name" component="p" className="text-red-400" />
                         </Col>
                         <Col>

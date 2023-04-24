@@ -4,5 +4,9 @@
     "signup": "Sign up",
     "email": "Email",
     "password": "Password",
-    "signin": "Sign in"
+    "signin": "Sign in",
+    "nameErrorMsg": "Name must be at least 2 characters",
+    "passwordErrorMsg": "Password must be at least 2 characters",
+    "required": "This field is required!",
+    "invalidEmail": "Invalid email format!"
 }

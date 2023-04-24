@@ -15,18 +15,14 @@ const LoginPage = (props: any) => {
 
 
 export default withAuthUser({
-  // whenAuthed: AuthAction.REDIRECT_TO_APP,
-  // whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
-  // whenUnauthedAfterInit: AuthAction.RENDER,
-  // LoaderComponent: PageLoader,
 })(LoginPage)
 
 export const getStaticProps: GetStaticProps<any> = async ({
   locale,
 }) => ({
   props: {
-      ...(await serverSideTranslations(locale ?? 'en', [
-          'common', 'auth',
-      ])),
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'common', 'auth',
+    ])),
   },
 })

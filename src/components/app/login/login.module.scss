@@ -1,9 +1,9 @@
 .left-border-side {
     flex: 1;
     height: 1px;
-    background-color: white;
+    background-color: theme('colors.white');
 }
 
 .signupLabel {
-    color: #558AF2;
+    color: theme('colors.blue_one');
 }

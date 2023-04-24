@@ -17,8 +17,6 @@ const HomePage = (props: any) => {
 }
 
 export default withAuthUser({
-    // whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-    // authPageURL: '/login/',
 })(HomePage)
 
 

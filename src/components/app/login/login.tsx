@@ -11,22 +11,22 @@ import { Col, Row } from "../../shared/layout/flex";
 import { MODE_DEBUG } from "../../../utils/constants/config";
 import { loginUserEmailPassword, appleAuth, googleAuth } from "../../../services/firebase/auth/auth";
 import TextInput from "../../shared/form/inputs/textInput/input";
-import {images} from '../../../assets/images';
+import { images } from '../../../assets/images';
 import { useAuthModal } from "../../../context/authModal.context";
 
 import styles from './login.module.scss';
 
 const Login: FC<any> = (props: any) => {
-    const {t} = useTranslation(['auth', 'common']);
-    const {hideModal} = useAuthModal();
+    const { t } = useTranslation(['auth', 'common']);
+    const { hideModal } = useAuthModal();
     const router = useRouter();
     const [is2FALoading, setIs2FALoading] = useState<boolean>(false)
     const [errorForm, setError] = useState<string | null>()
 
     const loginFormSchema = useCallback(() => {
         return Yup.object().shape({
-            email: Yup.string().email().required(),
-            password: Yup.string().min(2).required(),
+            email: Yup.string().email().required(t('common:required').toString()),
+            password: Yup.string().min(2, t('common:passwordErrorMsg').toString()).required(),
         });
     }, [])
 
@@ -65,9 +65,9 @@ const Login: FC<any> = (props: any) => {
                 validationSchema={loginFormSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     loginUserEmailPassword(values)
-                    .catch(err => {
-                        setError(err.message);
-                    })
+                        .catch(err => {
+                            setError(err.message);
+                        })
                         .finally(() => {
                             setSubmitting(false);
                         })
@@ -131,9 +131,9 @@ const Login: FC<any> = (props: any) => {
                         </Row>
                         <Row className="gap-1 font-semibold text-sm">
                             <h5 className="">{t('newToCrypto')}</h5>
-                            {props.changeSection ? 
-                            <Button onClick={() => props.changeSection('signup')} className={styles.signupLabel}><h5>{t('common:signup')}</h5></Button>
-                            :
+                            {props.changeSection ?
+                                <Button onClick={() => props.changeSection('signup')} className={styles.signupLabel}><h5>{t('common:signup')}</h5></Button>
+                                :
                                 <Link href={'/signup'} className={styles.signupLabel}><h5>{t('common:signup')}</h5></Link>
                             }
                         </Row>
