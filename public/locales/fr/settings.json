@@ -1,0 +1,17 @@
+{
+    "account": "Compte",
+    "exchange": "Échange",
+    "subscription": "Abonnement",
+    "changePassword": "Changer le mot de passe",
+    "referAFriend": "Référez un ami",
+    "referHint": "Parrainez un ami pour qu'il utilise ARYA Crypto en utilisant votre code de parrainage ci-dessous et offrez à vos amis 20 % de réduction sur l'abonnement de votre parrainage.",
+    "currentpassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "changePasswordNotMatchErrorMsg": "Votre mot de passe et votre mot de passe de confirmation ne correspondent pas.",
+    "subscriptionHint": "Abonnez-vous à ARYA Crypto et débloquez toutes les fonctionnalités et faites passer vos stratégies de trading et votre expérience au niveau supérieur.",
+    "subscriptionHistory": "Historique des abonnements",
+    "subscribeToPro": "Abonnez-vous à Premium",
+    "date": "Date",
+    "total": "Total"
+}
