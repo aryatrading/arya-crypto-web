@@ -11,7 +11,7 @@ type AssetsTableProps = {
 
 export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
   return (
-    <Col className="flex items-center justify-center flex-1 gap-10 w-2/4">
+    <Col className="flex items-center justify-center flex-1 gap-10 w-full">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -37,10 +37,10 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
         <tbody>
           {assets.map((elm, index) => {
             return (
-              <tr key={index}>
+              <tr key={index} className="hover:bg-grey_one cursor-pointer">
                 <th
                   scope="row"
-                  className="px-6 py-4 font-medium leading-6 text-white bg-sky-500 hover:bg-sky-700"
+                  className="px-6 py-4 font-medium leading-6 text-white"
                 >
                   {elm.rank}
                 </th>
