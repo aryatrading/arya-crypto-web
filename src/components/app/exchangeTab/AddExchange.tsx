@@ -1,16 +1,10 @@
-import { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import { Col, Row } from '../../shared/layout/flex';
 import Button from '../../shared/buttons/button';
-import { fetchProviders } from '../../../services/controllers/exchange';
 
 const AddExchange = () => {
     const { t } = useTranslation(['settings', 'common']);
-
-    useEffect(() => {
-        fetchProviders();
-    }, []);
 
     return (
         <Col className='items-center mt-[100px] gap-6'>

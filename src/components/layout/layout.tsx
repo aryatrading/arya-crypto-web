@@ -1,22 +1,21 @@
 import React from "react";
-import Nav from "./Nav/Nav";
 import { Poppins } from "next/font/google";
-import Footer from "./Footer/Footer";
+import clsx from "clsx";
 
+import Nav from "./Nav/Nav";
+import Footer from "./Footer/Footer";
 
 const poppins = Poppins({
   variable: "--poppins-font",
   weight: ["400", "500", "600"],
   subsets: ["latin"],
 });
-
+// flex flex-col flex-1 container sm:items-center lg:pt-28 p-5
 export default function Layout({ children }: any) {
   return (
     <div className={poppins.className}>
       <Nav />
-      <div
-        className={"flex flex-col flex-1 container sm:items-center pt-28"}
-      >
+      <div className={clsx('h-full w-full container mx-auto sm:items-center', poppins.className)}>
         {children}
       </div>
       <Footer />
