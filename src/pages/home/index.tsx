@@ -1,5 +1,4 @@
-import { withAuthUser, AuthAction } from 'next-firebase-auth'
-import { getAuth, signOut } from 'firebase/auth'
+import { withAuthUser } from 'next-firebase-auth'
 import Layout from '../../components/layout/layout'
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -25,7 +24,7 @@ export const getStaticProps: GetStaticProps<any> = async ({
 }) => ({
     props: {
         ...(await serverSideTranslations(locale ?? 'en', [
-            'common',
+            'common', 'auth'
         ])),
     },
 })

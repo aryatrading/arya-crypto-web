@@ -98,7 +98,7 @@ const Signup: FC<any> = (props: any) => {
     }, [errorForm, signupValidationScheme, t])
 
     return (
-        <Row className='h-full items-center justify-center'>
+        <Row className='h-full w-full items-center justify-center'>
             <Col className='flex flex-1 items-center justify-center'>
                 <Col className="justify-start w-full max-w-[400px] gap-8">
                     <Row className="items-center gap-4">

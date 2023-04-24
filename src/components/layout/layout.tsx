@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import {Poppins} from 'next/font/google';
+import { Poppins } from 'next/font/google';
 
 type LayoutPropsType = { children: any }
 
@@ -10,7 +10,7 @@ const poppins = Poppins({
 })
 
 export default function Layout({ children }: LayoutPropsType) {
-    return <div className={clsx('h-full w-full', poppins.className)}>
+    return <div className={clsx('flex flex-col flex-1 container mx-auto sm:items-center', poppins.className)}>
         {children}
     </div>;
 }

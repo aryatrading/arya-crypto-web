@@ -12,12 +12,12 @@ import { Col } from "../components/shared/layout/flex";
 import Login from "../components/app/login/login";
 import Signup from "../components/app/signup/signup";
 
-export const AuthModal = createContext({modalTrigger: {show: () => null, hide: () => null}, setVisibleSection: (String: string) => null, hideModal: () => null});
+export const AuthModal = createContext({ modalTrigger: { show: () => null, hide: () => null }, setVisibleSection: (String: string) => null, hideModal: () => null });
 
 const AuthModalProvider: FC<any> = (props: any) => {
     const [modalTrigger, setModalTrigger] = useState<any>();
     const [visibleSection, setVisibleSection] = useState<'login' | 'signup'>('login');
-    
+
     useEffect(() => {
         const $targetEl = document.getElementById('authentication-modal');
 
@@ -31,7 +31,7 @@ const AuthModalProvider: FC<any> = (props: any) => {
     }, []);
     const hideModal = useCallback(() => modalTrigger.hide(), [modalTrigger]);
 
-    const contextValue: any = {modalTrigger, setVisibleSection, hideModal};
+    const contextValue: any = { modalTrigger, setVisibleSection, hideModal };
 
     return (
         <AuthModal.Provider value={contextValue}>
@@ -40,11 +40,11 @@ const AuthModalProvider: FC<any> = (props: any) => {
                     <Col className="relative bg-white rounded-lg shadow dark:bg-gray-700 pt-5 pb-5">
                         <Col className="gap-4 min-h-[550px]">
                             <Button className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white me-8" data-modal-hide="staticModal" onClick={() => modalTrigger.hide()}>
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                             </Button>
                             {
                                 visibleSection === 'login' ? <Login changeSection={setVisibleSection} /> : <Signup changeSection={setVisibleSection} />
-                            } 
+                            }
                         </Col>
                     </Col>
                 </Col>
