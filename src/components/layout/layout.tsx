@@ -3,6 +3,7 @@ import Nav from "./Nav/Nav";
 import { Poppins } from "next/font/google";
 import Footer from "./Footer/Footer";
 
+
 const poppins = Poppins({
   variable: "--poppins-font",
   weight: ["400", "500", "600"],
@@ -18,7 +19,7 @@ export default function Layout({ children }: any) {
       >
         {children}
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
