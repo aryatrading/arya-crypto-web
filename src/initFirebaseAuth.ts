@@ -1,9 +1,22 @@
 // ./initAuth.js
+import { getApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import { init } from 'next-firebase-auth'
+import { axiosInstance } from './services/api/axiosConfig';
 
 const stagingFirebaseAPIKey = "AIzaSyBsvYPxUfROiiGW5RmrxPAt_Lf_IjRwdVA";
 
 const initAuth = () => {
+
+
+    const auth = getAuth(getApp());
+    auth.onAuthStateChanged(async (user) => {
+        const idToken = await user?.getIdToken();
+        if (idToken) {
+            localStorage.setItem("idToken", idToken);
+            axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;
+        }
+    })
 
     init({
         authPageURL: '/login',
