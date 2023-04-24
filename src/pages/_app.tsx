@@ -45,13 +45,13 @@ function App({ Component, ...pageProps }: AppPropsWithLayout) {
 
   return getLayout(
     <Provider store={store}>
-        <ThemeProvider attribute="class">
-      <AuthModalProvider>
+      <ThemeProvider attribute="class">
+        <AuthModalProvider>
           <Navbar />
           <Component {...props.pageProps} />
-      </AuthModalProvider>
-        </ThemeProvider>
-        <ToastContainer />
+        </AuthModalProvider>
+      </ThemeProvider>
+      <ToastContainer />
     </Provider>
   )
 };

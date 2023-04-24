@@ -10,12 +10,12 @@ import { Col, Row } from "../../shared/layout/flex";
 import { MODE_DEBUG } from "../../../utils/constants/config";
 import { registerUser, appleAuth, googleAuth } from "../../../services/firebase/auth/auth";
 import TextInput from "../../shared/form/inputs/textInput/input";
-import {images} from '../../../assets/images';
+import { images } from '../../../assets/images';
 
 import styles from './signup.module.scss';
 
 const Signup: FC<any> = (props: any) => {
-    const {t} = useTranslation(['auth', 'common']);
+    const { t } = useTranslation(['auth', 'common']);
     const [is2FALoading, setIs2FALoading] = useState<boolean>(false)
     const [errorForm, setError] = useState<string | null>()
 
@@ -62,9 +62,9 @@ const Signup: FC<any> = (props: any) => {
                 validationSchema={signupValidationScheme}
                 onSubmit={(values, { setSubmitting }) => {
                     registerUser(values)
-                    .catch(err => {
-                        setError(err.message);
-                    })
+                        .catch(err => {
+                            setError(err.message);
+                        })
                         .finally(() => {
                             setSubmitting(false);
                         })
@@ -108,9 +108,9 @@ const Signup: FC<any> = (props: any) => {
                     {signupForm}
                     <Row className="gap-1 font-semibold text-sm self-center">
                         <h5 className="">{t('haveAccount')}</h5>
-                        {props.changeSection ? 
+                        {props.changeSection ?
                             <Button onClick={() => props.changeSection('login')} className={styles.signupLabel}><h5>{t('common:signin')}</h5></Button>
-                        :
+                            :
                             <Link href={'/login'} className={styles.signupLabel}><h5>{t('common:signin')}</h5></Link>
                         }
                     </Row>

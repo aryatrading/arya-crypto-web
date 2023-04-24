@@ -65,10 +65,10 @@ export const googleAuth = async () => {
 
 export const registerUser = async (user: any) => {
     const auth = getAuth(getApp());
-    const {email, password, name} = user
+    const { email, password, name } = user
 
     try {
-        const {user} = await createUserWithEmailAndPassword(auth, email, password);
+        const { user } = await createUserWithEmailAndPassword(auth, email, password);
         updateProfile(user, {
             displayName: name,
         });
@@ -76,7 +76,7 @@ export const registerUser = async (user: any) => {
         if (MODE_DEBUG) {
             console.log(error.code)
         }
-        // throw Error(authErrorHandler(error))
+        throw Error(error);
     }
 }
 
