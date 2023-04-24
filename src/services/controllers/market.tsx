@@ -1,12 +1,40 @@
+import { AssetType } from "../../types/asset";
 import { axiosInstance } from "../api/axiosConfig";
+import { storeMrkAssets } from "../redux/marketSlice";
+import { store } from "../redux/store";
 
-const channel = `${process.env.REACT_APP_TWELEVE_SOCKET}?apikey=${process.env.REACT_APP_TWELVE_DATA_API_KEY}`;
+// FETCH REQUEST TO GET ASSETS FROM TWELEVE DATA AND RETURN A STRING OF SYMBOLS
+export const fetchSymbolsList = async () => {
+  let _symbols = "";
 
-// Function to get assets snapshot data, (graph)
-export const fetchAsset = async (symbol: string, interval: string) => {
   const response = await fetch(
-    `${process.env.REACT_APP_TWELEVE_API_URL}?symbol=${symbol}&interval=${interval}&apikey=${process.env.REACT_APP_TWELVE_DATA_API_KEY}`
+    `${process.env.NEXT_PUBLIC_TWELEVE_SYMBOLS_API}`
   );
-  const json = await response.json();
-  console.log(json);
+  const { data } = await response.json();
+  for (var i = 0; i < data.length; i++) {
+    _symbols += data[i].symbol + ",";
+  }
+
+  return _symbols;
+};
+
+// GET ASSETS LIST FROM OUT BACKEND
+export const fetchAssets = async () => {
+  const { data } = await axiosInstance.get("utils/assets?limit=100&offset=0");
+
+  let _assets: AssetType[] = [];
+
+  for (var i = 0; i < data.length; i++) {
+    _assets.push({
+      id: data[i]?.id ?? 0,
+      name: data[i].asset_data.name,
+      currentPrice: 0,
+      price: 0,
+      rank: data[i].asset_data.market_cap_rank,
+      volume: data[i].asset_data.total_volume,
+      iconUrl: data[i].asset_data.image,
+      symbol: data[i].asset_data.symbol.toLowerCase(),
+    });
+  }
+  store.dispatch(storeMrkAssets(_assets));
 };
