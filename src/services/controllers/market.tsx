@@ -38,6 +38,7 @@ export const fetchAssets = async (search?: string) => {
       iconUrl: data[i].asset_data.image,
       mrkCap: data[i].asset_data.market_cap,
       symbol: data[i].asset_data.symbol.toLowerCase(),
+      isFavorite: i % 2 === 0,
     });
   }
   dispatchAction(storeMrkAssets(_assets));

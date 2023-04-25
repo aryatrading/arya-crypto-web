@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Col, Row } from "../../shared/layout/flex";
 import MarketStats from "../../shared/containers/marketStats";
 import { AssetsTable } from "../../shared/tables/assetsTable";
@@ -9,9 +9,23 @@ import { StarIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
 import { getMarketAssets } from "../../../services/redux/marketSlice";
 import { fetchAssets } from "../../../services/controllers/market";
+import { FAVORITES_LIST } from "../../../utils/constants/config";
 
 const Market: FC = () => {
   const [tab, setTab] = useState("all");
+
+  const assets = () => {
+    if (typeof window !== "undefined") {
+      let _list = localStorage.getItem(FAVORITES_LIST);
+      if (_list) _list = JSON.parse(_list);
+
+      if (tab === "all") return useSelector(getMarketAssets);
+      return useSelector(getMarketAssets).filter((elm: any) =>
+        _list?.includes(elm.id)
+      );
+    }
+  };
+
   return (
     <div className="h-full w-full items-center justify-center ">
       <Col className="flex items-center justify-center flex-1 mt-20">
@@ -39,7 +53,7 @@ const Market: FC = () => {
         <Row className="w-full justify-between mt-8 mb-2 align-center">
           <SearchInput
             onchange={(e: string) => fetchAssets(e)}
-            placeholder="Search"
+            placeholder="Search a coin"
           />
           <Row className="gap-0.5">
             <ShadowButton
@@ -61,10 +75,7 @@ const Market: FC = () => {
             />
           </Row>
         </Row>
-        <AssetsTable
-          header={marketAssetsHeader}
-          assets={useSelector(getMarketAssets)}
-        />
+        <AssetsTable header={marketAssetsHeader} assets={assets() ?? []} />
       </Col>
     </div>
   );

@@ -6,4 +6,5 @@ export const marketAssetsHeader = [
   "Price in BTC",
   "Market Cap.",
   "Volume 24H",
+  "",
 ];
