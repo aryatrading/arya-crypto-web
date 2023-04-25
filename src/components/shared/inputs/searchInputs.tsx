@@ -32,7 +32,7 @@ export const SearchInput: FC<SearchInputProps> = ({
         <input
           type="text"
           id="simple-search"
-          className="font-medium border border-gray-300 text-gray-1 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-black_one dark:border-black_two dark:placeholder-gray-1 dark:text-gray-1 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="font-medium border border-gray-300 text-gray-1 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-black-1 dark:border-black-2 dark:placeholder-gray-1 dark:text-gray-1 dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder={placeholder}
           required
           onChange={(e) => onchange(e.target.value)}

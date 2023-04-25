@@ -4,6 +4,8 @@ import PageLoader from "../../components/shared/pageLoader/pageLoader";
 import Market from "../../components/app/market/market";
 import "../../services/api/socketConfig";
 import React from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetStaticProps } from "next";
 
 const MarketPage = () => {
   return (
@@ -14,3 +16,14 @@ const MarketPage = () => {
 };
 
 export default withAuthUser({ LoaderComponent: PageLoader })(MarketPage);
+
+export const getStaticProps: GetStaticProps<any> = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? "en", [
+      "common",
+      "auth",
+      "nav",
+      "market",
+    ])),
+  },
+});

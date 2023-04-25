@@ -9,6 +9,7 @@ import { getLivePrice } from "../../../services/redux/marketSlice";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { FAVORITES_LIST } from "../../../utils/constants/config";
 import React from "react";
+import { useTranslation } from "next-i18next";
 
 type AssetsTableProps = {
   assets: AssetType[];
@@ -16,7 +17,19 @@ type AssetsTableProps = {
 };
 
 export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
+  const { t } = useTranslation(["market"]);
   const _assetprice = useSelector(getLivePrice);
+
+  header = [
+    t("rank"),
+    t("name"),
+    t("pnl"),
+    t("currentprice"),
+    t("priceinbtc"),
+    t("marketcap"),
+    t("volume"),
+    "",
+  ];
 
   const renderFavoritesSvg = (asset: AssetType) => {
     let _list = localStorage.getItem(FAVORITES_LIST);
@@ -60,10 +73,10 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                   scope="col"
                   className={
                     index === 0
-                      ? "px-6 py-3 rounded-l-lg bg-black_two font-medium"
+                      ? "px-6 py-3 rounded-l-lg bg-black-2 font-medium"
                       : index === marketAssetsHeader.length - 1
-                      ? "rounded-r-lg bg-black_two font-medium"
-                      : "bg-black_two h-14 font-medium"
+                      ? "rounded-r-lg bg-black-2 font-medium"
+                      : "bg-black-2 h-14 font-medium"
                   }
                 >
                   {elm}
