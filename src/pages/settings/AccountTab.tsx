@@ -1,6 +1,8 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { ErrorMessage, Form, Formik } from "formik";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 import Layout from '../../components/layout/layout'
@@ -8,6 +10,7 @@ import { Col, Row } from '../../components/shared/layout/flex';
 import { Modal } from '../../components/app/modal';
 import Button from '../../components/shared/buttons/button';
 import TextInput from '../../components/shared/form/inputs/textInput';
+import { changePassword } from '../../services/firebase/auth/auth';
 
 interface InputTypes {
     label: string,
@@ -28,6 +31,7 @@ const Input = ({ label, value }: InputTypes) => {
 
 const AccountTab = () => {
     const { t } = useTranslation(['settings', 'common']);
+    const ref = useRef<any>();
     const [showChangePasswordModal, setShowChangePasswordModal] = useState<boolean>(false);
 
     const [errorForm, setError] = useState<string | null>()
@@ -35,6 +39,8 @@ const AccountTab = () => {
     const showCPModal = useCallback(() => setShowChangePasswordModal(true), []);
     const hideCPModal = useCallback(() => {
         setShowChangePasswordModal(false);
+        setError('');
+        ref.current?.resetForm();
     }, []);
 
     return (
@@ -72,15 +78,32 @@ const AccountTab = () => {
                     <h1 className='font-bold text-3xl mb-10'>{t('changePassword')}</h1>
 
                     <Formik
+                        innerRef={ref}
                         initialValues={{ currentPassword: '', newPassword: '', confirmNewPassowrd: '' }}
                         onSubmit={(values, { setSubmitting, setErrors }) => {
-                            if (values.currentPassword !== values.confirmNewPassowrd) {
+                            if (values.newPassword !== values.confirmNewPassowrd) {
                                 setErrors({
                                     newPassword: t('changePasswordNotMatchErrorMsg').toString()
                                 })
+                            } else {
+                                changePassword(values.currentPassword, values.newPassword).then(e => {
+                                    hideCPModal();
+                                    toast.success(t('changePasswordMsg'), {
+                                        position: "top-right",
+                                        autoClose: 5000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        theme: "light",
+                                        icon: "🔑",
+                                    });
+                                    setSubmitting(false);
+                                }).catch(error => {
+                                    setSubmitting(false);
+                                    setError(error.message);
+                                });
                             }
-
-                            setSubmitting(false);
                         }}
                     >
                         {({ isSubmitting }: any) => (
@@ -97,7 +120,6 @@ const AccountTab = () => {
                                     <TextInput type="password" name="confirmNewPassowrd" label={t('confirmNewPassword')} />
                                     <ErrorMessage name="confirmNewPassowrd" component="p" className="text-red-400" />
                                 </Col>
-                                {errorForm && <span className='input-error'>{(errorForm)}</span>}
                                 <Col className="items-center gap-4 mt-6 mb-4">
                                     {errorForm && <span className='text-red-600'>{(errorForm || 'Invalid email or password!')}</span>}
                                     <Button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
