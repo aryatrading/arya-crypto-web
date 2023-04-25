@@ -13,5 +13,9 @@
     "subscriptionHistory": "Historique des abonnements",
     "subscribeToPro": "Abonnez-vous à Premium",
     "date": "Date",
-    "total": "Total"
+    "total": "Total",
+    "exchangeTitle": "Sélectionnez un échange pour vous connecter",
+    "exchangeHint": "ARYA Crypto n'aura pas accès pour transférer ou retirer vos actifs. Chaque échange se connecte avec des clés API cryptées",
+    "exchangeFutureInfo": "Plus d'échanges à ajouter bientôt !",
+    "changePasswordMsg": "Le mot de passe a été changé avec succès!"
 }
