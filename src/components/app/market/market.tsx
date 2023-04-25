@@ -10,9 +10,19 @@ import { useSelector } from "react-redux";
 import { getMarketAssets } from "../../../services/redux/marketSlice";
 import { fetchAssets } from "../../../services/controllers/market";
 import { FAVORITES_LIST } from "../../../utils/constants/config";
+import useDebounce from "../../../utils/useDebounce";
 
 const Market: FC = () => {
   const [tab, setTab] = useState("all");
+  const [search, setSearch] = useState("");
+
+  useDebounce(
+    () => {
+      fetchAssets(search);
+    },
+    [search],
+    400
+  );
 
   const assets = () => {
     if (typeof window !== "undefined") {
@@ -52,7 +62,7 @@ const Market: FC = () => {
 
         <Row className="w-full justify-between mt-8 mb-2 align-center">
           <SearchInput
-            onchange={(e: string) => fetchAssets(e)}
+            onchange={(e: string) => setSearch(e)}
             placeholder="Search a coin"
           />
           <Row className="gap-0.5">
