@@ -2,7 +2,7 @@ import { FC } from "react";
 import { AssetType } from "../../../types/asset";
 import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
 import AssetPnl from "../containers/assetPnl";
-import { Col } from "../layout/flex";
+import { Col, Row } from "../layout/flex";
 import { formatNumber } from "../../../utils/format_currency";
 import { useSelector } from "react-redux";
 import { getLivePrice } from "../../../services/redux/marketSlice";
@@ -48,7 +48,12 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                 >
                   {elm.rank}
                 </th>
-                <td className="font-medium leading-6 text-white">{elm.name}</td>
+                <Row className="items-center gap-4 justify-start mt-4">
+                  <img className="w-6 h-6" src={elm.iconUrl} alt="new" />
+                  <td className="font-medium leading-6 text-white">
+                    {elm.name}
+                  </td>
+                </Row>
                 <td>
                   <AssetPnl
                     value={elm.pnl > 0 ? `+${elm.pnl}` : elm.pnl}
