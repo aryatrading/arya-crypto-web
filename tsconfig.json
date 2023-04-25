@@ -22,7 +22,8 @@
     "incremental": true
   },
   "include": [
-    "src"
+    "src",
+    "public/assets"
   ],
   "exclude": [
     "node_modules"
