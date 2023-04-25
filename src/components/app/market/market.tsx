@@ -13,7 +13,7 @@ import { fetchAssets } from "../../../services/controllers/market";
 const Market: FC = () => {
   const [tab, setTab] = useState("all");
   return (
-    <div className="h-full items-center justify-center ">
+    <div className="h-full w-full items-center justify-center ">
       <Col className="flex items-center justify-center flex-1 mt-20">
         <p className="text-[#F9FAFB] font-medium text-4xl mb-10">
           {tab === "all" ? "Cryptocurrencies" : "Favorites"}
