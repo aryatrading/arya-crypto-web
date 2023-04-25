@@ -1,7 +1,7 @@
 import { AssetType } from "../../types/asset";
+import { dispatchAction } from "../../utils/global_dispatch";
 import { axiosInstance } from "../api/axiosConfig";
 import { storeMrkAssets } from "../redux/marketSlice";
-import { store } from "../redux/store";
 
 // FETCH REQUEST TO GET ASSETS FROM TWELEVE DATA AND RETURN A STRING OF SYMBOLS
 export const fetchSymbolsList = async () => {
@@ -19,8 +19,10 @@ export const fetchSymbolsList = async () => {
 };
 
 // GET ASSETS LIST FROM OUT BACKEND
-export const fetchAssets = async () => {
-  const { data } = await axiosInstance.get("utils/assets?limit=100&offset=0");
+export const fetchAssets = async (search?: string) => {
+  const { data } = await axiosInstance.get(
+    `utils/assets?limit=100&offset=0${search ? `&search=${search}` : ""}`
+  );
 
   let _assets: AssetType[] = [];
 
@@ -29,12 +31,14 @@ export const fetchAssets = async () => {
       id: data[i]?.id ?? 0,
       name: data[i].asset_data.name,
       currentPrice: 0,
+      pnl: data[i].asset_data.price_change_percentage_24h?.toFixed(2),
       price: 0,
       rank: data[i].asset_data.market_cap_rank,
       volume: data[i].asset_data.total_volume,
       iconUrl: data[i].asset_data.image,
+      mrkCap: data[i].asset_data.market_cap,
       symbol: data[i].asset_data.symbol.toLowerCase(),
     });
   }
-  store.dispatch(storeMrkAssets(_assets));
+  dispatchAction(storeMrkAssets(_assets));
 };
