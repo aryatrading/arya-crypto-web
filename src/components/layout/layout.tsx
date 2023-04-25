@@ -10,5 +10,14 @@ const poppins = Poppins({
 });
 
 export default function Layout({ children }: LayoutPropsType) {
-  return <div className="h-full w-full container mx-auto">{children}</div>;
+  return (
+    <div
+      className={clsx(
+        "flex flex-col flex-1 container mx-auto sm:items-center",
+        poppins.className
+      )}
+    >
+      {children}
+    </div>
+  );
 }
