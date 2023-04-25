@@ -19,7 +19,7 @@ export type SelectedExchangeType = {
 
 
 export type PortfolioSnapshotType = {
-    created_at: "2023-04-24T08:25:35.259331+00:00",
+    created_at: string,
     total_evaluation: number,
     smart_allocation_total_evaluation: number
 }

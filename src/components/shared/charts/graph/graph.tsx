@@ -2,23 +2,25 @@ import { FC, useEffect, useRef } from "react";
 import {
     createChart,
     CrosshairMode,
-    ColorType
+    ColorType,
+    PriceScaleMode,
+    BarPrice
 } from 'lightweight-charts';
 
 import { Col } from "../../layout/flex";
 
 import { GraphChartType } from "./graph.type";
 import clsx from "clsx";
+import { shortNumberFormat } from "../../../../utils/helpers/prices";
 
 
-const GraphChart: FC<GraphChartType> = ({ chartData, className }) => {
+const LineChart: FC<GraphChartType> = ({ primaryLineData, secondaryLineData: secondaryData, className, fixed = true }) => {
 
     const chartContainerRef = useRef<HTMLDivElement>(null);
 
-
     useEffect(
         () => {
-            if (!chartContainerRef?.current || !chartData) {
+            if (!chartContainerRef?.current || !primaryLineData) {
                 return;
             }
 
@@ -43,17 +45,15 @@ const GraphChart: FC<GraphChartType> = ({ chartData, className }) => {
                     },
                 },
                 crosshair: {
-                    mode: CrosshairMode.Normal,
+                    mode: CrosshairMode.Magnet,
                 },
                 leftPriceScale: {
-                    borderColor: '#1F2A41',
                     borderVisible: false,
-                    autoScale: false,
+                    autoScale: true,
                     visible: true,
+                    mode: PriceScaleMode.Normal,
                 },
                 rightPriceScale: {
-                    borderColor: '#1F2A41',
-                    autoScale: false,
                     visible: false
                 },
                 timeScale: {
@@ -62,6 +62,8 @@ const GraphChart: FC<GraphChartType> = ({ chartData, className }) => {
                     timeVisible: true,
                     secondsVisible: false,
                 },
+                handleScale: !fixed,
+                handleScroll: !fixed,
             });
 
             chart.timeScale().fitContent();
@@ -70,9 +72,27 @@ const GraphChart: FC<GraphChartType> = ({ chartData, className }) => {
                 color: '#558AF2',
                 priceLineVisible: false,
                 lastValueVisible: true,
+                priceFormat: {
+                    type: "custom",
+                    formatter: (priceValue: BarPrice) => {
+                        return shortNumberFormat(priceValue)
+                    },
+                }
             });
 
-            series.setData(chartData);
+            series.setData(primaryLineData);
+
+
+
+            if (secondaryData) {
+                const series2 = chart.addLineSeries({
+                    color: 'yellow',
+                    priceLineVisible: false,
+                    lastValueVisible: true,
+                });
+                series2.setData(secondaryData)
+            }
+
 
             window.addEventListener('resize', handleResize);
 
@@ -80,13 +100,13 @@ const GraphChart: FC<GraphChartType> = ({ chartData, className }) => {
                 window.removeEventListener('resize', handleResize);
                 chart.remove();
             };
-        }, [chartData]
+        }, [primaryLineData, secondaryData]
     );
 
     return (
         <>
             {
-                chartData ?
+                primaryLineData ?
                     <Col
                         reference={chartContainerRef}
                         className={clsx(className)}
@@ -98,4 +118,4 @@ const GraphChart: FC<GraphChartType> = ({ chartData, className }) => {
     );
 }
 
-export default GraphChart;
+export default LineChart;

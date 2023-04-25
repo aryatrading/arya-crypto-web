@@ -1,14 +1,18 @@
 
+import {Time} from "lightweight-charts"
+
 export interface GraphChartType {
-    chartData: chartDataType[],
+    primaryLineData: chartDataType[],
+    secondaryLineData?: chartDataType[],
     className?: string,
+    fixed?: boolean,
 }
 
 export interface chartDataType {
-    time: string,
-     value: number,
-     open: number,
-     close: number,
-     high: number,
-     low: number,
+    time: Time,
+    value?: number,
+    open?: number,
+    close?: number,
+    high?: number,
+    low?: number,
 }
