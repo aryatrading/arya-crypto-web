@@ -17,3 +17,12 @@ export const getPortfolioSnapshots = async (providerId: number) => {
     { params: { provider: providerId , range:"year"} }
   );
 };
+
+
+export const getPortfolioHoldings = async (providerId: number) => {
+  // TODO: read providerId from state
+  return await axiosInstance.get(
+    `/trade-engine/portfolio-holdings/`,
+    { params: { provider: providerId } }
+  );
+};
