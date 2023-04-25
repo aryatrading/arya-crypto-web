@@ -1,26 +1,50 @@
 .table {
 
+    table-layout: fixed;
+
     thead {
+        @apply text-grey-1;
+
         tr {
-            @apply bg-black_two;
+            @apply bg-black-2;
 
             th:first-child {
-                @apply rounded-l-md;
+                @apply rounded-l-lg;
 
             }
 
             th:last-child {
-                @apply rounded-r-md;
+                @apply rounded-r-lg;
 
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            border-bottom: 1px solid #1C1C1C;
+
+            &:first-child {
+                td {
+                    height: 80px;
+                    vertical-align: bottom;
+                    padding-bottom: 20px;
+                }
             }
         }
     }
 
     th,
     td {
+        @apply font-normal;
         height: 55px;
         text-align: left;
         padding: 0 20px;
+
+
+        &:first-child {
+            padding-left: 20px;
+        }
     }
 
 }

@@ -100,7 +100,7 @@ const LineChart: FC<GraphChartType> = ({ primaryLineData, secondaryLineData: sec
                 window.removeEventListener('resize', handleResize);
                 chart.remove();
             };
-        }, [primaryLineData, secondaryData]
+        }, [fixed, primaryLineData, secondaryData]
     );
 
     return (

@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo } from "react";
 // import "./PieCharts.scss";
-import { Chart as ChartJS, ArcElement, Tooltip, ChartOptions } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, ChartOptions, ChartData } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import numeral from "numeral";
 import { Col, Row } from "../../layout/flex";
@@ -10,10 +10,11 @@ export type doughnutChartDataType = {
     value: number,
 }
 
-const colors: string[] = ['blue', 'red', 'yellow', 'indigo', 'lime', 'pink', 'green', 'purple', 'amber', 'cyan', 'brown', 'teal', 'grey', 'lime', 'blueGrey'];
+const colors: string[] = ['blue', 'darkBlue', 'orange', 'pink', 'indigo', 'lime', 'purple', 'green', 'yellow', 'amber', 'red', 'cyan', 'brown', 'teal', 'grey', 'lime', 'blueGrey'];
 
 const colorsHex: { [k: string]: string } = {
-    'blue': '#526BE8',
+    'blue': '#224DDA',
+    'darkBlue': '#232892',
     'red': '#FF1744',
     'yellow': '#FFA93A',
     'indigo': '#232892',
@@ -21,7 +22,7 @@ const colorsHex: { [k: string]: string } = {
     'purple': '#A05ACE',
     amber: '#FFAB00',
     cyan: '#00B8D4',
-    orange: '#FF6D00',
+    orange: '#F7931A',
     brown: '#5D4037',
     teal: '#00BFA5',
     green: '#00C853',
@@ -30,7 +31,7 @@ const colorsHex: { [k: string]: string } = {
     blueGrey: '#455A64',
 }
 
-const DoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[], maxWidth:string }> = ({ title, chartData, maxWidth }) => {
+const DoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[], maxWidth: string }> = ({ title, chartData, maxWidth }) => {
 
     ChartJS.register(ArcElement, Tooltip);
 
@@ -46,16 +47,15 @@ const DoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[], max
                 backgroundColors.push(colorsHex[colors[index]]);
             })
 
-            const data = {
+            const data: ChartData<"doughnut", number[], string> = {
                 labels,
                 datasets: [
                     {
                         data: values,
                         backgroundColor: backgroundColors,
                         borderColor: [
-                            'rgba(255, 255, 255, 0)',
                         ],
-                        borderWidth: 1,
+                        borderWidth: 0,
                     },
                 ],
             }
