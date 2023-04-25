@@ -1,8 +1,8 @@
 import { useEffect, useCallback } from "react";
 
 export default function useDebounce(
-  effect: any,
-  dependencies: any,
+  effect: Function,
+  dependencies: string[],
   delay: number
 ) {
   const callback = useCallback(effect, dependencies);
