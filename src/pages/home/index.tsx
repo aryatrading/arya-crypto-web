@@ -1,17 +1,16 @@
 import { withAuthUser } from 'next-firebase-auth'
 import Layout from '../../components/layout/layout'
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { GetStaticProps } from 'next';
 
 const HomePage = (props: any) => {
 
-    const { t } = useTranslation();
-
     return (
-        <Layout>
-            <div>{t("myHomePage")}</div>
-        </Layout>
+            <Layout>
+                <div className='flex w-full justify-center items-center'>
+                    <h1>Home</h1>
+                </div>
+            </Layout>
     )
 }
 
@@ -23,8 +22,6 @@ export const getStaticProps: GetStaticProps<any> = async ({
     locale,
 }) => ({
     props: {
-        ...(await serverSideTranslations(locale ?? 'en', [
-            'common', 'auth'
-        ])),
+        ...(await serverSideTranslations(locale ?? 'en', ['nav'])),
     },
 })

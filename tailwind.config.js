@@ -1,12 +1,17 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   darkMode: "class",
   content: [
+    "./node_modules/flowbite-react/**/*.js",
     "./src/**/*.{js,ts,jsx,tsx}",
     'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
     "./node_modules/flowbite/**/*.js",
   ],
   theme: {
+    container:{
+      center:true,
+    },
     screens: {
       sm: '480px',
       md: '768px',
@@ -16,25 +21,37 @@ module.exports = {
     },
     extend: {
       colors: {
-        green_one: "#22C55E",
-        green_two: "#0E3F2D",
-        blue_two: "#84ADFF",
-        blue_one: "#558AF2",
-        blue_three: "#213660",
-        red_one: "#F2323F",
-        red_two: "#440C10",
-        grey_one: "#6B7280",
-        grey_two: "#111827",
-        grey_three: "#1F2A41",
-        grey_four: "#2B3958",
-        black_two: "#0E1421",
-        black_one: "#030712",
-        yellow_one: "#F3BA2F"
+        green:{
+          1: "#22C55E",
+          2: "#0E3F2D",
+        },
+        blue:{
+          1: "#558AF2",
+          2: "#84ADFF",
+          3: "#213660"
+        },
+        red:{
+          1: "#F2323F",
+          2: "#440C10",
+        },
+        grey:{
+          1: "#6B7280",
+          2: "#111827",
+          3: "#1F2A41",
+          4: "#2B3958",
+        },
+        black:{
+          1: "#030712",
+          2: "#0E1421"
+        },
+        yellow:{
+          1: "#F3BA2F"
+        }
       }
     },
   },
   plugins: [
-    require('flowbite/plugin'),
+    require("flowbite/plugin")
   ],
 }
 

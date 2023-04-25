@@ -10,9 +10,9 @@ import { Col, Row } from "../../shared/layout/flex";
 import { MODE_DEBUG } from "../../../utils/constants/config";
 import { registerUser, appleAuth, googleAuth } from "../../../services/firebase/auth/auth";
 import TextInput from "../../shared/form/inputs/textInput/input";
-import { images } from '../../../assets/images';
+import { logoIcon } from "../../../../public/assets/images/svg";
+import { apple, google } from "../../../../public/assets/images/svg/auth";
 
-import styles from './signup.module.scss';
 
 const Signup: FC<any> = (props: any) => {
     const { t } = useTranslation(['auth', 'common']);
@@ -25,7 +25,7 @@ const Signup: FC<any> = (props: any) => {
             email: Yup.string().email().required(t('common:required').toString()),
             password: Yup.string().min(2, t('common:passwordErrorMsg').toString()).required(),
         });
-    }, [])
+    }, [t])
 
 
     const onGoogleAuth = async () => {
@@ -102,40 +102,40 @@ const Signup: FC<any> = (props: any) => {
             <Col className='flex flex-1 items-center justify-center'>
                 <Col className="justify-start w-full max-w-[400px] gap-8">
                     <Row className="items-center gap-4">
-                        <Image src={images.logoIcon} alt="Arya_Crypto" />
+                        <Image src={logoIcon} alt="Arya_Crypto" />
                         <h1 className="font-extrabold dark:text-white header-label">{t('signupHeader')}</h1>
                     </Row>
                     {signupForm}
                     <Row className="gap-1 font-semibold text-sm self-center">
                         <h5 className="">{t('haveAccount')}</h5>
                         {props.changeSection ?
-                            <Button onClick={() => props.changeSection('login')} className={styles.signupLabel}><h5>{t('common:signin')}</h5></Button>
+                            <Button onClick={() => props.changeSection('login')} className='text-blue-1'><h5>{t('common:signin')}</h5></Button>
                             :
-                            <Link href={'/login'} className={styles.signupLabel}><h5>{t('common:signin')}</h5></Link>
+                            <Link href={'/login'} className='text-blue-1'><h5>{t('common:signin')}</h5></Link>
                         }
                     </Row>
                     <Col className='gap-6 items-center justify-center'>
                         <Row className="w-full items-center gap-3">
-                            <Col className={styles['left-border-side']} />
+                            <Col className='flex-1 h-px bg-white'/>
                             <h6 className="font-semibold text-lg">{t('or')}</h6>
-                            <Col className={styles['left-border-side']} />
+                            <Col className='flex-1 h-px bg-white'/>
                         </Row>
                         <Row className="gap-8">
                             <Button className='' onClick={onGoogleAuth}
                                 disabled={is2FALoading}>
-                                <Image src={images.google} alt="Google_Icon" />
+                                <Image src={google} alt="Google_Icon" />
                             </Button>
                             <Button className='' onClick={onAppleAuth}
                                 disabled={is2FALoading}>
-                                <Image src={images.apple} alt="Apple_Icon" />
+                                <Image src={apple} alt="Apple_Icon" />
                             </Button>
                         </Row>
                         <Col className="font-semibold text-sm items-center">
                             <h5 className="">{t('ByProceedingYouAgreeToARYACryptos')}</h5>
                             <Row className="gap-1">
-                                <Button className={styles.signupLabel}><h5>{t('TU')}</h5></Button>
+                                <Button className='text-blue-1'><h5>{t('TU')}</h5></Button>
                                 &
-                                <Button className={styles.signupLabel}><h5>{t('Pp')}</h5></Button>
+                                <Button className='text-blue-1'><h5>{t('Pp')}</h5></Button>
                             </Row>
                         </Col>
                     </Col>

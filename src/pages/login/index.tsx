@@ -7,12 +7,11 @@ import Layout from '../../components/layout/layout'
 
 const LoginPage = (props: any) => {
   return (
-    <Layout >
-      <Login />
+    <Layout>
+      <Login/>
     </Layout>
   )
 }
-
 
 export default withAuthUser({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
@@ -23,7 +22,7 @@ export const getStaticProps: GetStaticProps<any> = async ({
 }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
-      'common', 'auth',
+      'common', 'auth', 'nav'
     ])),
   },
 })

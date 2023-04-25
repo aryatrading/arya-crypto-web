@@ -1,22 +1,19 @@
-import clsx from "clsx";
 import { FC } from "react";
 import LoadingSpinner from "../loadingSpinner/loadingSpinner";
-import { ButtonProps } from "./button.types";
-import "./button.module.scss";
 
-
-
+interface ButtonProps extends React.HTMLProps<HTMLButtonElement>{
+    isLoading?:boolean,
+    type?:"button" | "submit" | "reset" | undefined;
+}
 export const Button:FC<ButtonProps> = ({
     children,
-    className,
     onClick,
-    type = 'button',
+    type = "button",
     disabled = false,
-    form,
-    id,
-    isLoading
+    isLoading = false,
+    ...props
 }) => (
-    <button id={id} className={clsx(className)} onClick={onClick} disabled={disabled} type={type} form={form}>
+    <button onClick={onClick} disabled={disabled} type={type} {...props}>
         {isLoading ? <LoadingSpinner /> : children}
     </button>
 );
