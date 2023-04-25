@@ -1,4 +1,4 @@
-import { withAuthUser } from 'next-firebase-auth'
+import { AuthAction, withAuthUser } from 'next-firebase-auth'
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next';
@@ -43,8 +43,8 @@ const SettingsScreen = () => {
 }
 
 export default withAuthUser({
-    // whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-    // authPageURL: '/login/',
+    whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+    authPageURL: '/login/',
 })(SettingsScreen)
 
 
@@ -53,7 +53,7 @@ export const getStaticProps: GetStaticProps<any> = async ({
 }) => ({
     props: {
         ...(await serverSideTranslations(locale ?? 'en', [
-            'settings', 'common'
+            'settings', 'common', 'auth'
         ])),
     },
 })
