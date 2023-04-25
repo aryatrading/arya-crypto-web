@@ -49,7 +49,11 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                   {elm.rank}
                 </th>
                 <Row className="items-center gap-4 justify-start mt-4">
-                  <img className="w-6 h-6" src={elm.iconUrl} alt="new" />
+                  <img
+                    className="w-7 h-7 rounded-full"
+                    src={elm.iconUrl}
+                    alt="new"
+                  />
                   <td className="font-medium leading-6 text-white">
                     {elm.name}
                   </td>
