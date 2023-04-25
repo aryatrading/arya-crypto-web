@@ -32,4 +32,6 @@ export const { storeMrkAssets, pricechange } = marketSlice.actions;
 
 export const getMarketAssets = (state: AppState) => state.market.marketAssets;
 
+export const getLivePrice = (state: AppState) => state.market.assetliveprice;
+
 export default marketSlice.reducer;

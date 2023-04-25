@@ -8,10 +8,10 @@ import { ShadowButton } from "../../shared/buttons/shadow_button";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
 import { getMarketAssets } from "../../../services/redux/marketSlice";
+import { fetchAssets } from "../../../services/controllers/market";
 
 const Market: FC = () => {
   const [tab, setTab] = useState("all");
-
   return (
     <div className="h-full items-center justify-center ">
       <Col className="flex items-center justify-center flex-1 mt-20">
@@ -37,7 +37,10 @@ const Market: FC = () => {
         ) : null}
 
         <Row className="w-full justify-between mt-8 mb-2 align-center">
-          <SearchInput onChange={() => console.log("d")} placeholder=":" />
+          <SearchInput
+            onchange={(e: string) => fetchAssets(e)}
+            placeholder="Search"
+          />
           <Row className="gap-0.5">
             <ShadowButton
               title="All"

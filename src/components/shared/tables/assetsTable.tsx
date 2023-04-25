@@ -3,6 +3,9 @@ import { AssetType } from "../../../types/asset";
 import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
 import AssetPnl from "../containers/assetPnl";
 import { Col } from "../layout/flex";
+import { formatNumber } from "../../../utils/format_currency";
+import { useSelector } from "react-redux";
+import { getLivePrice } from "../../../services/redux/marketSlice";
 
 type AssetsTableProps = {
   assets: AssetType[];
@@ -10,6 +13,7 @@ type AssetsTableProps = {
 };
 
 export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
+  const _assetprice = useSelector(getLivePrice);
   return (
     <Col className="flex items-center justify-center flex-1 gap-10 w-full">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -54,16 +58,18 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                   />
                 </td>
                 <td className="font-medium leading-6 text-white">
-                  {elm.currentPrice}
+                  {formatNumber(_assetprice[elm.symbol ?? ""] ?? 0)}
                 </td>
                 <td className="font-medium leading-6 text-white">
-                  {elm.price}
+                  {(_assetprice[elm.symbol ?? ""] / _assetprice["btc"]).toFixed(
+                    7
+                  )}
                 </td>
                 <td className="font-medium leading-6 text-white">
-                  {elm.mrkCap}
+                  {formatNumber(elm.mrkCap ?? 0)}
                 </td>
                 <td className="font-medium leading-6 text-white">
-                  {elm.volume}
+                  {formatNumber(elm.volume ?? 0)}
                 </td>
               </tr>
             );
