@@ -11,6 +11,7 @@ import { getMarketAssets } from "../../../services/redux/marketSlice";
 import { fetchAssets } from "../../../services/controllers/market";
 import { FAVORITES_LIST } from "../../../utils/constants/config";
 import useDebounce from "../../../utils/useDebounce";
+import React from "react";
 
 const Market: FC = () => {
   const [tab, setTab] = useState("all");
@@ -46,14 +47,14 @@ const Market: FC = () => {
           <Row className="w-full items-center justify-center mb-10">
             {/* TODO: update hardcoded color values */}
             <MarketStats
-              bgColor="bg-green_two"
-              textColor="text-green_one"
+              bgColor="bg-green-2"
+              textColor="text-green-1"
               value="+8.15"
               title="Market Cap"
             />
             <MarketStats
-              bgColor="bg-red_two"
-              textColor="text-red_one"
+              bgColor="bg-red-2"
+              textColor="text-red-1"
               value="-3.75"
               title="Volume 24H"
             />
@@ -70,18 +71,16 @@ const Market: FC = () => {
               title="All"
               onClick={() => setTab("all")}
               border="rounded-l-md"
-              bgColor={tab === "all" ? "bg-blue_three" : "bg-grey_two"}
-              textColor={tab === "all" ? "text-blue_one" : "text-white"}
+              bgColor={tab === "all" ? "bg-blue-3" : "bg-grey_two"}
+              textColor={tab === "all" ? "text-blue-1" : "text-white"}
             />
             <ShadowButton
               title="Favorites"
               onClick={() => setTab("favorites")}
               border="rounded-r-md"
-              bgColor={tab === "all" ? "bg-grey_two" : "bg-blue_three"}
-              textColor={tab === "all" ? "text-white" : "text-blue_one"}
-              iconSvg={
-                <StarIcon className="w-4 h-4 fill-yellow_one stroke-0" />
-              }
+              bgColor={tab === "all" ? "bg-grey_two" : "bg-blue-3"}
+              textColor={tab === "all" ? "text-white" : "text-blue-3"}
+              iconSvg={<StarIcon className="w-4 h-4 fill-yellow-1 stroke-0" />}
             />
           </Row>
         </Row>

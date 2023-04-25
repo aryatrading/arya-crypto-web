@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { getLivePrice } from "../../../services/redux/marketSlice";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { FAVORITES_LIST } from "../../../utils/constants/config";
+import React from "react";
 
 type AssetsTableProps = {
   assets: AssetType[];
@@ -21,7 +22,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
     let _list = localStorage.getItem(FAVORITES_LIST);
     if (_list) _list = JSON.parse(_list);
 
-    if (_list?.includes(asset.id)) return `w-4 h-4 fill-yellow_one stroke-0`;
+    if (_list?.includes(asset.id)) return `w-4 h-4 fill-yellow-1 stroke-0`;
     else return `w-4 h-4 stroke-1`;
   };
 
@@ -50,7 +51,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
   return (
     <Col className="flex items-center justify-center flex-1 gap-10 w-full">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray_one">
+        <thead className="text-xs text-gray-1">
           <tr>
             {header.map((elm, index) => {
               return (
@@ -97,8 +98,8 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                 <td>
                   <AssetPnl
                     value={elm.pnl > 0 ? `+${elm.pnl}` : elm.pnl}
-                    bgColor={elm.pnl <= 0 ? "bg-red_two" : "bg-green_two"}
-                    textColor={elm.pnl <= 0 ? "text-red_one" : "text-green_one"}
+                    bgColor={elm.pnl <= 0 ? "bg-red-2" : "bg-green-2"}
+                    textColor={elm.pnl <= 0 ? "text-red-1" : "text-green-1"}
                     isUp={elm.pnl > 0}
                   />
                 </td>

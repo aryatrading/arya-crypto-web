@@ -8,7 +8,6 @@ const stagingFirebaseAPIKey = "AIzaSyBsvYPxUfROiiGW5RmrxPAt_Lf_IjRwdVA";
 
 const initAuth = () => {
 
-
     const auth = getAuth(getApp());
     auth.onAuthStateChanged(async (user) => {
         const idToken = await user?.getIdToken();

@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-black_one;
+    @apply bg-black-1;
   }
 }
 
@@ -40,10 +40,9 @@ code {
 }
 
 .bw-btn {
-  background-color: theme('colors.blue_one');
-  color: theme('colors.white');
+  @apply bg-blue-1 text-white
 }
 
 .header-label {
-  font-size: 24px;
+  @apply text-2xl
 }

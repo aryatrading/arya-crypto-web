@@ -3,6 +3,7 @@ import Layout from "../../components/layout/layout";
 import PageLoader from "../../components/shared/pageLoader/pageLoader";
 import Market from "../../components/app/market/market";
 import "../../services/api/socketConfig";
+import React from "react";
 
 const MarketPage = () => {
   return (

@@ -7,16 +7,15 @@ import { Provider, useDispatch } from "react-redux";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import "react-toastify/dist/ReactToastify.css";
-
-import Navbar from "../components/layout/navbar";
 import AuthModalProvider from "../context/authModal.context";
 import { firebaseConfig } from "../services/firebase/auth/config";
 import { wrapper } from "../services/redux/store";
 import initAuth from "../initFirebaseAuth";
 import { axiosInstance } from "../services/api/axiosConfig";
 
-import "./index.css";
+import "../styles/global.css";
 import { setDispatch } from "../utils/global_dispatch";
+import React from "react";
 
 /*
  *  Don't dispatch actions from pages/_app this mode is not compatible with Next.js 9's Auto Partial Static Export feature
@@ -48,7 +47,7 @@ function App({ Component, ...pageProps }: AppPropsWithLayout) {
     }
   }, []);
 
-  const { store, props } = wrapper.useWrappedStore(pageProps);
+  const { props } = wrapper.useWrappedStore(pageProps);
 
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout || ((page: any) => page);
@@ -59,17 +58,12 @@ function App({ Component, ...pageProps }: AppPropsWithLayout) {
   setDispatch(dispatch);
 
   return getLayout(
-    // <Provider store={store}>
-
     <ThemeProvider attribute="class">
       <AuthModalProvider>
-        <Navbar />
         <Component {...props.pageProps} />
       </AuthModalProvider>
       <ToastContainer />
     </ThemeProvider>
-
-    // </Provider>
   );
 }
 

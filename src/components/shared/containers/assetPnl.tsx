@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Row } from "../layout/flex";
 import { PlayIcon } from "@heroicons/react/24/outline";
+import React from "react";
 
 type AssetPnl = {
   isUp: boolean;
@@ -14,7 +15,7 @@ export const AssetPnl: FC<AssetPnl> = ({ bgColor, value, isUp, textColor }) => {
     <Row className={`${bgColor} w-20 h-5 rounded  justify-center items-center`}>
       <PlayIcon
         className={`w-3 h-3 ${
-          isUp ? "fill-green_one -rotate-90" : "fill-red_one rotate-90"
+          isUp ? "fill-green-1 -rotate-90" : "fill-red-1 rotate-90"
         } stroke-0`}
       />
       <p

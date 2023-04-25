@@ -1,7 +1,6 @@
-import clsx from "clsx";
+import React from "react";
+import Nav from "./Nav/Nav";
 import { Poppins } from "next/font/google";
-
-type LayoutPropsType = { children: any };
 
 const poppins = Poppins({
   variable: "--poppins-font",
@@ -9,15 +8,16 @@ const poppins = Poppins({
   subsets: ["latin"],
 });
 
-export default function Layout({ children }: LayoutPropsType) {
+export default function Layout({ children }: any) {
   return (
-    <div
-      className={clsx(
-        "flex flex-col flex-1 container mx-auto sm:items-center",
-        poppins.className
-      )}
-    >
-      {children}
+    <div className={poppins.className}>
+      <Nav />
+      <div
+        className={"flex flex-col flex-1 container sm:items-center lg:pt-28"}
+      >
+        {children}
+      </div>
+      ;
     </div>
   );
 }
