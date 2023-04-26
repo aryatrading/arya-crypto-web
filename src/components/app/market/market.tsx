@@ -18,6 +18,7 @@ const Market: FC = () => {
   const { t } = useTranslation(["market"]);
   const [tab, setTab] = useState("all");
   const [search, setSearch] = useState("");
+  const _assets = useSelector(getMarketAssets);
 
   useDebounce(
     () => {
@@ -32,10 +33,8 @@ const Market: FC = () => {
       let _list = localStorage.getItem(FAVORITES_LIST);
       if (_list) _list = JSON.parse(_list);
 
-      if (tab === "all") return useSelector(getMarketAssets);
-      return useSelector(getMarketAssets).filter((elm: any) =>
-        _list?.includes(elm.id)
-      );
+      if (tab === "all") return _assets;
+      return _assets.filter((elm: any) => _list?.includes(elm.id));
     }
   };
 
