@@ -33,6 +33,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
 
   const renderFavoritesSvg = (asset: AssetType) => {
     let _list = localStorage.getItem(FAVORITES_LIST);
+
     let _parsed = JSON.parse(_list ?? "");
 
     if (_parsed?.includes(asset.id ?? ""))
@@ -45,7 +46,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
     const favoritesList = localStorage.getItem(FAVORITES_LIST);
 
     if (!favoritesList) {
-      return localStorage.setItem(FAVORITES_LIST, JSON.stringify([asset.id]));
+      return;
     }
 
     let _list = JSON.parse(favoritesList);

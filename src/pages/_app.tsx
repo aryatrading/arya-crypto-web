@@ -16,6 +16,7 @@ import { axiosInstance } from "../services/api/axiosConfig";
 import "../styles/global.css";
 import { setDispatch } from "../utils/global_dispatch";
 import React from "react";
+import { FAVORITES_LIST } from "../utils/constants/config";
 
 /*
  *  Don't dispatch actions from pages/_app this mode is not compatible with Next.js 9's Auto Partial Static Export feature
@@ -39,7 +40,11 @@ try {
 
 function App({ Component, ...pageProps }: AppPropsWithLayout) {
   useEffect(() => {
+    console.log("loading");
     const localStorageToken = localStorage?.getItem("idToken");
+
+    // Create the inital favorites list in localstorage
+    localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
     if (localStorageToken) {
       axiosInstance.defaults.headers.common[
         "Authorization"
