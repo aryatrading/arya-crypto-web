@@ -17,5 +17,11 @@
     "exchangeTitle": "Sélectionnez un échange pour vous connecter",
     "exchangeHint": "ARYA Crypto n'aura pas accès pour transférer ou retirer vos actifs. Chaque échange se connecte avec des clés API cryptées",
     "exchangeFutureInfo": "Plus d'échanges à ajouter bientôt !",
-    "changePasswordMsg": "Le mot de passe a été changé avec succès!"
+    "changePasswordMsg": "Le mot de passe a été changé avec succès!",
+    "portfolioname": "Nom du portefeuille",
+    "creationDate": "Date de création de l'API",
+    "whitelistIPs": "IP de la liste blanche",
+    "APIKey": "clé API",
+    "APISecret": "Clé secrète de l'API",
+    "submit": "Soumettre"
 }

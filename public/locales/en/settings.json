@@ -17,5 +17,11 @@
     "exchangeTitle": "Select a exchange to connect",
     "exchangeHint": "ARYA Crypto will not access to transfer or withdraw your assets. Each exchange connects with encrypted API keys",
     "exchangeFutureInfo": "More exchanges to be added soon!",
-    "changePasswordMsg": "Password changed successfully!"
+    "changePasswordMsg": "Password changed successfully!",
+    "portfolioname": "Portfolio name",
+    "creationDate": "API creation date",
+    "whitelistIPs": "Whitelist IPs",
+    "APIKey": "API Key",
+    "APISecret": "API Secret",
+    "submit": "Submit"
 }
