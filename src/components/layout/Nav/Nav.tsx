@@ -19,7 +19,7 @@ const Nav = () => {
   const [authed, setAuthed] = useState(false)
   const [collapse,setCollapse] = useState(false)
   const {modalTrigger, setVisibleSection} = useAuthModal();
-  const { t } = useTranslation(['nav']);
+  const { t } = useTranslation(['common']);
 
   const userOptions = useCallback(
     () => {

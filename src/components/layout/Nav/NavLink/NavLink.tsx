@@ -14,7 +14,7 @@ interface INavLink extends LinkProps {
 
 const NavLink = ({ NavIcon, navTitle, Hover,fill=true, active=false, className, ...props }: INavLink) => {
   const [isHover, setIsHover] = useState(false)
-  const { t } = useTranslation(['nav']);
+  const { t } = useTranslation(['common']);
 
   return (
     <Link
