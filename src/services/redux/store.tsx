@@ -3,10 +3,11 @@ import { createWrapper } from "next-redux-wrapper";
 
 import userReducer from "./userSlice";
 import marketReducer from "./marketSlice";
+import assetReducer from "./assetSlice";
 
 export function makeStore() {
   return configureStore({
-    reducer: { user: userReducer, market: marketReducer },
+    reducer: { user: userReducer, market: marketReducer, asset: assetReducer },
   });
 }
 

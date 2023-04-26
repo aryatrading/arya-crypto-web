@@ -12,6 +12,7 @@ import { firebaseConfig } from "../services/firebase/auth/config";
 import { wrapper } from "../services/redux/store";
 import initAuth from "../initFirebaseAuth";
 import { axiosInstance } from "../services/api/axiosConfig";
+import "../services/api/socketConfig";
 
 import "../styles/global.css";
 import { setDispatch } from "../utils/global_dispatch";

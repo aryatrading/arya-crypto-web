@@ -280,6 +280,14 @@ export const dummyMarket = [
     isFavorite: true,
   },
 ];
-function AssetType() {
-  throw new Error("Function not implemented.");
-}
+
+export const asset = {
+  rank: 1,
+  name: "Bitcoin",
+  symbol: "BTC",
+  currentPrice: 30250.57,
+  price: 0,
+  pnl: 8.45,
+  iconUrl:
+    "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+};

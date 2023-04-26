@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { AssetType } from "../../../types/asset";
 import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
-import AssetPnl from "../containers/assetPnl";
 import { Col, Row } from "../layout/flex";
 import { formatNumber } from "../../../utils/format_currency";
 import { useSelector } from "react-redux";
@@ -10,6 +9,8 @@ import { StarIcon } from "@heroicons/react/24/outline";
 import { FAVORITES_LIST } from "../../../utils/constants/config";
 import React from "react";
 import { useTranslation } from "next-i18next";
+import AssetPnl from "../containers/asset/assetPnl";
+import { useRouter } from "next/navigation";
 
 type AssetsTableProps = {
   assets: AssetType[];
@@ -17,6 +18,7 @@ type AssetsTableProps = {
 };
 
 export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
+  const router = useRouter();
   const { t } = useTranslation(["market"]);
   const _assetprice = useSelector(getLivePrice);
 
@@ -89,7 +91,11 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
         <tbody>
           {assets.map((elm, index) => {
             return (
-              <tr key={index} className="hover:bg-grey-1 cursor-pointer">
+              <tr
+                key={index}
+                className="hover:bg-grey-1 cursor-pointer"
+                onClick={() => router.push(`/asset?symbol=${elm.symbol}`)}
+              >
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium leading-6 text-white"
@@ -111,7 +117,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                 </Row>
                 <td>
                   <AssetPnl
-                    value={elm.pnl > 0 ? `+${elm.pnl}` : elm.pnl}
+                    value={elm.pnl > 0 ? `+${elm.pnl}%` : elm.pnl + "%"}
                     bgColor={elm.pnl <= 0 ? "bg-red-2" : "bg-green-2"}
                     textColor={elm.pnl <= 0 ? "text-red-1" : "text-green-1"}
                     isUp={elm.pnl > 0}
