@@ -21,21 +21,22 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
   const _assetprice = useSelector(getLivePrice);
 
   header = [
-    t("rank"),
-    t("name"),
-    t("pnl"),
-    t("currentprice"),
-    t("priceinbtc"),
-    t("marketcap"),
-    t("volume"),
+    t("rank") ?? "",
+    t("name") ?? "",
+    t("pnl") ?? "",
+    t("currentprice") ?? "",
+    t("priceinbtc") ?? "",
+    t("marketcap") ?? "",
+    t("volume") ?? "",
     "",
   ];
 
   const renderFavoritesSvg = (asset: AssetType) => {
     let _list = localStorage.getItem(FAVORITES_LIST);
-    if (_list) _list = JSON.parse(_list);
+    let _parsed = JSON.parse(_list ?? "");
 
-    if (_list?.includes(asset.id)) return `w-4 h-4 fill-yellow-1 stroke-0`;
+    if (_parsed?.includes(asset.id ?? ""))
+      return `w-4 h-4 fill-yellow-1 stroke-0`;
     else return `w-4 h-4 stroke-1`;
   };
 
