@@ -25,7 +25,7 @@ const NavLink = ({ NavIcon, navTitle, Hover,fill=true, active=false, className, 
     >
       {(!!Hover&&(isHover||active))?<Hover className="w-6 h-6"/>:<NavIcon className="w-6 h-6"/>}
       {!!navTitle && (
-        <h2 className={twMerge("dark:text-white font-semibold text-sm",`${(!!Hover&&(isHover||active))&&'dark:text-blue-1'}`)}>
+        <h2 className={twMerge("dark:text-white font-medium text-sm",`${(!!Hover&&(isHover||active))&&'dark:text-blue-1'}`)}>
           {t(navTitle)}
         </h2>
       )}

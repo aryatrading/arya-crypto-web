@@ -4,9 +4,9 @@ import Image from 'next/image'
 import { logo } from '../../../../public/assets/images/svg'
 import Link from 'next/link'
 import { footerLinks, socials } from '../../../utils/constants/footer'
-import { EmailIcon } from '../../svg/SocialIcons'
-
-
+import { EmailIcon } from '../../svg/SocialIcons' 
+import _ from 'lodash'
+ 
 const Footer = () => {
     
   return (
@@ -19,7 +19,7 @@ const Footer = () => {
                 </p>
                 <Row className='gap-5 items-center'>
                     {socials.map((social)=>{
-                        return <Link href={social.link}>
+                        return <Link key={_.uniqueId()} href={social.link}>
                             <social.logo className='w-4 h-4 fill-current dark:text-white'/>
                         </Link>
                     })}
@@ -28,11 +28,11 @@ const Footer = () => {
             <div className='flex flex-wrap gap-4 md:gap-0 md:flex-row w-full items-start justify-between'>
                {
                 footerLinks.map((section)=>{
-                    return <Col className='gap-4'>
+                    return <Col key={_.uniqueId()} className='gap-4'>
                         <h3 className='dark:text-white text-base font-medium'>{section.name}</h3>
                         <Col className='gap-3'>
                             {section.links.map((link)=>{
-                                return <Link className='dark:text-grey-1 hover:dark:text-white' href={link.route}>{link.name}</Link>
+                                return <Link key={_.uniqueId()} className='dark:text-grey-1 hover:dark:text-white' href={link.route}>{link.name}</Link>
                             })}
                         </Col>
                     </Col>
