@@ -4,15 +4,21 @@ import { axiosInstance } from "../api/axiosConfig";
 import { storeMrkAssets } from "../redux/marketSlice";
 
 // FETCH REQUEST TO GET ASSETS FROM TWELEVE DATA AND RETURN A STRING OF SYMBOLS
-export const fetchSymbolsList = async () => {
+export const fetchSymbolsList = async (assets?: AssetType[]) => {
   let _symbols = "";
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_TWELEVE_SYMBOLS_API}`
-  );
-  const { data } = await response.json();
-  for (var i = 0; i < data.length; i++) {
-    _symbols += data[i].symbol + ",";
+  if (!assets?.length) {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_TWELEVE_SYMBOLS_API}`
+    );
+    const { data } = await response.json();
+    for (var i = 0; i < data.length; i++) {
+      _symbols += data[i].symbol + ",";
+    }
+  } else {
+    for (var i = 0; i < assets.length; i++) {
+      _symbols += assets[i].symbol?.toLocaleUpperCase() + "/USD" + ",";
+    }
   }
 
   return _symbols;
@@ -42,4 +48,5 @@ export const fetchAssets = async (search?: string) => {
     });
   }
   dispatchAction(storeMrkAssets(_assets));
+  return _assets;
 };

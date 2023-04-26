@@ -9,8 +9,9 @@ const channel = `${process.env.NEXT_PUBLIC_TWELEVE_SOCKET}?apikey=${process.env.
 const socket = new W3CWebSocket(channel);
 
 socket.onopen = async () => {
-  await fetchAssets();
-  let _list = await fetchSymbolsList();
+  let _assets = await fetchAssets();
+
+  let _list = await fetchSymbolsList(_assets);
 
   socket.send(
     JSON.stringify({
