@@ -6,11 +6,11 @@ import { GetStaticProps } from 'next';
 const HomePage = (props: any) => {
 
     return (
-            <Layout>
-                <div className='flex w-full justify-center items-center'>
-                    <h1>Home</h1>
-                </div>
-            </Layout>
+        <Layout>
+            <div className='flex w-full justify-center items-center'>
+                <h1>Home</h1>
+            </div>
+        </Layout>
     )
 }
 
