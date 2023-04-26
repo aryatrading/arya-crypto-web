@@ -20,8 +20,8 @@ const SettingsScreen = () => {
         <Layout>
             <h1 className='font-bold text-3xl my-10'>{t('settings')}</h1>
 
-            <Tabs selectedTabClassName="text-blue_one font-bold text-lg border-b-2 border-blue_one pb-3">
-                <TabList className="border-b-[1px] border-grey_three mb-6">
+            <Tabs selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
+                <TabList className="border-b-[1px] border-grey-3 mb-6">
                     <Row className='gap-4'>
                         <Tab className="font-bold text-lg outline-none cursor-pointer">{t('account')}</Tab>
                         <Tab className="font-bold text-lg outline-none cursor-pointer">{t('exchange')}</Tab>
@@ -53,7 +53,7 @@ export const getStaticProps: GetStaticProps<any> = async ({
 }) => ({
     props: {
         ...(await serverSideTranslations(locale ?? 'en', [
-            'settings', 'common', 'auth'
+            'settings', 'common', 'auth', 'nav'
         ])),
     },
 })

@@ -1,9 +1,14 @@
+import { FC } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import { Col, Row } from '../../shared/layout/flex';
 import Button from '../../shared/buttons/button';
 
-const AddExchange = () => {
+interface AddExchangeTypes {
+    onPressExchange: any,
+};
+
+const AddExchange = (props: AddExchangeTypes) => {
     const { t } = useTranslation(['settings', 'common']);
 
     return (
@@ -17,9 +22,9 @@ const AddExchange = () => {
                 </svg>
                 <h1 className='font-bold text-2xl'>{t('exchangeTitle')}</h1>
             </Row>
-            <label className='font-medium text-base text-center text-grey_one'>{t('exchangeHint').split('.')[0]}.<br />{t('exchangeHint').split('.')[1]}</label>
+            <label className='font-medium text-base text-center text-grey-1'>{t('exchangeHint').split('.')[0]}.<br />{t('exchangeHint').split('.')[1]}</label>
             <Col className="grid grid-cols-3 gap-4">
-                <Button className='w-[214px] h-[48px] bg-grey_three rounded-md hover:bg-grey_four'>
+                <Button className='w-[214px] h-[48px] bg-grey-3 rounded-md hover:bg-grey-4' onClick={() => props.onPressExchange((st: any) => [...st, { id: 1, name: 'Binance', create: true }, { id: 2, name: 'test' }])}>
                     <Row className='justify-center items-center gap-2'>
                         <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_2282_18035)">
@@ -39,7 +44,7 @@ const AddExchange = () => {
                         <label className='font-bold text-base text-center text-white'>Binance</label>
                     </Row>
                 </Button>
-                <Button className='w-[214px] h-[48px] bg-grey_three rounded-md hover:bg-grey_four'>
+                <Button className='w-[214px] h-[48px] bg-grey-3 rounded-md hover:bg-grey-4'>
                     <Row className='justify-center items-center gap-2'>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_2282_18044)">
@@ -56,16 +61,16 @@ const AddExchange = () => {
                         <label className='font-bold text-base text-center text-white'>Coinbase</label>
                     </Row>
                 </Button>
-                <Button className='w-[214px] h-[48px] bg-grey_three rounded-md hover:bg-grey_four'>
+                <Button className='w-[214px] h-[48px] bg-grey-3 rounded-md hover:bg-grey-4'>
                     <label className='font-bold text-base text-center text-white'>Kucoin</label>
                 </Button>
-                <Button className='w-[214px] h-[48px] bg-grey_three rounded-md hover:bg-grey_four'>
+                <Button className='w-[214px] h-[48px] bg-grey-3 rounded-md hover:bg-grey-4'>
                     <label className='font-bold text-base text-center text-white'>Crypto.com</label>
                 </Button>
-                <Button className='w-[214px] h-[48px] bg-grey_three rounded-md hover:bg-grey_four'>
+                <Button className='w-[214px] h-[48px] bg-grey-3 rounded-md hover:bg-grey-4'>
                     <label className='font-bold text-base text-center text-white'>Metamask</label>
                 </Button>
-                <Button className='w-[214px] h-[48px] bg-grey_three rounded-md hover:bg-grey_four'>
+                <Button className='w-[214px] h-[48px] bg-grey-3 rounded-md hover:bg-grey-4'>
                     <label className='font-bold text-base text-center text-white'>Kraken</label>
                 </Button>
             </Col>

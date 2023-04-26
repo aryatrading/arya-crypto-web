@@ -1,11 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { ErrorMessage, Form, Formik } from "formik";
+import { useAuthUser } from 'next-firebase-auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
-import Layout from '../../components/layout/layout'
 import { Col, Row } from '../../components/shared/layout/flex';
 import { Modal } from '../../components/app/modal';
 import Button from '../../components/shared/buttons/button';
@@ -22,7 +21,7 @@ const Input = ({ label, value }: InputTypes) => {
         <Col className='gap-2'>
             <label className="block text-sm font-medium text-white">{label}</label>
             <input
-                className='bg-grey_two text-white text-sm rounded-lg block w-[370px] p-2.5 opacity-60'
+                className='bg-grey-2 text-white text-sm rounded-lg block w-[370px] p-2.5 opacity-60'
                 disabled
                 defaultValue={value} />
         </Col>
@@ -31,6 +30,7 @@ const Input = ({ label, value }: InputTypes) => {
 
 const AccountTab = () => {
     const { t } = useTranslation(['settings', 'common']);
+    const { email, displayName } = useAuthUser();
     const ref = useRef<any>();
     const [showChangePasswordModal, setShowChangePasswordModal] = useState<boolean>(false);
 
@@ -44,21 +44,21 @@ const AccountTab = () => {
     }, []);
 
     return (
-        <Layout>
+        <>
             <Col className='gap-4'>
                 <Col className='gap-6'>
                     <Row className='gap-6 flex-wrap'>
                         <Col className='gap-2'>
-                            <Input label={t('common:name')} value="Abdalla Emad Eldin" />
+                            <Input label={t('common:name')} value={displayName?.replace('+', ' ') || ''} />
                         </Col>
                         <Col className='gap-2'>
-                            <Input label={t('common:email')} value="aemadeldin@arya.com" />
+                            <Input label={t('common:email')} value={email || ''} />
                         </Col>
                     </Row>
                     <Col className='gap-2'>
                         <label className="block text-sm font-medium text-white">{t('common:password')}</label>
                         <Button
-                            className="text-white font-medium rounded-lg text-sm px-5 bg-grey_two w-[300px] py-2.5"
+                            className="text-white font-medium rounded-lg text-sm px-5 bg-grey-2 w-[300px] py-2.5"
                             onClick={showCPModal}>
                             {t('changePassword')}
                         </Button>
@@ -67,7 +67,7 @@ const AccountTab = () => {
             </Col>
 
             <Modal isVisible={showChangePasswordModal} size='md'>
-                <Col className='min-h-[200px] p-5 bg-black_two'>
+                <Col className='min-h-[200px] p-5 bg-black-2'>
                     <Button className='self-end' onClick={hideCPModal}>
                         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M13 13L2 2" stroke="#D6D6D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -132,7 +132,7 @@ const AccountTab = () => {
                     </Formik>
                 </Col>
             </Modal>
-        </Layout>
+        </>
     )
 }
 
