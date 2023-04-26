@@ -88,7 +88,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
         <tbody>
           {assets.map((elm, index) => {
             return (
-              <tr key={index} className="hover:bg-grey_one cursor-pointer">
+              <tr key={index} className="hover:bg-grey-1 cursor-pointer">
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium leading-6 text-white"
