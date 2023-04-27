@@ -14,10 +14,17 @@ import initAuth from '../initFirebaseAuth';
 import { axiosInstance } from '../services/api/axiosConfig';
 
 import '../styles/global.css'
+import { Poppins } from 'next/font/google';
 
 /*
  *  Don't dispatch actions from pages/_app this mode is not compatible with Next.js 9's Auto Partial Static Export feature
  */
+
+const poppins = Poppins({
+    variable: '--poppins-font',
+    weight: ["400", "500", "600"],
+    subsets: ["latin"],
+})
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -54,7 +61,9 @@ function App({ Component, ...pageProps }: AppPropsWithLayout) {
     <Provider store={store}>
       <ThemeProvider attribute="class">
         <AuthModalProvider>
-          <Component {...props.pageProps} />
+          <main className={poppins.className}>
+            <Component {...props.pageProps} />
+          </main>
         </AuthModalProvider>
       </ThemeProvider>
       <ToastContainer />

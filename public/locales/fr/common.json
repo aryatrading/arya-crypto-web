@@ -8,5 +8,10 @@
     "nameErrorMsg": "Le nom doit comporter au moins 2 caractères",
     "passwordErrorMsg": "Le mot de passe doit comporter au moins 2 caractères Le mot de passe doit comporter au moins 2 caractères",
     "required": "Ce champ est obligatoire !",
-    "invalidEmail": "Format d'email non valide !"
+    "invalidEmail": "Format d'email non valide !",
+    "settings":"Paramètres",
+    "portfolio":"Mon portfolio",
+    "smartAllocation":"Allocation intelligente",
+    "trade":"Commerce",
+    "market":"Market"
 }
