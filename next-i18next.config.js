@@ -9,7 +9,12 @@ module.exports = {
     i18n: {
       defaultLocale: 'en',
       locales: ['en', 'fr'],
+      
     },
+    localeNamespaces:[
+      'common',
+      'auth'
+    ],
     /** To avoid issues when deploying to some paas (vercel...) */
     localePath:
       typeof window === 'undefined'
