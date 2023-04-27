@@ -12,7 +12,7 @@ type AssetPnl = {
 
 export const AssetPnl: FC<AssetPnl> = ({ bgColor, value, isUp, textColor }) => {
   return (
-    <Row className={`${bgColor} w-20 h-5 rounded  justify-center items-center`}>
+    <Row className={`${bgColor} w-[70px] h-5 rounded  justify-center gap-1.5 items-center`}>
       <PlayIcon
         className={`w-3 h-3 ${
           isUp ? "fill-green-1 -rotate-90" : "fill-red-1 rotate-90"
