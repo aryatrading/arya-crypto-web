@@ -18,12 +18,12 @@ export const MarketStats: FC<MarketProps> = ({
   return (
     <Col className={`ml-3.5 mr-3.5 ${bgColor} w-60 rounded-md h-20 pl-5 pt-2`}>
       <Row>
-        <p className="text-[#F9FAFB] text-sm font-medium leading-5 items-center">
+        <p className="dark:text-[#F9FAFB] text-sm font-medium leading-5 items-center">
           {title}
         </p>
         <AssetPnl value={value} textColor={textColor} isUp={+value > 0} />
       </Row>
-      <p className="text-[#F9FAFB] text-xl font-medium leading-7 pt-2">
+      <p className="dark:text-[#F9FAFB] text-xl font-medium leading-7 pt-2">
         $1,227,747,623,904
       </p>
     </Col>
