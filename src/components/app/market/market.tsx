@@ -43,7 +43,7 @@ const Market: FC = () => {
       <Col className="flex items-center justify-center flex-1">
         <Col className="h-32 mb-20">
           <p className="text-center  text-[#F9FAFB] font-medium text-4xl mb-10">
-            {tab === "all" ? t("cryptocurrencies") : t("cryptocurrencies")}
+            {tab === "all" ? t("cryptocurrencies") : t("favorites")}
           </p>
           {tab === "all" ? (
             <Row className="w-full items-center justify-center mb-10">
