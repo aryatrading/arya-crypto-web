@@ -44,7 +44,10 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
       />
       <Row className="gap-2 items-center">
         <p className="font-medium text-4xl">
-          {formatNumber(_assetprice[asset.symbol?.toLowerCase() ?? "eth"] ?? 0)}
+          {formatNumber(
+            _assetprice[asset.symbol?.toLowerCase() ?? "eth"] ??
+              asset.currentPrice
+          )}
         </p>
         <AssetPnl
           value={asset.pnl > 0 ? `+${asset.pnl}%` : asset.pnl + "%"}
