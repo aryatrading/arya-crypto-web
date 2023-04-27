@@ -19,7 +19,7 @@ export const AssetPnl: FC<AssetPnl> = ({ bgColor, value, isUp, textColor }) => {
         } stroke-0`}
       />
       <p
-        className={`text-sm font-medium leading-4 pl-1.5 pt-0.5 ${textColor} `}
+        className={`text-xs font-medium leading-4 pl-1.5 pt-0.5 ${textColor}`}
       >
         {value}%
       </p>
