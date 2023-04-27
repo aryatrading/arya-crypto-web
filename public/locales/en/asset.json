@@ -6,5 +6,13 @@
     "totalsupply": "Total Supply",
     "dailylow": "Daily Low",
     "dailyhigh": "Daily High",
-    "rank": "Rank"
+    "rank": "Rank",
+    "pricelivedata": "Price Live Data",
+    "pricetday": "price today is ",
+    "twentyfourvolume": " with a 24-hour trading volume of ",
+    "pricechange": "price change is",
+    "lasttwentyfour": "in the last 24 hours. It has a circulating supply of",
+    "totalsupplyof": "coins and a total supply of",
+    "binanceexchange": "If you are looking to buy or sell Bitcoin, Binance is currently the most active exchange.",
+    "whatis": "What is"
 }

@@ -1,10 +1,18 @@
 {
-    "mrkCap": "Market Cap",
-    "fullydiluted": "Fully Diluted Valuation",
-    "circsupply": "Circulating Supply",
+    "mrkCap": "Capitalisation boursière",
+    "fullydiluted": "Évaluation entièrement diluée",
+    "circsupply": "Alimentation en circulation",
     "volume": "Volume 24h",
-    "totalsupply": "Total Supply",
-    "dailylow": "Daily Low",
-    "dailyhigh": "Daily High",
-    "rank": "Rank"
+    "totalsupply": "Offre totale",
+    "dailylow": "Quotidiennement bas",
+    "dailyhigh": "Maximum journalier",
+    "rank": "Rang",
+    "pricelivedata": "Prix des données en direct",
+    "pricetday": "Le prix est aujourd'hui de",
+    "twentyfourvolume": " avec un volume de transactions sur 24 heures de ",
+    "pricechange": "Le changement de prix est",
+    "lasttwentyfour": "au cours des dernières 24 heures. Il dispose d'une réserve en circulation de",
+    "totalsupplyof": "et une offre totale de",
+    "binanceexchange": "Si vous cherchez à acheter ou à vendre des bitcoins, Binance est actuellement la bourse la plus active.",
+    "whatis": "Qu'est-ce que"
 }
