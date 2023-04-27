@@ -5,8 +5,6 @@ import Asset from "../../components/app/asset/asset";
 import { useEffect } from "react";
 import { getAssetDetails } from "../../services/controllers/asset";
 import { useRouter } from "next/router";
-import { dispatchAction } from "../../utils/global_dispatch";
-import { clearAsset } from "../../services/redux/assetSlice";
 
 const AssetPage = () => {
   const router = useRouter();
@@ -14,7 +12,7 @@ const AssetPage = () => {
 
   useEffect(() => {
     if (symbol) getAssetDetails(symbol);
-  }, []);
+  }, [symbol]);
 
   return (
     <Layout>
