@@ -1,0 +1,13 @@
+{
+    "cryptocurrencies": "Cryptocurrencies",
+    "favorites": "Favorites",
+    "search": "Search a coin",
+    "all": "All",
+    "rank": "Rank",
+    "name": "Name",
+    "pnl": "24h P/L",
+    "currentprice": "Current Price",
+    "priceinbtc": "Price in BTC",
+    "marketcap": "Market Cap.",
+    "volume": "volume 24H"
+}

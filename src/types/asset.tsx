@@ -13,4 +13,8 @@ export interface AssetType {
   locked?: number;
   isTradable?: boolean;
   isFavorite?: boolean;
+  pnl?: any;
+  mrkCap?: number;
+  volume?: number;
+  currentPrice?: number;
 }
