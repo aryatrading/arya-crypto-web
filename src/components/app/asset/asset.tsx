@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { getAsset } from "../../../services/redux/assetSlice";
 import { useTranslation } from "next-i18next";
 import { formatNumber } from "../../../utils/format_currency";
+import { AssetInformation } from "../../shared/containers/asset/assetInfotmation";
 
 const Asset: FC = () => {
   const { t } = useTranslation(["asset"]);
@@ -27,7 +28,7 @@ const Asset: FC = () => {
   }, [asset]);
 
   return (
-    <Col className="h-full w-full">
+    <Col className="h-full w-full gap-12">
       <AssetHeader asset={asset} />
       <Row className="mt-7 flex flex-wrap xl:justify-between">
         {stats.map((elm, index) => {
@@ -36,6 +37,7 @@ const Asset: FC = () => {
           );
         })}
       </Row>
+      <AssetInformation asset={asset} />
     </Col>
   );
 };
