@@ -124,7 +124,9 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                   />
                 </td>
                 <td className="font-medium leading-6 text-white">
-                  {formatNumber(_assetprice[elm.symbol ?? ""] ?? 0)}
+                  {formatNumber(
+                    _assetprice[elm.symbol ?? ""] ?? elm.currentPrice
+                  )}
                 </td>
                 <td className="font-medium leading-6 text-white">
                   {(_assetprice[elm.symbol ?? ""] / _assetprice["btc"]).toFixed(
