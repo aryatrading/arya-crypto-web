@@ -7,6 +7,7 @@ import { getAsset } from "../../../services/redux/assetSlice";
 import { useTranslation } from "next-i18next";
 import { formatNumber } from "../../../utils/format_currency";
 import { AssetInformation } from "../../shared/containers/asset/assetInfotmation";
+import AssetVote from "../../shared/containers/asset/assetVote";
 
 const Asset: FC = () => {
   const { t } = useTranslation(["asset"]);
@@ -29,7 +30,10 @@ const Asset: FC = () => {
 
   return (
     <Col className="h-full w-full gap-12">
-      <AssetHeader asset={asset} />
+      <Row className="justify-between">
+        <AssetHeader asset={asset} />
+        <AssetVote />
+      </Row>
       <Row className="mt-7 flex flex-wrap xl:justify-between">
         {stats.map((elm, index) => {
           return (
