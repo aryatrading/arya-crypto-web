@@ -1,5 +1,4 @@
 import { FC, useMemo } from "react";
-// import "./PieCharts.scss";
 import { Chart as ChartJS, ArcElement, Tooltip, ChartOptions, ChartData } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { Col, Row } from "../../layout/flex";

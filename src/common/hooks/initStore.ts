@@ -6,12 +6,8 @@ import { ExchangeType } from "../../types/exchange.types";
 import StatusAsync from "../../utils/status-async";
 
 export const initStoreData = (store: Store<any, AnyAction>) => {
-
     initExchangeStore(store.dispatch);
-
 }
-
-
 
 async function initExchangeStore(dispatch: Dispatch<AnyAction>) {
     dispatch(setExchangeStoreAsyncStatus(StatusAsync.PENDING));
@@ -26,7 +22,6 @@ async function initExchangeStore(dispatch: Dispatch<AnyAction>) {
 }
 
 async function initConnectedProviders(dispatch: Dispatch<AnyAction>) {
-    
     return await getConnectedProviders().then((res) => {
         const exchanges: ExchangeType[] = res.data;
         if (exchanges?.length) {

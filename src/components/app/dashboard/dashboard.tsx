@@ -3,23 +3,24 @@ import Image from "next/image"
 import clsx from "clsx"
 import { PlusIcon } from "@heroicons/react/24/solid"
 import { useSelector } from "react-redux"
+import { useTranslation } from "next-i18next"
 
 import { Col, Row } from "../../shared/layout/flex"
 import DoughnutChart from "../../shared/charts/doughnut/doughnut"
 import LineChart from "../../shared/charts/graph/graph"
 import Button from "../../shared/buttons/button"
 import ExchangeSwitcher from "../../shared/exchange-switcher/exchange-switcher"
-import { getConnectedProviders, getPortfolioHoldings, getPortfolioSnapshots } from "../../../services/controllers/market"
+import { getPortfolioHoldings, getPortfolioSnapshots } from "../../../services/controllers/market"
 import { PortfolioAssetType, PortfolioSnapshotType } from "../../../types/exchange.types"
 import { chartDataType } from "../../shared/charts/graph/graph.type"
 import { percentageFormat, priceFormat } from "../../../utils/helpers/prices"
 import LoadingSpinner from "../../shared/loading-spinner/loading-spinner"
 import { selectConnectedExchanges, selectExchangeStoreStatus, selectSelectedExchange } from "../../../services/redux/exchangeSlice"
 import StatusAsync from "../../../utils/status-async"
+import ExchangeImage from "../../shared/exchange-image/exchange-image"
+import { MODE_DEBUG } from "../../../utils/constants/config"
 
 import styles from "./dashboard.module.scss"
-import ExchangeImage from "../../shared/exchange-image/exchange-image"
-
 
 const Dashboard: FC = () => {
 
@@ -28,9 +29,12 @@ const Dashboard: FC = () => {
     const [portfolioSnapshots, setPortfolioSnapshots] = useState<PortfolioSnapshotType[]>([]);
     const [portfolioHoldings, setPortfolioHoldings] = useState<PortfolioAssetType[]>([]);
     const [totalPortfolioAmountInUSD, setTotalPortfolioAmountInUSD] = useState<number>(0);
+
     const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
     const selectedExchange = useSelector(selectSelectedExchange);
     const connectedExchanges = useSelector(selectConnectedExchanges);
+
+    const { t } = useTranslation(["dashboard", "common"]);
 
     useEffect(() => {
         setIsLoadingPortfolioSnapshots(true);
@@ -45,7 +49,8 @@ const Dashboard: FC = () => {
                 }
             })
             .catch((error) => {
-                console.error(error)
+                if (MODE_DEBUG)
+                    console.error("Error while getting portfolio Snapshots (getPortfolioSnapshots)", error)
             })
             .finally(() => {
                 setIsLoadingPortfolioSnapshots(false);
@@ -57,11 +62,8 @@ const Dashboard: FC = () => {
         getPortfolioHoldings(selectedExchange?.provider_id)
             .then((res) => {
                 const data: any = res.data;
-                console.log({ data });
                 if (selectedExchange?.provider_id) {
-
                     const assets: PortfolioAssetType[] = data[selectedExchange?.provider_id]?.data;
-
                     if (assets?.length) {
                         assets.sort((a, b) => (b.current_value - a.current_value));
                         setPortfolioHoldings(assets);
@@ -69,9 +71,7 @@ const Dashboard: FC = () => {
                         let total = assets.map(asset => asset.current_value)?.reduce((prev, current) => {
                             return prev + current;
                         });
-
                         setTotalPortfolioAmountInUSD(total);
-
                     }
                 } else {
                     setPortfolioHoldings([]);
@@ -79,7 +79,8 @@ const Dashboard: FC = () => {
 
             })
             .catch((error) => {
-                console.error(error)
+                if (MODE_DEBUG)
+                    console.error("Error while getting portfolio holdings (getPortfolioHoldings)", error)
             })
             .finally(() => {
                 setIsLoadingPortfolioHoldings(false);
@@ -103,12 +104,12 @@ const Dashboard: FC = () => {
                             label: asset.name,
                             value: asset.current_value,
                         }))}
-                        title="Portfolio composition"
+                        title={t("common:portfolioComposition")}
                     />
                 </Col>
             )
         }
-    }, [portfolioHoldings, selectedExchange?.provider_id])
+    }, [portfolioHoldings, selectedExchange?.provider_id, t])
 
     const portfolioLineChart = useMemo(() => {
 
@@ -165,19 +166,19 @@ const Dashboard: FC = () => {
                 <table className={styles.table}>
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Weight</th>
-                            <th>Amount</th>
-                            <th>Current Price</th>
-                            <th>Value</th>
-                            <th>24h P/L</th>
-                            <th>Exchange</th>
+                            <th>{t("common:name")}</th>
+                            <th>{t("common:weight")}</th>
+                            <th>{t("common:amount")}</th>
+                            <th>{t("common:currentPrice")}</th>
+                            <th>{t("common:value")}</th>
+                            <th>{t("common:24hP/L")}</th>
+                            <th>{t("common:exchange")}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {!portfolioHoldings.length ?
                             <tr>
-                                <td colSpan={7} className="row-span-full">No Assets</td>
+                                <td colSpan={7} className="row-span-full">{t("common:noAssets")}</td>
                             </tr>
                             : portfolioHoldings.map(asset => {
                                 const isPriceChangePositive = asset.asset_details.price_change_percentage_24h > 0;
@@ -193,21 +194,16 @@ const Dashboard: FC = () => {
                                         <td>
                                             <Row className="gap-3 items-center">
                                                 <Image src={asset.asset_details.image} alt="" width={23} height={23} />
-                                                {asset.asset_details.name}
+                                                <p>{asset.asset_details.name}</p>
                                                 <span className="text-sm text-grey-1">{asset.name}</span>
                                             </Row>
                                         </td>
                                         <td>
                                             <Row className="justify-between items-center w-[120px]">
-                                                <Row>
-                                                    {percentageFormat(asset.current_value / totalPortfolioAmountInUSD * 100)}%
-                                                </Row>
+                                                <p>{percentageFormat(asset.current_value / totalPortfolioAmountInUSD * 100)}%</p>
                                                 <Row className="h-[5px] rounded-full w-[50px] bg-white">
                                                     <Row className={`h-full rounded-full bg-blue-1`} style={{
                                                         width: `${Math.ceil(assetPortfolioPercentage)}%`
-                                                    }} />
-                                                    <Row className={`h-full rounded-full`} style={{
-                                                        width: 1
                                                     }} />
                                                 </Row>
                                             </Row>
@@ -228,18 +224,18 @@ const Dashboard: FC = () => {
                 </table>
             </Row>
         )
-    }, [portfolioHoldings, tableExchangesImages, totalPortfolioAmountInUSD])
+    }, [portfolioHoldings, t, tableExchangesImages, totalPortfolioAmountInUSD])
 
     const holdingsTable = useMemo(() => {
         if (selectedExchange?.provider_id) {
             return (
                 <Col className="gap-5 col-span-12">
                     <Row className="items-center justify-between w-full">
-                        <h3 className="text-2xl font-semibold">Your Holdings</h3>
+                        <h3 className="text-2xl font-semibold">{t("yourHoldings")}</h3>
                         <Button className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1">
                             <PlusIcon width={15} />
                             <p className="font-bold">
-                                Add Assets
+                                {t('addAssets')}
                             </p>
                         </Button>
                     </Row>
@@ -247,7 +243,7 @@ const Dashboard: FC = () => {
                 </Col>
             )
         }
-    }, [selectedExchange?.provider_id, table]);
+    }, [selectedExchange?.provider_id, t, table]);
 
     const loadingOverlay = useMemo(() => {
         return (
@@ -260,8 +256,6 @@ const Dashboard: FC = () => {
 
 
     }, [])
-
-    console.log({ isLoadingPortfolioSnapshots, isLoadingPortfolioHoldings, exchangeStoreStatus })
 
     return (
         <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">

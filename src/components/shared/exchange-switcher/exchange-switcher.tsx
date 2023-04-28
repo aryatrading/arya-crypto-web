@@ -3,6 +3,7 @@ import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/solid"
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
+import { useTranslation } from "next-i18next";
 
 import { Col, Row } from "../layout/flex";
 import { selectConnectedExchanges, selectExchangeStoreStatus, selectSelectedExchange, setSelectedExchange } from "../../../services/redux/exchangeSlice";
@@ -19,7 +20,10 @@ const ExchangeSwitcher: FC = () => {
     const selectedExchange = useSelector(selectSelectedExchange);
     const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
     const connectedExchanges = useSelector(selectConnectedExchanges);
+
     const dispatch = useDispatch();
+
+    const { t } = useTranslation(["common"]);
 
     const changePercentage = useCallback((exchange: ExchangeType | null) => {
 
@@ -82,7 +86,7 @@ const ExchangeSwitcher: FC = () => {
                                     <Row className="gap-1">
                                         <PlusIcon width={20} />
                                         <p className="text-bold">
-                                            Add exchange
+                                            {t("addExchange")}
                                         </p>
                                     </Row>
                                 </Button>
@@ -92,17 +96,16 @@ const ExchangeSwitcher: FC = () => {
                 </DropdownMenu.Portal>
             </DropdownMenu.Root>
         );
-    }, [connectedExchanges, dropdownItem])
+    }, [connectedExchanges, dropdownItem, t])
 
     return (
         <AsyncStatusWrapper
             asyncStatus={exchangeStoreStatus}
             whenIdleComponent={<LoadingSpinner />}
             whenPendingComponent={<LoadingSpinner />}
-            whenRejectedComponent={<p>Error</p>}
+            whenRejectedComponent={<></>}
         >
             <Col className="col-span-12 items-start gap-1">
-
                 <Row className="items-center justify-center gap-4 z-10">
                     <ExchangeImage providerId={selectedExchange?.provider_id} />
                     <h3 className="text-3xl font-bold capitalize">{selectedExchange?.name?.toLowerCase()}</h3>
@@ -110,7 +113,6 @@ const ExchangeSwitcher: FC = () => {
                 </Row>
                 <Row className="items-center gap-3">
                     <h3 className="text-4xl font-bold">${priceFormat(selectedExchange?.last_5m_evaluation ?? 0, true)} <span className="text-2xl">USD</span></h3>
-
                     <Row className="bg-green-2 p-1 rounded-md">
                         {changePercentage(selectedExchange)}
                     </Row>

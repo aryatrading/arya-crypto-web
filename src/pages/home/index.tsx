@@ -8,7 +8,7 @@ const HomePage = (props: any) => {
 
     return (
         <Layout>
-            <Dashboard/>
+            <Dashboard />
         </Layout>
     )
 }
@@ -21,6 +21,11 @@ export const getStaticProps: GetStaticProps<any> = async ({
     locale,
 }) => ({
     props: {
-        ...(await serverSideTranslations(locale ?? 'en')),
+        ...(await serverSideTranslations(locale ?? 'en', [
+            "common",
+            "auth",
+            "nav",
+            'dashboard'
+        ])),
     },
 })

@@ -6,6 +6,7 @@ import {
     PriceScaleMode,
     BarPrice
 } from 'lightweight-charts';
+import colors from 'tailwindcss/colors'
 
 import { Col } from "../../layout/flex";
 
@@ -69,7 +70,7 @@ const LineChart: FC<GraphChartType> = ({ primaryLineData, secondaryLineData: sec
             chart.timeScale().fitContent();
 
             const series = chart.addLineSeries({
-                color: '#558AF2',
+                color: colors.blue[500],
                 priceLineVisible: false,
                 lastValueVisible: true,
                 priceFormat: {
@@ -86,7 +87,7 @@ const LineChart: FC<GraphChartType> = ({ primaryLineData, secondaryLineData: sec
 
             if (secondaryData) {
                 const series2 = chart.addLineSeries({
-                    color: 'yellow',
+                    color: colors.yellow[500],
                     priceLineVisible: false,
                     lastValueVisible: true,
                 });
