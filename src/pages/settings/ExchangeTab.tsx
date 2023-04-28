@@ -67,7 +67,7 @@ const ExchangeTab = () => {
                                                 <ErrorMessage name="creationDate" component="p" className="text-red-400" />
                                             </Col>
                                         </Row>
-                                        {!selectedExchange.create && <Row className='justify-center items-center gap-4'>
+                                        <Row className='justify-center items-center gap-4'>
                                             <Col className='flex-1'>
                                                 <TextInput type="text" name="whitelistIPs" label={t('whitelistIPs')} disabled />
                                                 <ErrorMessage name="whitelistIPs" component="p" className="text-red-400" />
@@ -75,7 +75,7 @@ const ExchangeTab = () => {
                                             <Button className='text-white bg-grey-3 hover:bg-grey-4 font-medium rounded-lg text-sm h-[44px] min-w-[110px] mt-6' type="button">
                                                 <h5>{t('Copy')}</h5>
                                             </Button>
-                                        </Row>}
+                                        </Row>
                                         <Col>
                                             <TextInput type="text" name="APIKey" label={t('APIKey')} disabled={!selectedExchange.create} />
                                             <ErrorMessage name="APIKey" component="p" className="text-red-400" />
