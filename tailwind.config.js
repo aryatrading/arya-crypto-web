@@ -53,9 +53,9 @@ module.exports = {
         }
       }
     },
-    fontFamily: {
-      sans: ['var(--poppins-font)', ...fontFamily.sans],
-    }
+    // fontFamily: {
+    //   sans: ['var(--poppins-font)', ...fontFamily.sans],
+    // }
   },
 }
 export const plugins = [
