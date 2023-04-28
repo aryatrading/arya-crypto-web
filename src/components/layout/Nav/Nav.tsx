@@ -19,7 +19,7 @@ const Nav = () => {
   const [authed, setAuthed] = useState(false)
   const [collapse,setCollapse] = useState(false)
   const {modalTrigger, setVisibleSection} = useAuthModal();
-  const { t } = useTranslation(['nav']);
+  const { t } = useTranslation(['common']);
 
   const userOptions = useCallback(
     () => {
@@ -42,7 +42,7 @@ const Nav = () => {
       }
       else{
         return <Row className="gap-4 items-center">
-        <Button className="px-6 py-3 font-semi-bold"
+        <Button className="px-6 py-3 font-medium"
           onClick={() => {
             setVisibleSection('login');
             modalTrigger.show();
@@ -50,7 +50,7 @@ const Nav = () => {
         > 
           {t('login')}
         </Button>
-        <Button className="dark:bg-blue-3 px-6 py-3 dark:text-blue-1 text-sm rounded-md font-bold hidden md:block"
+        <Button className="dark:bg-blue-3 px-6 py-3 dark:text-blue-1 text-sm rounded-md font-medium hidden md:block"
           onClick={() => {
             setVisibleSection('signup');
             modalTrigger.show();
@@ -144,7 +144,7 @@ const Nav = () => {
                 className="rounded-md dark:bg-grey-3 w-full justify-center"
               />
             :
-              <Link href='/signup' className="dark:bg-blue-3 py-3 dark:text-blue-1 text-sm rounded-md font-bold w-full">{t('signup')}</Link>
+              <Link href='/signup' className="dark:bg-blue-3 py-3 dark:text-blue-1 text-sm rounded-md font-medium w-full">{t('signup')}</Link>
             }
           </div>
         </Col>

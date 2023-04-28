@@ -3,16 +3,15 @@ import { createWrapper } from "next-redux-wrapper";
 
 import userReducer from "./userSlice";
 import exchangeReducer from "./exchangeSlice";
+import marketReducer from "./marketSlice";
 
 export function makeStore() {
   return configureStore({
-    reducer: { user: userReducer, exchange: exchangeReducer },
+    reducer: { user: userReducer, market: marketReducer, exchange: exchangeReducer },
   });
 }
 
 export const store = makeStore();
-
-// const makeStore = (context: Context) => createStore(reducer);
 
 export type AppState = ReturnType<typeof store.getState>;
 
