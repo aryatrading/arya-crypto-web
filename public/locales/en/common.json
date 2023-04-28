@@ -8,5 +8,10 @@
     "nameErrorMsg": "Name must be at least 2 characters",
     "passwordErrorMsg": "Password must be at least 2 characters",
     "required": "This field is required!",
-    "invalidEmail": "Invalid email format!"
+    "invalidEmail": "Invalid email format!",
+    "settings":"Settings",
+    "portfolio":"My Portfolio",
+    "smartAllocation":"Smart Allocation",
+    "trade":"Trade",
+    "market":"Market"
 }

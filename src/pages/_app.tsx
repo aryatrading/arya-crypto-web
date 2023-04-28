@@ -17,10 +17,19 @@ import "../services/api/socketConfig";
 import "../styles/global.css";
 import { setDispatch } from "../utils/global_dispatch";
 import React from "react";
+import { FAVORITES_LIST } from "../utils/constants/config";
+import "../styles/global.css";
+import { Poppins } from "next/font/google";
 
 /*
  *  Don't dispatch actions from pages/_app this mode is not compatible with Next.js 9's Auto Partial Static Export feature
  */
+
+const poppins = Poppins({
+  variable: "--poppins-font",
+  weight: ["400", "500", "600"],
+  subsets: ["latin"],
+});
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -40,7 +49,11 @@ try {
 
 function App({ Component, ...pageProps }: AppPropsWithLayout) {
   useEffect(() => {
+    console.log("loading");
     const localStorageToken = localStorage?.getItem("idToken");
+
+    // Create the inital favorites list in localstorage
+    localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
     if (localStorageToken) {
       axiosInstance.defaults.headers.common[
         "Authorization"

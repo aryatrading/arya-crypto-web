@@ -53,6 +53,12 @@ module.exports = {
         }
       }
     },
+    fontFamily: {
+      sans: ['var(--poppins-font)', ...fontFamily.sans],
+    }
   },
 }
+export const plugins = [
+  require("flowbite/plugin")
+]
 
