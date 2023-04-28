@@ -11,8 +11,8 @@ const poppins = Poppins({
 export default function Layout({ children }:any) {
     return <div className={poppins.className}>
         <Nav/>
-        <div className={'flex flex-col flex-1 container sm:items-center lg:pt-20'}>
+        <div className={'flex flex-col flex-1 container sm:items-center lg:pt-20 p-5'}>
             {children}
-        </div>;
+        </div>
     </div>
 }

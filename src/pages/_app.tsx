@@ -14,6 +14,7 @@ import initAuth from '../initFirebaseAuth';
 import { axiosInstance } from '../services/api/axiosConfig';
 
 import '../styles/global.css'
+import { initStoreData } from '../common/hooks/initStore';
 
 /*
  *  Don't dispatch actions from pages/_app this mode is not compatible with Next.js 9's Auto Partial Static Export feature
@@ -46,6 +47,9 @@ function App({ Component, ...pageProps }: AppPropsWithLayout) {
 
 
   const { store, props } = wrapper.useWrappedStore(pageProps);
+
+  initStoreData(store);
+
 
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout || ((page: any) => page)

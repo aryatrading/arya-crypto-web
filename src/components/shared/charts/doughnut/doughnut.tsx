@@ -1,8 +1,7 @@
-import { FC, useCallback, useMemo } from "react";
+import { FC, useMemo } from "react";
 // import "./PieCharts.scss";
 import { Chart as ChartJS, ArcElement, Tooltip, ChartOptions, ChartData } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import numeral from "numeral";
 import { Col, Row } from "../../layout/flex";
 
 export type doughnutChartDataType = {
@@ -10,7 +9,7 @@ export type doughnutChartDataType = {
     value: number,
 }
 
-const colors: string[] = ['blue', 'darkBlue', 'orange', 'pink', 'indigo', 'lime', 'purple', 'green', 'yellow', 'amber', 'red', 'cyan', 'brown', 'teal', 'grey', 'lime', 'blueGrey'];
+const colors: string[] = ['pink', 'orange', 'blue', 'darkBlue', 'indigo', 'lime', 'purple', 'green', 'yellow', 'amber', 'red', 'cyan', 'brown', 'teal', 'grey', 'lime', 'blueGrey'];
 
 const colorsHex: { [k: string]: string } = {
     'blue': '#224DDA',
@@ -18,7 +17,7 @@ const colorsHex: { [k: string]: string } = {
     'red': '#FF1744',
     'yellow': '#FFA93A',
     'indigo': '#232892',
-    'pink': '#FF4081',
+    'pink': '#E6007A',
     'purple': '#A05ACE',
     amber: '#FFAB00',
     cyan: '#00B8D4',
@@ -53,15 +52,13 @@ const DoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[], max
                     {
                         data: values,
                         backgroundColor: backgroundColors,
-                        borderColor: [
-                        ],
                         borderWidth: 0,
+
                     },
                 ],
             }
 
             const graphOptions: ChartOptions<"doughnut"> = {
-
                 plugins: {
                     tooltip: {
                         padding: 10
@@ -82,7 +79,7 @@ const DoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[], max
     if (chartData?.length) {
         return (
             <Col className='justify-center items-start w-full gap-5 px-14'>
-                <h5 className='description-text font-bold'>{title}</h5>
+                <p className='font-bold'>{title}</p>
                 <Row className='justify-center w-full'>
                     <Row className={`max-w-[${maxWidth}]`}>
                         {doughnutChart}

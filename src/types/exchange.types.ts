@@ -3,18 +3,19 @@ import StatusAsync from "../utils/status-async"
 export interface ExchangeStateType {
     status: StatusAsync,
     data: {
-        selectedExchange: SelectedExchangeType | null,
-        connectedExchanges: any | null,
-        allExchanges: any | null,
+        selectedExchange: ExchangeType | null,
+        connectedExchanges: ExchangeType[] | null,
     }
     error: Error | null,
 }
 
-export type SelectedExchangeType = {
-    id?: string,
-    name?: string,
-    portfolioValue?: number,
-    portfolioChange?: number,
+export type ExchangeType = {
+    name: string,
+    provider_id: number,
+    provider_name: string,
+    "24h_change_value": number,
+    "24h_change_percentage": number,
+    last_5m_evaluation: number,
 }
 
 
