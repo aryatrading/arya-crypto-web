@@ -1,7 +1,7 @@
 import { useTranslation } from 'next-i18next';
 
-import { Col, Row } from '../../components/shared/layout/flex';
-import Button from '../../components/shared/buttons/button';
+import { Col, Row } from '../../shared/layout/flex';
+import Button from '../../shared/buttons/button';
 
 const SubcriptionTab = () => {
     const { t } = useTranslation(['settings', 'common']);

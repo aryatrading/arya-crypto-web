@@ -5,11 +5,11 @@ import { useAuthUser } from 'next-firebase-auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { Col, Row } from '../../components/shared/layout/flex';
-import { Modal } from '../../components/app/modal';
-import Button from '../../components/shared/buttons/button';
-import TextInput from '../../components/shared/form/inputs/textInput';
-import { changePassword } from '../../services/firebase/auth/auth';
+import { Col, Row } from '../../shared/layout/flex';
+import { Modal } from '../modal';
+import Button from '../../shared/buttons/button';
+import TextInput from '../../shared/form/inputs/textInput';
+import { changePassword } from '../../../services/firebase/auth/auth';
 
 interface InputTypes {
     label: string,

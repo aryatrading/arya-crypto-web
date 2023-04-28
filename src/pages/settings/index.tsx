@@ -4,13 +4,11 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next';
 import { GetStaticProps } from 'next';
 
-
 import Layout from '../../components/layout/layout'
 import { Row } from '../../components/shared/layout/flex';
-
-import AccountTab from './AccountTab';
-import SubcriptionTab from './SubcriptionTab';
-import ExchangeTab from './ExchangeTab';
+import AccountTab from '../../components/app/settings/AccountTab';
+import SubcriptionTab from '../../components/app/settings/SubcriptionTab';
+import ExchangeTab from '../../components/app/settings/ExchangeTab';
 
 
 const SettingsScreen = () => {

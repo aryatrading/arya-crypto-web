@@ -3,10 +3,10 @@ import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import { ErrorMessage, Form, Formik } from "formik";
 
-import { Col, Row } from '../../components/shared/layout/flex';
-import Button from '../../components/shared/buttons/button';
-import AddExchange from '../../components/app/exchangeTab/AddExchange';
-import TextInput from '../../components/shared/form/inputs/textInput';
+import { Col, Row } from '../../shared/layout/flex';
+import Button from '../../shared/buttons/button';
+import AddExchange from '../../app/exchangeTab/AddExchange';
+import TextInput from '../../shared/form/inputs/textInput';
 
 const ExchangeTab = () => {
     const { t } = useTranslation(['settings', 'common']);
