@@ -2,6 +2,7 @@ import Link from "next/link";
 import React, { useCallback, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
+import { useAuthUser, withAuthUser } from "next-firebase-auth";
 
 import { HomeHover, HomeDefault } from "../../svg/navbar/homeIcon";
 import { TradeHover, TradeDefault } from "../../svg/navbar/tradeIcon";
@@ -16,7 +17,6 @@ import { logoIcon } from "../../../../public/assets/images/svg";
 import { useAuthModal } from "../../../context/authModal.context";
 
 import NavLink from "./NavLink/NavLink";
-import { useAuthUser } from "next-firebase-auth";
 
 const Nav = () => {
   const { id } = useAuthUser();
@@ -146,4 +146,5 @@ const Nav = () => {
   );
 };
 
-export default Nav;
+export default withAuthUser({
+})(Nav)
