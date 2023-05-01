@@ -17,7 +17,7 @@ export const SearchInput: FC<SearchInputProps> = ({
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
             aria-hidden="true"
-            className="w-5 h-5 text-gray-500 dark:text-gray-400"
+            className="w-5 h-5 text-gray-500 text-gray-400"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@ export const SearchInput: FC<SearchInputProps> = ({
         <input
           type="text"
           id="simple-search"
-          className="font-medium border border-gray-300 text-gray-1 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-black-1 dark:border-black-2 dark:placeholder-gray-1 dark:text-gray-1 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="font-medium border border-gray-300 text-gray-1 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  bg-black-1 border-black-2 placeholder-gray-1 text-gray-1 focus:ring-blue-500 focus:border-blue-500"
           placeholder={placeholder}
           required
           onChange={(e) => onchange(e.target.value)}

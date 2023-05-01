@@ -1,6 +1,7 @@
 import React from "react";
 import Nav from "./Nav/Nav";
 import { Poppins } from "next/font/google";
+import Footer from "./Footer/Footer";
 
 const poppins = Poppins({
   variable: "--poppins-font",
@@ -17,6 +18,7 @@ export default function Layout({ children }: any) {
       >
         {children}
       </div>
+      <Footer/>
     </div>
   );
 }
