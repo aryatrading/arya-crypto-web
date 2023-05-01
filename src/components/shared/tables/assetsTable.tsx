@@ -1,11 +1,11 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { AssetType } from "../../../types/asset";
 import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
 import AssetPnl from "../containers/assetPnl";
 import { Col, Row } from "../layout/flex";
 import { formatNumber } from "../../../utils/format_currency";
 import { useSelector } from "react-redux";
-import { getLivePrice } from "../../../services/redux/marketSlice";
+import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { FAVORITES_LIST } from "../../../utils/constants/config";
 import React from "react";
@@ -18,7 +18,7 @@ type AssetsTableProps = {
 
 export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
   const { t } = useTranslation(["market"]);
-  const _assetprice = useSelector(getLivePrice);
+  const _assetprice = useSelector(selectAssetLivePrice);
 
   header = [
     t("rank") ?? "",
@@ -119,10 +119,10 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                   />
                 </td>
                 <td className="font-medium leading-6 text-white">
-                  {formatNumber(_assetprice[elm.symbol ?? ""] ?? 0)}
+                  {(!!_assetprice)?formatNumber(_assetprice[elm.symbol??'']):0}
                 </td>
                 <td className="font-medium leading-6 text-white">
-                  {(_assetprice[elm.symbol ?? ""] / _assetprice["btc"]).toFixed(
+                  {!!_assetprice&&(_assetprice[elm.symbol ?? ""] / _assetprice["btc"]).toFixed(
                     7
                   )}
                 </td>
