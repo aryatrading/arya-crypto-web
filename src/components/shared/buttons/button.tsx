@@ -1,6 +1,6 @@
 import { FC } from "react";
-import LoadingSpinner from "../loadingSpinner/loadingSpinner";
 import React from "react";
+import LoadingSpinner from "../loading-spinner/loading-spinner";
 
 interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   isLoading?: boolean;

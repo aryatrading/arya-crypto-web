@@ -1,7 +1,7 @@
 import { AssetType } from "../../types/asset";
-import { dispatchAction } from "../../utils/global_dispatch";
 import { axiosInstance } from "../api/axiosConfig";
 import { storeMrkAssets } from "../redux/marketSlice";
+import { store } from "../redux/store";
 
 // FETCH REQUEST TO GET ASSETS FROM TWELEVE DATA AND RETURN A STRING OF SYMBOLS
 export const fetchSymbolsList = async (assets?: AssetType[]) => {
@@ -47,7 +47,7 @@ export const fetchAssets = async (search?: string) => {
       isFavorite: i % 2 === 0,
     });
   }
-  dispatchAction(storeMrkAssets(_assets));
+  store.dispatch(storeMrkAssets(_assets));
   return _assets;
 };
 

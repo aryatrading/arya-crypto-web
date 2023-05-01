@@ -1,5 +1,5 @@
 
-import {Time} from "lightweight-charts"
+import { Time } from "lightweight-charts"
 
 export interface GraphChartType {
     primaryLineData: chartDataType[],
@@ -15,4 +15,12 @@ export interface chartDataType {
     close?: number,
     high?: number,
     low?: number,
+}
+
+export enum GraphDataRange {
+    "24h" = "24h",
+    "week" = "week",
+    "month" = "month",
+    "six_month" = "six_month",
+    "year" = "year",
 }

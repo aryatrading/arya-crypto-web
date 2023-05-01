@@ -18,11 +18,6 @@ export default withAuthUser({ LoaderComponent: PageLoader })(MarketPage);
 
 export const getStaticProps: GetStaticProps<any> = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? "en", [
-      "common",
-      "auth",
-      "nav",
-      "market",
-    ])),
+    ...(await serverSideTranslations(locale ?? "en")),
   },
 });
