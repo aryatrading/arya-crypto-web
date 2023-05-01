@@ -16,6 +16,7 @@ import React from "react";
 import { FAVORITES_LIST } from "../utils/constants/config";
 import { Poppins } from "next/font/google";
 import { Provider } from "react-redux";
+import { initStoreData } from "../common/hooks/initStore";
 
 
 const poppins = Poppins({
@@ -58,6 +59,8 @@ function App({ Component,...rest }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page: any) => page);
 
   const {store, props} = wrapper.useWrappedStore(rest)
+
+  initStoreData();
 
   return getLayout(
     <Provider store={store}>

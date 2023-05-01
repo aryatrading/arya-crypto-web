@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo } from "react";
+import { FC, useCallback, useEffect, useMemo } from "react";
 import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/solid"
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,14 @@ const ExchangeSwitcher: FC = () => {
     const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
     const connectedExchanges = useSelector(selectConnectedExchanges);
 
+    useEffect(() => {
+      console.log(connectedExchanges)
+      console.log(selectedExchange)
+      console.log(exchangeStoreStatus)
+     
+    }, [connectedExchanges, exchangeStoreStatus, selectedExchange])
+    
+    
     const dispatch = useDispatch();
 
     const { t } = useTranslation(["common"]);

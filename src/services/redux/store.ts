@@ -3,11 +3,14 @@ import { HYDRATE, createWrapper } from "next-redux-wrapper";
 
 import user from "./userSlice";
 import market from "./marketSlice";
+import exchange from "./exchangeSlice";
+
 import { MODE_DEBUG } from "../../utils/constants/config";
 
 const combineReducer = combineReducers({
   user,
-  market
+  market,
+  exchange
 })
 
 export const reducer = (state:any,action:any)=>{
