@@ -36,7 +36,7 @@ export const fetchAssets = async (search?: string) => {
     _assets.push({
       id: data[i]?.id ?? 0,
       name: data[i].asset_data.name,
-      currentPrice: 0,
+      currentPrice: data[i].asset_data.current_price,
       pnl: data[i].asset_data.price_change_percentage_24h?.toFixed(2),
       price: 0,
       rank: data[i].asset_data.market_cap_rank,

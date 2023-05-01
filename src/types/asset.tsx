@@ -17,4 +17,10 @@ export interface AssetType {
   mrkCap?: number;
   volume?: number;
   currentPrice?: number;
+  supply?: number;
+  dailyLow?: number;
+  dailyHigh?: number;
+  dilutedValuation?: number;
+  priceChange?: number;
+  circlSupply?: number;
 }
