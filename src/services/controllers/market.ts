@@ -50,3 +50,24 @@ export const fetchAssets = async (search?: string) => {
   dispatchAction(storeMrkAssets(_assets));
   return _assets;
 };
+
+
+export const getPortfolioSnapshots = async (providerId?: number | null) => {
+  return await axiosInstance.get(
+    `/trade-engine/portfolio-snapshots/`,
+    { params: { provider: providerId, range: "year" } }
+  );
+};
+
+
+export const getPortfolioHoldings = async (providerId?: number) => {
+  return await axiosInstance.get(
+    `/trade-engine/portfolio-holdings/`,
+    { params: { provider: providerId } }
+  );
+};
+
+
+export const getConnectedProviders = async () => {
+  return await axiosInstance.get(`/exchange/connected-keys`);
+};
