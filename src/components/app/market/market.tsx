@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Col, Row } from "../../shared/layout/flex";
 import MarketStats from "../../shared/containers/marketStats";
 import { AssetsTable } from "../../shared/tables/assetsTable";
@@ -7,7 +7,7 @@ import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
 import { ShadowButton } from "../../shared/buttons/shadow_button";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
-import { getMarketAssets } from "../../../services/redux/marketSlice";
+import { selectMarketAssets } from "../../../services/redux/marketSlice";
 import { fetchAssets } from "../../../services/controllers/market";
 import { FAVORITES_LIST } from "../../../utils/constants/config";
 import useDebounce from "../../../utils/useDebounce";
@@ -18,8 +18,13 @@ const Market: FC = () => {
   const { t } = useTranslation(["market"]);
   const [tab, setTab] = useState("all");
   const [search, setSearch] = useState("");
-  const _assets = useSelector(getMarketAssets);
-
+  const _assets = useSelector(selectMarketAssets);
+  
+  useEffect(() => {
+    console.log(_assets)
+  }, [_assets])
+  
+  
   useDebounce(
     () => {
       fetchAssets(search);
@@ -28,15 +33,22 @@ const Market: FC = () => {
     400
   );
 
-  const assets = () => {
-    if (typeof window !== "undefined") {
-      let _list = localStorage.getItem(FAVORITES_LIST);
-      if (_list) _list = JSON.parse(_list);
-
-      if (tab === "all") return _assets;
-      return _assets.filter((elm: any) => _list?.includes(elm.id));
+  const assets = useCallback(
+    () => {
+      if (typeof window !== "undefined") {
+        let _list = localStorage.getItem(FAVORITES_LIST);
+        if (_list) _list = JSON.parse(_list);
+  
+        if (tab === "all") return _assets;
+        return _assets.filter((elm: any) => _list?.includes(elm.id));
+      }
     }
-  };
+    ,
+    [_assets, tab],
+  )
+  
+  
+  
 
   return (
     <div className="h-full w-full items-center justify-center ">

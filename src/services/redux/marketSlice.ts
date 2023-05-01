@@ -1,37 +1,39 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { AssetType } from "../../types/asset";
 import { AppState } from "./store";
 
 interface initialStateType {
   marketAssets: AssetType[];
-  assetliveprice: any;
+  assetLivePrice: any;
 }
 
 const initialState: initialStateType = {
-  assetliveprice: {},
+  assetLivePrice: {},
   marketAssets: [],
 };
 
+const selectMarketData = (state:AppState) => state.market
+
+export const selectMarketAssets = createSelector([selectMarketData],data=>{return data.marketAssets})
+export const selectAssetLivePrice = createSelector([selectMarketData],data=>data.assetLivePrice)
+
 export const marketSlice = createSlice({
-  name: "maket",
+  name: "market",
   initialState,
   reducers: {
     storeMrkAssets: (state, action: { payload: AssetType[] }) => {
       state.marketAssets = action.payload;
     },
     pricechange: (state, action) => {
-      state.assetliveprice = {
-        ...state.assetliveprice,
-        [action.payload.symbol]: action.payload.price,
+      const {symbol,price} = action.payload
+      state.assetLivePrice = {
+        ...state.assetLivePrice,
+        [symbol]: price,
       };
     },
   },
 });
 
 export const { storeMrkAssets, pricechange } = marketSlice.actions;
-
-export const getMarketAssets = (state: AppState) => state.market.marketAssets;
-
-export const getLivePrice = (state: AppState) => state.market.assetliveprice;
 
 export default marketSlice.reducer;

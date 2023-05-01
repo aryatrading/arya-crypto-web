@@ -1,6 +1,6 @@
-import { dispatchAction } from "../../utils/global_dispatch";
 import { fetchAssets, fetchSymbolsList } from "../controllers/market";
 import { pricechange } from "../redux/marketSlice";
+import { store } from "../redux/store";
 
 var W3CWebSocket = require("websocket").w3cwebsocket;
 
@@ -34,6 +34,6 @@ socket.onmessage = function (e: any) {
   let _symbol = symbol?.split("/")[0].toLowerCase();
 
   if (price && _symbol) {
-    dispatchAction(pricechange({ symbol: _symbol, price }));
+    store.dispatch(pricechange({ symbol: _symbol, price }));
   }
 };

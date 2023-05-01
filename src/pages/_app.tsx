@@ -3,7 +3,6 @@ import { ReactNode, ReactElement, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "next-themes";
 import { initializeApp } from "firebase/app";
-import { Provider, useDispatch } from "react-redux";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,15 +13,12 @@ import initAuth from "../initFirebaseAuth";
 import { axiosInstance } from "../services/api/axiosConfig";
 
 import "../styles/global.css";
-import { setDispatch } from "../utils/global_dispatch";
 import React from "react";
 import { FAVORITES_LIST } from "../utils/constants/config";
 import "../styles/global.css";
 import { Poppins } from "next/font/google";
+import { Provider } from "react-redux";
 
-/*
- *  Don't dispatch actions from pages/_app this mode is not compatible with Next.js 9's Auto Partial Static Export feature
- */
 
 const poppins = Poppins({
   variable: "--poppins-font",
@@ -46,9 +42,9 @@ try {
   console.error(err);
 }
 
-function App({ Component, ...pageProps }: AppPropsWithLayout) {
+function App({ Component,...rest }: AppPropsWithLayout) {
   useEffect(() => {
-    console.log("loading");
+    
     const localStorageToken = localStorage?.getItem("idToken");
 
     // Create the inital favorites list in localstorage
@@ -60,24 +56,23 @@ function App({ Component, ...pageProps }: AppPropsWithLayout) {
     }
   }, []);
 
-  const { props } = wrapper.useWrappedStore(pageProps);
-
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout || ((page: any) => page);
 
-  const dispatch = useDispatch();
-
-  // SETTING DISPATCH GLOBALLY WITHIN THE APP
-  setDispatch(dispatch);
+  const {store, props} = wrapper.useWrappedStore(rest)
 
   return getLayout(
-    <ThemeProvider attribute="class">
-      <AuthModalProvider>
-        <Component {...props.pageProps} />
-      </AuthModalProvider>
-      <ToastContainer />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider attribute="class">
+        <AuthModalProvider>
+            <main className={poppins.className}>
+              <Component {...props.pageProps} />
+            </main>
+        </AuthModalProvider>
+        <ToastContainer />
+      </ThemeProvider>
+    </Provider>
   );
 }
 
-export default wrapper.withRedux(appWithTranslation(App));
+export default appWithTranslation(App);
