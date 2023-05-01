@@ -12,12 +12,12 @@ const initialState: ExchangeStateType = {
   error: null,
 };
 
-export const selectExchangeData = (state: AppState) => state.exchange.data;
-export const selectSelectedExchange = createSelector([selectExchangeData], (data: ExchangeStateType["data"]) => (data.selectedExchange));
-export const selectConnectedExchanges = createSelector([selectExchangeData], (data: ExchangeStateType["data"]) => (data.connectedExchanges));
+export const selectExchangeData = (state: AppState) => state.exchange?.data;
+export const selectSelectedExchange = createSelector([selectExchangeData], (data: ExchangeStateType["data"]) => (data?.selectedExchange));
+export const selectConnectedExchanges = createSelector([selectExchangeData], (data: ExchangeStateType["data"]) => (data?.connectedExchanges));
 
 
-export const selectExchangeStoreStatus = createSelector([(state: AppState) => state.exchange.status], (status: StatusAsync) => (status));
+export const selectExchangeStoreStatus = createSelector([(state: AppState) => state.exchange?.status], (status: StatusAsync) => (status));
 
 export const exchangeSlice = createSlice({
   name: "exchange",
