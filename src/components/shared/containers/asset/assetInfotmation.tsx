@@ -3,7 +3,7 @@ import { Col } from "../../layout/flex";
 import { AssetType } from "../../../../types/asset";
 import { formatNumber } from "../../../../utils/format_currency";
 import { useSelector } from "react-redux";
-import { getLivePrice } from "../../../../services/redux/marketSlice";
+import { selectAssetLivePrice } from "../../../../services/redux/marketSlice";
 import { useTranslation } from "next-i18next";
 
 type AssetInformationProps = {
@@ -12,7 +12,7 @@ type AssetInformationProps = {
 
 export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
   const { t } = useTranslation(["asset"]);
-  const _assetprice = useSelector(getLivePrice);
+  const _assetprice = useSelector(selectAssetLivePrice);
 
   return (
     <Col className="gap-11">

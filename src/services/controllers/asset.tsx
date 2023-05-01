@@ -1,8 +1,8 @@
 import { AssetType } from "../../types/asset";
 import { CapitalizeString } from "../../utils/format_string";
-import { dispatchAction } from "../../utils/global_dispatch";
 import { axiosInstance } from "../api/axiosConfig";
 import { setAsset } from "../redux/assetSlice";
+import { store } from "../redux/store";
 
 export const getAssetDetails = async (symbol?: any) => {
   let { data } = await axiosInstance.get(
@@ -29,5 +29,5 @@ export const getAssetDetails = async (symbol?: any) => {
   _asset.priceChange = _res.price_change_24h.toFixed(3);
   _asset.circlSupply = _res.circulating_supply;
 
-  dispatchAction(setAsset(_asset));
+  store.dispatch(setAsset(_asset));
 };

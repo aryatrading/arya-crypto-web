@@ -6,7 +6,7 @@ import { StarIcon } from "@heroicons/react/24/outline";
 import { AssetName } from "./assetName";
 import { formatNumber } from "../../../../utils/format_currency";
 import { useSelector } from "react-redux";
-import { getLivePrice } from "../../../../services/redux/marketSlice";
+import { selectAssetLivePrice } from "../../../../services/redux/marketSlice";
 import AssetPnl from "./assetPnl";
 import { useTranslation } from "next-i18next";
 
@@ -16,7 +16,7 @@ type AssetHeaderProps = {
 
 export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
   const { t } = useTranslation(["asset"]);
-  const _assetprice = useSelector(getLivePrice);
+  const _assetprice = useSelector(selectAssetLivePrice);
 
   return (
     <Col className="gap-2">
