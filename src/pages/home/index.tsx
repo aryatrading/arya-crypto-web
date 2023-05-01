@@ -30,7 +30,8 @@ export const getStaticProps: GetStaticProps<any> = async ({
             "common",
             "auth",
             "nav",
-            'dashboard'
+            'dashboard',
+            "coin"
         ])),
     },
 })
