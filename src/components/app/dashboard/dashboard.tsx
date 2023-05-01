@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react"
+import { FC, useCallback, useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import clsx from "clsx"
 import { PlusIcon } from "@heroicons/react/24/solid"
@@ -36,7 +36,8 @@ const Dashboard: FC = () => {
 
     const { t } = useTranslation(["dashboard", "common"]);
 
-    useEffect(() => {
+
+    const initPortfolioSnapshots = useCallback(() => {
         setIsLoadingPortfolioSnapshots(true);
         getPortfolioSnapshots(selectedExchange?.provider_id)
             .then((res) => {
@@ -55,9 +56,11 @@ const Dashboard: FC = () => {
             .finally(() => {
                 setIsLoadingPortfolioSnapshots(false);
             })
-    }, [selectedExchange?.provider_id]);
+    }, [selectedExchange?.provider_id])
 
-    useEffect(() => {
+
+    const initPortfolioHoldings = useCallback(() => {
+
         setIsLoadingPortfolioHoldings(true);
         getPortfolioHoldings(selectedExchange?.provider_id)
             .then((res) => {
@@ -88,9 +91,11 @@ const Dashboard: FC = () => {
 
     }, [selectedExchange?.provider_id]);
 
+
     useEffect(() => {
-        setIsLoadingPortfolioHoldings(true);
-    }, []);
+        initPortfolioSnapshots();
+        initPortfolioHoldings();
+    }, [initPortfolioSnapshots, initPortfolioHoldings]);
 
 
     const portfolioDoughnutChart = useMemo(() => {
