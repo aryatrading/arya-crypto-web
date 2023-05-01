@@ -13,5 +13,14 @@
     "portfolio":"My Portfolio",
     "smartAllocation":"Smart Allocation",
     "trade":"Trade",
-    "market":"Market"
+    "market":"Market",
+    "addExchange": "Add exchange",
+    "portfolioComposition": "Portfolio composition",
+    "name": "Name",
+    "weight":"Weight",
+    "currentPrice":"Current Price",
+    "value":"Value",
+    "24hP/L":"24h P/L",
+    "exchange":"Exchange",
+    "noAssets":"No Assets"
 }

@@ -11,11 +11,9 @@ import { firebaseConfig } from "../services/firebase/auth/config";
 import { wrapper } from "../services/redux/store";
 import initAuth from "../initFirebaseAuth";
 import { axiosInstance } from "../services/api/axiosConfig";
-
 import "../styles/global.css";
 import React from "react";
 import { FAVORITES_LIST } from "../utils/constants/config";
-import "../styles/global.css";
 import { Poppins } from "next/font/google";
 import { Provider } from "react-redux";
 
