@@ -13,7 +13,6 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async function (config) {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('myCat', 'Tom');
       const localStorageToken = localStorage?.getItem("idToken");
       if (localStorageToken) {
         config.headers.authorization = `Bearer ${localStorageToken}`;

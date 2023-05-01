@@ -21,14 +21,6 @@ const ExchangeSwitcher: FC = () => {
     const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
     const connectedExchanges = useSelector(selectConnectedExchanges);
 
-    useEffect(() => {
-      console.log(connectedExchanges)
-      console.log(selectedExchange)
-      console.log(exchangeStoreStatus)
-     
-    }, [connectedExchanges, exchangeStoreStatus, selectedExchange])
-    
-    
     const dispatch = useDispatch();
 
     const { t } = useTranslation(["common"]);

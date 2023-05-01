@@ -20,10 +20,6 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
   const { t } = useTranslation(["market"]);
   const _assetprice = useSelector(selectAssetLivePrice);
 
-  useEffect(() => {
-    console.log(_assetprice)
-  }, [_assetprice])
-  
   header = [
     t("rank") ?? "",
     t("name") ?? "",

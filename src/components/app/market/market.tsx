@@ -20,9 +20,6 @@ const Market: FC = () => {
   const [search, setSearch] = useState("");
   const _assets = useSelector(selectMarketAssets);
   
-  useEffect(() => {
-    console.log(_assets)
-  }, [_assets])
   
   
   useDebounce(
