@@ -65,7 +65,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
 
   return (
     <Col className="flex items-center justify-center flex-1 gap-10 w-full">
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <table className="w-full text-sm text-left text-gray-500 text-gray-400">
         <thead className="text-xs text-gray-1">
           <tr>
             {header.map((elm, index) => {

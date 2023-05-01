@@ -47,10 +47,10 @@ const AuthModalProvider: FC<any> = (props: any) => {
         className="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
       >
         <Col className="relative w-full max-w-md max-h-full">
-          <Col className="relative bg-white rounded-lg shadow dark:bg-gray-700 pt-5 pb-5">
+          <Col className="relative bg-white rounded-lg shadow bg-gray-700 pt-5 pb-5">
             <Col className="gap-4 min-h-[550px]">
               <Button
-                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white me-8"
+                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white me-8"
                 data-modal-hide="staticModal"
                 onClick={() => modalTrigger.hide()}
               >
