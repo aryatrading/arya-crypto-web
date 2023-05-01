@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { Col, Row } from "../../shared/layout/flex";
 import MarketStats from "../../shared/containers/marketStats";
 import { AssetsTable } from "../../shared/tables/assetsTable";

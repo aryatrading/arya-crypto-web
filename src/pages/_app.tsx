@@ -17,7 +17,7 @@ import { FAVORITES_LIST } from "../utils/constants/config";
 import { Poppins } from "next/font/google";
 import { Provider } from "react-redux";
 import { initStoreData } from "../common/hooks/initStore";
-
+import "../services/api/socketConfig";
 
 const poppins = Poppins({
   variable: "--poppins-font",
@@ -41,9 +41,8 @@ try {
   console.error(err);
 }
 
-function App({ Component,...rest }: AppPropsWithLayout) {
+function App({ Component, ...rest }: AppPropsWithLayout) {
   useEffect(() => {
-    
     const localStorageToken = localStorage?.getItem("idToken");
 
     // Create the inital favorites list in localstorage
@@ -58,7 +57,7 @@ function App({ Component,...rest }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout || ((page: any) => page);
 
-  const {store, props} = wrapper.useWrappedStore(rest)
+  const { store, props } = wrapper.useWrappedStore(rest);
 
   initStoreData();
 
@@ -66,9 +65,9 @@ function App({ Component,...rest }: AppPropsWithLayout) {
     <Provider store={store}>
       <ThemeProvider attribute="class">
         <AuthModalProvider>
-            <main className={poppins.className}>
-              <Component {...props.pageProps} />
-            </main>
+          <main className={poppins.className}>
+            <Component {...props.pageProps} />
+          </main>
         </AuthModalProvider>
         <ToastContainer />
       </ThemeProvider>

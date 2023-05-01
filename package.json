@@ -70,9 +70,9 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.194",
     "@types/numeral": "^2.0.2",
     "@types/websocket": "^1.0.5",
-    "@types/lodash": "^4.14.194",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21",
     "sass": "^1.61.0",
