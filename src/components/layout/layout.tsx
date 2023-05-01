@@ -11,14 +11,14 @@ const poppins = Poppins({
 
 export default function Layout({ children }: any) {
   return (
-    <div className={poppins.className}>
+    <div className={poppins.className + " min-h-screen flex flex-col justify-between"}>
       <Nav />
       <div
         className={"flex flex-col flex-1 container sm:items-center lg:pt-28 p-5"}
       >
         {children}
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

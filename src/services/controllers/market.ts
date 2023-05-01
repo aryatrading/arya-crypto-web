@@ -71,3 +71,11 @@ export const getPortfolioHoldings = async (providerId?: number) => {
 export const getConnectedProviders = async () => {
   return await axiosInstance.get(`/exchange/connected-keys`);
 };
+
+
+export const getSmartAllocation = async (providerId?: number) => {
+  return await axiosInstance.get(
+    `/trade-engine/smart-allocation`,
+    { params: { provider: providerId } }
+  );
+};
