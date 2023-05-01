@@ -2,11 +2,12 @@ import { configureStore, ThunkAction, Action, Store } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 
 import userReducer from "./userSlice";
+import exchangeReducer from "./exchangeSlice";
 import marketReducer from "./marketSlice";
 
 export function makeStore() {
   return configureStore({
-    reducer: { user: userReducer, market: marketReducer },
+    reducer: { user: userReducer, market: marketReducer, exchange: exchangeReducer },
   });
 }
 

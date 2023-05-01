@@ -13,5 +13,14 @@
     "portfolio":"Mon portfolio",
     "smartAllocation":"Allocation intelligente",
     "trade":"Commerce",
-    "market":"Market"
+    "market":"Marché",
+    "addExchange": "Ajouter un échange",
+    "portfolioComposition": "Composition du portefeuille",
+    "name": "Nom",
+    "weight":"Poids",
+    "currentPrice":"Prix actuel",
+    "value":"Valeur",
+    "24hP/L":"24h P/L",
+    "exchange":"Échange",
+    "noAssets":"Pas d'actifs"
 }
