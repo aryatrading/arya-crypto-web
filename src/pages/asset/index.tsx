@@ -5,13 +5,20 @@ import Asset from "../../components/app/asset/asset";
 import { useEffect } from "react";
 import { getAssetDetails } from "../../services/controllers/asset";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { clearAsset } from "../../services/redux/assetSlice";
 
 const AssetPage = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const { symbol } = router.query;
 
   useEffect(() => {
-    if (symbol) getAssetDetails(symbol);
+    getAssetDetails(symbol ?? "btc");
+
+    return () => {
+      dispatch(clearAsset());
+    };
   }, [symbol]);
 
   return (
