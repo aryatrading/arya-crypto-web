@@ -87,7 +87,7 @@ export const CoinProfitCalculator = () => {
                 </Row>
             </Col>
             <Col className="border w-[375px] rounded-md border-grey-3 px-4 py-6 gap-4">
-                <h1 className="font-extrabold text-white header-label">{t('investmentResult')}</h1>
+                <h3 className="font-extrabold text-white header-label">{t('investmentResult')}</h3>
                 <>
                     <label className="block text-sm text-grey-1 font-light">{t('profit/loss')}</label>
                     <Row className={clsx({ "bg-green-2": profit >= 0, "bg-red-2": profit < 0 }, "h-1/5 max-w-[315px] rounded-md justify-center items-center gap-1")}>

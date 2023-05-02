@@ -78,7 +78,7 @@ const ForgotPassword = () => {
                 <Col className='flex flex-1 items-center justify-center'>
                     <Col className="justify-start w-full max-w-[400px] gap-8">
                         <Col className='gap-2'>
-                            <h1 className="font-extrabold text-white header-label">{t('resetPassword')}</h1>
+                            <h3 className="font-extrabold text-white header-label">{t('resetPassword')}</h3>
                             <h6 className="font-medium text-white">{t('resetPasswordHint')}</h6>
                         </Col>
                         {forgotPasswordForm}

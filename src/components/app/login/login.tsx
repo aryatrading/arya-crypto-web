@@ -109,7 +109,7 @@ const Login: FC<any> = (props: any) => {
                 <Col className="justify-start w-full max-w-[400px] gap-8">
                     <Row className="items-center gap-4">
                         <Image src={logoIcon} alt="Arya_Crypto" />
-                        <h1 className="font-extrabold text-white header-label">{t('loginHeader')}</h1>
+                        <h3 className="font-extrabold text-white header-label">{t('loginHeader')}</h3>
                     </Row>
                     {loginForm}
                     <Col className='gap-6 items-center justify-center'>
