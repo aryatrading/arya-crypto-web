@@ -1,14 +1,14 @@
-import { Col, Row } from "../layout/flex";
-import InputWithTag from "../form/inputs/inputWithTag/inputWithTag";
+import { useTranslation } from "next-i18next";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
-import { useTranslation } from "react-i18next";
 
+import { Col, Row } from "../layout/flex";
+import InputWithTag from "../form/inputs/inputWithTag/inputWithTag";
 import { ChevronUp } from "../../svg/chevron-up";
 import { ChevronDown } from "../../svg/chevron-down";
 
 export const CoinProfitCalculator = () => {
-    const { t } = useTranslation(["coin", "common"]);
+    const { t } = useTranslation(["coin"]);
     const [coin, setCoin] = useState();
     const [buyPrice, setBuyPrice] = useState('');
     const [sellPrice, setSellPrice] = useState('');
@@ -52,7 +52,7 @@ export const CoinProfitCalculator = () => {
     const onClear = useCallback((type: 'inv' | 'buy' | 'sell' | 'invFee' | 'exitFee') => {
         switch (type) {
             case "inv":
-                return setInvestment('coin:');
+                return setInvestment('');
             case 'buy':
                 return setBuyPrice('');
             case 'sell':
@@ -72,8 +72,8 @@ export const CoinProfitCalculator = () => {
                 <Row className="w-full gap-6">
                     <Row className="w-full gap-6">
                         <Col className="w-1/2 gap-6">
-                            <InputWithTag label={t('coin:coin')} />
-                            <InputWithTag label={t('coin:investment')} onChange={({ target: { value } }: any) => updateInputs(value, 'inv')} value={investment} placeholder="0" onClear={() => onClear('inv')} />
+                            <InputWithTag label={t('coin')} />
+                            <InputWithTag label={t('investment')} onChange={({ target: { value } }: any) => updateInputs(value, 'inv')} value={investment} placeholder="0" onClear={() => onClear('inv')} />
                         </Col>
                         <Col className="w-1/2 gap-6">
                             <InputWithTag label={t("buyPrice")} onChange={({ target: { value } }: any) => updateInputs(value, 'buy')} value={buyPrice} placeholder="0" onClear={() => onClear('buy')} />
@@ -87,9 +87,9 @@ export const CoinProfitCalculator = () => {
                 </Row>
             </Col>
             <Col className="border w-[375px] rounded-md border-grey-3 px-4 py-6 gap-4">
-                <h1 className="font-extrabold text-white header-label">{t('coin:investmentResult')}</h1>
+                <h1 className="font-extrabold text-white header-label">{t('investmentResult')}</h1>
                 <>
-                    <label className="block text-sm text-grey-1 font-light">{t('coin:profit/loss')}</label>
+                    <label className="block text-sm text-grey-1 font-light">{t('profit/loss')}</label>
                     <Row className={clsx({ "bg-green-2": profit >= 0, "bg-red-2": profit < 0 }, "h-1/5 max-w-[315px] rounded-md justify-center items-center gap-1")}>
                         {profit >= 0 ? <ChevronUp /> :
                             <ChevronDown />}
@@ -98,13 +98,13 @@ export const CoinProfitCalculator = () => {
                 </>
                 <Row className="gap-4">
                     <Col className="gap-4">
-                        <label className="block text-sm text-grey-1 font-light">{t('coin:totalInvestmentAmount')}</label>
+                        <label className="block text-sm text-grey-1 font-light">{t('totalInvestmentAmount')}</label>
                         <Row className={clsx({ "bg-green-2": profit >= 0, "bg-red-2": profit < 0 }, "rounded-md justify-center items-center gap-1 h-[50px]")}>
                             <p className={clsx({ "text-green-1": profit >= 0, "text-red-1": profit < 0 }, "block text-lg text-green-1 font-bold")}>${totalInvestment.toFixed(2)}</p>
                         </Row>
                     </Col>
                     <Col className="gap-4">
-                        <label className="block text-sm text-grey-1 font-light">{t('coin:totalExitAmount')}</label>
+                        <label className="block text-sm text-grey-1 font-light">{t('totalExitAmount')}</label>
                         <Row className={clsx({ "bg-green-2": profit >= 0, "bg-red-2": profit < 0 }, "rounded-md justify-center items-center gap-1 h-[50px]")}>
                             <p className={clsx({ "text-green-1": profit >= 0, "text-red-1": profit < 0 }, "block text-lg text-green-1 font-bold")}>${totalExitAmount.toFixed(2)}</p>
                         </Row>

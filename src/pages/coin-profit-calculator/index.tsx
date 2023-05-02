@@ -1,20 +1,19 @@
-import { withAuthUser } from 'next-firebase-auth'
-import Layout from '../../components/layout/layout'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { GetStaticProps } from 'next';
-import Dashboard from '../../components/app/dashboard/dashboard';
 
-const HomePage = (props: any) => {
+import Layout from '../../components/layout/layout'
+import CoinProfitCalcu from '../../components/shared/coinProfitCalculator';
+
+const CoinProfitCalculator = () => {
 
     return (
         <Layout>
-            <Dashboard />
+            <CoinProfitCalcu />
         </Layout>
     )
 }
 
-export default withAuthUser({
-})(HomePage)
+export default CoinProfitCalculator;
 
 
 export const getStaticProps: GetStaticProps<any> = async ({

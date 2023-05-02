@@ -28,7 +28,6 @@ const Dashboard: FC = () => {
     const [isLoadingPortfolioHoldings, setIsLoadingPortfolioHoldings] = useState<boolean>(false);
     const [portfolioSnapshots, setPortfolioSnapshots] = useState<PortfolioSnapshotType[]>([]);
     const [portfolioHoldings, setPortfolioHoldings] = useState<PortfolioAssetType[]>([]);
-    const [totalPortfolioAmountInUSD, setTotalPortfolioAmountInUSD] = useState<number>(0);
 
     const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
     const selectedExchange = useSelector(selectSelectedExchange);
@@ -59,25 +58,21 @@ const Dashboard: FC = () => {
     }, [selectedExchange?.provider_id])
 
 
+    const getAssetUSDValue = (asset: PortfolioAssetType) => {
+        return (asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0)
+    }
+
     const initPortfolioHoldings = useCallback(() => {
 
         setIsLoadingPortfolioHoldings(true);
         getPortfolioHoldings(selectedExchange?.provider_id)
             .then((res) => {
-                const data: any = res.data;
-                if (selectedExchange?.provider_id) {
-                    const assets: PortfolioAssetType[] = data[selectedExchange?.provider_id]?.data;
-                    if (assets?.length) {
-                        assets.sort((a, b) => (b.current_value - a.current_value));
-                        setPortfolioHoldings(assets);
-
-                        let total = assets.map(asset => asset.current_value)?.reduce((prev, current) => {
-                            return prev + current;
-                        });
-                        setTotalPortfolioAmountInUSD(total);
-                    }
-                } else {
-                    setPortfolioHoldings([]);
+                const data: any = res?.data;
+                const assets: PortfolioAssetType[] = data?.data;
+                console.log({ assets })
+                if (assets?.length) {
+                    assets.sort((a, b) => (getAssetUSDValue(b) - getAssetUSDValue(a)));
+                    setPortfolioHoldings(assets);
                 }
 
             })
@@ -100,21 +95,21 @@ const Dashboard: FC = () => {
 
     const portfolioDoughnutChart = useMemo(() => {
 
-        if (selectedExchange?.provider_id) {
+        if (portfolioHoldings.length) {
             return (
                 <Col className="sm:col-span-1 col-span-3">
                     <DoughnutChart
                         maxWidth="250px"
                         chartData={portfolioHoldings.map(asset => ({
-                            label: asset.name,
-                            value: asset.current_value,
+                            label: asset.name ?? "",
+                            value: (asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0),
                         }))}
                         title={t("common:portfolioComposition")}
                     />
                 </Col>
             )
         }
-    }, [portfolioHoldings, selectedExchange?.provider_id, t])
+    }, [portfolioHoldings, t])
 
     const portfolioLineChart = useMemo(() => {
 
@@ -137,10 +132,10 @@ const Dashboard: FC = () => {
         });
 
         return (
-            <LineChart primaryLineData={chartData} secondaryLineData={smartAllocationData} className={clsx("sm:col-span-2 col-span-3 h-[400px]", { "sm:col-span-3": (!selectedExchange?.provider_id) },)} />
+            <LineChart primaryLineData={chartData} secondaryLineData={smartAllocationData} className={"sm:col-span-2 col-span-3 h-[400px]"} />
         )
 
-    }, [portfolioSnapshots, selectedExchange?.provider_id])
+    }, [portfolioSnapshots])
 
     const charts = useMemo(() => {
         return (
@@ -186,36 +181,36 @@ const Dashboard: FC = () => {
                                 <td colSpan={7} className="row-span-full">{t("common:noAssets")}</td>
                             </tr>
                             : portfolioHoldings.map(asset => {
-                                const isPriceChangePositive = asset.asset_details.price_change_percentage_24h > 0;
+                                const isPriceChangePositive = (asset?.asset_details?.price_change_percentage_24h ?? 0) > 0;
                                 const signal = isPriceChangePositive ? '+' : '-';
 
-                                const formattedChangePercentage = `${signal}${percentageFormat(Math.abs(asset.asset_details.price_change_percentage_24h))}`;
-                                const formattedChangePrice = `${signal}$${priceFormat(Math.abs(asset.asset_details.price_change_24h))}`;
+                                const formattedChangePercentage = `${signal}${percentageFormat(Math.abs(asset?.asset_details?.price_change_percentage_24h ?? 0))}`;
+                                const formattedChangePrice = `${signal}$${priceFormat(Math.abs(asset?.asset_details?.price_change_24h ?? 0))}`;
 
-                                const assetPortfolioPercentage = asset.current_value / totalPortfolioAmountInUSD * 100;
+                                const assetPortfolioPercentage = asset.weight;
 
                                 return (
                                     <tr key={asset.name}>
                                         <td>
                                             <Row className="gap-3 items-center">
-                                                <Image src={asset.asset_details.image} alt="" width={23} height={23} />
-                                                <p>{asset.asset_details.name}</p>
+                                                <Image src={asset?.asset_details?.image ?? ""} alt="" width={23} height={23} />
+                                                <p>{asset?.asset_details?.name}</p>
                                                 <span className="text-sm text-grey-1">{asset.name}</span>
                                             </Row>
                                         </td>
                                         <td>
                                             <Row className="justify-between items-center w-[120px]">
-                                                <p>{percentageFormat(asset.current_value / totalPortfolioAmountInUSD * 100)}%</p>
+                                                <p>{percentageFormat(asset.weight ?? 0)}%</p>
                                                 <Row className="h-[5px] rounded-full w-[50px] bg-white">
                                                     <Row className={`h-full rounded-full bg-blue-1`} style={{
-                                                        width: `${Math.ceil(assetPortfolioPercentage)}%`
+                                                        width: `${Math.ceil(assetPortfolioPercentage ?? 0)}%`
                                                     }} />
                                                 </Row>
                                             </Row>
                                         </td>
-                                        <td>{priceFormat(asset.current_amount)} {asset.name}</td>
-                                        <td>${priceFormat(asset.asset_details.current_price)}</td>
-                                        <td>${priceFormat(asset.current_amount * asset.asset_details.current_price)}</td>
+                                        <td>{priceFormat(asset.free ?? 0)} {asset.name}</td>
+                                        <td>${priceFormat(asset?.asset_details?.current_price ?? 0)}</td>
+                                        <td>${priceFormat((asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0))}</td>
                                         <td className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive })}>{formattedChangePercentage}% ({formattedChangePrice})</td>
                                         <td>
                                             <Row className="gap-2">
@@ -229,10 +224,10 @@ const Dashboard: FC = () => {
                 </table>
             </Row>
         )
-    }, [portfolioHoldings, t, tableExchangesImages, totalPortfolioAmountInUSD])
+    }, [portfolioHoldings, t, tableExchangesImages])
 
     const holdingsTable = useMemo(() => {
-        if (selectedExchange?.provider_id) {
+        if (portfolioHoldings.length) {
             return (
                 <Col className="gap-5 col-span-12">
                     <Row className="items-center justify-between w-full">
@@ -248,7 +243,7 @@ const Dashboard: FC = () => {
                 </Col>
             )
         }
-    }, [selectedExchange?.provider_id, t, table]);
+    }, [portfolioHoldings.length, t, table]);
 
     const loadingOverlay = useMemo(() => {
         return (
