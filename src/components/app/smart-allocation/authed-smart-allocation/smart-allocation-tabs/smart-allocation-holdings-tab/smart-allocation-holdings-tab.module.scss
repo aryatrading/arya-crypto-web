@@ -2,7 +2,7 @@
 
     width: 100%;
     min-width: 800px;
-    table-layout: fixed;
+    // table-layout: fixed;
 
     thead {
         @apply text-grey-1;
@@ -10,9 +10,13 @@
         tr {
             @apply bg-black-2;
 
+
             th:first-child {
                 @apply rounded-l-lg;
                 width: 50px;
+            }
+            th:nth-child(3), th:nth-child(4), th:nth-child(5), th:nth-child(6), th:last-child {
+                width: 100px;
             }
 
             th:last-child {
@@ -37,7 +41,7 @@
 
     th {
         height: 55px;
-        @apply font-normal;
+        @apply font-bold text-sm;
         text-align: left;
         padding: 0 20px;
 

@@ -10,10 +10,16 @@ import { chartDataType } from "../../../shared/charts/graph/graph.type";
 import LineChart from "../../../shared/charts/graph/graph";
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
+import { SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
+import { getSmartAllocation } from "../../../../services/controllers/market";
 
 const AuthedSmartAllocation: FC = () => {
     const [isLoadingPortfolioHoldings, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
     const [portfolioSnapshots, setPortfolioSnapshots] = useState<PortfolioSnapshotType[]>([]);
+
+    const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
+    const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
+    const [smartAllocationTotalEvaluation, setSmartAllocationTotalEvaluation] = useState<number>(0);
 
     const selectedExchange = useSelector(selectSelectedExchange);
 
@@ -39,10 +45,33 @@ const AuthedSmartAllocation: FC = () => {
             })
     }, [selectedExchange?.provider_id]);
 
+    const initSmartAllocationHoldings = useCallback(() => {
+        setIsLoadingSmartAllocationHoldings(true);
+        getSmartAllocation(selectedExchange?.provider_id)
+            .then((res) => {
+                const data: any = res.data;
+                const holdings: SmartAllocationAssetType[] = data.assets;
+                setSmartAllocationTotalEvaluation(data.total_asset_value);
+
+                if (holdings) {
+                    holdings.sort((a, b) => ((b.current_weight) - (a.current_weight)));
+                    setSmartAllocationHoldings(holdings);
+                }
+            })
+            .catch((error) => {
+                if (MODE_DEBUG)
+                    console.error("Error while initSmartAllocationHoldings (initSmartAllocationHoldings)", error)
+            })
+            .finally(() => {
+                setIsLoadingSmartAllocationHoldings(false);
+            })
+    }, [selectedExchange?.provider_id]);
+
 
     useEffect(() => {
         initPortfolioSnapshots();
-    }, [initPortfolioSnapshots]);
+        initSmartAllocationHoldings();
+    }, [initPortfolioSnapshots, initSmartAllocationHoldings]);
 
     const noAllocation = useMemo(() => {
         return (
@@ -97,6 +126,8 @@ const AuthedSmartAllocation: FC = () => {
     }, [portfolioSnapshots]);
 
     const tabs = useMemo(() => {
+
+        console.log({ smartAllocationHoldings })
         return (
             <Tabs className="w-full font-light" selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
                 <TabList className="w-full border-b-[1px] border-grey-3 mb-6">
@@ -107,7 +138,7 @@ const AuthedSmartAllocation: FC = () => {
                     </Row>
                 </TabList>
                 <TabPanel>
-                    <SmartAllocationHoldingsTab smartAllocationHoldings={[]} />
+                    <SmartAllocationHoldingsTab smartAllocationHoldings={smartAllocationHoldings} smartAllocationTotalEvaluation={smartAllocationTotalEvaluation} />
                 </TabPanel>
                 <TabPanel>
 
@@ -117,7 +148,7 @@ const AuthedSmartAllocation: FC = () => {
                 </TabPanel>
             </Tabs>
         )
-    }, []);
+    }, [smartAllocationHoldings]);
 
     const withAllocation = useMemo(() => {
         return (

@@ -5,29 +5,33 @@ import { useTranslation } from "next-i18next";
 import styles from "./smart-allocation-holdings-tab.module.scss";
 import { percentageFormat, priceFormat } from "../../../../../../utils/helpers/prices";
 import Image from "next/image";
+import { CustomizeAllocationIcon } from "../../../../../svg/smart-allocation/customize-portfolio-icon";
+import { SmartAllocationAssetType } from "../../../../../../types/smart-allocation.types";
 import clsx from "clsx";
+import { useSelector } from "react-redux";
+import { selectAssetLivePrice } from "../../../../../../services/redux/marketSlice";
+import PortfolioComposition from "../../../../../shared/portfolio-composition/portfolio-composition";
 
-const SmartAllocationHoldingsTab:FC<{smartAllocationHoldings:any[]}> = ({smartAllocationHoldings}) => {
+const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
+
+    // const selectAssets = useSelector(selectAssetLivePrice);
+
+    // console.log({selectAssets})
 
     const portfolioComposition = useMemo(() => {
         return (
-            <Col className="gap-2 w-full max-w-[500px]">
-                <p className="font-bold">Portfolio composition</p>
-                <Row className="h-3 w-full bg-blue-1 rounded-full overflow-hidden">
-                    <Row className="h-full flex-1 bg-yellow-1" />
-                    <Row className="h-full flex-1 bg-[#558AF2]" />
-                    <Row className="h-full flex-1 bg-[#E6007A]" />
-                    <Row className="h-full flex-1 bg-[#224DDA]" />
-                </Row>
-            </Col>
+            <PortfolioComposition portfolioAssets={smartAllocationHoldings.map(asset => {
+                return {
+                    name: asset.name,
+                    weight: (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1)
+                };
+            })} />
         )
-    }, [])
+    }, [smartAllocationHoldings, smartAllocationTotalEvaluation])
 
     const table = useMemo(() => {
-
-        const totalPortfolioAmountInUSD  = 1;
         return (
             <Row className="flex-[3] overflow-auto">
                 <table className={styles.table}>
@@ -46,48 +50,63 @@ const SmartAllocationHoldingsTab:FC<{smartAllocationHoldings:any[]}> = ({smartAl
                     <tbody>
                         {!smartAllocationHoldings.length ?
                             <tr>
-                                <td colSpan={7} className="row-span-full">{t("common:noAssets")}</td>
+                                <td colSpan={7} className="row-span-full">
+                                    <Col className="w-full p-10 gap-5 items-center justify-center">
+                                        <CustomizeAllocationIcon />
+                                        <p className="font-bold">Start customising your portfolio</p>
+                                        <Button className="py-3 px-10 bg-blue-3 rounded-md">Create portfolio</Button>
+                                    </Col>
+                                </td>
                             </tr>
-                            : smartAllocationHoldings.map(asset => {
-                                const isPriceChangePositive = asset.asset_details.price_change_percentage_24h > 0;
-                                const signal = isPriceChangePositive ? '+' : '-';
+                            : smartAllocationHoldings.map((asset, index) => {
 
-                                const formattedChangePercentage = `${signal}${percentageFormat(Math.abs(asset.asset_details.price_change_percentage_24h))}`;
-                                const formattedChangePrice = `${signal}$${priceFormat(Math.abs(asset.asset_details.price_change_24h))}`;
-
-                                const assetPortfolioPercentage = asset.current_value / totalPortfolioAmountInUSD * 100;
+                                const setWeight = asset.current_weight ?? 0;
+                                const currentWeight = (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1);
+                                const isCurrentWeightMoreThanSetWeight = currentWeight >= setWeight;
 
                                 return (
                                     <tr key={asset.name}>
+                                        <td>{index + 1}</td>
                                         <td>
                                             <Row className="gap-3 items-center">
-                                                <Image src={asset.asset_details.image} alt="" width={23} height={23} />
-                                                <p>{asset.asset_details.name}</p>
+                                                <Image src={""} alt="" width={23} height={23} />
+                                                <p>{asset.name}</p>
                                                 <span className="text-sm text-grey-1">{asset.name}</span>
                                             </Row>
                                         </td>
                                         <td>
-                                            <Row className="justify-between items-center w-[120px]">
-                                                <p>{percentageFormat(asset.current_value / totalPortfolioAmountInUSD * 100)}%</p>
-                                                <Row className="h-[5px] rounded-full w-[50px] bg-white">
-                                                    <Row className={`h-full rounded-full bg-blue-1`} style={{
-                                                        width: `${Math.ceil(assetPortfolioPercentage)}%`
-                                                    }} />
+                                            ??%
+                                        </td>
+                                        <td>${priceFormat(asset.ask_price, true)}</td>
+                                        <td>{priceFormat(asset.available, true)}</td>
+                                        <td>${priceFormat(asset.current_value, true)}</td>
+                                        <td className="">
+                                            <Row className="gap-2 items-center">
+                                                <p>
+                                                    {percentageFormat(setWeight * 100)}%
+                                                </p>
+                                                <Row className="w-16 rounded-full overflow-hidden bg-white" style={{ height: 10 }}>
+                                                    <Row
+                                                        className={`bg-yellow-1 rounded-full`}
+                                                        style={{
+                                                            width: `${percentageFormat(setWeight * 100)}%`
+                                                        }}
+                                                    />
                                                 </Row>
                                             </Row>
                                         </td>
-                                        <td>{priceFormat(asset.current_amount)} {asset.name}</td>
-                                        <td>${priceFormat(asset.asset_details.current_price)}</td>
-                                        <td>${priceFormat(asset.current_amount * asset.asset_details.current_price)}</td>
-                                        <td className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive })}>{formattedChangePercentage}% ({formattedChangePrice})</td>
+                                        <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
+                                            {percentageFormat(currentWeight * 100)}%
+                                        </td>
                                     </tr>
                                 );
                             })}
                     </tbody>
                 </table>
+
             </Row>
         )
-    }, [smartAllocationHoldings, t])
+    }, [smartAllocationHoldings, smartAllocationTotalEvaluation, t])
 
 
     const reBalanceNow = useMemo(() => {
@@ -105,19 +124,34 @@ const SmartAllocationHoldingsTab:FC<{smartAllocationHoldings:any[]}> = ({smartAl
         )
     }, [])
 
-    return (
-        <Col className="gap-10">
-            <Row className="gap-10 items-center">
-                <Button className="bg-blue-1 py-2.5 px-5 rounded-md font-bold">Edit Portfolio</Button>
-                {portfolioComposition}
-            </Row>
+    if (smartAllocationHoldings?.length) {
 
-            <Row className="w-full">
-                {table}
-                {reBalanceNow}
-            </Row>
-        </Col>
-    )
+        return (
+            <Col className="gap-10">
+                <Row className="w-full gap-5 items-center">
+                    <Row className="gap-10 flex-[3]">
+                        <Button className="bg-blue-1 py-2.5 px-5 rounded-md font-bold shrink-0">Edit Portfolio</Button>
+                        {portfolioComposition}
+                    </Row>
+                    <Row className="flex-1"></Row>
+                </Row>
+                <Row className="w-full gap-5">
+                    {table}
+                    {reBalanceNow}
+                </Row>
+            </Col>
+        )
+    } else {
+        return (
+
+            <Col className="w-full p-10 gap-5 items-center justify-center">
+                <CustomizeAllocationIcon />
+                <p className="font-bold">Start customising your portfolio</p>
+                <Button className="py-3 px-10 bg-blue-3 rounded-md">Create portfolio</Button>
+            </Col>
+        );
+
+    }
 }
 
 export default SmartAllocationHoldingsTab;
