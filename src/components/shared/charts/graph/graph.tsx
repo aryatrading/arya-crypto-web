@@ -87,29 +87,6 @@ const LineChart: FC<GraphChartType> = ({
       primaryLineData.map((d) => ({ time: d.time, value: d.value }))
     );
 
-    // const series = chart.addCandlestickSeries({
-    //     //   color: colors.blue[500],
-    //     priceLineVisible: false,
-    //     lastValueVisible: true,
-    //     priceFormat: {
-    //       type: "custom",
-    //       formatter: (priceValue: BarPrice) => {
-    //         return shortNumberFormat(priceValue);
-    //       },
-    //     },
-    //   });
-
-    //   series.setData(
-    //     primaryLineData.map((d) => ({
-    //       time: d.time,
-    //       value: d.value,
-    //       open: d.open,
-    //       close: d.close,
-    //       high: d.high,
-    //       low: d.low,
-    //     }))
-    //   );
-
     if (secondaryData) {
       const series2 = chart.addLineSeries({
         color: colors.yellow[500],
