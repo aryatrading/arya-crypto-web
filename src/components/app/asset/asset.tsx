@@ -20,14 +20,19 @@ import { getAssetTimeseriesPrice } from "../../../services/controllers/asset";
 import { formatNumber } from "../../../utils/helpers/prices";
 import TradingViewWidget from "../../shared/charts/tradingView/tradingView";
 
-type seriesInterface = { title: string; value: string; points: number };
+type seriesInterface = {
+  title: string;
+  value: string;
+  points: number;
+  key: string;
+};
 
 const Asset: FC = () => {
   const { t } = useTranslation(["asset"]);
   const asset = useSelector(getAsset);
   const timeseries = useSelector(getAssetTimeseries);
   const [activeSeries, setActiveSeries] = useState("24H");
-  const [view, setView] = useState("Price");
+  const [view, setView] = useState("price");
 
   const stats = useMemo(() => {
     return [
@@ -47,8 +52,23 @@ const Asset: FC = () => {
     ];
   }, [asset]);
 
+  const assetGraphToggles = useMemo(() => {
+    return [
+      {
+        title: t("pricegraph"),
+        value: "price",
+        key: "price",
+      },
+      {
+        title: t("tradinggraph"),
+        value: "tradingview",
+        key: "tradingview",
+      },
+    ];
+  }, []);
+
   const onSeriesClick = async (series: seriesInterface) => {
-    setActiveSeries(series.title);
+    setActiveSeries(series.key);
     await getAssetTimeseriesPrice(asset.symbol, series.value, series.points);
   };
 
@@ -70,7 +90,7 @@ const Asset: FC = () => {
           {asset.name} {t("price_chart")}
         </p>
         <Row className="gap-3">
-          {view === "Price" ? (
+          {view === "price" ? (
             <TimeseriesPicker
               series={assetTimeseries}
               active={activeSeries}
@@ -78,13 +98,13 @@ const Asset: FC = () => {
             />
           ) : null}
           <TimeseriesPicker
-            series={assetGraphView}
+            series={assetGraphToggles}
             active={view}
-            onclick={(e: seriesInterface) => setView(e.title)}
+            onclick={(e: seriesInterface) => setView(e.value)}
           />
         </Row>
       </Row>
-      {view === "Price" ? (
+      {view === "price" ? (
         <LineChart primaryLineData={timeseries} className="w-full h-80" />
       ) : (
         <TradingViewWidget />

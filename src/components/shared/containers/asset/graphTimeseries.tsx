@@ -3,7 +3,7 @@ import { Row } from "../../layout/flex";
 import { ShadowButton } from "../../buttons/shadow_button";
 
 type TimeseriesProps = {
-  series: { title: string; value: string; points?: number }[];
+  series: { title: string; value: string; key: string; points?: number }[];
   active: string;
   onclick: Function;
 };
@@ -28,8 +28,8 @@ export const TimeseriesPicker: FC<TimeseriesProps> = ({
                 ? "rounded-r-md"
                 : ""
             }
-            bgColor={active === elm.title ? "bg-blue-3" : "bg-grey-2"}
-            textColor={active === elm.title ? "text-blue-2" : ""}
+            bgColor={active === elm.key ? "bg-blue-3" : "bg-grey-2"}
+            textColor={active === elm.key ? "text-blue-2" : ""}
           />
         );
       })}

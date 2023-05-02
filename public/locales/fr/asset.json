@@ -17,5 +17,7 @@
     "whatis": "Qu'est-ce que",
     "price_chart": "graphique des prix en direct",
     "assetvoting": "Que pensez-vous de cet actif aujourd'hui ?",
-    "vote": "Votez pour voir le résultat"
+    "vote": "Votez pour voir le résultat",
+    "pricegraph": "Prix",
+    "tradinggraph": "Vue d'ensemble"
 }
