@@ -19,5 +19,7 @@
     "assetvoting": "Que pensez-vous de cet actif aujourd'hui ?",
     "vote": "Votez pour voir le résultat",
     "pricegraph": "Prix",
-    "tradinggraph": "Vue d'ensemble"
+    "tradinggraph": "Vue d'ensemble",
+    "assetinfotab": "Informations sur les actifs",
+    "holdingsinfo": "Informations sur les participations"
 }

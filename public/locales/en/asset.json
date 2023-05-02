@@ -19,5 +19,7 @@
     "assetvoting": "How do you feel about this asset today?",
     "vote": "Vote to see result",
     "pricegraph": "Price",
-    "tradinggraph": "Trading View"
+    "tradinggraph": "Trading View",
+    "assetinfotab": "Asset information",
+    "holdingsinfo": "Holdings information"
 }
