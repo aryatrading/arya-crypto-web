@@ -8,13 +8,17 @@ import {
   getAssetTimeseries,
 } from "../../../services/redux/assetSlice";
 import { useTranslation } from "next-i18next";
-import { formatNumber } from "../../../utils/format_currency";
 import { AssetInformation } from "../../shared/containers/asset/assetInfotmation";
 import AssetVote from "../../shared/containers/asset/assetVote";
 import LineChart from "../../shared/charts/graph/graph";
 import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries";
-import { assetTimeseries } from "../../../utils/constants/assetTimeseries";
+import {
+  assetGraphView,
+  assetTimeseries,
+} from "../../../utils/constants/assetTimeseries";
 import { getAssetTimeseriesPrice } from "../../../services/controllers/asset";
+import { formatNumber } from "../../../utils/helpers/prices";
+import TradingViewWidget from "../../shared/charts/tradingView/tradingView";
 
 type seriesInterface = { title: string; value: string; points: number };
 
@@ -23,19 +27,23 @@ const Asset: FC = () => {
   const asset = useSelector(getAsset);
   const timeseries = useSelector(getAssetTimeseries);
   const [activeSeries, setActiveSeries] = useState("24H");
+  const [view, setView] = useState("Price");
 
   const stats = useMemo(() => {
     return [
-      { title: t("mrkCap"), value: formatNumber(asset.mrkCap ?? 0) },
+      { title: t("mrkCap"), value: formatNumber(asset.mrkCap ?? 0, true) },
       {
         title: t("fullydiluted"),
-        value: formatNumber(asset.dilutedValuation ?? 0),
+        value: formatNumber(asset.dilutedValuation ?? 0, true),
       },
-      { title: t("circsupply"), value: asset.circlSupply },
-      { title: t("volume"), value: formatNumber(asset.volume ?? 0) },
-      { title: t("totalsupply"), value: asset.supply },
-      { title: t("dailylow"), value: formatNumber(asset.dailyLow ?? 0) },
-      { title: t("dailyhigh"), value: formatNumber(asset.dailyHigh ?? 0) },
+      { title: t("circsupply"), value: formatNumber(asset.circlSupply) },
+      { title: t("volume"), value: formatNumber(asset.volume ?? 0, true) },
+      { title: t("totalsupply"), value: formatNumber(asset.supply) },
+      { title: t("dailylow"), value: formatNumber(asset.dailyLow ?? 0, true) },
+      {
+        title: t("dailyhigh"),
+        value: formatNumber(asset.dailyHigh ?? 0, true),
+      },
     ];
   }, [asset]);
 
@@ -62,14 +70,26 @@ const Asset: FC = () => {
           {asset.name} {t("price_chart")}
         </p>
         <Row className="gap-3">
+          {view === "Price" ? (
+            <TimeseriesPicker
+              series={assetTimeseries}
+              active={activeSeries}
+              onclick={(e: seriesInterface) => onSeriesClick(e)}
+            />
+          ) : null}
           <TimeseriesPicker
-            series={assetTimeseries}
-            active={activeSeries}
-            onclick={(e: seriesInterface) => onSeriesClick(e)}
+            series={assetGraphView}
+            active={view}
+            onclick={(e: seriesInterface) => setView(e.title)}
           />
         </Row>
       </Row>
-      <LineChart primaryLineData={timeseries} className="w-full h-80" />
+      {view === "Price" ? (
+        <LineChart primaryLineData={timeseries} className="w-full h-80" />
+      ) : (
+        <TradingViewWidget />
+      )}
+
       <AssetInformation asset={asset} />
     </Col>
   );

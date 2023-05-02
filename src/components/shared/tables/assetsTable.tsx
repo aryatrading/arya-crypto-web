@@ -2,7 +2,6 @@ import { FC, useEffect } from "react";
 import { AssetType } from "../../../types/asset";
 import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
 import { Col, Row } from "../layout/flex";
-import { formatNumber } from "../../../utils/format_currency";
 import { useSelector } from "react-redux";
 import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
 import { StarIcon } from "@heroicons/react/24/outline";
@@ -11,6 +10,7 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import AssetPnl from "../containers/asset/assetPnl";
 import { useRouter } from "next/navigation";
+import { formatNumber } from "../../../utils/helpers/prices";
 
 type AssetsTableProps = {
   assets: AssetType[];
@@ -126,7 +126,8 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                 </td>
                 <td className="font-medium leading-6 text-white">
                   {formatNumber(
-                    _assetprice[elm.symbol ?? ""] ?? elm.currentPrice
+                    _assetprice[elm.symbol ?? ""] ?? elm.currentPrice,
+                    true
                   )}
                 </td>
                 <td className="font-medium leading-6 text-white">
@@ -136,10 +137,10 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                     ).toFixed(7)}
                 </td>
                 <td className="font-medium leading-6 text-white">
-                  {formatNumber(elm.mrkCap ?? 0)}
+                  {formatNumber(elm.mrkCap ?? 0, true)}
                 </td>
                 <td className="font-medium leading-6 text-white">
-                  {formatNumber(elm.volume ?? 0)}
+                  {formatNumber(elm.volume ?? 0, true)}
                 </td>
                 <td
                   className="font-medium  text-white"

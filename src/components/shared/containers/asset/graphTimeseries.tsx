@@ -3,7 +3,7 @@ import { Row } from "../../layout/flex";
 import { ShadowButton } from "../../buttons/shadow_button";
 
 type TimeseriesProps = {
-  series: { title: string; value: string; points: number }[];
+  series: { title: string; value: string; points?: number }[];
   active: string;
   onclick: Function;
 };

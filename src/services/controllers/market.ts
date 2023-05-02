@@ -44,29 +44,24 @@ export const fetchAssets = async (search?: string) => {
       iconUrl: data[i].asset_data.image,
       mrkCap: data[i].asset_data.market_cap,
       symbol: data[i].asset_data.symbol.toLowerCase(),
-      isFavorite: i % 2 === 0,
+      isFavorite: false,
     });
   }
   store.dispatch(storeMrkAssets(_assets));
   return _assets;
 };
 
-
 export const getPortfolioSnapshots = async (providerId?: number | null) => {
-  return await axiosInstance.get(
-    `/trade-engine/portfolio-snapshots/`,
-    { params: { provider: providerId, range: "year" } }
-  );
+  return await axiosInstance.get(`/trade-engine/portfolio-snapshots/`, {
+    params: { provider: providerId, range: "year" },
+  });
 };
-
 
 export const getPortfolioHoldings = async (providerId?: number) => {
-  return await axiosInstance.get(
-    `/trade-engine/portfolio-holdings/`,
-    { params: { provider: providerId } }
-  );
+  return await axiosInstance.get(`/trade-engine/portfolio-holdings/`, {
+    params: { provider: providerId },
+  });
 };
-
 
 export const getConnectedProviders = async () => {
   return await axiosInstance.get(`/exchange/connected-keys`);

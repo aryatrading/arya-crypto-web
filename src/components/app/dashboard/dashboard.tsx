@@ -19,7 +19,7 @@ import {
   PortfolioSnapshotType,
 } from "../../../types/exchange.types";
 import { chartDataType } from "../../shared/charts/graph/graph.type";
-import { percentageFormat, priceFormat } from "../../../utils/helpers/prices";
+import { percentageFormat, formatNumber } from "../../../utils/helpers/prices";
 import LoadingSpinner from "../../shared/loading-spinner/loading-spinner";
 import {
   selectConnectedExchanges,
@@ -226,7 +226,7 @@ const Dashboard: FC = () => {
                 const formattedChangePercentage = `${signal}${percentageFormat(
                   Math.abs(asset.asset_details.price_change_percentage_24h)
                 )}`;
-                const formattedChangePrice = `${signal}$${priceFormat(
+                const formattedChangePrice = `${signal}${formatNumber(
                   Math.abs(asset.asset_details.price_change_24h)
                 )}`;
 
@@ -269,13 +269,14 @@ const Dashboard: FC = () => {
                       </Row>
                     </td>
                     <td>
-                      {priceFormat(asset.current_amount)} {asset.name}
+                      {formatNumber(asset.current_amount)} {asset.name}
                     </td>
-                    <td>${priceFormat(asset.asset_details.current_price)}</td>
+                    <td>${formatNumber(asset.asset_details.current_price)}</td>
                     <td>
-                      $
-                      {priceFormat(
-                        asset.current_amount * asset.asset_details.current_price
+                      {formatNumber(
+                        asset.current_amount *
+                          asset.asset_details.current_price,
+                        true
                       )}
                     </td>
                     <td
@@ -329,7 +330,7 @@ const Dashboard: FC = () => {
   return (
     <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
       <ExchangeSwitcher />
-      {/* {charts} */}
+      {charts}
       {holdingsTable}
       {(isLoadingPortfolioSnapshots ||
         isLoadingPortfolioHoldings ||
