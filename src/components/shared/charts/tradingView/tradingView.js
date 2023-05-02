@@ -1,11 +1,13 @@
 // TradingViewWidget.jsx
 
 import React, { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 let tvScriptLoadingPromise;
 
 export default function TradingViewWidget() {
   const onLoadScriptRef = useRef();
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     onLoadScriptRef.current = createWidget;
@@ -40,8 +42,7 @@ export default function TradingViewWidget() {
           timezone: "Etc/UTC",
           theme: "dark",
           style: "1",
-          // TODO: ad fr localization when reading value from firebase
-          locale: "en",
+          locale: i18n.language,
           toolbar_bg: "#f1f3f6",
           enable_publishing: false,
           container_id: "tradingview_d2d35",
