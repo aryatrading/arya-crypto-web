@@ -22,5 +22,12 @@
     "value":"Valeur",
     "24hP/L":"24h P/L",
     "exchange":"Échange",
-    "noAssets":"Pas d'actifs"
+    "noAssets":"Pas d'actifs",
+    "addAsset" : "Ajouter un actif",
+    "selectAsset" : "Sélectionner un actif",
+    "24change" : "24h Change",
+    "fetchAssetErr" : "Erreur lors de la récupération d'un actif",
+    "searchforAsset" : "Recherche d'un actif",
+    "noAssetFound" : "Aucun actif trouvé...",
+    "searchAsset" : "Recherche d'un bien"
 }

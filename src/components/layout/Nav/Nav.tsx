@@ -87,8 +87,8 @@ const Nav = () => {
   
 
   return (
-    <Col className="w-full lg:px-6 bg-black-2 fixed lg:relative rounded-b-lg">
-      <Row className="container w-full h-[72px] justify-between pt-3 px-6 lg:p-0">
+    <Col className="w-full dark:bg-black-2 fixed lg:relative rounded-b-lg">
+      <Row className="container w-full h-[72px] justify-between">
         <Row className="xl:gap-20 md:gap-16 items-center">
           <Link href={"/home"}>
             <Image

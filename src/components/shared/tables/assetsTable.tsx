@@ -1,7 +1,7 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { AssetType } from "../../../types/asset";
 import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
-import { Col, Row } from "../layout/flex";
+import { Col } from "../layout/flex";
 import { formatNumber } from "../../../utils/format_currency";
 import { useSelector } from "react-redux";
 import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
@@ -11,6 +11,7 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import AssetPnl from "../containers/asset/assetPnl";
 import { useRouter } from "next/navigation";
+import AssetRow from "../AssetRow/AssetRow";
 
 type AssetsTableProps = {
   assets: AssetType[];
@@ -67,7 +68,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
 
   return (
     <Col className="flex items-center justify-center flex-1 gap-10 w-full">
-      <table className="w-full text-sm text-left text-gray-500 text-gray-400">
+      <table className="w-full text-sm text-left text-gray-400">
         <thead className="text-xs text-gray-1">
           <tr>
             {header.map((elm, index) => {
@@ -103,25 +104,13 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                 >
                   {elm.rank}
                 </th>
-                <Row className="items-center gap-5 justify-start mt-4">
-                  <img
-                    className="w-7 h-7 rounded-full"
-                    src={elm.iconUrl}
-                    alt="new"
-                  />
-                  <td className="font-medium leading-6 text-white">
-                    {elm.name}
-                  </td>
-                  <p className="text-grey_one font-medium text-sm">
-                    {elm.symbol?.toUpperCase()}
-                  </p>
-                </Row>
+                <td>
+                  <AssetRow icon={elm.iconUrl??''} name={elm.name??''} symbol={elm.symbol??''} className="font-medium"/>
+                </td>
                 <td>
                   <AssetPnl
-                    value={elm.pnl > 0 ? `+${elm.pnl}%` : elm.pnl + "%"}
-                    bgColor={elm.pnl <= 0 ? "bg-red-2" : "bg-green-2"}
-                    textColor={elm.pnl <= 0 ? "text-red-1" : "text-green-1"}
-                    isUp={elm.pnl > 0}
+                    value={elm.pnl}
+                    className={elm.pnl<=0?'bg-red-2 text-red-1':'bg-green-2 text-green-1'}
                   />
                 </td>
                 <td className="font-medium leading-6 text-white">

@@ -12,12 +12,12 @@ export const fetchSymbolsList = async (assets?: AssetType[]) => {
       `${process.env.NEXT_PUBLIC_TWELEVE_SYMBOLS_API}`
     );
     const { data } = await response.json();
-    for (var i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       _symbols += data[i].symbol + ",";
     }
   } else {
-    for (var i = 0; i < assets.length; i++) {
-      _symbols += assets[i].symbol?.toLocaleUpperCase() + "/USD" + ",";
+    for (let i = 0; i < assets.length; i++) {
+      _symbols += assets[i].symbol?.toLocaleUpperCase() + "/USD,";
     }
   }
 
@@ -31,21 +31,23 @@ export const fetchAssets = async (search?: string) => {
   );
 
   let _assets: AssetType[] = [];
-
-  for (var i = 0; i < data.length; i++) {
-    _assets.push({
-      id: data[i]?.id ?? 0,
-      name: data[i].asset_data.name,
-      currentPrice: data[i].asset_data.current_price,
-      pnl: data[i].asset_data.price_change_percentage_24h?.toFixed(2),
-      price: 0,
-      rank: data[i].asset_data.market_cap_rank,
-      volume: data[i].asset_data.total_volume,
-      iconUrl: data[i].asset_data.image,
-      mrkCap: data[i].asset_data.market_cap,
-      symbol: data[i].asset_data.symbol.toLowerCase(),
-      isFavorite: i % 2 === 0,
-    });
+  console.log(data);
+  if(data.length){
+    for (var i = 0; i < data.length; i++) {
+      _assets.push({
+        id: data[i]?.id ?? 0,
+        name: data[i].asset_data.name,
+        currentPrice: data[i].asset_data.current_price,
+        pnl: data[i].asset_data.price_change_percentage_24h?.toFixed(2),
+        price: 0,
+        rank: data[i].asset_data.market_cap_rank,
+        volume: data[i].asset_data.total_volume,
+        iconUrl: data[i].asset_data.image,
+        mrkCap: data[i].asset_data.market_cap,
+        symbol: data[i].asset_data.symbol.toLowerCase(),
+        isFavorite: i % 2 === 0,
+      });
+    }
   }
   store.dispatch(storeMrkAssets(_assets));
   return _assets;

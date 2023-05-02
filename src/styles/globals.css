@@ -2,14 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
 
+@layer base {
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-
   body {
     @apply bg-black-1;
   }
@@ -25,6 +24,7 @@
     @apply h-full w-full;
   }
 }
+
 /* If the user prefers dark mode, 
 we of course apply color-scheme: dark, as usual */
 @media (prefers-color-scheme: dark) {
@@ -41,6 +41,8 @@ we still enforce color-scheme: dark, despite the user preference */
   }
 }
 
+
+
 body {
   min-height: 100vh;
   margin: 0;
@@ -49,11 +51,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
 }
 
 .btn {
