@@ -1,0 +1,133 @@
+.table {
+
+    width: 100%;
+    min-width: 800px;
+
+    thead {
+        @apply text-grey-1;
+
+        tr {
+            @apply bg-black-2;
+
+
+            th {
+                height: 55px;
+                @apply font-bold text-sm;
+                text-align: left;
+                padding: 0 20px;
+            }
+
+            th:first-child {
+                @apply rounded-l-lg;
+                width: 250px;
+                padding-left: 20px;
+            }
+
+            th:nth-child(2),
+            th:nth-child(3),
+            th:nth-child(4),
+            th:nth-child(5),
+            th:nth-child(6) {
+                width: 100px;
+            }
+
+            th:last-child {
+                width: 50px;
+                vertical-align: middle;
+                @apply rounded-r-lg;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            border-bottom: 1px solid theme('colors.grey.5');
+
+            &:first-child {
+                td {
+                    height: 80px;
+                    vertical-align: bottom;
+                    padding-bottom: 20px;
+                }
+            }
+
+            td {
+                @apply font-normal;
+                text-align: left;
+                padding: 0 20px;
+                height: 70px;
+        
+        
+                &:only-child {
+                    text-align: center;
+                }
+        
+                &:first-child {
+                    padding-left: 20px;
+                }
+        
+                &:last-child {
+                    width: 50px;
+                }
+            }
+        }
+    }
+
+
+    tfoot {
+        @apply text-grey-1;
+
+        tr {
+            @apply bg-black-2;
+
+
+            th {
+                height: 55px;
+                @apply font-bold text-sm;
+                text-align: left;
+                padding: 0 20px;
+            }
+
+            th:first-child {
+                @apply rounded-l-lg;
+                width: 250px;
+                padding-left: 20px;
+            }
+
+            th:nth-child(2),
+            th:nth-child(3),
+            th:nth-child(4),
+            th:nth-child(5),
+            th:nth-child(6) {
+                width: 100px;
+            }
+
+            th:last-child {
+                width: 50px;
+                vertical-align: middle;
+                @apply rounded-r-lg;
+            }
+
+            td {
+                @apply font-normal;
+                text-align: left;
+                padding: 0 20px;
+                height: 70px;
+        
+        
+                &:only-child {
+                    text-align: center;
+                }
+        
+                &:first-child {
+                    padding-left: 20px;
+                }
+        
+                &:last-child {
+                    width: 50px;
+                }
+            }
+        }
+    }
+
+}

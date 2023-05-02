@@ -11,6 +11,8 @@ import clsx from "clsx";
 import { useSelector } from "react-redux";
 import { selectAssetLivePrice } from "../../../../../../services/redux/marketSlice";
 import PortfolioComposition from "../../../../../shared/portfolio-composition/portfolio-composition";
+import Link from "next/link";
+import { USDTSymbol } from "../../../../../../utils/constants/market";
 
 const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
 
@@ -118,7 +120,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                     <p className="font-bold">Automatic rebalancing scheduled <span className="text-blue-1">Monthly</span></p>
                     <p className="font-bold">Next rebalancing schedule : <span className="text-blue-1">01/12/2023</span></p>
                     <p className="font-bold text-grey-1">Exit Strategy</p>
-                    <p className="font-bold">When biticoin drops by 5% sell 50% of your portfolio for USDT</p>
+                    <p className="font-bold">When biticoin drops by 5% sell 50% of your portfolio for {USDTSymbol}</p>
                 </Col>
             </Col>
         )
@@ -130,7 +132,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
             <Col className="gap-10">
                 <Row className="w-full gap-5 items-center">
                     <Row className="gap-10 flex-[3]">
-                        <Button className="bg-blue-1 py-2.5 px-5 rounded-md font-bold shrink-0">Edit Portfolio</Button>
+                        <Link href="smart-allocation/edit" className="bg-blue-1 py-2.5 px-5 rounded-md font-bold shrink-0">Edit Portfolio</Link>
                         {portfolioComposition}
                     </Row>
                     <Row className="flex-1"></Row>

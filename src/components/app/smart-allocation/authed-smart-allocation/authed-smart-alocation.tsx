@@ -132,9 +132,9 @@ const AuthedSmartAllocation: FC = () => {
             <Tabs className="w-full font-light" selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
                 <TabList className="w-full border-b-[1px] border-grey-3 mb-6">
                     <Row className='gap-4'>
-                        <Tab className=" text-sm outline-none cursor-pointer">Your holdings</Tab>
-                        <Tab className=" text-sm outline-none cursor-pointer">Automation</Tab>
-                        <Tab className=" text-sm outline-none cursor-pointer">Portfolio trade history</Tab>
+                        <Tab className="text-sm outline-none cursor-pointer px-5">Your holdings</Tab>
+                        <Tab className="text-sm outline-none cursor-pointer px-5">Automation</Tab>
+                        <Tab className="text-sm outline-none cursor-pointer px-5">Portfolio trade history</Tab>
                     </Row>
                 </TabList>
                 <TabPanel>
@@ -148,7 +148,7 @@ const AuthedSmartAllocation: FC = () => {
                 </TabPanel>
             </Tabs>
         )
-    }, [smartAllocationHoldings]);
+    }, [smartAllocationHoldings, smartAllocationTotalEvaluation]);
 
     const withAllocation = useMemo(() => {
         return (
