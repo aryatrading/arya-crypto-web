@@ -8,5 +8,9 @@
     "investmentResult": "Résultat de l’investissement",
     "profit/loss": "Profit/perte",
     "totalInvestmentAmount": "Montant total de l’investissement",
-    "totalExitAmount": "Montant total de sortie"
+    "totalExitAmount": "Montant total de sortie",
+    "cryptoConverter": "Convertisseur de chiffrement",
+    "selectAsset": "Sélectionnez l'actif",
+    "searchAsset": "Rechercher un élément",
+    "emptySearch": "Recherche vide"
 }
