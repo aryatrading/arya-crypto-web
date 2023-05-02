@@ -63,7 +63,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
         return (
             <DropdownMenu.Item
                 key={data.id}
-                id={data.id + '_' + data.name}
+                id={data.id + '_' + data?.name}
                 className={"h-12 py-1 px-4 cursor-pointer bg-grey-4"}
                 onClick={() => {
                     if (addTo === 'first') {
@@ -137,7 +137,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
         if (value === '') {
             setSecondCoinAmount('');
         } else {
-            if (firstCoin.name === secondCoin?.name) {
+            if (firstCoin?.name === secondCoin?.name) {
                 setSecondCoinAmount(value);
                 return;
             } else {
@@ -152,7 +152,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
         if (value === '') {
             setFirstCoinAmount('');
         } else {
-            if (firstCoin.name === secondCoin?.name) {
+            if (firstCoin?.name === secondCoin?.name) {
                 setFirstCoinAmount(value);
                 return;
             } else {
@@ -172,7 +172,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
             } else {
                 const currentPrice = assetLivePrice?.[e.symbol];
                 setSecondCoin({ ...e, currentPrice: currentPrice });
-                if (e.name === firstCoin.name) {
+                if (e?.name === firstCoin?.name) {
                     setSecondCoinAmount(firstCoinAmount);
                 } else {
                     setSecondCoinAmount(convertValues(parseFloat(firstCoinAmount.toString()), firstCoin?.currentPrice || 0, currentPrice || 0));
@@ -181,10 +181,10 @@ export const CoinConverter = (props: CoinConverterTypes) => {
         }
         return (
             <Button key={e.symbol} className="btn bg-grey-3 rounded-md hover:bg-grey-4" onClick={onClick}>
-                <label className="block text-sm text-white font-medium">{props.preDefined ? firstCoin.name + ' > ' + e.name : e.name + ' > ' + usdt.name}</label>
+                <label className="block text-sm text-white font-medium">{props.preDefined ? firstCoin?.name + ' > ' + e?.name : e?.name + ' > ' + usdt?.name}</label>
             </Button>
         );
-    }), [assetLivePrice, convertValues, firstCoin?.currentPrice, firstCoin.name, firstCoinAmount, props.preDefined]);
+    }), [assetLivePrice, convertValues, firstCoin?.currentPrice, firstCoin?.name, firstCoinAmount, props.preDefined]);
 
     return (
         <Col className="items-start w-full gap-10">
