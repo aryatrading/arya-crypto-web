@@ -1,38 +1,18 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useMemo } from "react";
 import { AssetHeader } from "../../shared/containers/asset/assetDetailsHeader";
 import AssetStatistics from "../../shared/containers/asset/assetStatistics";
 import { Col, Row } from "../../shared/layout/flex";
 import { useSelector } from "react-redux";
-import {
-  getAsset,
-  getAssetTimeseries,
-} from "../../../services/redux/assetSlice";
+import { getAsset } from "../../../services/redux/assetSlice";
 import { useTranslation } from "next-i18next";
-import { AssetInformation } from "../../shared/containers/asset/assetInfotmation";
 import AssetVote from "../../shared/containers/asset/assetVote";
-import LineChart from "../../shared/charts/graph/graph";
-import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries";
-import {
-  assetGraphView,
-  assetTimeseries,
-} from "../../../utils/constants/assetTimeseries";
-import { getAssetTimeseriesPrice } from "../../../services/controllers/asset";
 import { formatNumber } from "../../../utils/helpers/prices";
-import TradingViewWidget from "../../shared/charts/tradingView/tradingView";
-
-type seriesInterface = {
-  title: string;
-  value: string;
-  points: number;
-  key: string;
-};
+import AssetInformationTab from "./assetInformation";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
 const Asset: FC = () => {
   const { t } = useTranslation(["asset"]);
   const asset = useSelector(getAsset);
-  const timeseries = useSelector(getAssetTimeseries);
-  const [activeSeries, setActiveSeries] = useState("24H");
-  const [view, setView] = useState("price");
 
   const stats = useMemo(() => {
     return [
@@ -52,26 +32,6 @@ const Asset: FC = () => {
     ];
   }, [asset]);
 
-  const assetGraphToggles = useMemo(() => {
-    return [
-      {
-        title: t("pricegraph"),
-        value: "price",
-        key: "price",
-      },
-      {
-        title: t("tradinggraph"),
-        value: "tradingview",
-        key: "tradingview",
-      },
-    ];
-  }, []);
-
-  const onSeriesClick = async (series: seriesInterface) => {
-    setActiveSeries(series.key);
-    await getAssetTimeseriesPrice(asset.symbol, series.value, series.points);
-  };
-
   return (
     <Col className="h-full w-full gap-12">
       <Row className="justify-between">
@@ -85,32 +45,21 @@ const Asset: FC = () => {
           );
         })}
       </Row>
-      <Row className="justify-between items-center">
-        <p className="font-medium text-xl">
-          {asset.name} {t("price_chart")}
-        </p>
-        <Row className="gap-3">
-          {view === "price" ? (
-            <TimeseriesPicker
-              series={assetTimeseries}
-              active={activeSeries}
-              onclick={(e: seriesInterface) => onSeriesClick(e)}
-            />
-          ) : null}
-          <TimeseriesPicker
-            series={assetGraphToggles}
-            active={view}
-            onclick={(e: seriesInterface) => setView(e.value)}
-          />
-        </Row>
-      </Row>
-      {view === "price" ? (
-        <LineChart primaryLineData={timeseries} className="w-full h-80" />
-      ) : (
-        <TradingViewWidget />
-      )}
-
-      <AssetInformation asset={asset} />
+      <Tabs selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
+        <TabList className="border-b-[1px] border-grey-3 mb-6">
+          <Row className="gap-4">
+            <Tab className="font-bold text-lg outline-none cursor-pointer">
+              {t("assetinfotab")}
+            </Tab>
+            <Tab className="font-bold text-lg outline-none cursor-pointer">
+              {t("holdingsinfo")}
+            </Tab>
+          </Row>
+        </TabList>
+        <TabPanel>
+          <AssetInformationTab />
+        </TabPanel>
+      </Tabs>
     </Col>
   );
 };
