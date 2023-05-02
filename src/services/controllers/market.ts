@@ -25,9 +25,9 @@ export const fetchSymbolsList = async (assets?: AssetType[]) => {
 };
 
 // GET ASSETS LIST FROM OUT BACKEND
-export const fetchAssets = async (search?: string) => {
+export const fetchAssets = async (search?: string, limit: string = "100") => {
   const { data } = await axiosInstance.get(
-    `utils/assets?limit=100&offset=0${search ? `&search=${search}` : ""}`
+    `utils/assets?limit=${limit}&offset=0${search ? `&search=${search}` : ""}`
   );
 
   let _assets: AssetType[] = [];
@@ -47,7 +47,9 @@ export const fetchAssets = async (search?: string) => {
       isFavorite: false,
     });
   }
-  store.dispatch(storeMrkAssets(_assets));
+  if (limit === "100") {
+    store.dispatch(storeMrkAssets(_assets));
+  }
   return _assets;
 };
 
