@@ -31,7 +31,7 @@ export const fetchAssets = async (search?: string) => {
   );
 
   let _assets: AssetType[] = [];
-  console.log(data);
+  
   if(data.length){
     for (var i = 0; i < data.length; i++) {
       _assets.push({

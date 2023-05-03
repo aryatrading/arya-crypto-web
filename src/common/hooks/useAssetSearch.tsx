@@ -1,11 +1,13 @@
-import { ChangeEvent, FormEvent, useCallback, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { MODE_DEBUG } from '../../utils/constants/config';
 import { fetchAssets } from '../../services/controllers/market';
+import _ from 'lodash';
+import { AssetType } from '../../types/asset';
 
 const useAssetSearch = () => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [fetchingError, setFetchingError] = useState<boolean>(false);
-    const [filteredAssets, setFilteredAssets] = useState<any[] | null>(null);
+    const [filteredAssets, setFilteredAssets] = useState<AssetType[] | null>(null);
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     const handleSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -34,12 +36,22 @@ const useAssetSearch = () => {
         }
     }, [searchTerm]);
 
-    const onSearchSubmit = useCallback((e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const debouncedSearch = useMemo(() => {
+        return _.debounce(handleSearch, 500);
+    }, [handleSearch]);
+    
+    useEffect(() => {
+        return () => {
+            debouncedSearch.cancel();
+        }
+    },[debouncedSearch]);
+
+    // Fetch new assets if search term changed
+    useEffect(() => {
         fetchFilteredAssets();
     }, [fetchFilteredAssets]);
 
-    return{fetchingError,filteredAssets,handleSearch,searchTerm,fetchFilteredAssets,onSearchSubmit,isSearching}
+    return{fetchingError,isSearching,filteredAssets,searchTerm,fetchFilteredAssets,debouncedSearch}
 }
 
 export default useAssetSearch

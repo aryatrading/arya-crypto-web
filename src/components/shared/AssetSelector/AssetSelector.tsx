@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import Button from '../buttons/button'
 import CloseIcon from '../../svg/Shared/CloseIcon'
@@ -12,26 +12,17 @@ import { Col, Row } from '../layout/flex'
 import CustomScroll from '../CustomScroll/CustomScroll';
 import AssetSelectorSkeleton from './AssetSelectorSkeleton';
 import { useTranslation } from 'next-i18next'
+import { AssetType } from '../../../types/asset'
 
-const AssetSelector = ({onClick}:{onClick:Function}) => {
-  const {fetchingError,filteredAssets,handleSearch,fetchFilteredAssets,isSearching} = useAssetSearch();
+interface IAssetSelectorProps {
+  onClick:(asset:AssetType)=>void,
+  trigger:React.ReactNode
+}
+
+const AssetSelector = ({onClick,trigger}:IAssetSelectorProps) => {
+  const {fetchingError,filteredAssets,isSearching,debouncedSearch} = useAssetSearch();
 
   const {t}=useTranslation(['common']);
-  
-  const debouncedResults = useMemo(() => {
-    return _.debounce(handleSearch, 500);
-  }, [handleSearch]);
-
-  useEffect(() => {
-    return () => {
-        debouncedResults.cancel();
-    }
-  },[debouncedResults]);
-
-  // Fetch new assets if search term changed
-  useEffect(() => {
-    fetchFilteredAssets();
-  }, [fetchFilteredAssets]);
   
   const renderAssets = useCallback(() => {
     return <Col className='w-full h-full'>
@@ -53,15 +44,13 @@ const AssetSelector = ({onClick}:{onClick:Function}) => {
               }
           </Col>
     }
-  , [filteredAssets, onClick, t])
+  ,[filteredAssets, onClick, t])
 
 
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <Button className='bg-blue-1 text-white px-4 py-2 rounded-md'>
-          {t('addAsset')}
-        </Button>
+        {trigger}
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="bg-blackA9 data-[state=open]:animate-overlayShow fixed inset-0" />
@@ -79,7 +68,7 @@ const AssetSelector = ({onClick}:{onClick:Function}) => {
           <Dialog.Title className="text-mauve12 m-0 text-2xl font-semibold">
             {t('selectAsset')}
           </Dialog.Title>
-          <InputWithIcon onChange={debouncedResults} className='gap-3 bg-grey-3 px-3 py-4 rounded-md text-sm font-semibold focus-within:outline focus-within:outline-1 focus-within:outline-grey-1' placeholder='Search asset' icon={<SearchIcon className='stroke-current text-grey-1 w-3 h-3'/>}/>
+          <InputWithIcon onChange={debouncedSearch} className='gap-3 bg-grey-3 px-3 py-4 rounded-md text-sm font-semibold focus-within:outline focus-within:outline-1 focus-within:outline-grey-1' placeholder='Search asset' icon={<SearchIcon className='stroke-current text-grey-1 w-3 h-3'/>}/>
           <div className='flex flex-col w-full gap-4'>
             <div className='grid grid-cols-2 font-semibold content-center px-2'>
                 <span className='text-start'>{t('name')}</span>
