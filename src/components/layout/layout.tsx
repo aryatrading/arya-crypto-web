@@ -14,7 +14,7 @@ export default function Layout({ children }: any) {
     <div className={poppins.className}>
       <Nav />
       <div
-        className={"flex flex-col flex-1 container sm:items-center lg:pt-28 p-5"}
+        className={"flex flex-col flex-1 container sm:items-center pt-28"}
       >
         {children}
       </div>

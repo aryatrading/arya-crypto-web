@@ -1,29 +1,55 @@
-import { FC } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { PlayIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { Row } from "../../layout/flex";
+import { twMerge } from "tailwind-merge";
 
-type AssetPnl = {
-  isUp: boolean;
-  value: string;
-  bgColor: string;
-  textColor: string;
+interface  IAssetPnlProps  {
+  value: number;
+  className?:string;
+  transform?:Function;
 };
 
-export const AssetPnl: FC<AssetPnl> = ({ bgColor, value, isUp, textColor }) => {
+
+const AssetPnl: FC<IAssetPnlProps> = ({ value, className, transform}) => {
+  const [isProfit, setIsProfit] = useState<boolean|null>(false)
+
+  useEffect(() => {
+
+    if(value>0){
+      setIsProfit(true)
+    }else if(value<0){
+      setIsProfit(false)
+    }
+    else{
+      setIsProfit(null)
+    }
+  }, [value])
+
+  const handleValue = useCallback(
+    () => {
+      if(value){
+        return <p className={`text-xs font-medium ${(isProfit===null)?'text-grey-1':''}`}>
+        {transform?transform(value??0):`${isProfit?'+':''}${value}%`}
+      </p>
+      }
+      else{
+        return <span className="text-grey-1 text-xs font-medium">N/A</span>
+      }
+    },
+    [isProfit, transform, value],
+  )
+  
   return (
-    <Row className={`${bgColor} w-20 h-5 rounded  justify-center items-center`}>
-      {isUp != null ? (
+    <Row className={twMerge(`w-20 h-5 rounded  justify-center items-center gap-1`,className)}>
+      {(isProfit !== null) && (
         <PlayIcon
           className={`w-3 h-3 ${
-            isUp ? "fill-green-1 -rotate-90" : "fill-red-1 rotate-90"
+            isProfit ? "fill-green-1 -rotate-90" : "fill-red-1 rotate-90"
           } stroke-0`}
         />
-      ) : null}
-
-      <p className={`text-xs font-medium leading-4 pl-1.5 pt-0.5 ${textColor}`}>
-        {value}
-      </p>
+      )}
+      {handleValue()}
     </Row>
   );
 };

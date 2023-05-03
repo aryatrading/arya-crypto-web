@@ -59,14 +59,12 @@ const Market: FC = () => {
               {/* TODO: update hardcoded color values */}
               <MarketStats
                 bgColor="bg-green-2"
-                textColor="text-green-1"
-                value="+8.15"
+                value={8.15}
                 title={t("marketcap")}
               />
               <MarketStats
                 bgColor="bg-red-2"
-                textColor="text-red-1"
-                value="-3.75"
+                value={-3.75}
                 title={t("volume")}
               />
             </Row>

@@ -50,14 +50,13 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
           )}
         </p>
         <AssetPnl
-          value={asset.pnl > 0 ? `+${asset.pnl}%` : asset.pnl + "%"}
-          bgColor={asset.pnl <= 0 ? "bg-red-2" : "bg-green-2"}
-          textColor={asset.pnl <= 0 ? "text-red-1" : "text-green-1"}
-          isUp={asset.pnl > 0}
+          value={asset.pnl}
+          className={asset.pnl <= 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"}
         />
         <AssetPnl
-          value={formatNumber(asset.priceChange ?? 0)}
-          textColor={asset.priceChange! <= 0 ? "text-red-1" : "text-green-1"}
+          value={asset.priceChange!}
+          className={asset.priceChange! <= 0 ? "text-red-1" : "text-green-1"}
+          transform={formatNumber}
         />
       </Row>
     </Col>
