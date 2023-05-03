@@ -53,8 +53,8 @@ const AssetSelector = ({onClick,trigger}:IAssetSelectorProps) => {
         {trigger}
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="bg-blackA9 data-[state=open]:animate-overlayShow fixed inset-0" />
-        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[600px] w-[90vw] max-w-[466px] translate-x-[-50%] translate-y-[-50%] rounded-lg bg-grey-2 p-7 focus:outline-none font-sans flex flex-col gap-3">
+        <Dialog.Overlay className="bg-slate-950 data-[state=open]:animate-overlayShow fixed inset-0 z-10 opacity-30" />
+        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[600px] w-[90vw] max-w-[466px] translate-x-[-50%] translate-y-[-50%] rounded-lg bg-grey-2 p-7 focus:outline-none font-sans flex flex-col gap-3 z-10">
         <div className='flex w-full justify-end items-center'>
           <Dialog.Close asChild>
             <Button
