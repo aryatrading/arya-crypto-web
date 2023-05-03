@@ -39,5 +39,5 @@ export const percentageFormat = (number: number) => {
         }
         return numeral(number).format('0a[.]00');
     }
-    return 0;
+    return "0";
 }

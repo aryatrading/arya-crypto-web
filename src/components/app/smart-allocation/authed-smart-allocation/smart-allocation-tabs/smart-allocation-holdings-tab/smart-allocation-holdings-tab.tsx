@@ -13,6 +13,7 @@ import { selectAssetLivePrice } from "../../../../../../services/redux/marketSli
 import PortfolioComposition from "../../../../../shared/portfolio-composition/portfolio-composition";
 import Link from "next/link";
 import { USDTSymbol } from "../../../../../../utils/constants/market";
+import { AssetPnl } from "../../../../../shared/containers/asset/assetPnl";
 
 const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
 
@@ -26,7 +27,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
         return (
             <PortfolioComposition portfolioAssets={smartAllocationHoldings.map(asset => {
                 return {
-                    name: asset.name,
+                    name: (asset.name ?? ''),
                     weight: (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1)
                 };
             })} />
@@ -50,38 +51,36 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                         </tr>
                     </thead>
                     <tbody>
-                        {!smartAllocationHoldings.length ?
-                            <tr>
-                                <td colSpan={7} className="row-span-full">
-                                    <Col className="w-full p-10 gap-5 items-center justify-center">
-                                        <CustomizeAllocationIcon />
-                                        <p className="font-bold">Start customising your portfolio</p>
-                                        <Button className="py-3 px-10 bg-blue-3 rounded-md">Create portfolio</Button>
-                                    </Col>
-                                </td>
-                            </tr>
-                            : smartAllocationHoldings.map((asset, index) => {
-
+                        {smartAllocationHoldings.map((asset, index) => {
+                            if(asset.name !== USDTSymbol){
                                 const setWeight = asset.current_weight ?? 0;
                                 const currentWeight = (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1);
                                 const isCurrentWeightMoreThanSetWeight = currentWeight >= setWeight;
-
+    
+                                const pnlPercentage = asset?.pnl?.percent ?? 0;
+                                const pnlIsPositive = pnlPercentage >= 0;
+    
                                 return (
                                     <tr key={asset.name}>
                                         <td>{index + 1}</td>
                                         <td>
                                             <Row className="gap-3 items-center">
-                                                <Image src={""} alt="" width={23} height={23} />
-                                                <p>{asset.name}</p>
+                                                <Image src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
+                                                <p>{asset.asset_details?.asset_data?.name}</p>
                                                 <span className="text-sm text-grey-1">{asset.name}</span>
                                             </Row>
                                         </td>
                                         <td>
-                                            ??%
+                                            <AssetPnl
+                                                isUp={pnlIsPositive}
+                                                bgColor={pnlIsPositive ? "bg-green-2" : "bg-red-2"}
+                                                textColor={pnlIsPositive ? "text-green-1" : "text-red-1"}
+                                                value={`${percentageFormat(asset.pnl?.percent ?? 0)}%`}
+                                            />
                                         </td>
-                                        <td>${priceFormat(asset.ask_price, true)}</td>
-                                        <td>{priceFormat(asset.available, true)}</td>
-                                        <td>${priceFormat(asset.current_value, true)}</td>
+                                        <td>${priceFormat((asset?.ask_price ?? 0), true)}</td>
+                                        <td>{priceFormat((asset.available ?? 0), true)}</td>
+                                        <td>${priceFormat((asset.current_value ?? 0), true)}</td>
                                         <td className="">
                                             <Row className="gap-2 items-center">
                                                 <p>
@@ -102,7 +101,10 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                         </td>
                                     </tr>
                                 );
-                            })}
+                            } else {
+                                return <></>
+                            }
+                        })}
                     </tbody>
                 </table>
 
@@ -149,7 +151,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
             <Col className="w-full p-10 gap-5 items-center justify-center">
                 <CustomizeAllocationIcon />
                 <p className="font-bold">Start customising your portfolio</p>
-                <Button className="py-3 px-10 bg-blue-3 rounded-md">Create portfolio</Button>
+                <Link href="/smart-allocation/edit" className="py-3 px-10 bg-blue-3 rounded-md">Create portfolio</Link>
             </Col>
         );
 

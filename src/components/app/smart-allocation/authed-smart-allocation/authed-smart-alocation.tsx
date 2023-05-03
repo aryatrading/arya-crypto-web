@@ -12,6 +12,7 @@ import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
 import { SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
 import { getSmartAllocation } from "../../../../services/controllers/market";
+import PageLoader from "../../../shared/pageLoader/pageLoader";
 
 const AuthedSmartAllocation: FC = () => {
     const [isLoadingPortfolioHoldings, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
@@ -53,8 +54,8 @@ const AuthedSmartAllocation: FC = () => {
                 const holdings: SmartAllocationAssetType[] = data.assets;
                 setSmartAllocationTotalEvaluation(data.total_asset_value);
 
-                if (holdings) {
-                    holdings.sort((a, b) => ((b.current_weight) - (a.current_weight)));
+                if (holdings && data.exists) {
+                    holdings.sort((a, b) => ((b?.current_weight ?? 0) - (a?.current_weight ?? 0)));
                     setSmartAllocationHoldings(holdings);
                 }
             })
@@ -164,6 +165,7 @@ const AuthedSmartAllocation: FC = () => {
 
     return (
         <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
+            {(isLoadingSmartAllocationHoldings || isLoadingPortfolioHoldings) && <PageLoader />}
             {withAllocation}
         </Col>
     )
