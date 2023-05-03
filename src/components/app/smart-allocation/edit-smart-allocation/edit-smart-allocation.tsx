@@ -18,8 +18,8 @@ import { XMarkIcon } from "@heroicons/react/24/solid"
 import { USDTSymbol } from "../../../../utils/constants/market"
 import * as Slider from '@radix-ui/react-slider';
 import PageLoader from "../../../shared/pageLoader/pageLoader"
-import { AssetPnl } from "../../../shared/containers/asset/assetPnl"
 import Link from "next/link"
+import AssetPnl from "../../../shared/containers/asset/assetPnl"
 
 
 
@@ -144,9 +144,6 @@ const EditSmartAllocation: FC = () => {
                                     const setWeight = asset.weight ?? 0;
                                     const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
 
-                                    const pnlPercentage = asset?.pnl?.percent ?? 0;
-                                    const pnlIsPositive = pnlPercentage >= 0;
-
                                     const assetEvaluation = smartAllocationTotalEvaluation * setWeight;
 
                                     return (
@@ -160,10 +157,7 @@ const EditSmartAllocation: FC = () => {
                                             </td>
                                             <td>
                                                 <AssetPnl
-                                                    isUp={pnlIsPositive}
-                                                    bgColor={pnlIsPositive ? "bg-green-2" : "bg-red-2"}
-                                                    textColor={pnlIsPositive ? "text-green-1" : "text-red-1"}
-                                                    value={`${percentageFormat(asset.pnl?.percent ?? 0)}%`}
+                                                    value={asset.pnl?.percent ?? 0}
                                                 />
                                             </td>
                                             <td>${priceFormat(asset?.ask_price ?? 0, true)}</td>

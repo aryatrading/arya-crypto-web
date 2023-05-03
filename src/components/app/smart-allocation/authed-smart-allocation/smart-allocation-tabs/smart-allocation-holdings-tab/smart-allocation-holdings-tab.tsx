@@ -13,7 +13,7 @@ import { selectAssetLivePrice } from "../../../../../../services/redux/marketSli
 import PortfolioComposition from "../../../../../shared/portfolio-composition/portfolio-composition";
 import Link from "next/link";
 import { USDTSymbol } from "../../../../../../utils/constants/market";
-import { AssetPnl } from "../../../../../shared/containers/asset/assetPnl";
+import AssetPnl from "../../../../../shared/containers/asset/assetPnl";
 
 const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
 
@@ -57,9 +57,6 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                 const currentWeight = (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1);
                                 const isCurrentWeightMoreThanSetWeight = currentWeight >= setWeight;
     
-                                const pnlPercentage = asset?.pnl?.percent ?? 0;
-                                const pnlIsPositive = pnlPercentage >= 0;
-    
                                 return (
                                     <tr key={asset.name}>
                                         <td>{index + 1}</td>
@@ -72,10 +69,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                         </td>
                                         <td>
                                             <AssetPnl
-                                                isUp={pnlIsPositive}
-                                                bgColor={pnlIsPositive ? "bg-green-2" : "bg-red-2"}
-                                                textColor={pnlIsPositive ? "text-green-1" : "text-red-1"}
-                                                value={`${percentageFormat(asset.pnl?.percent ?? 0)}%`}
+                                                value={asset.pnl?.percent ?? 0}
                                             />
                                         </td>
                                         <td>${priceFormat((asset?.ask_price ?? 0), true)}</td>
