@@ -21,5 +21,20 @@
     "pricegraph": "Price",
     "tradinggraph": "Trading View",
     "assetinfotab": "Asset information",
-    "holdingsinfo": "Holdings information"
+    "holdingsinfo": "Holdings information",
+    "holdingperexchange": "holdings per exchange",
+    "orders": "Orders",
+    "type": "Type",
+    "status": "Stauts",
+    "amount": "Amount",
+    "price": "Price",
+    "date": "Date",
+    "worth": "Worth",
+    "exchange": "Exchange",
+    "avgprice": "Avg. Price",
+    "pnl": "24 P/L",
+    "pending": "Pending",
+    "cancelled": "Cancelled",
+    "executed": "Executed",
+    "error": "Error Executing"
 }

@@ -9,6 +9,7 @@ import AssetVote from "../../shared/containers/asset/assetVote";
 import { formatNumber } from "../../../utils/helpers/prices";
 import AssetInformationTab from "./assetInformation";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import AssetHoldingTab from "./assetHolding";
 
 const Asset: FC = () => {
   const { t } = useTranslation(["asset"]);
@@ -51,13 +52,18 @@ const Asset: FC = () => {
             <Tab className="font-bold text-lg outline-none cursor-pointer">
               {t("assetinfotab")}
             </Tab>
-            <Tab className="font-bold text-lg outline-none cursor-pointer">
-              {t("holdingsinfo")}
-            </Tab>
+            {asset?.isHoldingAsset ? (
+              <Tab className="font-bold text-lg outline-none cursor-pointer">
+                {t("holdingsinfo")}
+              </Tab>
+            ) : null}
           </Row>
         </TabList>
         <TabPanel>
           <AssetInformationTab />
+        </TabPanel>
+        <TabPanel>
+          <AssetHoldingTab />
         </TabPanel>
       </Tabs>
     </Col>
