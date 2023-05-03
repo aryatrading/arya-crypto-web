@@ -1,10 +1,13 @@
 import { FC } from "react";
-import Layout from "../../layout/layout";
+import { Col } from "../layout/flex";
+import LoadingSpinner from "../loading-spinner/loading-spinner";
 
 const PageLoader: FC = () => (
-    <Layout>
-        <div>Loading ...</div>
-    </Layout>
+    <Col className="w-full h-full bg-black-2 fixed z-10 left-0 top-0 items-center justify-center z-20">
+        <Col className="w-40 h-40 bg-slate-50 rounded-md">
+            <LoadingSpinner />
+        </Col>
+    </Col>
 )
 
 export default PageLoader;

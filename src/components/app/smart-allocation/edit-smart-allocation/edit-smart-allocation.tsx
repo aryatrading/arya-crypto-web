@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react"
+import { ChangeEvent, FC, useCallback, useEffect, useMemo, useState } from "react"
 import { Col, Row } from "../../../shared/layout/flex"
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher"
 import Button from "../../../shared/buttons/button"
@@ -18,6 +18,8 @@ import styles from "./edit-smart-allocation.module.scss";
 import { TrashIcon } from "@heroicons/react/24/outline"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import { USDTSymbol } from "../../../../utils/constants/market"
+import * as Slider from '@radix-ui/react-slider';
+import PageLoader from "../../../shared/pageLoader/pageLoader"
 
 const EditSmartAllocation: FC = () => {
 
@@ -58,128 +60,142 @@ const EditSmartAllocation: FC = () => {
     }, [initSmartAllocationHoldings]);
 
 
+    const onSetWeightChange = useCallback((value: number, asset: SmartAllocationAssetType) => {
+        setSmartAllocationHoldings((oldState) => {
+            const strictedValue = value < 0 ? 0 : value > 100 ? 100 : value;
+            return oldState.map((holding) => {
+                if (holding.name === asset.name) {
+                    return { ...holding, current_weight: strictedValue / 100 }
+                } else {
+                    return holding;
+                }
+            })
+        })
+    }, [])
+
+
     const table = useMemo(() => {
-        return (
-            <Row className="col-span-full overflow-auto">
-                <table className={styles.table}>
-                    <thead>
-                        <tr>
-                            <th>{t("common:name")}</th>
-                            <th>{t("common:24hP/L")}</th>
-                            <th>{t("common:currentPrice")}</th>
-                            <th>Holding Quantity</th>
-                            <th>Holding Value</th>
-                            <th>Current weight</th>
-                            <th>
-                                <Row className="gap-3">
-                                    <p>Set weight</p>
-                                    <Button className="text-blue-1 underline">Distribute equally</Button>
-                                </Row>
-                            </th>
-                            <th>
-                                <Button>
-                                    <TrashIcon width={20} height={20} color="white" />
-                                </Button>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {!smartAllocationHoldings.length ?
+        if (!isLoadingSmartAllocationHoldings) {
+            return (
+                <Row className="col-span-full overflow-auto">
+                    <table className={styles.table}>
+                        <thead>
                             <tr>
-                                <td colSpan={7} className="row-span-full">
-                                    <Col className="w-full p-10 gap-5 items-center justify-center">
-                                        <CustomizeAllocationIcon />
-                                        <p className="font-bold">Start customising your portfolio</p>
-                                        <Button className="py-3 px-10 bg-blue-3 rounded-md">Create portfolio</Button>
-                                    </Col>
-                                </td>
+                                <th>{t("common:name")}</th>
+                                <th>{t("common:24hP/L")}</th>
+                                <th>{t("common:currentPrice")}</th>
+                                <th>Holding Quantity</th>
+                                <th>Holding Value</th>
+                                <th>Current weight</th>
+                                <th>
+                                    <Row className="gap-3">
+                                        <p>Set weight</p>
+                                        <Button className="text-blue-1 underline">Distribute equally</Button>
+                                    </Row>
+                                </th>
+                                <th>
+                                    <Button>
+                                        <TrashIcon width={20} height={20} color="white" />
+                                    </Button>
+                                </th>
                             </tr>
-                            : smartAllocationHoldings.map((asset, index) => {
+                        </thead>
+                        <tbody>
+                            {!smartAllocationHoldings.length ?
+                                <tr>
+                                    <td colSpan={7} className="row-span-full">
+                                        <Col className="w-full p-10 gap-5 items-center justify-center">
+                                            <CustomizeAllocationIcon />
+                                            <p className="font-bold">Start customising your portfolio</p>
+                                            <Button className="py-3 px-10 bg-blue-3 rounded-md">Create portfolio</Button>
+                                        </Col>
+                                    </td>
+                                </tr>
+                                : smartAllocationHoldings.map((asset, index) => {
 
-                                const setWeight = asset.current_weight ?? 0;
-                                const currentWeight = (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1);
-                                const isCurrentWeightMoreThanSetWeight = currentWeight >= setWeight;
+                                    const setWeight = asset.current_weight ?? 0;
+                                    const currentWeight = (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1);
+                                    const isCurrentWeightMoreThanSetWeight = currentWeight >= setWeight;
 
-                                return (
-                                    <tr key={asset.name}>
-                                        <td>
-                                            <Row className="gap-3 items-center">
-                                                <Image src={""} alt="" width={23} height={23} />
-                                                <p>{asset.name}</p>
-                                                <span className="text-sm text-grey-1">{asset.name}</span>
-                                            </Row>
-                                        </td>
-                                        <td>
-                                            ??%
-                                        </td>
-                                        <td>${priceFormat(asset.ask_price, true)}</td>
-                                        <td>{priceFormat(asset.available, true)}</td>
-                                        <td>${priceFormat(asset.current_value, true)}</td>
-                                        <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
-                                            {percentageFormat(currentWeight * 100)}%
-                                        </td>
-                                        <td className="">
-                                            <Row className="w-full gap-4 items-center">
-                                                <Row className="flex-1 rounded-full overflow-hidden bg-white" style={{ height: 10 }}>
-                                                    <Row
-                                                        className={`bg-yellow-1 rounded-full`}
-                                                        style={{
-                                                            width: `${percentageFormat(setWeight * 100)}%`
+                                    return (
+                                        <tr key={asset.name}>
+                                            <td>
+                                                <Row className="gap-3 items-center">
+                                                    <Image src={""} alt="" width={23} height={23} />
+                                                    <p>{asset.name}</p>
+                                                    <span className="text-sm text-grey-1">{asset.name}</span>
+                                                </Row>
+                                            </td>
+                                            <td>
+                                                ??%
+                                            </td>
+                                            <td>${priceFormat(asset.ask_price, true)}</td>
+                                            <td>{priceFormat(asset.available, true)}</td>
+                                            <td>${priceFormat(asset.current_value, true)}</td>
+                                            <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
+                                                {percentageFormat(currentWeight * 100)}%
+                                            </td>
+                                            <td className="">
+                                                <Row className="w-full gap-4 items-center">
+                                                    <Slider.Root
+                                                        className="relative flex items-center select-none flex-1"
+                                                        value={[setWeight * 100]}
+                                                        max={100}
+                                                        step={1}
+                                                        aria-label="Volume"
+                                                        onValueChange={(value) => onSetWeightChange(value[0], asset)}
+                                                    >
+                                                        <Slider.Track className="flex-grow flex-1 bg-[#D9D9D9] rounded-full h-2">
+                                                            <Slider.Range className="absolute h-full bg-yellow-1 rounded-full" />
+                                                        </Slider.Track>
+                                                        <Slider.Thumb className="block w-4 h-4 bg-white rounded-full shadow-lg shadow-black-1 hover:bg-yellow-400 focus:outline-none" />
+                                                    </Slider.Root>
+                                                    <input
+                                                        className="bg-white text-black-1 w-12 h-8 text-center rounded-md"
+                                                        value={percentageFormat(setWeight * 100)}
+                                                        type="number"
+                                                        onChange={(event) => {
+                                                            onSetWeightChange(parseFloat(event.target.value), asset);
                                                         }}
                                                     />
+                                                    <p className="font-bold">%</p>
+                                                    <p className="font-bold">USD $1,021</p>
                                                 </Row>
-                                                <input
-                                                    className="bg-white text-black-1 w-12 h-8 text-center rounded-md"
-                                                    value={percentageFormat(setWeight * 100)}
-                                                    type="number"
-                                                    onChange={(event) => {
-                                                        setSmartAllocationHoldings((oldState) => {
-                                                            return oldState.map((holding) => {
-                                                                if (holding.name === asset.name) {
-                                                                    return { ...holding, current_weight: parseFloat(event.target.value)/ 100 }
-                                                                } else {
-                                                                    return holding;
-                                                                }
-                                                            })
-                                                        })
-                                                    }}
-                                                />
-                                                <p className="font-bold">%</p>
-                                                <p className="font-bold">USD $1,021</p>
-                                            </Row>
-                                        </td>
-                                        <td><XMarkIcon width={20} height={20} color="white" /></td>
-                                    </tr>
-                                );
-                            })}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colSpan={6} className="rounded-lg overflow-hidden">
-                            </td>
-                            <td className="rounded-lg overflow-hidden">
-                                <Row className="w-full justify-between gap-4 items-center font-bold text-white">
-                                    <Row className="flex-1 justify-between items-center">
-                                        <Button className="px-5 min-w-[10rem] bg-blue-1 h-10 rounded-md">Add asset</Button>
-                                        <p>Total</p>
+                                            </td>
+                                            <td><XMarkIcon width={20} height={20} color="white" /></td>
+                                        </tr>
+                                    );
+                                })}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colSpan={6} className="rounded-lg overflow-hidden">
+                                </td>
+                                <td className="rounded-lg overflow-hidden">
+                                    <Row className="w-full justify-between gap-4 items-center font-bold text-white">
+                                        <Row className="flex-1 justify-between items-center">
+                                            <Button className="px-5 min-w-[10rem] bg-blue-1 h-10 rounded-md">Add asset</Button>
+                                            <p>Total</p>
+                                        </Row>
+                                        <p className="text-green-1 w-12 text-center">100%</p>
+                                        <p className="text-green-1 w-3"></p>
+                                        <p className="text-green-1">USD $1,021</p>
                                     </Row>
-                                    <p className="text-green-1 w-12 text-center">100%</p>
-                                    <p className="text-green-1 w-3"></p>
-                                    <p className="text-green-1">USD $1,021</p>
-                                </Row>
-                            </td>
-                            <td>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
 
-            </Row>
-        )
-    }, [smartAllocationHoldings, smartAllocationTotalEvaluation, t])
+                </Row>
+            )
+        }
+    }, [isLoadingSmartAllocationHoldings, onSetWeightChange, smartAllocationHoldings, smartAllocationTotalEvaluation, t])
 
     return (
         <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
+            {isLoadingSmartAllocationHoldings && <PageLoader />}
             <Row className="col-span-full gap-1">
                 <p>Smart allocation</p>
                 <p>&gt;</p>
