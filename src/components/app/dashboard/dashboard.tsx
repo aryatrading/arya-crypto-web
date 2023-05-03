@@ -69,7 +69,6 @@ const Dashboard: FC = () => {
             .then((res) => {
                 const data: any = res?.data;
                 const assets: PortfolioAssetType[] = data?.data;
-                console.log({ assets })
                 if (assets?.length) {
                     assets.sort((a, b) => (getAssetUSDValue(b) - getAssetUSDValue(a)));
                     setPortfolioHoldings(assets);

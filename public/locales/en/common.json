@@ -22,5 +22,12 @@
     "value":"Value",
     "24hP/L":"24h P/L",
     "exchange":"Exchange",
-    "noAssets":"No Assets"
+    "noAssets":"No Assets",
+    "addAsset":"Add Asset",
+    "selectAsset":"Select Asset",
+    "24change":"24h Change",
+    "fetchAssetErr":"Error fetching asset",
+    "searchforAsset":"Search for an Asset",
+    "noAssetFound":"No Assets Found...",
+    "searchAsset":"Search Asset"
 }

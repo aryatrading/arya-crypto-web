@@ -1,3 +1,4 @@
+import { MODE_DEBUG } from "../../utils/constants/config";
 import { fetchAssets, fetchSymbolsList } from "../controllers/market";
 import { pricechange } from "../redux/marketSlice";
 import { store } from "../redux/store";
@@ -24,7 +25,9 @@ socket.onopen = async () => {
 };
 
 socket.onerror = (error: any) => {
-  console.log(`Error with web socket connection: ${error}`);
+  if(MODE_DEBUG){
+    console.log(`Error with web socket connection: ${error}`);
+  }
   socket.close();
 };
 
