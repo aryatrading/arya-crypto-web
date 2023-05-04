@@ -30,7 +30,7 @@ const Asset: FC = () => {
         value: formatNumber(asset.dailyHigh ?? 0, true),
       },
     ];
-  }, [asset]);
+  }, [asset.circlSupply, asset.dailyHigh, asset.dailyLow, asset.dilutedValuation, asset.mrkCap, asset.supply, asset.volume, t]);
 
   return (
     <Col className="h-full w-full gap-12">

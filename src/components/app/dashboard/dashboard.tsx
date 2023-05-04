@@ -155,6 +155,98 @@ const Dashboard: FC = () => {
         };
       }
     );
+            return connectedExchanges?.map((exchange) => {
+                return (
+                    <ExchangeImage key={exchange.name} providerId={exchange?.provider_id} ></ExchangeImage>
+                );
+            })
+        }
+    }, [connectedExchanges, selectedExchange?.provider_id])
+
+    const table = useMemo(() => {
+        return (
+            <Row className="w-full overflow-auto">
+                <table className={styles.table}>
+                    <thead>
+                        <tr>
+                            <th>{t("common:name")}</th>
+                            <th>{t("common:weight")}</th>
+                            <th>{t("common:amount")}</th>
+                            <th>{t("common:currentPrice")}</th>
+                            <th>{t("common:value")}</th>
+                            <th>{t("common:24hP/L")}</th>
+                            <th>{t("common:exchange")}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {!portfolioHoldings.length ?
+                            <tr>
+                                <td colSpan={7} className="row-span-full">{t("common:noAssets")}</td>
+                            </tr>
+                            : portfolioHoldings.map(asset => {
+                                const isPriceChangePositive = (asset?.asset_details?.price_change_percentage_24h ?? 0) > 0;
+                                const signal = isPriceChangePositive ? '+' : '-';
+
+                                const formattedChangePercentage = `${signal}${percentageFormat(Math.abs(asset?.asset_details?.price_change_percentage_24h ?? 0))}`;
+                                const formattedChangePrice = `${signal}$${priceFormat(Math.abs(asset?.asset_details?.price_change_24h ?? 0))}`;
+
+                                const assetPortfolioPercentage = asset.weight;
+
+                                return (
+                                    <tr key={asset.name}>
+                                        <td>
+                                            <Row className="gap-3 items-center">
+                                                <Image src={asset?.asset_details?.image ?? ""} alt="" width={23} height={23} />
+                                                <p>{asset?.asset_details?.name}</p>
+                                                <span className="text-sm text-grey-1">{asset.name}</span>
+                                            </Row>
+                                        </td>
+                                        <td>
+                                            <Row className="justify-between items-center w-[120px]">
+                                                <p>{percentageFormat(asset.weight ?? 0)}%</p>
+                                                <Row className="h-[5px] rounded-full w-[50px] bg-white">
+                                                    <Row className={`h-full rounded-full bg-blue-1`} style={{
+                                                        width: `${Math.ceil(assetPortfolioPercentage ?? 0)}%`
+                                                    }} />
+                                                </Row>
+                                            </Row>
+                                        </td>
+                                        <td>{priceFormat(asset.free ?? 0)} {asset.name}</td>
+                                        <td>${priceFormat(asset?.asset_details?.current_price ?? 0)}</td>
+                                        <td>${priceFormat((asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0))}</td>
+                                        <td className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive })}>{formattedChangePercentage}% ({formattedChangePrice})</td>
+                                        <td>
+                                            <Row className="gap-2">
+                                                {tableExchangesImages}
+                                            </Row>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                    </tbody>
+                </table>
+            </Row>
+        )
+    }, [portfolioHoldings, t, tableExchangesImages])
+
+    const holdingsTable = useMemo(() => {
+        if (portfolioHoldings.length) {
+            return (
+                <Col className="gap-5 col-span-12">
+                    <Row className="items-center justify-between w-full">
+                        <h3 className="text-2xl font-semibold">{t("yourHoldings")}</h3>
+                        <Button className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1">
+                            <PlusIcon width={15} />
+                            <p className="font-bold">
+                                {t('addAssets')}
+                            </p>
+                        </Button>
+                    </Row>
+                    {table}
+                </Col>
+            )
+        }
+    }, [portfolioHoldings.length, t, table]);
 
     return (
       <LineChart

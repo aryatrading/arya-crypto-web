@@ -12,12 +12,12 @@ export const fetchSymbolsList = async (assets?: AssetType[]) => {
       `${process.env.NEXT_PUBLIC_TWELEVE_SYMBOLS_API}`
     );
     const { data } = await response.json();
-    for (var i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       _symbols += data[i].symbol + ",";
     }
   } else {
-    for (var i = 0; i < assets.length; i++) {
-      _symbols += assets[i].symbol?.toLocaleUpperCase() + "/USD" + ",";
+    for (let i = 0; i < assets.length; i++) {
+      _symbols += assets[i].symbol?.toLocaleUpperCase() + "/USD,";
     }
   }
 
