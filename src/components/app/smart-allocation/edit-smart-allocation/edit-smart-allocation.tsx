@@ -20,6 +20,7 @@ import * as Slider from '@radix-ui/react-slider';
 import PageLoader from "../../../shared/pageLoader/pageLoader"
 import Link from "next/link"
 import AssetPnl from "../../../shared/containers/asset/assetPnl"
+import AssetSelector from "../../../shared/AssetSelector/AssetSelector"
 
 
 
@@ -40,11 +41,22 @@ const EditSmartAllocation: FC = () => {
             .then((res) => {
                 const data = res.data;
                 const holdings: SmartAllocationAssetType[] | undefined = data.assets;
-                setSmartAllocationTotalEvaluation(data?.total_asset_value ?? 0);
 
                 if (holdings && data.exists) {
                     holdings.sort((a, b) => ((b?.current_weight ?? 0) - (a?.current_weight ?? 0)));
                     setSmartAllocationHoldings(holdings.filter(asset => asset.name !== USDTSymbol));
+
+
+                    let total = 0;
+                    holdings.forEach((holding) => {
+                        if (holding.name === USDTSymbol) {
+                            total += holding.available ?? 0;
+                        } else {
+                            total += (holding.current_value ?? 0);
+                        }
+                    })
+                    console.log({ total })
+                    setSmartAllocationTotalEvaluation(total);
                 }
             })
             .catch((error) => {
@@ -61,10 +73,21 @@ const EditSmartAllocation: FC = () => {
         initSmartAllocationHoldings();
     }, [initSmartAllocationHoldings]);
 
+    const distributeWeightsEqually = useCallback(() => {
+        setSmartAllocationHoldings((oldState) => {
+            return oldState.map((holding) => {
+                return { ...holding, weight: 1 / oldState.length }
+            })
+        })
+    }, [])
+
 
     const onSetWeightChange = useCallback((value: number, asset: SmartAllocationAssetType) => {
         setSmartAllocationHoldings((oldState) => {
-            const strictedValue = value < 0 ? 0 : value > 100 ? 100 : value;
+            const filteredSmartAllocationHoldings = smartAllocationHoldings?.filter((a) => a.name !== asset.name);
+            const totalPercentage = filteredSmartAllocationHoldings.length ? (filteredSmartAllocationHoldings?.map(asset => asset.weight)?.reduce((prev, next) => ((prev ?? 0) + (next ?? 0))) ?? 0) : 0;
+            const maxPercent = 100 - ((totalPercentage * 100));
+            const strictedValue = value < 0 ? 0 : value > maxPercent ? maxPercent : value;
             return oldState.map((holding) => {
                 if (holding.name === asset.name) {
                     return { ...holding, weight: strictedValue / 100 }
@@ -73,36 +96,72 @@ const EditSmartAllocation: FC = () => {
                 }
             })
         })
+    }, [smartAllocationHoldings])
+
+    const onRemoveAsset = useCallback((asset: SmartAllocationAssetType) => {
+        setSmartAllocationHoldings((oldState) => {
+            return oldState.filter((holding) => holding.name !== asset.name);
+        })
     }, [])
 
     const tableFooter = useMemo(() => {
-
+        let totalPercentage = 0;
+        let totalEvaluation = 0;
         if (smartAllocationHoldings.length) {
-            const totalPercentage = smartAllocationHoldings?.map(asset => asset.weight)?.reduce((prev, next) => ((prev ?? 0) + (next ?? 0))) ?? 0;
-            const totalEvaluation = smartAllocationHoldings?.map(asset => (asset.weight ?? 0) * (asset.ask_price ?? 0))?.reduce((prev, next) => ((prev ?? 0) + (next ?? 0))) ?? 0;
-            const is100Percent = totalPercentage === 1;
-            return (
-                <tfoot>
-                    <tr>
-                        <td colSpan={6} />
-                        <td>
-                            <Row className="w-full justify-between gap-4 items-center font-bold text-white">
-                                <Row className="flex-1 justify-between items-center">
-                                    <Button className="px-5 min-w-[10rem] bg-blue-1 h-10 rounded-md">Add asset</Button>
-                                    <p>Total</p>
-                                </Row>
-                                <p className={clsx({ "text-green-1": is100Percent, "text-red-1": !is100Percent }, "w-12 text-center")}>{percentageFormat((totalPercentage * 100))}%</p>
-                                <p className="w-3"></p>
-                                <p className={clsx({ "text-green-1": is100Percent, "text-red-1": !is100Percent })}>USD ${priceFormat(totalEvaluation, true)}</p>
-                            </Row>
-                        </td>
-                        <td />
-                    </tr>
-                </tfoot>
-            )
-
+            totalPercentage = smartAllocationHoldings?.map(asset => asset.weight)?.reduce((prev, next) => ((prev ?? 0) + (next ?? 0))) ?? 0;
+            totalEvaluation = smartAllocationHoldings?.map(asset => (asset.weight ?? 0) * (smartAllocationTotalEvaluation ?? 0))?.reduce((prev, next) => ((prev ?? 0) + (next ?? 0))) ?? 0;
         }
-    }, [smartAllocationHoldings])
+        const is100Percent = totalPercentage === 1;
+        return (
+            <tfoot>
+                <tr>
+                    <td colSpan={6} />
+                    <td>
+                        <Row className="w-full justify-between gap-4 items-center font-bold text-white">
+                            <Row className="flex-1 justify-between items-center">
+                                <AssetSelector
+                                    trigger={<Button className="px-5 min-w-[5rem] bg-blue-1 h-10 rounded-md">Add asset</Button>}
+                                    onClick={(selectedAsset) => {
+                                        setSmartAllocationHoldings((oldState) => {
+                                            const newState = [...oldState];
+                                            const assetAlreadyExists = oldState.find(asset => selectedAsset?.symbol?.toLowerCase() === asset?.name?.toLowerCase());
+                                            if (!assetAlreadyExists) {
+                                                if (selectedAsset?.symbol?.toLocaleLowerCase() !== USDTSymbol?.toLocaleLowerCase()) {
+                                                    newState.push({
+                                                        name: selectedAsset.symbol?.toUpperCase() ?? "",
+                                                        ask_price: selectedAsset.currentPrice,
+                                                        weight: 0,
+                                                        current_weight: 0,
+                                                        available: 0,
+                                                        current_value: 0,
+                                                        pnl: {
+                                                            percent: selectedAsset.pnl,
+                                                        },
+                                                        asset_details: {
+                                                            asset_data: {
+                                                                name: selectedAsset.name ?? "",
+                                                                image: selectedAsset.iconUrl,
+                                                            }
+                                                        }
+                                                    })
+                                                }
+                                            }
+                                            return newState;
+                                        })
+                                    }}
+                                />
+                                <p>Total</p>
+                            </Row>
+                            <p className={clsx({ "text-green-1": is100Percent, "text-red-1": !is100Percent }, "w-12 text-center")}>{percentageFormat((totalPercentage * 100))}%</p>
+                            <p className="w-3"></p>
+                            <p className={clsx({ "text-green-1": is100Percent, "text-red-1": !is100Percent })}>USD ${priceFormat(totalEvaluation, true)}</p>
+                        </Row>
+                    </td>
+                    <td />
+                </tr>
+            </tfoot>
+        )
+    }, [smartAllocationHoldings, smartAllocationTotalEvaluation])
 
     const table = useMemo(() => {
         if (!isLoadingSmartAllocationHoldings) {
@@ -122,7 +181,7 @@ const EditSmartAllocation: FC = () => {
                                 <th>
                                     <Row className="gap-3">
                                         <p>Set weight</p>
-                                        <Button className="text-blue-1 underline">Distribute equally</Button>
+                                        <Button className="text-blue-1 underline" onClick={distributeWeightsEqually}>Distribute equally</Button>
                                     </Row>
                                 </th>
                                 <th>
@@ -190,10 +249,14 @@ const EditSmartAllocation: FC = () => {
                                                         }}
                                                     />
                                                     <p className="font-bold">%</p>
-                                                    <p className="font-bold">USD ${priceFormat(assetEvaluation)}</p>
+                                                    <p className="font-bold w-32">USD ${priceFormat(assetEvaluation)}</p>
                                                 </Row>
                                             </td>
-                                            <td><XMarkIcon width={20} height={20} color="white" /></td>
+                                            <td>
+                                                {(!asset.current_weight) && <Button onClick={() => onRemoveAsset(asset)}>
+                                                    <XMarkIcon width={20} height={20} color="white" />
+                                                </Button>}
+                                            </td>
                                         </tr>
                                     );
                                 })}
@@ -204,7 +267,7 @@ const EditSmartAllocation: FC = () => {
                 </Row>
             )
         }
-    }, [isLoadingSmartAllocationHoldings, onSetWeightChange, smartAllocationHoldings, smartAllocationTotalEvaluation, t, tableFooter])
+    }, [distributeWeightsEqually, isLoadingSmartAllocationHoldings, onRemoveAsset, onSetWeightChange, smartAllocationHoldings, smartAllocationTotalEvaluation, t, tableFooter])
 
     return (
         <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
