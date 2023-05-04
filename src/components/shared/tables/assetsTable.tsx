@@ -11,6 +11,7 @@ import { useTranslation } from "next-i18next";
 import AssetPnl from "../containers/asset/assetPnl";
 import { useRouter } from "next/navigation";
 import { formatNumber } from "../../../utils/helpers/prices";
+import AssetRow from "../AssetRow/AssetRow";
 
 type AssetsTableProps = {
   assets: AssetType[];
