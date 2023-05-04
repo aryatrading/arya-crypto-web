@@ -14,5 +14,12 @@
     "lasttwentyfour": "in the last 24 hours. It has a circulating supply of",
     "totalsupplyof": "coins and a total supply of",
     "binanceexchange": "If you are looking to buy or sell Bitcoin, Binance is currently the most active exchange.",
-    "whatis": "What is"
+    "whatis": "What is",
+    "price_chart": "live price Chart",
+    "assetvoting": "How do you feel about this asset today?",
+    "vote": "Vote to see result",
+    "pricegraph": "Price",
+    "tradinggraph": "Trading View",
+    "assetinfotab": "Asset information",
+    "holdingsinfo": "Holdings information"
 }

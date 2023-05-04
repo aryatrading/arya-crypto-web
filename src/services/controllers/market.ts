@@ -31,44 +31,37 @@ export const fetchAssets = async (search?: string) => {
   );
 
   let _assets: AssetType[] = [];
-  
-  if(data.length){
-    for (var i = 0; i < data.length; i++) {
-      _assets.push({
-        id: data[i]?.id ?? 0,
-        name: data[i].asset_data.name,
-        currentPrice: data[i].asset_data.current_price,
-        pnl: data[i].asset_data.price_change_percentage_24h?.toFixed(2),
-        price: 0,
-        rank: data[i].asset_data.market_cap_rank,
-        volume: data[i].asset_data.total_volume,
-        iconUrl: data[i].asset_data.image,
-        mrkCap: data[i].asset_data.market_cap,
-        symbol: data[i].asset_data.symbol.toLowerCase(),
-        isFavorite: i % 2 === 0,
-      });
-    }
+
+  for (var i = 0; i < data.length; i++) {
+    _assets.push({
+      id: data[i]?.id ?? 0,
+      name: data[i].asset_data.name,
+      currentPrice: data[i].asset_data.current_price,
+      pnl: data[i].asset_data.price_change_percentage_24h?.toFixed(2),
+      price: 0,
+      rank: data[i].asset_data.market_cap_rank,
+      volume: data[i].asset_data.total_volume,
+      iconUrl: data[i].asset_data.image,
+      mrkCap: data[i].asset_data.market_cap,
+      symbol: data[i].asset_data.symbol.toLowerCase(),
+      isFavorite: false,
+    });
   }
   store.dispatch(storeMrkAssets(_assets));
   return _assets;
 };
 
-
 export const getPortfolioSnapshots = async (providerId?: number | null) => {
-  return await axiosInstance.get(
-    `/trade-engine/portfolio-snapshots/`,
-    { params: { provider: providerId, range: "year" } }
-  );
+  return await axiosInstance.get(`/trade-engine/portfolio-snapshots/`, {
+    params: { provider: providerId, range: "year" },
+  });
 };
-
 
 export const getPortfolioHoldings = async (providerId?: number) => {
-  return await axiosInstance.get(
-    `/trade-engine/portfolio-holdings/`,
-    { params: { provider: providerId } }
-  );
+  return await axiosInstance.get(`/trade-engine/portfolio-holdings/`, {
+    params: { provider: providerId },
+  });
 };
-
 
 export const getConnectedProviders = async () => {
   return await axiosInstance.get(`/exchange/connected-keys`);

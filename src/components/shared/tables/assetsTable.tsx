@@ -1,8 +1,7 @@
 import { FC } from "react";
 import { AssetType } from "../../../types/asset";
 import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
-import { Col } from "../layout/flex";
-import { formatNumber } from "../../../utils/format_currency";
+import { Col, Row } from "../layout/flex";
 import { useSelector } from "react-redux";
 import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
 import { StarIcon } from "@heroicons/react/24/outline";
@@ -11,6 +10,7 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import AssetPnl from "../containers/asset/assetPnl";
 import { useRouter } from "next/navigation";
+import { formatNumber } from "../../../utils/helpers/prices";
 import AssetRow from "../AssetRow/AssetRow";
 
 type AssetsTableProps = {
@@ -105,17 +105,27 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                   {elm.rank}
                 </th>
                 <td>
-                  <AssetRow icon={elm.iconUrl??''} name={elm.name??''} symbol={elm.symbol??''} className="font-medium"/>
+                  <AssetRow
+                    icon={elm.iconUrl ?? ""}
+                    name={elm.name ?? ""}
+                    symbol={elm.symbol ?? ""}
+                    className="font-medium"
+                  />
                 </td>
                 <td>
                   <AssetPnl
                     value={elm.pnl}
-                    className={elm.pnl<=0?'bg-red-2 text-red-1':'bg-green-2 text-green-1'}
+                    className={
+                      elm.pnl <= 0
+                        ? "bg-red-2 text-red-1"
+                        : "bg-green-2 text-green-1"
+                    }
                   />
                 </td>
                 <td className="font-medium leading-6 text-white">
                   {formatNumber(
-                    _assetprice[elm.symbol ?? ""] ?? elm.currentPrice
+                    _assetprice[elm.symbol ?? ""] ?? elm.currentPrice,
+                    true
                   )}
                 </td>
                 <td className="font-medium leading-6 text-white">
@@ -125,10 +135,10 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                     ).toFixed(7)}
                 </td>
                 <td className="font-medium leading-6 text-white">
-                  {formatNumber(elm.mrkCap ?? 0)}
+                  {formatNumber(elm.mrkCap ?? 0, true)}
                 </td>
                 <td className="font-medium leading-6 text-white">
-                  {formatNumber(elm.volume ?? 0)}
+                  {formatNumber(elm.volume ?? 0, true)}
                 </td>
                 <td
                   className="font-medium  text-white"
