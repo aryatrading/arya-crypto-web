@@ -15,7 +15,7 @@ import { firebaseConfig } from "../services/firebase/auth/config";
 import { wrapper } from "../services/redux/store";
 import initAuth from "../initFirebaseAuth";
 import { axiosInstance } from "../services/api/axiosConfig";
-import "../styles/global.css";
+import "../styles/globals.css";
 import { FAVORITES_LIST } from "../utils/constants/config";
 import { initStoreData } from "../common/hooks/initStore";
 import "../services/api/socketConfig";
