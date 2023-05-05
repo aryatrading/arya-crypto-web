@@ -23,5 +23,15 @@
     "whitelistIPs": "IP de la liste blanche",
     "APIKey": "clé API",
     "APISecret": "Clé secrète de l'API",
-    "submit": "Soumettre"
+    "submit": "Soumettre",
+    "disconnect": "Déconnecter {{name}}",
+    "changeName": "Changer le nom du portefeuille",
+    "cancel": "Annuler",
+    "save": "Sauvegarder",
+    "deleteTitle": "Déconnecter l'échange",
+    "deleteFirstHint": "Voulez-vous vraiment déconnecter cet échange ?",
+    "deleteHint": "En déconnectant cet échange ARYA Crypto\n",
+    "connected": "Connecté",
+    "connectedNote": "Vous avez connecté votre compte avec succès !\n",
+    "startTrade": "Commencer à négocier"
 }

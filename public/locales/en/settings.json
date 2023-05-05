@@ -23,5 +23,15 @@
     "whitelistIPs": "Whitelist IPs",
     "APIKey": "API Key",
     "APISecret": "API Secret",
-    "submit": "Submit"
+    "submit": "Submit",
+    "disconnect": "Disconnect {{name}}",
+    "changeName": "Change portfolio name",
+    "cancel": "Cancel",
+    "save": "Save",
+    "deleteTitle": "Disconnect exchange",
+    "deleteFirstHint": "Are you sure you want to disconnect this exchange?",
+    "deleteHint": "By disconnecting this exchange ARYA Crypto will no longer have control of your assets, including assets in your smart allocation",
+    "connected": "Connected",
+    "connectedNote": "You’ve successfully connected your account! you can now start trading.",
+    "startTrade": "Start trading"
 }
