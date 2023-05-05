@@ -122,7 +122,7 @@ const AccountTab = () => {
                                 </Col>
                                 <Col className="items-center gap-4 mt-6 mb-4">
                                     {errorForm && <span className='text-red-600'>{(errorForm || 'Invalid email or password!')}</span>}
-                                    <Button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
+                                    <Button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 focus:outline-none w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
                                         <h5>{t('changePassword')}</h5>
                                     </Button>
                                 </Col>

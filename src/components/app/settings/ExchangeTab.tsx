@@ -105,7 +105,7 @@ const ExchangeTab = () => {
                         </Row>
                         <Row className='justify-center items-center gap-4 h-[90px]'>
                             <Col className='flex-1 gap-2'>
-                                <label className="block text-sm dark:text-white font-semibold">{t('whitelistIPs')}</label>
+                                <label className="block text-smtext-white font-semibold">{t('whitelistIPs')}</label>
                                 <textarea disabled rows={2} cols={4} className="text-sm resize-none rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white">
                                     {ips}
                                 </textarea>
@@ -133,7 +133,7 @@ const ExchangeTab = () => {
                 )}
             </Formik>
         );
-    }, [openModal, selectedExchange, t]);
+    }, [formScheme, openModal, selectedExchange, t]);
 
     const display = useMemo(() => {
         const toggleModal = () => openModal("delete")
@@ -142,7 +142,7 @@ const ExchangeTab = () => {
             <Col className="flex flex-col w-full gap-4">
                 <Row className='gap-4'>
                     <Col className='flex-1 gap-2'>
-                        <label className="block text-sm dark:text-white font-semibold">{t('portfolioname')}</label>
+                        <label className="block text-sm text-white font-semibold">{t('portfolioname')}</label>
                         <Col className='relative'>
                             <Button className='text-sm rounded-lg text-start block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white pr-4' onClick={edit}>{selectedExchange?.name || ''}</Button>
                             <Col className='absolute right-3 top-[11px]'>
@@ -151,13 +151,13 @@ const ExchangeTab = () => {
                         </Col>
                     </Col>
                     <Col className='flex-1 gap-2'>
-                        <label className="block text-sm dark:text-white font-semibold">{t('creationDate')}</label>
+                        <label className="block text-sm text-white font-semibold">{t('creationDate')}</label>
                         <Col className='text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white'>{new Date(selectedExchange?.creation_date || '').toLocaleDateString()}</Col>
                     </Col>
                 </Row>
                 <Row className='justify-center items-center gap-4 h-[90px]'>
                     <Col className='flex-1 gap-2'>
-                        <label className="block text-sm dark:text-white font-semibold">{t('whitelistIPs')}</label>
+                        <label className="block text-sm text-white font-semibold">{t('whitelistIPs')}</label>
                         <textarea disabled rows={2} cols={4} className="text-sm resize-none rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white">
                             {ips}
                         </textarea>
@@ -171,11 +171,11 @@ const ExchangeTab = () => {
                     </Button>
                 </Row>
                 <Col className='gap-2'>
-                    <label className="block text-sm dark:text-white font-semibold">{t('APIKey')}</label>
+                    <label className="block text-sm text-white font-semibold">{t('APIKey')}</label>
                     <Col className='text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white'>{selectedExchange?.public_key || ''}</Col>
                 </Col>
                 <Col className='gap-2'>
-                    <label className="block text-sm dark:text-white font-semibold">{t('APISecret')}</label>
+                    <label className="block text-sm text-white font-semibold">{t('APISecret')}</label>
                     <Col className='text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white'>********************************************</Col>
                 </Col>
                 <Button className={'text-white  font-medium rounded-lg text-sm py-2.5 focus:outline-none self-start px-10 bg-red-1 hover:bg-red-2'} onClick={toggleModal}>
@@ -222,7 +222,7 @@ const ExchangeTab = () => {
             <ModalContainer closeModal={closeModal} type="edit">
                 <h3 className='text-white text-2xl font-bold'>{t("changeName")}</h3>
 
-                <label className="block text-sm dark:text-white font-semibold">{t('portfolioname')}</label>
+                <label className="block text-sm text-white font-semibold">{t('portfolioname')}</label>
                 {activeExchange?.name && <input ref={editNameRef} className="text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" defaultValue={activeExchange?.name} />}
 
                 <Row className='justify-end gap-4'>

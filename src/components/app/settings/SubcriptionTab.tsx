@@ -14,7 +14,7 @@ const SubcriptionTab = () => {
                     <h1 className='font-medium text-sm '>{t('subscriptionHint')}</h1>
                 </Col>
 
-                <Button className='focus:outline-none text-white bg-yellow-1 hover:bg-yellow-1 hover:bg-opacity-95 focus:ring-2 font-medium rounded-lg text-sm px-5 py-3 dark:focus:ring-yellow-1 dark:focus:bg-opacity-80 max-w-[300px]'>
+                <Button className='focus:outline-none text-white bg-yellow-1 hover:bg-yellow-1 hover:bg-opacity-95 focus:ring-2 font-medium rounded-lg text-sm px-5 py-3 max-w-[300px]'>
                     {t('subscribeToPro')}
                 </Button>
 

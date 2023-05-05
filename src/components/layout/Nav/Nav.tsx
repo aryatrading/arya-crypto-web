@@ -45,7 +45,7 @@ const Nav = () => {
       }
       else {
         return <Row className="gap-4 items-center">
-          <Button className="px-6 py-3 font-semi-bold"
+          <Button className="px-6 py-3 font-semi-medium text-white"
             onClick={() => {
               setVisibleSection('login');
               modalTrigger.show();
@@ -53,7 +53,7 @@ const Nav = () => {
           >
             {t('login')}
           </Button>
-          <Button className="dark:bg-blue-3 px-6 py-3 dark:text-blue-1 text-sm rounded-md font-bold hidden md:block"
+          <Button className="bg-blue-3 px-6 py-3 text-blue-1 text-sm rounded-md font-medium hidden md:block"
             onClick={() => {
               setVisibleSection('signup');
               modalTrigger.show();
@@ -105,8 +105,8 @@ const Nav = () => {
   }
 
   return (
-    <Col className="w-full lg:px-6 dark:bg-black-2 fixed lg:relative rounded-b-lg">
-      <Row className="container w-full h-[72px] justify-between pt-3 px-6 lg:p-0">
+    <Col className="w-full bg-black-2 fixed lg:relative rounded-b-lg">
+      <Row className="container w-full h-[72px] justify-between">
         <Row className="xl:gap-20 md:gap-16 items-center">
           <Link href={"/home"}>
             <Image
@@ -118,7 +118,7 @@ const Nav = () => {
         </Row>
         <Row className="gap-3 justify-center items-center">
           {userOptions()}
-          <Button onClick={() => (setCollapse(!collapse))} className="dark:bg-blue-3 dark:text-blue-1 p-4 rounded-md font-bold lg:hidden">
+          <Button onClick={() => (setCollapse(!collapse))} className="bg-blue-3 text-blue-1 p-4 rounded-md font-bold lg:hidden">
             <HamburgerIcon className="w-3.5 h-3" />
           </Button>
         </Row>
@@ -134,10 +134,10 @@ const Nav = () => {
                   SettingsIcon
                 }
                 navTitle="settings"
-                className="rounded-md dark:bg-grey-3 w-full justify-center"
+                className="rounded-md bg-grey-3 w-full justify-center"
               />
               :
-              <Link href='/signup' className="dark:bg-blue-3 py-3 dark:text-blue-1 text-sm rounded-md font-bold w-full">{t('signup')}</Link>
+              <Link href='/signup' className="bg-blue-3 py-3 text-blue-1 text-sm rounded-md font-medium w-full">{t('signup')}</Link>
             }
           </div>
         </Col>
