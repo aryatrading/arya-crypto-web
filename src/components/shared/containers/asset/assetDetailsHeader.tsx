@@ -4,11 +4,11 @@ import { Col, Row } from "../../layout/flex";
 import { ShadowButton } from "../../buttons/shadow_button";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { AssetName } from "./assetName";
-import { formatNumber } from "../../../../utils/format_currency";
 import { useSelector } from "react-redux";
 import { selectAssetLivePrice } from "../../../../services/redux/marketSlice";
 import AssetPnl from "./assetPnl";
 import { useTranslation } from "next-i18next";
+import { formatNumber } from "../../../../utils/helpers/prices";
 
 type AssetHeaderProps = {
   asset: AssetType;
@@ -46,7 +46,8 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
         <p className="font-medium text-4xl">
           {formatNumber(
             _assetprice[asset.symbol?.toLowerCase() ?? "eth"] ??
-              asset.currentPrice
+              asset.currentPrice,
+            true
           )}
         </p>
         <AssetPnl
