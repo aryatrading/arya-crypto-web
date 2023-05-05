@@ -18,6 +18,7 @@ import { Modal } from '../modal';
 import { ConnectedAlertIcon } from '../../svg/connectedAlert';
 import { EditIcon } from '../../svg/edit';
 import { deleteExchange, addExchange as addNewExchange, changeExchangeName } from '../../../services/controllers/settings';
+import { ExchangeType } from '../../../types/exchange.types';
 
 const ModalContainer = ({ closeModal, children, type }: { closeModal: () => void, children?: any, type?: string }) => {
     return (
@@ -187,8 +188,8 @@ const ExchangeTab = () => {
     const deleteDialog = useMemo(() => {
         const onPress = () => {
             deleteExchange(selectedExchange?.provider_id, closeModal);
-            if (exchanges?.filter((e: any) => e.provider_id !== selectedExchange?.provider_id && e.provider_id != null).length) {
-                setSelectedExchange(exchanges?.filter((e: any) => e.provider_id !== selectedExchange?.provider_id)[0]);
+            if (exchanges?.filter((e: ExchangeType) => e.provider_id !== selectedExchange?.provider_id && e.provider_id != null).length) {
+                setSelectedExchange(exchanges?.filter((e: ExchangeType) => e.provider_id !== selectedExchange?.provider_id)[0]);
             } else {
                 setSelectedExchange({});
                 setExchanges([]);
@@ -273,7 +274,7 @@ const ExchangeTab = () => {
                     <Row className='gap-10'>
                         <Col className='items-center gap-4 flex-1'>
                             <h1 className='font-bold text-lg'>Connected Exchanges</h1>
-                            {exchanges.map((exchange: any) => {
+                            {exchanges.map((exchange: ExchangeType) => {
                                 const bg = selectedExchange?.provider_id === exchange.provider_id ? 'bg-blue-3' : 'bg-grey-2';
                                 const onClick = () => {
                                     setSelectedExchange(exchange);
