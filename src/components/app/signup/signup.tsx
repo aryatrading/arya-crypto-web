@@ -103,7 +103,7 @@ const Signup: FC<any> = (props: any) => {
                 <Col className="justify-start w-full max-w-[400px] gap-8">
                     <Row className="items-center gap-4">
                         <Image src={logoIcon} alt="Arya_Crypto" />
-                        <h1 className="font-extrabold text-white header-label">{t('signupHeader')}</h1>
+                        <h3 className="font-extrabold text-white header-label">{t('signupHeader')}</h3>
                     </Row>
                     {signupForm}
                     <Row className="gap-1 font-semibold text-sm self-center">
@@ -116,9 +116,9 @@ const Signup: FC<any> = (props: any) => {
                     </Row>
                     <Col className='gap-6 items-center justify-center'>
                         <Row className="w-full items-center gap-3">
-                            <Col className='flex-1 h-px bg-white'/>
+                            <Col className='flex-1 h-px bg-white' />
                             <h6 className="font-semibold text-lg">{t('or')}</h6>
-                            <Col className='flex-1 h-px bg-white'/>
+                            <Col className='flex-1 h-px bg-white' />
                         </Row>
                         <Row className="gap-8">
                             <Button className='' onClick={onGoogleAuth}

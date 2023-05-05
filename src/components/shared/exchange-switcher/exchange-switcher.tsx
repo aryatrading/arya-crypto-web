@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo } from "react";
-import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/solid";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/solid"
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import { useTranslation } from "next-i18next";
@@ -107,7 +107,7 @@ const ExchangeSwitcher: FC = () => {
 
         <DropdownMenu.Portal className="z-10">
           <DropdownMenu.Content
-            className="min-w-[420px] bg-grey-2 rounded-md overflow-hidden z-10"
+            className="min-w-[420px] bg-grey-2 rounded-md overflow-hidden"
             sideOffset={15}
           >
             {connectedExchanges?.map((exchange) => dropdownItem(exchange))}
