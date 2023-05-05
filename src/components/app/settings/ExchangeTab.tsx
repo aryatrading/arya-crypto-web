@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import { ErrorMessage, Form, Formik } from "formik";
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import clsx from 'clsx';
 import * as Yup from 'yup';
+import { PlusIcon } from '@heroicons/react/24/solid';
 
 import { Col, Row } from '../../shared/layout/flex';
 import Button from '../../shared/buttons/button';
 import AddExchange from '../../app/exchangeTab/AddExchange';
 import TextInput from '../../shared/form/inputs/textInput';
 import { selectConnectedExchanges, selectSelectedExchange } from '../../../services/redux/exchangeSlice';
-import { toast } from 'react-toastify';
-import clsx from 'clsx';
 import { DisccounetAlertIcon } from '../../svg/discconetAlert';
 import CloseIcon from '../../svg/Shared/CloseIcon'
 import { Modal } from '../modal';
@@ -19,6 +19,8 @@ import { ConnectedAlertIcon } from '../../svg/connectedAlert';
 import { EditIcon } from '../../svg/edit';
 import { deleteExchange, addExchange as addNewExchange, changeExchangeName } from '../../../services/controllers/settings';
 import { ExchangeType } from '../../../types/exchange.types';
+import { IPs } from '../../../utils/constants/settings';
+import ExchangeImage from '../../shared/exchange-image/exchange-image';
 
 const ModalContainer = ({ closeModal, children, type }: { closeModal: () => void, children?: any, type?: string }) => {
     return (
@@ -68,8 +70,6 @@ const ExchangeTab = () => {
     const openModal = useCallback((type: string) => setShowModal({ bool: true, type }), []);
     const closeModal = useCallback(() => setShowModal({ bool: false, type: '' }), []);
 
-    const ips = "18.181.136.58   54.249.167.235   54.64.197.111   54.199.133.213   3.115.73.125   3.112.136.141   54.178.179.147";
-
     const form = useMemo(() => {
         return (
             <Formik
@@ -107,15 +107,15 @@ const ExchangeTab = () => {
                             <Col className='flex-1 gap-2'>
                                 <label className="block text-smtext-white font-semibold">{t('whitelistIPs')}</label>
                                 <textarea disabled rows={2} cols={4} className="text-sm resize-none rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white">
-                                    {ips}
+                                    {IPs}
                                 </textarea>
                             </Col>
                             <Button className='text-white bg-grey-3 hover:bg-grey-4 font-medium rounded-lg text-sm h-[44px] min-w-[110px] mt-6' type="button" onClick={() => {
-                                navigator.clipboard.writeText(ips).then(() => {
-                                    toast.success("Copied!");
+                                navigator.clipboard.writeText(IPs).then(() => {
+                                    toast.success(t('common:copied'));
                                 });
                             }}>
-                                <h5>{t('Copy')}</h5>
+                                <h5>{t('copy')}</h5>
                             </Button>
                         </Row>
                         <Col>
@@ -159,15 +159,15 @@ const ExchangeTab = () => {
                     <Col className='flex-1 gap-2'>
                         <label className="block text-sm text-white font-semibold">{t('whitelistIPs')}</label>
                         <textarea disabled rows={2} cols={4} className="text-sm resize-none rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white">
-                            {ips}
+                            {IPs}
                         </textarea>
                     </Col>
                     <Button className='text-white bg-grey-3 hover:bg-grey-4 font-medium rounded-lg text-sm h-[44px] min-w-[110px] mt-6' type="button" onClick={() => {
-                        navigator.clipboard.writeText(ips).then(() => {
-                            toast.success("Copied!");
+                        navigator.clipboard.writeText(IPs).then(() => {
+                            toast.success(t('common:copied'));
                         });
                     }}>
-                        <h5>{t('Copy')}</h5>
+                        <h5>{t('copy')}</h5>
                     </Button>
                 </Row>
                 <Col className='gap-2'>
@@ -187,7 +187,9 @@ const ExchangeTab = () => {
 
     const deleteDialog = useMemo(() => {
         const onPress = () => {
-            deleteExchange(selectedExchange?.provider_id, closeModal);
+            deleteExchange(selectedExchange?.provider_id, closeModal).then(() => {
+                toast.success(t('discconectedSuccess'));
+            });
             if (exchanges?.filter((e: ExchangeType) => e.provider_id !== selectedExchange?.provider_id && e.provider_id != null).length) {
                 setSelectedExchange(exchanges?.filter((e: ExchangeType) => e.provider_id !== selectedExchange?.provider_id)[0]);
             } else {
@@ -213,7 +215,7 @@ const ExchangeTab = () => {
             if (editNameRef.current) {
                 changeExchangeName(selectedExchange.provider_id, editNameRef.current.value, setSelectedExchange).then(() => {
                     closeModal();
-                    toast.success("Name updated successfully!");
+                    toast.success(t('updateNameSuccess'));
                 });
             }
         };
@@ -273,7 +275,7 @@ const ExchangeTab = () => {
                     :
                     <Row className='gap-10'>
                         <Col className='items-center gap-4 flex-1'>
-                            <h1 className='font-bold text-lg'>Connected Exchanges</h1>
+                            <h1 className='font-bold text-lg'>{t('title')}</h1>
                             {exchanges.map((exchange: ExchangeType) => {
                                 const bg = selectedExchange?.provider_id === exchange.provider_id ? 'bg-blue-3' : 'bg-grey-2';
                                 const onClick = () => {
@@ -282,7 +284,7 @@ const ExchangeTab = () => {
                                 return (
                                     <Button className={`w-full h-[44px] ${bg} rounded-md hover:bg-grey-4 px-5`} onClick={onClick}>
                                         <Row className='gap-3'>
-                                            <Image src={`https://aryatrading-content.s3.eu-west-1.amazonaws.com/arya_crypto/exchanges_icons/${exchange.provider_id}.svg`} alt='' width={20} height={20} />
+                                            <ExchangeImage height={20} width={20} providerId={exchange.provider_id} />
                                             <label className='font-bold text-white text-base'>{exchange?.create ? exchange.name.charAt(0).toUpperCase() + exchange.name.slice(1) : exchange.name}</label>
                                         </Row>
                                     </Button>
@@ -290,16 +292,14 @@ const ExchangeTab = () => {
                             })}
                             {!selectedExchange?.create && <Button className='w-full h-[44px] bg-grey-2 rounded-md hover:bg-grey-4 px-5' onClick={() => openModal("add")}>
                                 <Row className='gap-2'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5 stroke-blue-1">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
+                                    <PlusIcon stroke="currentColor" className="w-5 h-5 stroke-blue-1" />
 
-                                    <label className='font-bold text-blue-1 text-sm'>Add Exchange</label>
+                                    <label className='font-bold text-blue-1 text-sm'>{t('addExchange')}</label>
                                 </Row>
                             </Button>}
                         </Col>
                         <Col className='flex-[3] border-l-[1px] border-grey-3 pl-8 gap-8'>
-                            <h1 className='font-bold text-lg'>{`Connect Binance`}</h1>
+                            <h1 className='font-bold text-lg'>{`Connect ${selectedExchange.provider_name.charAt(0) + selectedExchange.provider_name.slice(1).toLowerCase()}`}</h1>
 
                             {selectedExchange?.create ? form : display}
                         </Col>

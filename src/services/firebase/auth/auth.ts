@@ -105,7 +105,6 @@ export const changePassword = async (oldPassword: string, newPassword: string) =
         }
 
     } catch (error: any) {
-        alert('xx');
         throw Error(error.message);
     }
 }

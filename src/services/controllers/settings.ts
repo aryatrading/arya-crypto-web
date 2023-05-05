@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import { axiosInstance } from "../api/axiosConfig";
 import { setConnectedExchanges, setSelectedExchange } from "../redux/exchangeSlice";
 import { store } from "../redux/store";
@@ -12,8 +11,6 @@ export const deleteExchange = async (id?: string | number, closeModal?: any) => 
     store.dispatch(setConnectedExchanges(connectedProvider));
 
     closeModal();
-
-    toast.success("Discconected successfully");
 };
 
 export const addExchange = async (id?: string | number, fullExchange?: ExchangeType, setSelected?: any) => {

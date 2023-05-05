@@ -3,6 +3,7 @@ import { useTranslation } from 'next-i18next';
 import { ErrorMessage, Form, Formik } from "formik";
 import { useAuthUser } from 'next-firebase-auth';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Col, Row } from '../../shared/layout/flex';
@@ -10,6 +11,7 @@ import { Modal } from '../modal';
 import Button from '../../shared/buttons/button';
 import TextInput from '../../shared/form/inputs/textInput';
 import { changePassword } from '../../../services/firebase/auth/auth';
+import CloseIcon from '../../svg/Shared/CloseIcon';
 
 interface InputTypes {
     label: string,
@@ -43,6 +45,14 @@ const AccountTab = () => {
         ref.current?.resetForm();
     }, []);
 
+    const formScheme = useCallback(() => {
+        return Yup.object().shape({
+            currentPassword: Yup.string().required(t('common:required').toString()),
+            newPassword: Yup.string().required(t('common:required').toString()),
+            confirmNewPassowrd: Yup.string().required(t('common:required').toString()),
+        });
+    }, [t]);
+
     return (
         <>
             <Col className='gap-4'>
@@ -69,16 +79,14 @@ const AccountTab = () => {
             <Modal isVisible={showChangePasswordModal} size='md'>
                 <Col className='min-h-[200px] p-5 bg-black-2'>
                     <Button className='self-end' onClick={hideCPModal}>
-                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 13L2 2" stroke="#D6D6D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M13 2L2 13" stroke="#D6D6D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                        <CloseIcon className='stroke-current text-[#89939F] w-3 h-3' />
                     </Button>
 
-                    <h1 className='font-bold text-3xl mb-10'>{t('changePassword')}</h1>
+                    <h3 className='font-bold text-3xl mb-10'>{t('changePassword')}</h3>
 
                     <Formik
                         innerRef={ref}
+                        validationSchema={formScheme}
                         initialValues={{ currentPassword: '', newPassword: '', confirmNewPassowrd: '' }}
                         onSubmit={(values, { setSubmitting, setErrors }) => {
                             if (values.newPassword !== values.confirmNewPassowrd) {

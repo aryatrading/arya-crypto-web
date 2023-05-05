@@ -33,5 +33,10 @@
     "deleteHint": "En déconnectant cet échange ARYA Crypto\n",
     "connected": "Connecté",
     "connectedNote": "Vous avez connecté votre compte avec succès !\n",
-    "startTrade": "Commencer à négocier"
+    "startTrade": "Commencer à négocier",
+    "title": "Bourses connectées",
+    "updateNameSuccess": "Nom mis à jour avec succès !",
+    "addExchange": "Ajouter un échange",
+    "discconectedSuccess": "Déconnexion réussie",
+    "copied": "Copié !"
 }

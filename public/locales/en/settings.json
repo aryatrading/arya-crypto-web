@@ -33,5 +33,10 @@
     "deleteHint": "By disconnecting this exchange ARYA Crypto will no longer have control of your assets, including assets in your smart allocation",
     "connected": "Connected",
     "connectedNote": "You’ve successfully connected your account! you can now start trading.",
-    "startTrade": "Start trading"
+    "startTrade": "Start trading",
+    "title": "Connected Exchanges",
+    "updateNameSuccess": "Name updated successfully!",
+    "addExchange": "Add Exchange",
+    "discconectedSuccess": "Discconected successfully",
+    "copied": "Copied!"
 }
