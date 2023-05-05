@@ -3,13 +3,12 @@ import { Col, Row } from "../../../shared/layout/flex"
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher"
 import Button from "../../../shared/buttons/button"
 import PortfolioComposition from "../../../shared/portfolio-composition/portfolio-composition"
-import { SmartAllocationAssetType } from "../../../../types/smart-allocation.types"
+import { SaveSmartAllocationAssetType, SmartAllocationAssetStatus, SmartAllocationAssetType } from "../../../../types/smart-allocation.types"
 import { useSelector } from "react-redux"
-import { getSmartAllocation } from "../../../../services/controllers/market"
 import { selectSelectedExchange } from "../../../../services/redux/exchangeSlice"
 import { MODE_DEBUG } from "../../../../utils/constants/config"
 import { useTranslation } from "next-i18next"
-import { percentageFormat, priceFormat } from "../../../../utils/helpers/prices"
+import { percentageFormat, formatNumber } from "../../../../utils/helpers/prices"
 import Image from "next/image"
 import clsx from "clsx"
 import styles from "./edit-smart-allocation.module.scss";
@@ -21,6 +20,8 @@ import PageLoader from "../../../shared/pageLoader/pageLoader"
 import Link from "next/link"
 import AssetPnl from "../../../shared/containers/asset/assetPnl"
 import AssetSelector from "../../../shared/AssetSelector/AssetSelector"
+import { getSmartAllocation, updateSmartAllocation } from "../../../../services/controllers/smart-allocation"
+import { toast } from "react-toastify"
 
 
 
@@ -29,6 +30,8 @@ const EditSmartAllocation: FC = () => {
     const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
     const [smartAllocationTotalEvaluation, setSmartAllocationTotalEvaluation] = useState<number>(0);
+    const [smartAllocationAlreadyExists, setSmartAllocationAlreadyExists] = useState<boolean>(false);
+    const [isSavingSmartAllocation, setIsSavingSmartAllocation] = useState<boolean>(false);
 
     const selectedExchange = useSelector(selectSelectedExchange);
 
@@ -40,6 +43,7 @@ const EditSmartAllocation: FC = () => {
         getSmartAllocation(selectedExchange?.provider_id)
             .then((res) => {
                 const data = res.data;
+                setSmartAllocationAlreadyExists(data?.exists ?? false);
                 const holdings: SmartAllocationAssetType[] | undefined = data.assets;
 
                 if (holdings && data.exists) {
@@ -55,7 +59,6 @@ const EditSmartAllocation: FC = () => {
                             total += (holding.current_value ?? 0);
                         }
                     })
-                    console.log({ total })
                     setSmartAllocationTotalEvaluation(total);
                 }
             })
@@ -134,13 +137,11 @@ const EditSmartAllocation: FC = () => {
                                                         current_weight: 0,
                                                         available: 0,
                                                         current_value: 0,
-                                                        pnl: {
-                                                            percent: selectedAsset.pnl,
-                                                        },
                                                         asset_details: {
                                                             asset_data: {
                                                                 name: selectedAsset.name ?? "",
                                                                 image: selectedAsset.iconUrl,
+                                                                price_change_percentage_24h: selectedAsset.pnl,
                                                             }
                                                         }
                                                     })
@@ -154,7 +155,7 @@ const EditSmartAllocation: FC = () => {
                             </Row>
                             <p className={clsx({ "text-green-1": is100Percent, "text-red-1": !is100Percent }, "w-12 text-center")}>{percentageFormat((totalPercentage * 100))}%</p>
                             <p className="w-3"></p>
-                            <p className={clsx({ "text-green-1": is100Percent, "text-red-1": !is100Percent })}>USD ${priceFormat(totalEvaluation, true)}</p>
+                            <p className={clsx({ "text-green-1": is100Percent, "text-red-1": !is100Percent })}>USD {formatNumber(totalEvaluation, true)}</p>
                         </Row>
                     </td>
                     <td />
@@ -216,16 +217,16 @@ const EditSmartAllocation: FC = () => {
                                             </td>
                                             <td>
                                                 <AssetPnl
-                                                    value={asset.pnl?.percent ?? 0}
+                                                    value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
                                                 />
                                             </td>
-                                            <td>${priceFormat(asset?.ask_price ?? 0, true)}</td>
-                                            <td>{priceFormat(asset?.available ?? 0, true)}</td>
-                                            <td>${priceFormat(asset?.current_value ?? 0, true)}</td>
+                                            <td>{formatNumber(asset?.ask_price ?? 0, true)}</td>
+                                            <td>{formatNumber(asset?.available ?? 0)}</td>
+                                            <td>{formatNumber(asset?.current_value ?? 0, true)}</td>
                                             <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
                                                 {percentageFormat((asset.current_weight ?? 0) * 100)}%
                                             </td>
-                                            <td className="">
+                                            <td className="text-sm">
                                                 <Row className="w-full gap-4 items-center">
                                                     <Slider.Root
                                                         className="relative flex items-center select-none flex-1"
@@ -241,7 +242,7 @@ const EditSmartAllocation: FC = () => {
                                                         <Slider.Thumb className="block w-4 h-4 bg-white rounded-full shadow-lg shadow-black-1 hover:bg-yellow-400 focus:outline-none" />
                                                     </Slider.Root>
                                                     <input
-                                                        className="bg-white text-black-1 w-12 h-8 text-center rounded-md"
+                                                        className="bg-white text-black-1 w-12 h-8 text-center rounded-md text-sm p-0"
                                                         value={percentageFormat(setWeight * 100)}
                                                         type="number"
                                                         onChange={(event) => {
@@ -249,7 +250,7 @@ const EditSmartAllocation: FC = () => {
                                                         }}
                                                     />
                                                     <p className="font-bold">%</p>
-                                                    <p className="font-bold w-32">USD ${priceFormat(assetEvaluation)}</p>
+                                                    <p className="font-bold w-32">USD {formatNumber(assetEvaluation, true)}</p>
                                                 </Row>
                                             </td>
                                             <td>
@@ -269,6 +270,39 @@ const EditSmartAllocation: FC = () => {
         }
     }, [distributeWeightsEqually, isLoadingSmartAllocationHoldings, onRemoveAsset, onSetWeightChange, smartAllocationHoldings, smartAllocationTotalEvaluation, t, tableFooter])
 
+
+    const onSaveSmartAllocation = useCallback(() => {
+        setIsSavingSmartAllocation(true);
+        const assets: SaveSmartAllocationAssetType[] = smartAllocationHoldings.map((holding) => {
+            return (
+                {
+                    name: holding.name,
+                    weight: holding.weight,
+                    status: ((holding.weight ?? 0) > 0) ? SmartAllocationAssetStatus.ACTIVE : SmartAllocationAssetStatus.DELETED,
+                    id: holding.id,
+                })
+        });
+
+        updateSmartAllocation({
+            providerId: selectedExchange?.provider_id,
+            data: assets,
+            smartAllocationAlreadyExists
+        })
+            .then((res) => {
+                toast.success("Smart allocation was saved successfully");
+            })
+            .catch((error) => {
+                if (MODE_DEBUG) {
+                    console.error("Error while saving smart allocation (saveSmartAllocation)", error)
+                }
+                toast.error("Something went wrong")
+            })
+            .finally(() => {
+                setIsSavingSmartAllocation(false);
+            });
+
+    }, [selectedExchange?.provider_id, smartAllocationAlreadyExists, smartAllocationHoldings])
+
     return (
         <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
             {isLoadingSmartAllocationHoldings && <PageLoader />}
@@ -280,7 +314,7 @@ const EditSmartAllocation: FC = () => {
             <Col className="col-span-full gap-5">
                 <Row className="justify-between">
                     <ExchangeSwitcher />
-                    <Button className="h-11 w-36 rounded-md bg-blue-1">
+                    <Button className="h-11 w-36 rounded-md bg-blue-1" onClick={onSaveSmartAllocation} isLoading={isSavingSmartAllocation}>
                         Save
                     </Button>
                 </Row>

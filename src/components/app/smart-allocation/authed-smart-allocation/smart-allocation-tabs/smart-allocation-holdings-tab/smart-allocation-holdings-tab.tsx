@@ -3,13 +3,11 @@ import { Col, Row } from "../../../../../shared/layout/flex";
 import Button from "../../../../../shared/buttons/button";
 import { useTranslation } from "next-i18next";
 import styles from "./smart-allocation-holdings-tab.module.scss";
-import { percentageFormat, priceFormat } from "../../../../../../utils/helpers/prices";
+import { percentageFormat, formatNumber } from "../../../../../../utils/helpers/prices";
 import Image from "next/image";
 import { CustomizeAllocationIcon } from "../../../../../svg/smart-allocation/customize-portfolio-icon";
 import { SmartAllocationAssetType } from "../../../../../../types/smart-allocation.types";
 import clsx from "clsx";
-import { useSelector } from "react-redux";
-import { selectAssetLivePrice } from "../../../../../../services/redux/marketSlice";
 import PortfolioComposition from "../../../../../shared/portfolio-composition/portfolio-composition";
 import Link from "next/link";
 import { USDTSymbol } from "../../../../../../utils/constants/market";
@@ -72,9 +70,9 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                                 value={asset.pnl?.percent ?? 0}
                                             />
                                         </td>
-                                        <td>${priceFormat((asset?.ask_price ?? 0), true)}</td>
-                                        <td>{priceFormat((asset.available ?? 0), true)}</td>
-                                        <td>${priceFormat((asset.current_value ?? 0), true)}</td>
+                                        <td>${formatNumber((asset?.ask_price ?? 0), true)}</td>
+                                        <td>{formatNumber((asset.available ?? 0), true)}</td>
+                                        <td>${formatNumber((asset.current_value ?? 0), true)}</td>
                                         <td className="">
                                             <Row className="gap-2 items-center">
                                                 <p>

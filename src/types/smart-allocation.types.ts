@@ -42,8 +42,17 @@ export type SmartAllocationAssetType = {
     },
 }
 
+
+export type SaveSmartAllocationAssetType = {
+    name?: string,
+    weight?: number,
+    id?: number,
+    status?: SmartAllocationAssetStatus
+}
+
 export enum SmartAllocationAssetStatus {
-    ACTIVE = "ACTIVE"
+    ACTIVE = "ACTIVE",
+    DELETED = "DELETED",
 }
 
 export enum SmartAllocationFrequency {

@@ -1,5 +1,4 @@
 import { AssetType } from "../../types/asset";
-import { SmartAllocationAssetType, SmartAllocationResponseType } from "../../types/smart-allocation.types";
 import { axiosInstance } from "../api/axiosConfig";
 import { storeMrkAssets } from "../redux/marketSlice";
 import { store } from "../redux/store";
@@ -66,12 +65,4 @@ export const getPortfolioHoldings = async (providerId?: number) => {
 
 export const getConnectedProviders = async () => {
   return await axiosInstance.get(`/exchange/connected-keys`);
-};
-
-
-export const getSmartAllocation = async (providerId?: number) => {
-  return await axiosInstance.get<SmartAllocationResponseType>(
-    `/trade-engine/smart-allocation`,
-    { params: { provider: providerId } }
-  );
 };

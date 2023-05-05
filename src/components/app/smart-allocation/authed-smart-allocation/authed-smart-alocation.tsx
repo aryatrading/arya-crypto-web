@@ -11,8 +11,8 @@ import LineChart from "../../../shared/charts/graph/graph";
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
 import { SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
-import { getSmartAllocation } from "../../../../services/controllers/market";
 import PageLoader from "../../../shared/pageLoader/pageLoader";
+import { getSmartAllocation } from "../../../../services/controllers/smart-allocation";
 
 const AuthedSmartAllocation: FC = () => {
     const [isLoadingPortfolioHoldings, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
