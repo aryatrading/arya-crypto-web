@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import clsx from "clsx";
 import { converterTop6Coins, usdt } from "../../../utils/constants/defaultConverterList";
 
-const inputClasses = "font-medium text-white bg-transparent flex-1 h-[40px] pl-4 mr-12";
+const inputClasses = "font-medium text-white bg-transparent flex-1 h-[40px] pl-4 mr-12 border-transparent";
 
 const numericInput = (value: string | number, onChange: ChangeEventHandler, disabled: boolean) => {
     return (
