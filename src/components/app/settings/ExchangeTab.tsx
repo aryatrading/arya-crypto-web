@@ -60,8 +60,8 @@ const ExchangeTab = () => {
     }, [connectedExchanges, activeExchange]);
 
     useEffect(() => {
-        if (exchanges.filter(e => e?.create).length) {
-            setSelectedExchange(exchanges.filter(e => e?.create)[0]);
+        if (exchanges.filter((e: ExchangeType) => e?.create).length) {
+            setSelectedExchange(exchanges.filter((e: ExchangeType) => e?.create)[0]);
         }
     }, [exchanges]);
 
@@ -91,7 +91,7 @@ const ExchangeTab = () => {
                     });
                 }}
             >
-                {({ isSubmitting }: any) => (
+                {({ isSubmitting }) => (
                     <Form className="flex flex-col w-full gap-4">
                         <Row className='gap-4'>
                             <Col className='flex-1'>
