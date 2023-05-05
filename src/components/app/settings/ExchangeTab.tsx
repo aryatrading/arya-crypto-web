@@ -42,10 +42,10 @@ const ExchangeTab = () => {
 
     const formScheme = useCallback(() => {
         return Yup.object().shape({
-            portfolioname: Yup.string().email().required(t('common:required').toString()),
-            creationDate: Yup.string().min(2, t('common:passwordErrorMsg').toString()).required(),
-            apiKey: Yup.string().min(2, t('common:passwordErrorMsg').toString()).required(),
-            apiSecret: Yup.string().min(2, t('common:passwordErrorMsg').toString()).required(),
+            portfolioname: Yup.string().min(4).required(t('common:required').toString()),
+            creationDate: Yup.string().required(t('common:required').toString()),
+            apiKey: Yup.string().min(64).required(t('common:required').toString()),
+            apiSecret: Yup.string().min(64).required(t('common:required').toString()),
         });
     }, [t]);
 
