@@ -1,5 +1,6 @@
 import { AssetType } from "../../types/asset";
 import { axiosInstance } from "../api/axiosConfig";
+import { setAllProviders } from "../redux/exchangeSlice";
 import { storeMrkAssets } from "../redux/marketSlice";
 import { store } from "../redux/store";
 
@@ -32,20 +33,22 @@ export const fetchAssets = async (search?: string, limit: number = 100) => {
 
   let _assets: AssetType[] = [];
 
-  for (var i = 0; i < data.length; i++) {
-    _assets.push({
-      id: data[i]?.id ?? 0,
-      name: data[i].asset_data.name,
-      currentPrice: data[i].asset_data.current_price,
-      pnl: data[i].asset_data.price_change_percentage_24h?.toFixed(2),
-      price: 0,
-      rank: data[i].asset_data.market_cap_rank,
-      volume: data[i].asset_data.total_volume,
-      iconUrl: data[i].asset_data.image,
-      mrkCap: data[i].asset_data.market_cap,
-      symbol: data[i].asset_data.symbol.toLowerCase(),
-      isFavorite: false,
-    });
+  if (data.length) {
+    for (var i = 0; i < data.length; i++) {
+      _assets.push({
+        id: data[i]?.id ?? 0,
+        name: data[i].asset_data.name,
+        currentPrice: data[i].asset_data.current_price,
+        pnl: data[i].asset_data.price_change_percentage_24h?.toFixed(2),
+        price: 0,
+        rank: data[i].asset_data.market_cap_rank,
+        volume: data[i].asset_data.total_volume,
+        iconUrl: data[i].asset_data.image,
+        mrkCap: data[i].asset_data.market_cap,
+        symbol: data[i].asset_data.symbol.toLowerCase(),
+        isFavorite: i % 2 === 0,
+      });
+    }
   }
   if (limit === 100) {
     store.dispatch(storeMrkAssets(_assets));
@@ -67,4 +70,20 @@ export const getPortfolioHoldings = async (providerId?: number) => {
 
 export const getConnectedProviders = async () => {
   return await axiosInstance.get(`/exchange/connected-keys`);
+};
+
+export const getAddableProviders = async () => {
+  axiosInstance.get(`/general/providers`).then(response => {
+    if (response.data.length) {
+      const arr: any[] = [];
+      const connectedExchanges = store.getState().exchange.data.connectedExchanges;
+      response.data.map((e: any) => {
+        return arr.push({
+          ...e,
+          isConnected: connectedExchanges.filter((exchange: any) => exchange.provider_id === e.id).length > 0,
+        })
+      });
+      store?.dispatch(setAllProviders(arr));
+    }
+  });
 };
