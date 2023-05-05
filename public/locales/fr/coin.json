@@ -12,5 +12,6 @@
     "cryptoConverter": "Convertisseur de chiffrement",
     "selectAsset": "Sélectionnez l'actif",
     "searchAsset": "Rechercher un élément",
-    "emptySearch": "Recherche vide"
+    "emptySearch": "Recherche vide",
+    "coins": "Pièces"
 }

@@ -1,19 +1,15 @@
-import { ChangeEventHandler, ChangeEvent, useCallback, useEffect, useState, useMemo } from "react";
+import { ChangeEventHandler, useCallback, useState, useMemo } from "react";
 import { useTranslation } from "next-i18next";
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import Image from "next/image";
-import { ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { useSelector } from "react-redux";
+import clsx from "clsx";
 
 import { Col, Row } from "../layout/flex";
 import { ConvertButtonIcon } from "../../svg/convert-CTA";
 import Button from "../buttons/button";
-import { fetchAssets } from "../../../services/controllers/market";
 import { AssetType } from "../../../types/asset";
 import LoadingSpinner from "../loading-spinner/loading-spinner";
-import { toast } from "react-toastify";
-import clsx from "clsx";
 import { converterTop6Coins, usdt } from "../../../utils/constants/defaultConverterList";
+import { AssetDropdown } from "../assetDropdown";
 
 const inputClasses = "font-medium text-white bg-transparent flex-1 h-[40px] pl-4 mr-12 border-transparent";
 
@@ -31,105 +27,15 @@ interface CoinConverterTypes {
 export const CoinConverter = (props: CoinConverterTypes) => {
     const { t } = useTranslation(["coin"]);
     const { assetLivePrice } = useSelector(({ market }: any) => market);
-    const [coins, setCoins] = useState<AssetType[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+
     const [firstCoin, setFirstCoin] = useState<AssetType>(props?.staticCoin);
     const [secondCoin, setSecondCoin] = useState<AssetType>();
     const [firstCoinAmount, setFirstCoinAmount] = useState<string | number>('');
     const [secondCoinAmount, setSecondCoinAmount] = useState<string | number>('');
-    const [keyword, setKeyword] = useState<string>('');
 
     const convertValues = useCallback((amount: number, currentPrice1: number, currentPrice2: number) => {
         return amount * (currentPrice1 / currentPrice2);
     }, []);
-
-    useEffect(() => {
-        fetchAssets(keyword, "50").then((response: AssetType[]) => {
-            setCoins(response);
-            setLoading(false);
-        }).catch((err) => {
-            toast.error(err);
-            setLoading(false);
-        })
-    }, [firstCoin?.id, keyword, secondCoin?.id]);
-
-    const onChangeKeyword = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        setCoins([]);
-        setLoading(true);
-        setKeyword(event.target.value);
-    }, []);
-
-    const dropdownItem = useCallback((data: any, addTo?: 'first' | 'second') => {
-        return (
-            <DropdownMenu.Item
-                key={data.id}
-                id={data.id + '_' + data?.name}
-                className={"h-12 py-1 px-4 cursor-pointer bg-grey-4"}
-                onClick={() => {
-                    if (addTo === 'first') {
-                        setFirstCoin(data);
-                        setSecondCoinAmount(convertValues(parseFloat(firstCoinAmount.toString()), data?.currentPrice || 0, secondCoin?.currentPrice || 0));
-                    } else if (addTo === 'second') {
-                        setSecondCoin(data);
-                        setSecondCoinAmount(convertValues(parseFloat(firstCoinAmount.toString()), firstCoin?.currentPrice || 0, data?.currentPrice || 0));
-                        return;
-                    } else {
-                        return;
-                    }
-                }}
-            >
-                <Row className="items-center gap-3 h-full">
-                    <Image src={data.iconUrl} alt={data?.name?.toLocaleLowerCase() + "_icon"} width={22} height={22} />
-                    <Row className="gap-2 items-center">
-                        <p className="capitalize font-extrabold text-sm">{data?.name}</p>
-                        <p className="capitalize font-medium text-xs">{data?.symbol}</p>
-                    </Row>
-                </Row>
-            </DropdownMenu.Item>
-        )
-    }, [convertValues, firstCoin?.currentPrice, firstCoinAmount, secondCoin?.currentPrice])
-
-    const dropdown = useCallback((title: string, disabled?: boolean, addTo?: 'first' | 'second') => {
-        return (
-            <DropdownMenu.Root
-                onOpenChange={(opened) => {
-                    if (!opened) {
-                        setKeyword('');
-                    }
-                }}>
-                <DropdownMenu.Trigger asChild disabled={disabled}>
-                    <button aria-label="Customise options" disabled={disabled} className="active:outline-none">
-                        <Row className="gap-4 items-center">
-                            <h3 className="font-extrabold text-white">{title}</h3>
-                            {!disabled && <ChevronDownIcon height="20px" width="20px" color="#fff" />}
-                        </Row>
-                    </button>
-                </DropdownMenu.Trigger>
-
-                <DropdownMenu.Portal className="z-10">
-                    <DropdownMenu.Content className="min-w-[400px] bg-grey-4 rounded-md z-10 max-h-[340px] overflow-scroll" sideOffset={15}>
-                        <Col className="gap-4 p-4 mb-3 absolute bg-grey-4 w-full">
-                            <h3 className="font-extrabold text-white text-xl">{t('selectAsset')}</h3>
-                            <Row className="bg-grey-3 w-full h-[40px] rounded-sm px-4">
-                                <MagnifyingGlassIcon width="20px" color="#6B7280" />
-                                <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:outline-none" type="text" value={keyword} placeholder={t('searchAsset').toString()} onChange={onChangeKeyword} />
-                            </Row>
-                        </Col>
-                        <Col className="mt-[120px]">
-                            {coins?.map(coin => dropdownItem(coin, addTo))}
-                            {coins.length === 0 && (
-                                loading ?
-                                    <Col className="mb-8">
-                                        <LoadingSpinner />
-                                    </Col>
-                                    :
-                                    <h3 className="text-center text-base font-bold text-white mb-4">{t('emptySearch')}</h3>)}
-                        </Col>
-                    </DropdownMenu.Content>
-                </DropdownMenu.Portal>
-            </DropdownMenu.Root>
-        );
-    }, [coins, dropdownItem, keyword, loading, onChangeKeyword, t]);
 
     const onChnageFirstCoinAmount = useCallback((event: any) => {
         const value = event.target.value;
@@ -192,7 +98,15 @@ export const CoinConverter = (props: CoinConverterTypes) => {
             <Row className="container  gap-12 w-full bg-grey-2 rounded-md px-10 py-4 flex-wrap">
                 <Col className="flex-[0.8] justify-center gap-6">
                     <Row className="gap-4 items-center">
-                        {dropdown(firstCoin?.name || "Coins", props?.preDefined, 'first')}
+                        <AssetDropdown
+                            onClick={(data: any) => {
+                                setFirstCoin(data);
+                                setSecondCoinAmount(convertValues(parseFloat(firstCoinAmount.toString()), data?.currentPrice || 0, secondCoin?.currentPrice || 0));
+                            }}
+                            t={t}
+                            disabled={props?.preDefined}
+                            title={firstCoin?.name}
+                        />
                         {numericInput(firstCoinAmount, onChnageFirstCoinAmount, !firstCoin?.name || !secondCoin?.name)}
                     </Row>
                     <Row className="relative">
@@ -202,7 +116,14 @@ export const CoinConverter = (props: CoinConverterTypes) => {
                         </Button>
                     </Row>
                     <Row className="gap-4 items-center">
-                        {dropdown(secondCoin?.name || "Coins", false, 'second')}
+                        <AssetDropdown
+                            onClick={(data: any) => {
+                                setSecondCoin(data);
+                                setSecondCoinAmount(convertValues(parseFloat(firstCoinAmount.toString()), firstCoin?.currentPrice || 0, data?.currentPrice || 0));
+                            }}
+                            t={t}
+                            title={secondCoin?.name}
+                        />
                         {numericInput(secondCoinAmount, onChnageSecondCoinAmount, !secondCoin?.name || !secondCoin?.name)}
                     </Row>
                 </Col>

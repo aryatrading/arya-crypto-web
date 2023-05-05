@@ -1,14 +1,15 @@
 import { FC, useMemo } from "react";
+import { useTranslation } from "next-i18next";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import { useSelector } from "react-redux";
+
 import { AssetHeader } from "../../shared/containers/asset/assetDetailsHeader";
 import AssetStatistics from "../../shared/containers/asset/assetStatistics";
 import { Col, Row } from "../../shared/layout/flex";
-import { useSelector } from "react-redux";
 import { getAsset } from "../../../services/redux/assetSlice";
-import { useTranslation } from "next-i18next";
 import AssetVote from "../../shared/containers/asset/assetVote";
 import { formatNumber } from "../../../utils/helpers/prices";
 import AssetInformationTab from "./assetInformation";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
 const Asset: FC = () => {
   const { t } = useTranslation(["asset"]);

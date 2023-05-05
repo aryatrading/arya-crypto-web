@@ -12,5 +12,6 @@
     "cryptoConverter": "Crypto Converter",
     "selectAsset": "Select Asset",
     "searchAsset": "Search asset",
-    "emptySearch": "Empty Search"
+    "emptySearch": "Empty Search",
+    "coins": "Coins"
 }

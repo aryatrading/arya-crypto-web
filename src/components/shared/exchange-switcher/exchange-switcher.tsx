@@ -107,7 +107,7 @@ const ExchangeSwitcher: FC = () => {
 
         <DropdownMenu.Portal className="z-10">
           <DropdownMenu.Content
-            className="min-w-[420px] bg-grey-2 rounded-md overflow-hidden z-10"
+            className="min-w-[420px] bg-grey-2 rounded-md overflow-hidden"
             sideOffset={15}
           >
             {connectedExchanges?.map((exchange) => dropdownItem(exchange))}
