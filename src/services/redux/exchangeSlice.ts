@@ -1,6 +1,9 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
+
 import { ExchangeStateType, ExchangeType } from "../../types/exchange.types";
 import StatusAsync from "../../utils/status-async";
+import { ProviderType } from "../../types/exchange.types";
+
 import { AppState } from "./store";
 
 const initialState: ExchangeStateType = {
@@ -8,6 +11,7 @@ const initialState: ExchangeStateType = {
   data: {
     selectedExchange: null,
     connectedExchanges: [],
+    allProviders: [],
   },
   error: null,
 };
@@ -15,6 +19,7 @@ const initialState: ExchangeStateType = {
 export const selectExchangeData = (state: AppState) => state.exchange?.data;
 export const selectSelectedExchange = createSelector([selectExchangeData], (data: ExchangeStateType["data"]) => (data?.selectedExchange));
 export const selectConnectedExchanges = createSelector([selectExchangeData], (data: ExchangeStateType["data"]) => (data?.connectedExchanges));
+export const selectAllProviders = createSelector([selectExchangeData], (data: ExchangeStateType["data"]) => (data?.allProviders));
 
 
 export const selectExchangeStoreStatus = createSelector([(state: AppState) => state.exchange?.status], (status: StatusAsync) => (status));
@@ -35,9 +40,12 @@ export const exchangeSlice = createSlice({
     setSelectedExchange: (state: ExchangeStateType, action: { payload: ExchangeType }) => {
       state.data.selectedExchange = action.payload;
     },
+    setAllProviders: (state: ExchangeStateType, action: { payload: ProviderType[] }) => {
+      state.data.allProviders = action.payload;
+    }
   },
 });
 
-export const { setExchangeStoreError, setSelectedExchange, setConnectedExchanges, setExchangeStoreAsyncStatus } = exchangeSlice.actions;
+export const { setExchangeStoreError, setSelectedExchange, setConnectedExchanges, setExchangeStoreAsyncStatus, setAllProviders } = exchangeSlice.actions;
 
 export default exchangeSlice.reducer;

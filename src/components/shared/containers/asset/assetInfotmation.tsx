@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { Col } from "../../layout/flex";
 import { AssetType } from "../../../../types/asset";
-import { formatNumber } from "../../../../utils/format_currency";
 import { useSelector } from "react-redux";
 import { selectAssetLivePrice } from "../../../../services/redux/marketSlice";
 import { useTranslation } from "next-i18next";
+import { formatNumber } from "../../../../utils/helpers/prices";
 
 type AssetInformationProps = {
   asset: AssetType;
@@ -23,13 +23,15 @@ export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
         <p className="font-semibold text-sm">
           {asset.name} {t("pricetday")}
           {formatNumber(
-            _assetprice[asset.symbol?.toLowerCase() ?? ""] ?? asset.currentPrice
+            _assetprice[asset.symbol?.toLowerCase() ?? ""] ??
+              asset.currentPrice,
+            true
           )}
           {t("twentyfourvolume")} {formatNumber(asset.volume ?? 0)}.{" "}
           {asset.symbol?.toUpperCase()} {t("pricechange")} {asset.pnl}%{" "}
-          {t("lasttwentyfour")} {asset.circlSupply ?? 0}{" "}
-          {asset.symbol?.toUpperCase()} {t("totalsupplyof")} {asset.supply}.{" "}
-          {t("binanceexchange")}
+          {t("lasttwentyfour")} {formatNumber(asset.circlSupply ?? 0)}{" "}
+          {asset.symbol?.toUpperCase()} {t("totalsupplyof")}{" "}
+          {formatNumber(asset.supply ?? 0)}. {t("binanceexchange")}
         </p>
       </Col>
       <Col className="gap-4">
