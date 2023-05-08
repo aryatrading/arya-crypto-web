@@ -1,5 +1,5 @@
 import { FC, useMemo, useState } from "react";
-import { Row } from "../../shared/layout/flex";
+import { Col, Row } from "../../shared/layout/flex";
 import { assetTimeseries } from "../../../utils/constants/assetTimeseries";
 import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
@@ -12,6 +12,8 @@ import { getAssetTimeseriesPrice } from "../../../services/controllers/asset";
 import LineChart from "../../shared/charts/graph/graph";
 import TradingViewWidget from "../../shared/charts/tradingView/tradingView";
 import { AssetInformation } from "../../shared/containers/asset/assetInfotmation";
+import CoinProfitCalculator from "../../shared/coinProfitCalculator";
+import CoinConverter from "../../shared/coinConverter";
 
 type seriesInterface = {
   title: string;
@@ -77,6 +79,14 @@ const AssetInformationTab: FC = () => {
       </div>
 
       <AssetInformation asset={asset} />
+
+      <Col className="mt-14 gap-14">
+        <CoinProfitCalculator />
+        {asset?.id && <CoinConverter
+          preDefined
+          staticCoin={asset}
+        />}
+      </Col>
     </>
   );
 };

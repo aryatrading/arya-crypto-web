@@ -58,7 +58,7 @@ export const footerLinks = [
             },
             {
                 name: "Crypto Converter",
-                route: '/portfolio'
+                route: '/coin-converter'
             }
         ]
     },
