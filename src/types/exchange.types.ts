@@ -5,6 +5,7 @@ export interface ExchangeStateType {
     data: {
         selectedExchange: ExchangeType | null,
         connectedExchanges: ExchangeType[] | null,
+        allProviders: ProviderType[] | null,
     }
     error: Error | null,
 }
@@ -16,6 +17,16 @@ export type ExchangeType = {
     "24h_change_value": number,
     "24h_change_percentage": number,
     last_5m_evaluation: number,
+    public_key: string,
+    private_key?: string,
+    creation_date: string,
+    create?: boolean,
+}
+
+export type ProviderType = {
+    name: string,
+    id: number,
+    isConnected: boolean,
 }
 
 
@@ -27,16 +38,13 @@ export type PortfolioSnapshotType = {
 
 
 export type PortfolioAssetType = {
-    name: string,
-    current_amount: number,
-    current_value: number,
-    buy_amount: number,
-    buy_value: number,
-    pnl_value: number,
-    pnl_percent: number,
-    sell_amount: number,
-    sell_value: number,
-    asset_details: {
+    name?: string,
+    pnl_value?: number,
+    pnl_percent?: number,
+    weight?: number,
+    free?: number,
+    exchanges_ids?: number[],
+    asset_details?: {
         id: string,
         ath: number,
         atl: number,

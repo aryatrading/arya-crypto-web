@@ -19,13 +19,12 @@ export const ShadowButton: FC<ShadowButtonProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-row items-center gap-2 justify-center px-5 py-2.5 ${
-        border ?? ""
-      } ${bgColor} hover:cursor-pointer`}
+      className={`flex flex-row items-center gap-2 justify-center px-5 py-2.5 ${border ?? ""
+        } ${bgColor} hover:cursor-pointer`}
       onClick={() => onClick!()}
     >
       {iconSvg ?? null}
-      <h1 className={`${textColor} font-semibold text-sm`}>{title}</h1>
+      <h3 className={`${textColor} font-semibold text-sm`}>{title}</h3>
     </div>
   );
 };

@@ -1,10 +1,11 @@
 import { FC, useMemo } from "react";
+import { useTranslation } from "next-i18next";
+import { useSelector } from "react-redux";
+
 import { AssetHeader } from "../../shared/containers/asset/assetDetailsHeader";
 import AssetStatistics from "../../shared/containers/asset/assetStatistics";
 import { Col, Row } from "../../shared/layout/flex";
-import { useSelector } from "react-redux";
 import { getAsset } from "../../../services/redux/assetSlice";
-import { useTranslation } from "next-i18next";
 import AssetVote from "../../shared/containers/asset/assetVote";
 import { formatNumber } from "../../../utils/helpers/prices";
 import AssetInformationTab from "./assetInformation";
@@ -31,7 +32,16 @@ const Asset: FC = () => {
         value: formatNumber(asset.dailyHigh ?? 0, true),
       },
     ];
-  }, [asset]);
+  }, [
+    asset.circlSupply,
+    asset.dailyHigh,
+    asset.dailyLow,
+    asset.dilutedValuation,
+    asset.mrkCap,
+    asset.supply,
+    asset.volume,
+    t,
+  ]);
 
   return (
     <Col className="h-full w-full gap-12">

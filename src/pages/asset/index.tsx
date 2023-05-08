@@ -1,14 +1,12 @@
-import { GetStaticProps } from "next";
-import Layout from "../../components/layout/layout";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Asset from "../../components/app/asset/asset";
 import { useEffect } from "react";
-import {
-  getAssetDetails,
-  getAssetTimeseriesPrice,
-} from "../../services/controllers/asset";
+import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+import Layout from "../../components/layout/layout";
+import Asset from "../../components/app/asset/asset";
+import { getAssetDetails, getAssetTimeseriesPrice } from "../../services/controllers/asset";
 import { clearAsset } from "../../services/redux/assetSlice";
 
 const AssetPage = () => {
@@ -41,6 +39,7 @@ export const getStaticProps: GetStaticProps<any> = async ({ locale }) => ({
       "auth",
       "nav",
       "asset",
+      "coin"
     ])),
   },
 });

@@ -62,7 +62,7 @@ const ForgotPassword = () => {
                         </Col>
                         <Col className="items-center gap-4">
                             {errorForm && <span className='text-red-600'>{(errorForm)}</span>}
-                            <Button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
+                            <Button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
                                 <h5>{t('resetLinkCTALabel')}</h5>
                             </Button>
                         </Col>
@@ -78,8 +78,8 @@ const ForgotPassword = () => {
                 <Col className='flex flex-1 items-center justify-center'>
                     <Col className="justify-start w-full max-w-[400px] gap-8">
                         <Col className='gap-2'>
-                            <h1 className="font-extrabold dark:text-white header-label">{t('resetPassword')}</h1>
-                            <h6 className="font-medium dark:text-white">{t('resetPasswordHint')}</h6>
+                            <h3 className="font-extrabold text-white header-label">{t('resetPassword')}</h3>
+                            <h6 className="font-medium text-white">{t('resetPasswordHint')}</h6>
                         </Col>
                         {forgotPasswordForm}
                         <Col className='items-center justify-center'>

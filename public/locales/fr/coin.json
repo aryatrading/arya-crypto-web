@@ -1,0 +1,17 @@
+{
+    "coin": "Pièce",
+    "investment": "Investissement",
+    "buyPrice": "Prix d’achat",
+    "sellPrice": "Prix de vente",
+    "investmentFee": "Frais d’investissement",
+    "exitFee": "Frais de sortie",
+    "investmentResult": "Résultat de l’investissement",
+    "profit/loss": "Profit/perte",
+    "totalInvestmentAmount": "Montant total de l’investissement",
+    "totalExitAmount": "Montant total de sortie",
+    "cryptoConverter": "Convertisseur de chiffrement",
+    "selectAsset": "Sélectionnez l'actif",
+    "searchAsset": "Rechercher un élément",
+    "emptySearch": "Recherche vide",
+    "coins": "Pièces"
+}

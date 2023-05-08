@@ -9,14 +9,14 @@ export const initStoreData = () => {
 }
 
 async function initExchangeStore() {
-    store.dispatch(setExchangeStoreAsyncStatus(StatusAsync.PENDING));
+    store?.dispatch(setExchangeStoreAsyncStatus(StatusAsync.PENDING));
     await Promise.all([
         initConnectedProviders(),
     ]).then(() => {
-        store.dispatch(setExchangeStoreAsyncStatus(StatusAsync.RESOLVED));
+        store?.dispatch(setExchangeStoreAsyncStatus(StatusAsync.RESOLVED));
     }).catch((error) => {
-        store.dispatch(setExchangeStoreError(error));
-        store.dispatch(setExchangeStoreAsyncStatus(StatusAsync.REJECTED));
+        store?.dispatch(setExchangeStoreError(error));
+        store?.dispatch(setExchangeStoreAsyncStatus(StatusAsync.REJECTED));
     });
 }
 
@@ -24,8 +24,8 @@ async function initConnectedProviders() {
     return await getConnectedProviders().then((res) => {
         const exchanges: ExchangeType[] = res.data;
         if (exchanges?.length) {
-            store.dispatch(setSelectedExchange({...exchanges[0]}))
-            store.dispatch(setConnectedExchanges(exchanges));
+            store?.dispatch(setSelectedExchange({ ...exchanges[0] }))
+            store?.dispatch(setConnectedExchanges(exchanges));
         }
     });
 }
