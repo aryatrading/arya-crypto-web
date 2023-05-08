@@ -102,7 +102,6 @@ const Nav = () => {
         <Row className="gap-3 justify-center items-center">
           <AssetDropdown
             onClick={(asset) => {
-              console.log({ asset });
               const data = {
                 iconUrl: asset.iconUrl,
                 id: asset.id,
