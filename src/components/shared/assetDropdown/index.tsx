@@ -55,7 +55,7 @@ export const AssetDropdown = ({ onClick, trigger, title, showContentHeaderLabel 
             <DropdownMenu.Item
                 key={data.id}
                 id={data.id + '_' + data?.name}
-                className={"h-12 py-1 px-4 cursor-pointer bg-grey-2"}
+                className={"h-12 py-1 px-4 cursor-pointer bg-grey-2 z-50"}
                 onClick={() => {
                     if (onClick) {
                         onClick(data);
@@ -105,7 +105,7 @@ export const AssetDropdown = ({ onClick, trigger, title, showContentHeaderLabel 
                 </DropdownMenu.Trigger>
 
                 <DropdownMenu.Portal className="z-10">
-                    <DropdownMenu.Content className={clsx({ "min-w-[400px] max-h-[340px]": !showTopCoinsList, "min-w-[500px] max-h-[440px]": showTopCoinsList }, "bg-grey-2 rounded-md overflow-scroll")} sideOffset={sideOffset} align={align} side={side}>
+                    <DropdownMenu.Content className={clsx({ "min-w-[400px] max-h-[340px]": !showTopCoinsList, "min-w-[500px] max-h-[440px]": showTopCoinsList }, "bg-grey-2 rounded-md overflow-scroll z-50")} sideOffset={sideOffset} align={align} side={side}>
                         <Col className={clsx({ "p-4": showContentHeaderLabel, "p-2": !showContentHeaderLabel }, "gap-4 mb-3 absolute bg-grey-2 w-full rounded-lg z-50")}>
                             {showContentHeaderLabel && <h3 className="font-extrabold text-white text-xl">{contentHeaderLabel || t('selectAsset')}</h3>}
                             <Row className="bg-grey-3 w-full h-[40px] rounded-sm px-4">
@@ -113,7 +113,7 @@ export const AssetDropdown = ({ onClick, trigger, title, showContentHeaderLabel 
                                 <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:ring-0 border-0" type="text" value={keyword} placeholder={t('searchAsset').toString()} onChange={onChangeKeyword} autoFocus={showTopCoinsList} />
                             </Row>
                         </Col>
-                        <Col className={showContentHeaderLabel ? "mt-[120px]" : "mt-[50px]"}>
+                        <Col className={showContentHeaderLabel ? "mt-[120px] z-50" : "mt-[50px] z-50"}>
                             {coins?.map(coin => dropdownItem(coin))}
                             {coins.length === 0 && (
                                 loading ?
