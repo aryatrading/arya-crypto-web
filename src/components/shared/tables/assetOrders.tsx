@@ -17,7 +17,7 @@ export const AssetOrdersTable: FC = () => {
     t("type"),
     t("status"),
     t("amount"),
-    t("amount"),
+    t("price"),
     t("date"),
     t("exchange"),
   ];
