@@ -50,11 +50,10 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                     </thead>
                     <tbody>
                         {smartAllocationHoldings.map((asset, index) => {
-                            if(asset.name !== USDTSymbol){
-                                const setWeight = asset.current_weight ?? 0;
-                                const currentWeight = (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1);
-                                const isCurrentWeightMoreThanSetWeight = currentWeight >= setWeight;
-    
+                            if (asset.name !== USDTSymbol) {
+                                const setWeight = asset.weight ?? 0;
+                                const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
+
                                 return (
                                     <tr key={asset.name}>
                                         <td>{index + 1}</td>
@@ -67,12 +66,12 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                         </td>
                                         <td>
                                             <AssetPnl
-                                                value={asset.pnl?.percent ?? 0}
+                                                value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
                                             />
                                         </td>
-                                        <td>${formatNumber((asset?.ask_price ?? 0), true)}</td>
-                                        <td>{formatNumber((asset.available ?? 0), true)}</td>
-                                        <td>${formatNumber((asset.current_value ?? 0), true)}</td>
+                                        <td>{formatNumber(asset?.ask_price ?? 0, true)}</td>
+                                        <td>{formatNumber(asset?.available ?? 0)}</td>
+                                        <td>{formatNumber(asset?.current_value ?? 0, true)}</td>
                                         <td className="">
                                             <Row className="gap-2 items-center">
                                                 <p>
@@ -89,7 +88,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                             </Row>
                                         </td>
                                         <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
-                                            {percentageFormat(currentWeight * 100)}%
+                                            {percentageFormat((asset.current_weight ?? 0) * 100)}%
                                         </td>
                                     </tr>
                                 );
@@ -102,19 +101,19 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
 
             </Row>
         )
-    }, [smartAllocationHoldings, smartAllocationTotalEvaluation, t])
+    }, [smartAllocationHoldings, t])
 
 
     const reBalanceNow = useMemo(() => {
         return (
             <Col className="flex-1 gap-5">
-                <Button className="w-full bg-blue-1 py-2.5 px-5 rounded-md font-bold">Rebalance now</Button>
+                <Button className="w-full bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold">Rebalance now</Button>
                 <Col className="gap-4">
                     <p className="font-bold text-grey-1">Automation</p>
-                    <p className="font-bold">Automatic rebalancing scheduled <span className="text-blue-1">Monthly</span></p>
-                    <p className="font-bold">Next rebalancing schedule : <span className="text-blue-1">01/12/2023</span></p>
+                    <p className="text-sm font-bold">Automatic rebalancing scheduled <span className="text-blue-1">Monthly</span></p>
+                    <p className="text-sm font-bold">Next rebalancing schedule : <span className="text-blue-1">01/12/2023</span></p>
                     <p className="font-bold text-grey-1">Exit Strategy</p>
-                    <p className="font-bold">When biticoin drops by 5% sell 50% of your portfolio for {USDTSymbol}</p>
+                    <p className="text-sm font-bold">When biticoin drops by 5% sell 50% of your portfolio for {USDTSymbol}</p>
                 </Col>
             </Col>
         )
@@ -126,7 +125,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
             <Col className="gap-10">
                 <Row className="w-full gap-5 items-center">
                     <Row className="gap-10 flex-[3]">
-                        <Link href="smart-allocation/edit" className="bg-blue-1 py-2.5 px-5 rounded-md font-bold shrink-0">Edit Portfolio</Link>
+                        <Link href="smart-allocation/edit" className="grid items-center bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold shrink-0">Edit Portfolio</Link>
                         {portfolioComposition}
                     </Row>
                     <Row className="flex-1"></Row>

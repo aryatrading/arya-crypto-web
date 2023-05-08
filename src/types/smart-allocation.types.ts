@@ -33,13 +33,15 @@ export type SmartAllocationAssetType = {
         value?: number,
         percent?: number
     },
-    asset_details?: {
-        id?: number,
-        added_on?: string,
-        asset_name?: string,
-        asset_data?: PortfolioAssetDetailsType,
-        updated_on?: string
-    },
+    asset_details?: SmartAllocationAssetDetails,
+}
+
+export type SmartAllocationAssetDetails = {
+    id?: number,
+    added_on?: string,
+    asset_name?: string,
+    asset_data?: PortfolioAssetDetailsType,
+    updated_on?: string
 }
 
 
@@ -57,4 +59,10 @@ export enum SmartAllocationAssetStatus {
 
 export enum SmartAllocationFrequency {
     MONTHLY = "MONTHLY"
+}
+
+export enum PredefinedSmartAllocationPortfolio {
+    top5 = "top5",
+    top10 = "top10",
+    top15 = "top15",
 }

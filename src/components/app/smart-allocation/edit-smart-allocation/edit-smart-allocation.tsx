@@ -3,7 +3,7 @@ import { Col, Row } from "../../../shared/layout/flex"
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher"
 import Button from "../../../shared/buttons/button"
 import PortfolioComposition from "../../../shared/portfolio-composition/portfolio-composition"
-import { SaveSmartAllocationAssetType, SmartAllocationAssetStatus, SmartAllocationAssetType } from "../../../../types/smart-allocation.types"
+import { PredefinedSmartAllocationPortfolio, SaveSmartAllocationAssetType, SmartAllocationAssetStatus, SmartAllocationAssetType } from "../../../../types/smart-allocation.types"
 import { useSelector } from "react-redux"
 import { selectSelectedExchange } from "../../../../services/redux/exchangeSlice"
 import { MODE_DEBUG } from "../../../../utils/constants/config"
@@ -20,22 +20,27 @@ import PageLoader from "../../../shared/pageLoader/pageLoader"
 import Link from "next/link"
 import AssetPnl from "../../../shared/containers/asset/assetPnl"
 import AssetSelector from "../../../shared/AssetSelector/AssetSelector"
-import { getSmartAllocation, updateSmartAllocation } from "../../../../services/controllers/smart-allocation"
+import { getPredefinedPortfolioHoldings, getSmartAllocation, updateSmartAllocation } from "../../../../services/controllers/smart-allocation"
 import { toast } from "react-toastify"
+import { useRouter } from "next/router"
 
 
 
 const EditSmartAllocation: FC = () => {
 
-    const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
+    const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(true);
+    const [isLoadingPredefinedAllocationHoldings, setIsLoadingPredefinedAllocationHoldings] = useState<boolean>(false);
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
     const [smartAllocationTotalEvaluation, setSmartAllocationTotalEvaluation] = useState<number>(0);
     const [smartAllocationAlreadyExists, setSmartAllocationAlreadyExists] = useState<boolean>(false);
     const [isSavingSmartAllocation, setIsSavingSmartAllocation] = useState<boolean>(false);
+    const [userHasSubscription, setUserHasSubscription] = useState<boolean>(true);
 
     const selectedExchange = useSelector(selectSelectedExchange);
 
     const { t } = useTranslation();
+
+    const router = useRouter()
 
 
     const initSmartAllocationHoldings = useCallback(() => {
@@ -44,23 +49,24 @@ const EditSmartAllocation: FC = () => {
             .then((res) => {
                 const data = res.data;
                 setSmartAllocationAlreadyExists(data?.exists ?? false);
-                const holdings: SmartAllocationAssetType[] | undefined = data.assets;
-
-                if (holdings && data.exists) {
-                    holdings.sort((a, b) => ((b?.current_weight ?? 0) - (a?.current_weight ?? 0)));
-                    setSmartAllocationHoldings(holdings.filter(asset => asset.name !== USDTSymbol));
-
-
-                    let total = 0;
-                    holdings.forEach((holding) => {
-                        if (holding.name === USDTSymbol) {
-                            total += holding.available ?? 0;
-                        } else {
-                            total += (holding.current_value ?? 0);
-                        }
-                    })
-                    setSmartAllocationTotalEvaluation(total);
+                if (data.exists) {
+                    const holdings: SmartAllocationAssetType[] | undefined = data.assets;
+                    if (holdings) {
+                        holdings.sort((a, b) => ((b?.current_weight ?? 0) - (a?.current_weight ?? 0)));
+                        setSmartAllocationHoldings(holdings.filter(asset => asset.name !== USDTSymbol));
+                    }
+                } else {
+                    const predefinedPortfolioId = router?.query?.portfolio;
+                    if (predefinedPortfolioId) {
+                        setIsLoadingPredefinedAllocationHoldings(true);
+                        getPredefinedPortfolioHoldings(predefinedPortfolioId as PredefinedSmartAllocationPortfolio)?.then((res) => {
+                            setSmartAllocationHoldings(res);
+                        }).finally(() => {
+                            setIsLoadingPredefinedAllocationHoldings(false);
+                        })
+                    }
                 }
+                setSmartAllocationTotalEvaluation(data.total_asset_value ?? 0);
             })
             .catch((error) => {
                 if (MODE_DEBUG)
@@ -69,7 +75,7 @@ const EditSmartAllocation: FC = () => {
             .finally(() => {
                 setIsLoadingSmartAllocationHoldings(false);
             })
-    }, [selectedExchange?.provider_id]);
+    }, [router?.query?.portfolio, selectedExchange?.provider_id]);
 
 
     useEffect(() => {
@@ -123,7 +129,7 @@ const EditSmartAllocation: FC = () => {
                         <Row className="w-full justify-between gap-4 items-center font-bold text-white">
                             <Row className="flex-1 justify-between items-center">
                                 <AssetSelector
-                                    trigger={<Button className="px-5 min-w-[5rem] bg-blue-1 h-10 rounded-md">Add asset</Button>}
+                                    trigger={<Button disabled={!userHasSubscription} className="px-5 min-w-[5rem] bg-blue-1 h-10 rounded-md">Add asset</Button>}
                                     onClick={(selectedAsset) => {
                                         setSmartAllocationHoldings((oldState) => {
                                             const newState = [...oldState];
@@ -162,10 +168,10 @@ const EditSmartAllocation: FC = () => {
                 </tr>
             </tfoot>
         )
-    }, [smartAllocationHoldings, smartAllocationTotalEvaluation])
+    }, [smartAllocationHoldings, smartAllocationTotalEvaluation, userHasSubscription])
 
     const table = useMemo(() => {
-        if (!isLoadingSmartAllocationHoldings) {
+        if (!isLoadingSmartAllocationHoldings || !isLoadingPredefinedAllocationHoldings) {
 
 
             return (
@@ -254,7 +260,7 @@ const EditSmartAllocation: FC = () => {
                                                 </Row>
                                             </td>
                                             <td>
-                                                {(!asset.current_weight) && <Button onClick={() => onRemoveAsset(asset)}>
+                                                {(!asset.current_weight && userHasSubscription) && <Button onClick={() => onRemoveAsset(asset)}>
                                                     <XMarkIcon width={20} height={20} color="white" />
                                                 </Button>}
                                             </td>
@@ -264,48 +270,55 @@ const EditSmartAllocation: FC = () => {
                         </tbody>
                         {tableFooter}
                     </table>
-
                 </Row>
             )
         }
-    }, [distributeWeightsEqually, isLoadingSmartAllocationHoldings, onRemoveAsset, onSetWeightChange, smartAllocationHoldings, smartAllocationTotalEvaluation, t, tableFooter])
+    }, [distributeWeightsEqually, isLoadingPredefinedAllocationHoldings, isLoadingSmartAllocationHoldings, onRemoveAsset, onSetWeightChange, smartAllocationHoldings, smartAllocationTotalEvaluation, t, tableFooter, userHasSubscription])
 
 
     const onSaveSmartAllocation = useCallback(() => {
-        setIsSavingSmartAllocation(true);
-        const assets: SaveSmartAllocationAssetType[] = smartAllocationHoldings.map((holding) => {
-            return (
-                {
-                    name: holding.name,
-                    weight: holding.weight,
-                    status: ((holding.weight ?? 0) > 0) ? SmartAllocationAssetStatus.ACTIVE : SmartAllocationAssetStatus.DELETED,
-                    id: holding.id,
+
+        if (smartAllocationHoldings.length) {
+            const totalPercentage = smartAllocationHoldings?.map(asset => asset.weight)?.reduce((prev, next) => ((prev ?? 0) + (next ?? 0))) ?? 0;
+            if (totalPercentage >= .999) {
+
+                setIsSavingSmartAllocation(true);
+                const assets: SaveSmartAllocationAssetType[] = smartAllocationHoldings.map((holding) => {
+                    return (
+                        {
+                            name: holding.name,
+                            weight: holding.weight,
+                            status: ((holding.weight ?? 0) > 0) ? SmartAllocationAssetStatus.ACTIVE : SmartAllocationAssetStatus.DELETED,
+                            id: holding.id,
+                        })
+                });
+
+                updateSmartAllocation({
+                    providerId: selectedExchange?.provider_id,
+                    data: assets,
+                    smartAllocationAlreadyExists
                 })
-        });
-
-        updateSmartAllocation({
-            providerId: selectedExchange?.provider_id,
-            data: assets,
-            smartAllocationAlreadyExists
-        })
-            .then((res) => {
-                toast.success("Smart allocation was saved successfully");
-            })
-            .catch((error) => {
-                if (MODE_DEBUG) {
-                    console.error("Error while saving smart allocation (saveSmartAllocation)", error)
-                }
-                toast.error("Something went wrong")
-            })
-            .finally(() => {
-                setIsSavingSmartAllocation(false);
-            });
-
+                    .then((res) => {
+                        toast.success("Smart allocation was saved successfully");
+                    })
+                    .catch((error) => {
+                        if (MODE_DEBUG) {
+                            console.error("Error while saving smart allocation (saveSmartAllocation)", error)
+                        }
+                        toast.error("Something went wrong")
+                    })
+                    .finally(() => {
+                        setIsSavingSmartAllocation(false);
+                    });
+            } else {
+                toast.error("Make sure to allocate 100% of your portfolio");
+            }
+        }
     }, [selectedExchange?.provider_id, smartAllocationAlreadyExists, smartAllocationHoldings])
 
     return (
         <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
-            {isLoadingSmartAllocationHoldings && <PageLoader />}
+            {(isLoadingSmartAllocationHoldings || isLoadingPredefinedAllocationHoldings) && <PageLoader />}
             <Row className="col-span-full gap-1">
                 <Link href="/smart-allocation">Smart allocation</Link>
                 <p>&gt;</p>
