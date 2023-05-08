@@ -15,13 +15,19 @@ import { useAuthModal } from "../../../context/authModal.context";
 import { navLinkData } from "../../../utils/constants/nav";
 
 import NavLink from "./NavLink/NavLink";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { AssetDropdown } from "../../shared/assetDropdown";
+import { useDispatch } from "react-redux";
+import { setAsset } from "../../../services/redux/assetSlice";
+import { CapitalizeString } from "../../../utils/format_string";
 
 const Nav = () => {
+  const dispatch = useDispatch();
   const { id } = useAuthUser();
   const [collapse, setCollapse] = useState(false)
   const { modalTrigger, setVisibleSection } = useAuthModal();
   const { t } = useTranslation(['nav']);
-  const { pathname } = useRouter()
+  const { pathname, push } = useRouter()
 
   const userOptions = useCallback(
     () => {
@@ -94,6 +100,37 @@ const Nav = () => {
           {navLinks("gap-10 h-full hidden lg:flex")}
         </Row>
         <Row className="gap-3 justify-center items-center">
+          <AssetDropdown
+            onClick={(asset) => {
+              console.log({ asset });
+              const data = {
+                iconUrl: asset.iconUrl,
+                id: asset.id,
+                rank: asset.rank,
+                currentPrice: asset.currentPrice,
+                symbol: asset.symbol.toLowerCase(),
+                pnl: asset.pnl,
+                mrkCap: asset.mrkCap,
+                volume: asset.volume,
+                name: CapitalizeString(asset.name),
+              };
+              dispatch(setAsset(data));
+              push(`/asset?symbol=${asset.symbol}`);
+            }}
+            t={t}
+            trigger={
+              <button aria-label="Customise options" className="active:outline-none">
+                <Row className="bg-grey-3 w-full h-[40px] rounded-sm px-4">
+                  <MagnifyingGlassIcon width="20px" color="#6B7280" />
+                  <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:outline-none border-transparent" type="text" placeholder={t('searchAsset').toString()} disabled />
+                </Row>
+              </button>
+            }
+            showContentHeaderLabel={false}
+            showTopCoinsList
+            side="center"
+            sideOffset={-100}
+          />
           {userOptions()}
           <Button onClick={() => (setCollapse(!collapse))} className="bg-blue-3 text-blue-1 p-4 rounded-md font-bold lg:hidden">
             <HamburgerIcon className="w-3.5 h-3" />
