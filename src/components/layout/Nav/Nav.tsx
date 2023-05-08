@@ -3,11 +3,8 @@ import React, { useCallback, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
 import { useAuthUser, withAuthUser } from "next-firebase-auth";
+import { useRouter } from "next/router";
 
-import { HomeHover, HomeDefault } from "../../svg/navbar/homeIcon";
-import { TradeHover, TradeDefault } from "../../svg/navbar/tradeIcon";
-import { PortfolioHover, PortfolioDefault } from "../../svg/navbar/portfolioIcon";
-import { MarketHover, MarketDefault } from "../../svg/navbar/marketIcon";
 import UserDefaultIcon from "../../svg/UserDefaultIcon";
 import SettingsIcon from "../../svg/SettingsIcon";
 import Button from "../../shared/buttons/button";
@@ -15,6 +12,7 @@ import { Col, Row } from "../../shared/layout/flex";
 import HamburgerIcon from "../../svg/navbar/hamburger";
 import { logoIcon } from "../../../../public/assets/images/svg";
 import { useAuthModal } from "../../../context/authModal.context";
+import { navLinkData } from "../../../utils/constants/nav";
 
 import NavLink from "./NavLink/NavLink";
 
@@ -23,6 +21,7 @@ const Nav = () => {
   const [collapse, setCollapse] = useState(false)
   const { modalTrigger, setVisibleSection } = useAuthModal();
   const { t } = useTranslation(['nav']);
+  const { pathname } = useRouter()
 
   const userOptions = useCallback(
     () => {
@@ -68,39 +67,17 @@ const Nav = () => {
 
   const navLinks = (className: string) => {
     return <div className={className}>
-      <NavLink
-        active={true}
-        href="/login"
-        navTitle="portfolio"
-        NavIcon={
-          HomeDefault
-        }
-        Hover={HomeHover}
-      />
-      <NavLink
-        href="/allocation"
-        navTitle="smartAllocation"
-        NavIcon={
-          PortfolioDefault
-        }
-        Hover={PortfolioHover}
-      />
-      <NavLink
-        href="/trade"
-        navTitle="trade"
-        NavIcon={
-          TradeDefault
-        }
-        Hover={TradeHover}
-      />
-      <NavLink
-        href="/market"
-        navTitle="market"
-        NavIcon={
-          MarketDefault
-        }
-        Hover={MarketHover}
-      />
+      {
+        navLinkData.map((navLink) => <NavLink
+          active={pathname === navLink.route}
+          href={navLink.route}
+          navTitle={navLink.title}
+          NavIcon={
+            navLink.Icon
+          }
+          Hover={navLink.Hover}
+        />)
+      }
     </div>
   }
 
