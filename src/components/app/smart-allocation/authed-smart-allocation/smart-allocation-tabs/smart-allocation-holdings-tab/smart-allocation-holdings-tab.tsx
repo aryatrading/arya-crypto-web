@@ -17,10 +17,6 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
 
     const { t } = useTranslation();
 
-    // const selectAssets = useSelector(selectAssetLivePrice);
-
-    // console.log({selectAssets})
-
     const portfolioComposition = useMemo(() => {
         return (
             <PortfolioComposition portfolioAssets={smartAllocationHoldings.map(asset => {
@@ -124,16 +120,16 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
         return (
             <Col className="gap-10">
                 <Row className="w-full gap-5 items-center">
-                    <Row className="gap-10 flex-[3]">
-                        <Link href="smart-allocation/edit" className="grid items-center bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold shrink-0">Edit Portfolio</Link>
+                    <Col className="gap-5 flex-1 sm:gap-10 sm:flex-[3] sm:flex-row">
+                        <Link href="smart-allocation/edit" className="w-max bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold shrink-0">Edit Portfolio</Link>
                         {portfolioComposition}
-                    </Row>
-                    <Row className="flex-1"></Row>
+                    </Col>
+                    <Row className="hidden sm:flex sm:flex-1"></Row>
                 </Row>
-                <Row className="w-full gap-5">
+                <Col className="w-full gap-5 sm:flex-row">
                     {table}
                     {reBalanceNow}
-                </Row>
+                </Col>
             </Col>
         )
     } else {

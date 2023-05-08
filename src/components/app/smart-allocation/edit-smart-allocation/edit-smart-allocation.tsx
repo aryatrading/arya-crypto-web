@@ -300,6 +300,7 @@ const EditSmartAllocation: FC = () => {
                 })
                     .then((res) => {
                         toast.success("Smart allocation was saved successfully");
+                        router.push('/smart-allocation/')
                     })
                     .catch((error) => {
                         if (MODE_DEBUG) {
@@ -317,20 +318,20 @@ const EditSmartAllocation: FC = () => {
     }, [selectedExchange?.provider_id, smartAllocationAlreadyExists, smartAllocationHoldings])
 
     return (
-        <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
+        <Col className="grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start gap-4">
             {(isLoadingSmartAllocationHoldings || isLoadingPredefinedAllocationHoldings) && <PageLoader />}
-            <Row className="col-span-full gap-1">
-                <Link href="/smart-allocation">Smart allocation</Link>
+            <Row className="w-full col-span-full gap-1 shrink-0 overflow-auto">
+                <Link className="shrink-0" href="/smart-allocation">Smart allocation</Link>
                 <p>&gt;</p>
-                <p className="text-blue-1 font-bold">Edit your smart allocation</p>
+                <p className="shrink-0 text-blue-1 font-bold">Edit your smart allocation</p>
             </Row>
             <Col className="col-span-full gap-5">
-                <Row className="justify-between">
+                <Col className="justify-between gap-5 sm:flex-row">
                     <ExchangeSwitcher />
                     <Button className="h-11 w-36 rounded-md bg-blue-1" onClick={onSaveSmartAllocation} isLoading={isSavingSmartAllocation}>
                         Save
                     </Button>
-                </Row>
+                </Col>
                 <Row className="justify-between">
                     <PortfolioComposition portfolioAssets={smartAllocationHoldings?.map(asset => {
                         return {
