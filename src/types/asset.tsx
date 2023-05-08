@@ -24,4 +24,5 @@ export interface AssetType {
   priceChange?: number;
   circlSupply?: number;
   isHoldingAsset?: boolean;
+  description?: string;
 }
