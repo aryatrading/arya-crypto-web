@@ -76,3 +76,18 @@ export const getAssetTimeseriesPrice = async (
     )
   );
 };
+
+export const getAssetVotes = async (assetId: number) => {
+  const { data } = await axiosInstance.get(
+    `asset-bullish-bearish-vote?asset_id=${assetId}`
+  );
+  return data;
+};
+
+export const castVote = async (vote: string, assetId: number) => {
+  const { data } = await axiosInstance.post(
+    `asset-bullish-bearish-vote?asset_id=${assetId}&vote=${vote}`
+  );
+
+  return data;
+};
