@@ -25,7 +25,7 @@ export const getStaticProps: GetStaticProps<any> = async ({
             "common",
             "auth",
             "nav",
-            'smartAllocation'
+            'smart-allocation'
         ])),
     },
 })

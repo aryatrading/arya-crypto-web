@@ -18,11 +18,14 @@ import { Top10Icon, Top15Icon, Top5Icon } from "../../../svg/smart-allocation/to
 import Link from "next/link";
 import clsx from "clsx";
 import { SelectSmartAllocationPortfolioIcon } from "../../../svg/smart-allocation/customize-portfolio-icon";
+import { useTranslation } from "next-i18next";
 
 const AuthedSmartAllocation: FC = () => {
+
+    const {t} = useTranslation(['smart-allocation']);
+
     const [isLoadingPortfolioHoldings, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
     const [portfolioSnapshots, setPortfolioSnapshots] = useState<PortfolioSnapshotType[]>([]);
-
     const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
     const [smartAllocationExists, setSmartAllocationExists] = useState<boolean>(false);
@@ -99,32 +102,32 @@ const AuthedSmartAllocation: FC = () => {
                     <Col className="items-center">
                         <Row className="items-center gap-5">
                             <SelectSmartAllocationPortfolioIcon />
-                            <p className="text-2xl">Select a preset or customize your portfolio</p>
+                            <p className="text-2xl">{t('selectAPresetOrCustomizeYourPortfolio')}</p>
                         </Row>
-                        <p className="text-grey-1">Select a preset below, or custom your portfolio.</p>
+                        <p className="text-grey-1">{t('selectAPresetBelowOrCustomYourPortfolio')}</p>
                     </Col>
                 </Row>
                 <Row className="items-center justify-center gap-5">
                     {getPredefinedAllocationsButtons({
-                        label: "Customize portfolio",
+                        label: t('customizePortfolio'),
                         icon: <AdjustmentsHorizontalIcon width={35} height={35} />,
                         href: "smart-allocation/edit",
                         isCustom: true,
                     })}
                     {getPredefinedAllocationsButtons({
-                        label: "Current top 5 coins",
+                        label: t('currentTop5Coins'),
                         icon: <Top5Icon />,
                         href: `smart-allocation/edit?portfolio=${PredefinedSmartAllocationPortfolio.top5}`,
                         isCustom: false,
                     })}
                     {getPredefinedAllocationsButtons({
-                        label: "Customize portfolio",
+                        label: t('currentTop10Coins'),
                         icon: <Top10Icon />,
                         href: `smart-allocation/edit?portfolio=${PredefinedSmartAllocationPortfolio.top10}`,
                         isCustom: false,
                     })}
                     {getPredefinedAllocationsButtons({
-                        label: "Customize portfolio",
+                        label: t('currentTop15Coins'),
                         icon: <Top15Icon />,
                         href: `smart-allocation/edit?portfolio=${PredefinedSmartAllocationPortfolio.top15}`,
                         isCustom: false,
@@ -132,7 +135,7 @@ const AuthedSmartAllocation: FC = () => {
                 </Row>
             </Col>
         )
-    }, [getPredefinedAllocationsButtons]);
+    }, [getPredefinedAllocationsButtons, t]);
 
 
     const smartAllocationGraph = useMemo(() => {
@@ -159,9 +162,9 @@ const AuthedSmartAllocation: FC = () => {
             <Tabs className="w-full font-light" selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
                 <TabList className="w-full border-b-[1px] border-grey-3 mb-6">
                     <Row className='gap-4'>
-                        <Tab className="text-sm outline-none cursor-pointer px-5">Your holdings</Tab>
-                        <Tab className="text-sm outline-none cursor-pointer px-5">Automation</Tab>
-                        <Tab className="text-sm outline-none cursor-pointer px-5">Portfolio trade history</Tab>
+                        <Tab className="text-sm outline-none cursor-pointer px-5">{t('yourHoldings')}</Tab>
+                        <Tab className="text-sm outline-none cursor-pointer px-5">{t('automation')}</Tab>
+                        <Tab className="text-sm outline-none cursor-pointer px-5">{t('portfolioTradeHistory')}</Tab>
                     </Row>
                 </TabList>
                 <TabPanel>
@@ -175,7 +178,7 @@ const AuthedSmartAllocation: FC = () => {
                 </TabPanel>
             </Tabs>
         )
-    }, [smartAllocationHoldings, smartAllocationTotalEvaluation]);
+    }, [smartAllocationHoldings, smartAllocationTotalEvaluation, t]);
 
     const withAllocation = useMemo(() => {
         return (

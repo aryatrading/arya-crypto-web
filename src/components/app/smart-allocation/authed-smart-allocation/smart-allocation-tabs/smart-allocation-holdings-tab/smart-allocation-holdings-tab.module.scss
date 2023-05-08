@@ -25,20 +25,15 @@
             }
 
             th:nth-child(2) {
-                width: 200px;
+                width: 170px;
             }
 
             th:nth-child(3),
             th:nth-child(4),
             th:nth-child(5),
-            th:nth-child(6) {
-                width: 135px;
-            }
-
-            th:last-child {
-                width: 50px;
-                vertical-align: middle;
-                @apply rounded-r-lg;
+            th:nth-child(6),
+            th:nth-child(8) {
+                width: 120px;
             }
         }
     }
@@ -68,10 +63,6 @@
 
                 &:first-child {
                     padding-left: 20px;
-                }
-
-                &:last-child {
-                    width: 50px;
                 }
             }
         }

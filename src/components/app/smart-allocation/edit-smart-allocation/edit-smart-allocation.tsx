@@ -38,7 +38,7 @@ const EditSmartAllocation: FC = () => {
 
     const selectedExchange = useSelector(selectSelectedExchange);
 
-    const { t } = useTranslation();
+    const { t } = useTranslation(['smart-allocation']);
 
     const router = useRouter()
 
@@ -182,13 +182,13 @@ const EditSmartAllocation: FC = () => {
                                 <th>{t("common:name")}</th>
                                 <th>{t("common:24hP/L")}</th>
                                 <th>{t("common:currentPrice")}</th>
-                                <th>Holding Quantity</th>
-                                <th>Holding Value</th>
-                                <th>Current weight</th>
+                                <th>{t("holdingQuantity")}</th>
+                                <th>{t('holdingValue')}</th>
+                                <th>{t('currentWeight')}</th>
                                 <th>
                                     <Row className="gap-3">
-                                        <p>Set weight</p>
-                                        <Button className="text-blue-1 underline" onClick={distributeWeightsEqually}>Distribute equally</Button>
+                                        <p>{t('setWeight')}</p>
+                                        <Button className="text-blue-1 underline" onClick={distributeWeightsEqually}>{t('distributeEqually')}</Button>
                                     </Row>
                                 </th>
                                 <th>
@@ -202,10 +202,10 @@ const EditSmartAllocation: FC = () => {
                             {!smartAllocationHoldings.length ?
                                 <tr>
                                     <td colSpan={7} className="row-span-full">
-                                        No assets
+                                        {t('common:noAssets')}
                                     </td>
                                 </tr>
-                                : smartAllocationHoldings.map((asset, index) => {
+                                : smartAllocationHoldings.map((asset) => {
 
                                     const setWeight = asset.weight ?? 0;
                                     const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
@@ -299,37 +299,37 @@ const EditSmartAllocation: FC = () => {
                     smartAllocationAlreadyExists
                 })
                     .then((res) => {
-                        toast.success("Smart allocation was saved successfully");
+                        toast.success(t("smartAllocationWasSavedSuccessfully"));
                         router.push('/smart-allocation/')
                     })
                     .catch((error) => {
                         if (MODE_DEBUG) {
                             console.error("Error while saving smart allocation (saveSmartAllocation)", error)
                         }
-                        toast.error("Something went wrong")
+                        toast.error(t("somethingWentWrong"))
                     })
                     .finally(() => {
                         setIsSavingSmartAllocation(false);
                     });
             } else {
-                toast.error("Make sure to allocate 100% of your portfolio");
+                toast.error(t('makeSureToAllocate100%OfYourPortfolio'));
             }
         }
-    }, [selectedExchange?.provider_id, smartAllocationAlreadyExists, smartAllocationHoldings])
+    }, [router, selectedExchange?.provider_id, smartAllocationAlreadyExists, smartAllocationHoldings, t])
 
     return (
         <Col className="grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start gap-4">
             {(isLoadingSmartAllocationHoldings || isLoadingPredefinedAllocationHoldings) && <PageLoader />}
             <Row className="w-full col-span-full gap-1 shrink-0 overflow-auto">
-                <Link className="shrink-0" href="/smart-allocation">Smart allocation</Link>
+                <Link className="shrink-0" href="/smart-allocation">{t('common:smartAllocation')}</Link>
                 <p>&gt;</p>
-                <p className="shrink-0 text-blue-1 font-bold">Edit your smart allocation</p>
+                <p className="shrink-0 text-blue-1 font-bold">{t('editYourSmartAllocation')}</p>
             </Row>
             <Col className="col-span-full gap-5">
                 <Col className="justify-between gap-5 sm:flex-row">
                     <ExchangeSwitcher />
                     <Button className="h-11 w-36 rounded-md bg-blue-1" onClick={onSaveSmartAllocation} isLoading={isSavingSmartAllocation}>
-                        Save
+                        {t('common:save')}
                     </Button>
                 </Col>
                 <Row className="justify-between">

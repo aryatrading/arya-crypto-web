@@ -15,7 +15,7 @@ import AssetPnl from "../../../../../shared/containers/asset/assetPnl";
 
 const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation(['smart-allocation']);
 
     const portfolioComposition = useMemo(() => {
         return (
@@ -38,10 +38,10 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                             <th>{t("common:name")}</th>
                             <th>{t("common:24hP/L")}</th>
                             <th>{t("common:currentPrice")}</th>
-                            <th>Holding Quantity</th>
-                            <th>Holding Value</th>
-                            <th>Set weight</th>
-                            <th>Current weight</th>
+                            <th>{t('holdingQuantity')}</th>
+                            <th>{t('holdingValue')}</th>
+                            <th>{t('setWeight')}</th>
+                            <th>{t('currentWeight')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,7 +73,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                                 <p>
                                                     {percentageFormat(setWeight * 100)}%
                                                 </p>
-                                                <Row className="w-16 rounded-full overflow-hidden bg-white" style={{ height: 10 }}>
+                                                <Row className="w-16 rounded-full overflow-hidden bg-white flex-1" style={{ height: 10 }}>
                                                     <Row
                                                         className={`bg-yellow-1 rounded-full`}
                                                         style={{
@@ -103,13 +103,13 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
     const reBalanceNow = useMemo(() => {
         return (
             <Col className="flex-1 gap-5">
-                <Button className="w-full bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold">Rebalance now</Button>
+                <Button className="w-full bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold">{t('RebalanceNow')}</Button>
                 <Col className="gap-4">
-                    <p className="font-bold text-grey-1">Automation</p>
-                    <p className="text-sm font-bold">Automatic rebalancing scheduled <span className="text-blue-1">Monthly</span></p>
-                    <p className="text-sm font-bold">Next rebalancing schedule : <span className="text-blue-1">01/12/2023</span></p>
-                    <p className="font-bold text-grey-1">Exit Strategy</p>
-                    <p className="text-sm font-bold">When biticoin drops by 5% sell 50% of your portfolio for {USDTSymbol}</p>
+                    <p className="font-bold text-grey-1">{t('automation')}</p>
+                    <p className="text-sm font-bold">{t('automaticRebalancingScheduled')} <span className="text-blue-1">{t('common:monthly')}</span></p>
+                    <p className="text-sm font-bold">{t('nextRebalancingSchedule')} : <span className="text-blue-1">01/12/2023</span></p>
+                    <p className="font-bold text-grey-1">{t('common:exitStrategy')}</p>
+                    <p className="text-sm font-bold">{t('WhenCoinDropsByXAmountSellYAmountOfYourPortfolioForUSDT', { coinName: "Bitcoin", dropPercent: "5%", sellPercent: "50%", USDTSymbol })}</p>
                 </Col>
             </Col>
         )
@@ -121,7 +121,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
             <Col className="gap-10">
                 <Row className="w-full gap-5 items-center">
                     <Col className="gap-5 flex-1 sm:gap-10 sm:flex-[3] sm:flex-row">
-                        <Link href="smart-allocation/edit" className="w-max bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold shrink-0">Edit Portfolio</Link>
+                        <Link href="smart-allocation/edit" className="w-max bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold shrink-0">{t('editPortfolio')}</Link>
                         {portfolioComposition}
                     </Col>
                     <Row className="hidden sm:flex sm:flex-1"></Row>
@@ -137,8 +137,8 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
 
             <Col className="w-full p-10 gap-5 items-center justify-center">
                 <CustomizeAllocationIcon />
-                <p className="font-bold">Start customising your portfolio</p>
-                <Link href="/smart-allocation/edit" className="py-3 px-10 bg-blue-3 rounded-md">Create portfolio</Link>
+                <p className="font-bold">{t('startCustomizingYourPortfolio')}</p>
+                <Link href="/smart-allocation/edit" className="py-3 px-10 bg-blue-3 rounded-md">{t('createPortfolio')}</Link>
             </Col>
         );
 
