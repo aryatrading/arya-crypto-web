@@ -34,6 +34,7 @@ const Login: FC<any> = (props: any) => {
         setIs2FALoading(true)
         try {
             await googleAuth()
+            hideModal()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -47,6 +48,7 @@ const Login: FC<any> = (props: any) => {
         setIs2FALoading(true)
         try {
             await appleAuth()
+            hideModal()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -64,6 +66,9 @@ const Login: FC<any> = (props: any) => {
                 validationSchema={loginFormSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     loginUserEmailPassword(values)
+                        .then(() => {
+                            hideModal()
+                        })
                         .catch(err => {
                             setError(err.message);
                         })

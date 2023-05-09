@@ -1,13 +1,15 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { ChangeEvent, ReactNode, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { ChevronDownIcon, MagnifyingGlassIcon, PlayIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import clsx from "clsx";
 
 import { Col, Row } from "../layout/flex";
 import { fetchAssets } from "../../../services/controllers/market";
 import { AssetType } from "../../../types/asset";
-import { ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import LoadingSpinner from "../loading-spinner/loading-spinner";
+
 
 interface AssetDropdownTypes {
     onClick: (x: any) => void,
@@ -15,22 +17,30 @@ interface AssetDropdownTypes {
     title?: string,
     disabled?: boolean,
     t: any,
+    sideOffset?: number,
+    align?: "start" | "end" | "center",
+    side?: "left" | "right" | "bottom" | "top" | any,
+    showTopCoinsList?: boolean,
+    showContentHeaderLabel?: boolean,
+    contentHeaderLabel?: string,
 }
 
-export const AssetDropdown = (props: AssetDropdownTypes) => {
+export const AssetDropdown = ({ onClick, trigger, title, showContentHeaderLabel = true, t, contentHeaderLabel, side, sideOffset = 15, align, showTopCoinsList, disabled }: AssetDropdownTypes) => {
     const [coins, setCoins] = useState<AssetType[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [keyword, setKeyword] = useState<string>('');
 
+    const resultLimit = useMemo(() => showTopCoinsList ? keyword !== '' ? 50 : 5 : 50, [keyword, showTopCoinsList]);
+
     useEffect(() => {
-        fetchAssets(keyword, 50).then((response: AssetType[]) => {
+        fetchAssets(keyword, resultLimit).then((response: AssetType[]) => {
             setCoins(response);
             setLoading(false);
         }).catch((err) => {
             toast.error(err);
             setLoading(false);
         })
-    }, [keyword]);
+    }, [keyword, resultLimit]);
 
 
     const onChangeKeyword = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -41,27 +51,40 @@ export const AssetDropdown = (props: AssetDropdownTypes) => {
 
 
     const dropdownItem = useCallback((data: any) => {
+
         return (
             <DropdownMenu.Item
                 key={data.id}
                 id={data.id + '_' + data?.name}
-                className={"h-12 py-1 px-4 cursor-pointer bg-grey-2"}
+                className={"h-12 py-1 px-4 cursor-pointer bg-grey-2 z-50"}
                 onClick={() => {
-                    if (props.onClick) {
-                        props.onClick(data);
+                    if (onClick) {
+                        onClick(data);
                     }
                 }}
             >
                 <Row className="items-center gap-3 h-full">
                     <Image src={data.iconUrl} alt={data?.name?.toLocaleLowerCase() + "_icon"} width={22} height={22} />
-                    <Row className="gap-2 items-center">
+                    <Row className="gap-2 items-center flex-1">
                         <p className="capitalize font-extrabold text-sm">{data?.name}</p>
                         <p className="capitalize font-medium text-xs">{data?.symbol}</p>
+                    </Row>
+                    <Row className="items-center justify-center gap-1">
+                        {
+                            data.pnl < 0
+                                ?
+                                <PlayIcon className="w-3 h-3 fill-red-1 rotate-90 stroke-0" />
+                                :
+                                data.pnl > 0 ?
+                                    <PlayIcon className={`w-3 h-3  fill-green-1 -rotate-90 stroke-0`} />
+                                    : null
+                        }
+                        <p className={clsx({ "text-red-1": data.pnl < 0, "text-green-1": data.pnl > 0, "text-grey-1": data.pnl === 0 }, "font-bold text-sm tracking-[1px]")}>USD {data?.currentPrice}</p>
                     </Row>
                 </Row>
             </DropdownMenu.Item>
         )
-    }, [])
+    }, [onClick])
 
     const dropdown = useCallback(() => {
         return (
@@ -71,27 +94,27 @@ export const AssetDropdown = (props: AssetDropdownTypes) => {
                         setKeyword('');
                     }
                 }}>
-                <DropdownMenu.Trigger asChild disabled={props.disabled}>
-                    {props.trigger ||
-                        <button aria-label="Customise options" disabled={props.disabled} className="active:outline-none">
+                <DropdownMenu.Trigger asChild disabled={disabled}>
+                    {trigger ||
+                        <button aria-label="Customise options" disabled={disabled} className="active:outline-none">
                             <Row className="gap-4 items-center">
-                                <h3 className="font-extrabold text-white">{props.title || props.t('coins')}</h3>
-                                {!props.disabled && <ChevronDownIcon height="20px" width="20px" color="#fff" />}
+                                <h3 className="font-extrabold text-white">{title || t('coins')}</h3>
+                                {!disabled && <ChevronDownIcon height="20px" width="20px" color="#fff" />}
                             </Row>
                         </button>
                     }
                 </DropdownMenu.Trigger>
 
                 <DropdownMenu.Portal className="z-10">
-                    <DropdownMenu.Content className="min-w-[400px] bg-grey-2 rounded-md max-h-[340px] overflow-scroll" sideOffset={15}>
-                        <Col className="gap-4 p-4 mb-3 absolute bg-grey-2 w-full rounded-lg">
-                            <h3 className="font-extrabold text-white text-xl">{props.t('selectAsset')}</h3>
+                    <DropdownMenu.Content className={clsx({ "min-w-[400px] max-h-[340px]": !showTopCoinsList, "min-w-[500px] max-h-[440px]": showTopCoinsList }, "bg-grey-2 rounded-md overflow-auto z-50")} sideOffset={sideOffset} align={align} side={side}>
+                        <Col className={clsx({ "p-4": showContentHeaderLabel, "p-2": !showContentHeaderLabel }, "gap-4 mb-3 absolute bg-grey-2 w-full rounded-lg z-[100]")}>
+                            {showContentHeaderLabel && <h3 className="font-extrabold text-white text-xl">{contentHeaderLabel || t('selectAsset')}</h3>}
                             <Row className="bg-grey-3 w-full h-[40px] rounded-sm px-4">
                                 <MagnifyingGlassIcon width="20px" color="#6B7280" />
-                                <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:outline-none border-transparent" type="text" value={keyword} placeholder={props.t('searchAsset').toString()} onChange={onChangeKeyword} />
+                                <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:ring-0 border-0" type="text" value={keyword} placeholder={t(showTopCoinsList ? 'coin:searchAsset' : 'searchAsset').toString()} onChange={onChangeKeyword} autoFocus={showTopCoinsList} />
                             </Row>
                         </Col>
-                        <Col className="mt-[120px]">
+                        <Col className={showContentHeaderLabel ? "mt-[120px] z-50" : "mt-[50px] z-50"}>
                             {coins?.map(coin => dropdownItem(coin))}
                             {coins.length === 0 && (
                                 loading ?
@@ -99,13 +122,13 @@ export const AssetDropdown = (props: AssetDropdownTypes) => {
                                         <LoadingSpinner />
                                     </Col>
                                     :
-                                    <h3 className="text-center text-base font-bold text-white mb-4">{props.t('emptySearch')}</h3>)}
+                                    <h3 className="text-center text-base font-bold text-white mb-4">{t('emptySearch')}</h3>)}
                         </Col>
                     </DropdownMenu.Content>
                 </DropdownMenu.Portal>
             </DropdownMenu.Root>
         );
-    }, [coins, dropdownItem, keyword, loading, onChangeKeyword, props]);
+    }, [align, coins, contentHeaderLabel, disabled, dropdownItem, keyword, loading, onChangeKeyword, showContentHeaderLabel, showTopCoinsList, side, sideOffset, t, title, trigger]);
 
     return dropdown();
 };

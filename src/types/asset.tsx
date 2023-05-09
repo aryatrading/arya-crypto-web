@@ -23,4 +23,5 @@ export interface AssetType {
   dilutedValuation?: number;
   priceChange?: number;
   circlSupply?: number;
+  isHoldingAsset?: boolean;
 }

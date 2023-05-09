@@ -42,14 +42,3 @@ export const assetTimeseries = [
     points: 5000,
   },
 ];
-
-export const assetGraphView = [
-  {
-    title: "Price",
-    value: "price",
-  },
-  {
-    title: "Trading View",
-    value: "tradingview",
-  },
-];
