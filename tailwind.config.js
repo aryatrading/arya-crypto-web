@@ -17,9 +17,15 @@ export const theme = {
     screens: {
       "2xl": "1400px",
     },
-
   },
   extend: {
+    typography: (theme) => ({
+      DEFAULT: {
+        css: {
+          color: theme('colors.white'),
+        },
+      },
+    }),
     colors: {
       green: {
         1: "#22C55E",

@@ -8,7 +8,6 @@ import { useTranslation } from "next-i18next"
 import { Col, Row } from "../../shared/layout/flex"
 import DoughnutChart from "../../shared/charts/doughnut/doughnut"
 import LineChart from "../../shared/charts/graph/graph"
-import Button from "../../shared/buttons/button"
 import ExchangeSwitcher from "../../shared/exchange-switcher/exchange-switcher"
 import { getPortfolioHoldings, getPortfolioSnapshots } from "../../../services/controllers/market"
 import { PortfolioAssetType, PortfolioSnapshotType } from "../../../types/exchange.types"
@@ -21,6 +20,7 @@ import ExchangeImage from "../../shared/exchange-image/exchange-image"
 import { MODE_DEBUG } from "../../../utils/constants/config"
 
 import styles from "./dashboard.module.scss"
+import Link from "next/link"
 
 const Dashboard: FC = () => {
 
@@ -191,11 +191,11 @@ const Dashboard: FC = () => {
                 return (
                   <tr key={asset.name}>
                     <td>
-                      <Row className="gap-3 items-center">
+                      <Link href={`/asset?symbol=${asset.asset_details?.symbol}`} className="flex flex-row gap-3 items-center">
                         <Image src={asset?.asset_details?.image ?? ""} alt="" width={23} height={23} />
                         <p>{asset?.asset_details?.name}</p>
                         <span className="text-sm text-grey-1">{asset.name}</span>
-                      </Row>
+                      </Link>
                     </td>
                     <td>
                       <Row className="justify-between items-center w-[120px]">
@@ -231,12 +231,12 @@ const Dashboard: FC = () => {
         <Col className="gap-5 col-span-12">
           <Row className="items-center justify-between w-full">
             <h3 className="text-2xl font-semibold">{t("yourHoldings")}</h3>
-            <Button className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1">
+            <Link href="/trade" className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1">
               <PlusIcon width={15} />
               <p className="font-bold">
                 {t('addAssets')}
               </p>
-            </Button>
+            </Link>
           </Row>
           {table}
         </Col>

@@ -2,7 +2,12 @@ import { chartDataType } from "../../components/shared/charts/graph/graph.type";
 import { AssetType } from "../../types/asset";
 import { CapitalizeString } from "../../utils/format_string";
 import { axiosInstance } from "../api/axiosConfig";
-import { setAsset, setTimesseries } from "../redux/assetSlice";
+import {
+  setAsset,
+  setAssetHolding,
+  setOrders,
+  setTimesseries,
+} from "../redux/assetSlice";
 import { store } from "../redux/store";
 
 export const getAssetDetails = async (symbol?: any) => {
@@ -11,6 +16,9 @@ export const getAssetDetails = async (symbol?: any) => {
   );
 
   let _res = data.asset_details;
+  let _trade = data.trade;
+  let _holding = data.asset_holding_information;
+  let _orders = data?.trade?.orders ?? [];
 
   let _asset: AssetType = {};
 
@@ -29,8 +37,11 @@ export const getAssetDetails = async (symbol?: any) => {
   _asset.name = CapitalizeString(_res.id);
   _asset.priceChange = _res.price_change_24h.toFixed(3);
   _asset.circlSupply = _res.circulating_supply;
+  _asset.isHoldingAsset = _trade ? true : false;
 
   store.dispatch(setAsset(_asset));
+  store.dispatch(setAssetHolding(_holding));
+  store.dispatch(setOrders(_orders));
 };
 
 export const getAssetTimeseriesPrice = async (

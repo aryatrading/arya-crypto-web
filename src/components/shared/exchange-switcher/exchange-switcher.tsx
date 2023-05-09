@@ -18,6 +18,7 @@ import AsyncStatusWrapper from "../async-status-wrapper/async-status-wrapper";
 import ExchangeImage from "../exchange-image/exchange-image";
 import { ExchangeType } from "../../../types/exchange.types";
 import Button from "../buttons/button";
+import Link from "next/link";
 
 const ExchangeSwitcher: FC = () => {
   const selectedExchange = useSelector(selectSelectedExchange);
@@ -114,12 +115,12 @@ const ExchangeSwitcher: FC = () => {
 
             <DropdownMenu.Item className={"p-4 rounded-md"} disabled={true}>
               <Row className="items-center gap-5 h-full">
-                <Button className="py-3 px-4 rounded-md bg-blue-1">
+                <Link href="settings" className="py-3 px-4 rounded-md bg-blue-1">
                   <Row className="gap-1">
                     <PlusIcon width={20} />
                     <p className="text-bold">{t("addExchange")}</p>
                   </Row>
-                </Button>
+                </Link>
               </Row>
             </DropdownMenu.Item>
           </DropdownMenu.Content>

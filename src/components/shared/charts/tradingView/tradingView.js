@@ -54,12 +54,6 @@ export default function TradingViewWidget() {
   return (
     <div className="h-3/5r">
       <div id="tradingview_d2d35" />
-      <a
-        href="https://www.tradingview.com/symbols/NASDAQ-AAPL/"
-        rel="noopener"
-        target="_blank"
-      >
-      </a>
     </div>
   );
 }

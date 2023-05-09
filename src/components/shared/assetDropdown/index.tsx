@@ -1,14 +1,15 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChangeEvent, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { ChevronDownIcon, MagnifyingGlassIcon, PlayIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import clsx from "clsx";
 
 import { Col, Row } from "../layout/flex";
 import { fetchAssets } from "../../../services/controllers/market";
 import { AssetType } from "../../../types/asset";
-import { ChevronDownIcon, MagnifyingGlassIcon, PlayIcon } from "@heroicons/react/24/solid";
 import LoadingSpinner from "../loading-spinner/loading-spinner";
-import clsx from "clsx";
+
 
 interface AssetDropdownTypes {
     onClick: (x: any) => void,
@@ -55,7 +56,7 @@ export const AssetDropdown = ({ onClick, trigger, title, showContentHeaderLabel 
             <DropdownMenu.Item
                 key={data.id}
                 id={data.id + '_' + data?.name}
-                className={"h-12 py-1 px-4 cursor-pointer bg-grey-2"}
+                className={"h-12 py-1 px-4 cursor-pointer bg-grey-2 z-50"}
                 onClick={() => {
                     if (onClick) {
                         onClick(data);
@@ -105,15 +106,15 @@ export const AssetDropdown = ({ onClick, trigger, title, showContentHeaderLabel 
                 </DropdownMenu.Trigger>
 
                 <DropdownMenu.Portal className="z-10">
-                    <DropdownMenu.Content className={clsx({ "min-w-[400px] max-h-[340px]": !showTopCoinsList, "min-w-[500px] max-h-[440px]": showTopCoinsList }, "bg-grey-2 rounded-md overflow-scroll")} sideOffset={sideOffset} align={align} side={side}>
-                        <Col className={clsx({ "p-4": showContentHeaderLabel, "p-2": !showContentHeaderLabel }, "gap-4 mb-3 absolute bg-grey-2 w-full rounded-lg z-50")}>
+                    <DropdownMenu.Content className={clsx({ "min-w-[400px] max-h-[340px]": !showTopCoinsList, "min-w-[500px] max-h-[440px]": showTopCoinsList }, "bg-grey-2 rounded-md overflow-auto z-50")} sideOffset={sideOffset} align={align} side={side}>
+                        <Col className={clsx({ "p-4": showContentHeaderLabel, "p-2": !showContentHeaderLabel }, "gap-4 mb-3 absolute bg-grey-2 w-full rounded-lg z-[100]")}>
                             {showContentHeaderLabel && <h3 className="font-extrabold text-white text-xl">{contentHeaderLabel || t('selectAsset')}</h3>}
                             <Row className="bg-grey-3 w-full h-[40px] rounded-sm px-4">
                                 <MagnifyingGlassIcon width="20px" color="#6B7280" />
                                 <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:ring-0 border-0" type="text" value={keyword} placeholder={t(showTopCoinsList ? 'coin:searchAsset' : 'searchAsset').toString()} onChange={onChangeKeyword} autoFocus={showTopCoinsList} />
                             </Row>
                         </Col>
-                        <Col className={showContentHeaderLabel ? "mt-[120px]" : "mt-[50px]"}>
+                        <Col className={showContentHeaderLabel ? "mt-[120px] z-50" : "mt-[50px] z-50"}>
                             {coins?.map(coin => dropdownItem(coin))}
                             {coins.length === 0 && (
                                 loading ?
