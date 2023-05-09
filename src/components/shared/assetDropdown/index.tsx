@@ -111,7 +111,7 @@ export const AssetDropdown = ({ onClick, trigger, title, showContentHeaderLabel 
                             {showContentHeaderLabel && <h3 className="font-extrabold text-white text-xl">{contentHeaderLabel || t('selectAsset')}</h3>}
                             <Row className="bg-grey-3 w-full h-[40px] rounded-sm px-4">
                                 <MagnifyingGlassIcon width="20px" color="#6B7280" />
-                                <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:ring-0 border-0" type="text" value={keyword} placeholder={t('searchAsset').toString()} onChange={onChangeKeyword} autoFocus={showTopCoinsList} />
+                                <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:ring-0 border-0" type="text" value={keyword} placeholder={t(showTopCoinsList ? 'coin:searchAsset' : 'searchAsset').toString()} onChange={onChangeKeyword} autoFocus={showTopCoinsList} />
                             </Row>
                         </Col>
                         <Col className={showContentHeaderLabel ? "mt-[120px] z-50" : "mt-[50px] z-50"}>

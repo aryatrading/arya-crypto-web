@@ -1,10 +1,11 @@
 import Link from "next/link";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
 import { useAuthUser, withAuthUser } from "next-firebase-auth";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 import UserDefaultIcon from "../../svg/UserDefaultIcon";
 import SettingsIcon from "../../svg/SettingsIcon";
@@ -15,6 +16,8 @@ import { logoIcon } from "../../../../public/assets/images/svg";
 import { useAuthModal } from "../../../context/authModal.context";
 import { navLinkData } from "../../../utils/constants/nav";
 import { AssetDropdown } from "../../shared/assetDropdown";
+import { FRIcon } from "../../svg/FRIcon";
+import { ENIcon } from "../../shared/ENIcon";
 import AssetSelector from "../../shared/AssetSelector/AssetSelector";
 import { SearchIcon } from "../../svg/searchIcon";
 
@@ -24,8 +27,8 @@ const Nav = () => {
   const { id } = useAuthUser();
   const [collapse, setCollapse] = useState(false)
   const { modalTrigger, setVisibleSection } = useAuthModal();
-  const { t } = useTranslation(['nav']);
-  const { pathname, push } = useRouter()
+  const { t } = useTranslation(['nav', 'coin']);
+  const { pathname, push, locale, asPath, query } = useRouter()
 
   const userOptions = useCallback(
     () => {
@@ -86,6 +89,28 @@ const Nav = () => {
     </div>
   }
 
+  const changeLanguageView = useMemo(() => {
+    if (locale == null) {
+      return;
+    }
+
+    if (locale === 'en') {
+      return (
+        <Button onClick={() => {
+          push({ pathname, query }, asPath, { locale: 'fr' })
+        }}>
+          <FRIcon />
+        </Button>
+      )
+    } else {
+      return <Button onClick={() => {
+        push({ pathname, query }, asPath, { locale: 'en' })
+      }}>
+        <ENIcon />
+      </Button>
+    }
+  }, [asPath, locale, pathname, push, query]);
+
   return (
     <Col className="w-full bg-black-2 fixed lg:relative rounded-b-lg z-20">
       <Row className="container w-full h-[72px] justify-between">
@@ -108,7 +133,7 @@ const Nav = () => {
               <button aria-label="Customise options" className="active:outline-none">
                 <Row className="bg-grey-3 sm:w-full h-[40px] rounded-sm px-4 hidden sm:flex">
                   <MagnifyingGlassIcon width="20px" color="#6B7280" />
-                  <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:outline-none border-transparent" type="text" placeholder={t('searchAsset').toString()} disabled />
+                  <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:outline-none border-transparent" type="text" placeholder={t('coin:searchAsset').toString()} disabled />
                 </Row>
               </button>
             }
@@ -117,7 +142,7 @@ const Nav = () => {
             side="center"
             sideOffset={-100}
           />
-
+          {changeLanguageView}
           {userOptions()}
           <AssetSelector
             trigger={
