@@ -12,7 +12,7 @@ export const navLinkData = [
     },
     {
         title: 'smartAllocation',
-        route: '/allocation',
+        route: '/smart-allocation',
         Icon: PortfolioDefault,
         Hover: PortfolioHover
     },

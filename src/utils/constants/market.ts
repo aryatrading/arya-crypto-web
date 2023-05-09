@@ -7,3 +7,5 @@ export const AllowedGraphDataRanges: GraphDataRange[] = [
     GraphDataRange["six_month"],
     GraphDataRange["year"],
 ]
+
+export const USDTSymbol = 'USDT';

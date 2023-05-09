@@ -37,7 +37,7 @@ export const footerLinks = [
             },
             {
                 name: "Smart Allocation",
-                route: '/smartallocation'
+                route: '/smart-allocation'
             },
             {
                 name: "Trading",
