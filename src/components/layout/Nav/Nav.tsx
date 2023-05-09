@@ -3,6 +3,7 @@ import React, { useCallback, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
 import { useAuthUser, withAuthUser } from "next-firebase-auth";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 
 import UserDefaultIcon from "../../svg/UserDefaultIcon";
@@ -13,16 +14,13 @@ import HamburgerIcon from "../../svg/navbar/hamburger";
 import { logoIcon } from "../../../../public/assets/images/svg";
 import { useAuthModal } from "../../../context/authModal.context";
 import { navLinkData } from "../../../utils/constants/nav";
+import { AssetDropdown } from "../../shared/assetDropdown";
+import AssetSelector from "../../shared/AssetSelector/AssetSelector";
+import { SearchIcon } from "../../svg/searchIcon";
 
 import NavLink from "./NavLink/NavLink";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { AssetDropdown } from "../../shared/assetDropdown";
-import { useDispatch } from "react-redux";
-import { setAsset } from "../../../services/redux/assetSlice";
-import { CapitalizeString } from "../../../utils/format_string";
 
 const Nav = () => {
-  const dispatch = useDispatch();
   const { id } = useAuthUser();
   const [collapse, setCollapse] = useState(false)
   const { modalTrigger, setVisibleSection } = useAuthModal();
@@ -45,6 +43,7 @@ const Nav = () => {
             NavIcon={
               UserDefaultIcon
             }
+            className="p-2"
           />
         </div>
       }
@@ -88,7 +87,7 @@ const Nav = () => {
   }
 
   return (
-    <Col className="w-full bg-black-2 fixed lg:relative rounded-b-lg">
+    <Col className="w-full bg-black-2 fixed lg:relative rounded-b-lg z-20">
       <Row className="container w-full h-[72px] justify-between">
         <Row className="xl:gap-20 md:gap-16 items-center">
           <Link href={"/home"}>
@@ -101,25 +100,13 @@ const Nav = () => {
         </Row>
         <Row className="gap-3 justify-center items-center">
           <AssetDropdown
-            onClick={(asset) => {
-              const data = {
-                iconUrl: asset.iconUrl,
-                id: asset.id,
-                rank: asset.rank,
-                currentPrice: asset.currentPrice,
-                symbol: asset.symbol.toLowerCase(),
-                pnl: asset.pnl,
-                mrkCap: asset.mrkCap,
-                volume: asset.volume,
-                name: CapitalizeString(asset.name),
-              };
-              dispatch(setAsset(data));
-              push(`/asset?symbol=${asset.symbol}`);
+            onClick={({ symbol }) => {
+              push(`/asset?symbol=${symbol.toLowerCase()}`);
             }}
             t={t}
             trigger={
               <button aria-label="Customise options" className="active:outline-none">
-                <Row className="bg-grey-3 w-full h-[40px] rounded-sm px-4">
+                <Row className="bg-grey-3 sm:w-full h-[40px] rounded-sm px-4 hidden sm:flex">
                   <MagnifyingGlassIcon width="20px" color="#6B7280" />
                   <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:outline-none border-transparent" type="text" placeholder={t('searchAsset').toString()} disabled />
                 </Row>
@@ -130,7 +117,20 @@ const Nav = () => {
             side="center"
             sideOffset={-100}
           />
+
           {userOptions()}
+          <AssetSelector
+            trigger={
+              <button className="sm:hidden">
+                <SearchIcon />
+              </button>
+            }
+            showDialogTitle={false}
+            dismissOnClick
+            onClick={({ symbol }) => {
+              push(`/asset?symbol=${symbol?.toLowerCase()}`);
+            }}
+          />
           <Button onClick={() => (setCollapse(!collapse))} className="bg-blue-3 text-blue-1 p-4 rounded-md font-bold lg:hidden">
             <HamburgerIcon className="w-3.5 h-3" />
           </Button>
@@ -139,7 +139,7 @@ const Nav = () => {
       {collapse &&
         <Col className="lg:hidden gap-6">
           {navLinks("flex flex-col h-full")}
-          <div className="px-6 pb-8 w-full md:hidden">
+          <Col className="px-6 pb-8 w-full md:hidden">
             {!!id ?
               <NavLink
                 href="/settings"
@@ -152,7 +152,7 @@ const Nav = () => {
               :
               <Link href='/signup' className="bg-blue-3 py-3 text-blue-1 text-sm rounded-md font-medium w-full">{t('signup')}</Link>
             }
-          </div>
+          </Col>
         </Col>
       }
     </Col>
