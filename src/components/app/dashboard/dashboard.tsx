@@ -189,7 +189,7 @@ const Dashboard: FC = () => {
                 const assetPortfolioPercentage = asset.weight;
 
                 return (
-                  <tr key={asset.name}>
+                  <tr className="hover:bg-black-2/25 hover:bg-blend-darken cursor-pointer" key={asset.name}>
                     <td>
                       <Link href={`/asset?symbol=${asset.asset_details?.symbol}`} className="flex flex-row items-center">
                         <Image className="mr-4" src={asset?.asset_details?.image ?? ""} alt="" width={23} height={23} />
