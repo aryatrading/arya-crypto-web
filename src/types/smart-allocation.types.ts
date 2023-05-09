@@ -34,6 +34,7 @@ export type SmartAllocationAssetType = {
         percent?: number
     },
     asset_details?: SmartAllocationAssetDetails,
+    removed:boolean,
 }
 
 export type SmartAllocationAssetDetails = {

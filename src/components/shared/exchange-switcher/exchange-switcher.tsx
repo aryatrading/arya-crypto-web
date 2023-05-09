@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo } from "react";
+import { FC, useCallback, useEffect, useMemo } from "react";
 import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/solid"
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +19,7 @@ import ExchangeImage from "../exchange-image/exchange-image";
 import { ExchangeType } from "../../../types/exchange.types";
 import Button from "../buttons/button";
 
-const ExchangeSwitcher: FC = () => {
+const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall = true }) => {
   const selectedExchange = useSelector(selectSelectedExchange);
   const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
   const connectedExchanges = useSelector(selectConnectedExchanges);
@@ -27,6 +27,18 @@ const ExchangeSwitcher: FC = () => {
   const dispatch = useDispatch();
 
   const { t } = useTranslation(["common"]);
+
+
+  useEffect(() => {
+    if (!canSelectOverall) {
+      if (!selectedExchange?.provider_id) {
+        const notOverallExchange = connectedExchanges?.find(exchange => exchange.provider_id);
+        if (notOverallExchange) {
+          dispatch(setSelectedExchange(notOverallExchange));
+        }
+      }
+    }
+  }, [canSelectOverall, connectedExchanges, dispatch, selectedExchange?.provider_id])
 
   const changePercentage = useCallback((exchange: ExchangeType | null) => {
     const changeIn24h = exchange?.["24h_change_percentage"] ?? 0;
@@ -60,15 +72,22 @@ const ExchangeSwitcher: FC = () => {
     (exchange: ExchangeType) => {
       const isSelected =
         selectedExchange?.provider_id === exchange?.provider_id;
+      const isNotSelectable = !exchange?.provider_id && !canSelectOverall;
       return (
         <DropdownMenu.Item
+          disabled={isNotSelectable}
           key={exchange.name}
           className={clsx(
-            { "bg-grey-4": isSelected, "bg-grey-2": !isSelected },
-            "h-20 py-3 px-9 rounded-md cursor-pointer"
+            {
+              "bg-grey-4": isSelected,
+              "bg-grey-2": !isSelected,
+              "cursor-pointer": !isNotSelectable
+            },
+            "h-20 py-3 px-9 rounded-md"
           )}
           onClick={() => {
-            selectExchange(exchange);
+            if (!isNotSelectable)
+              selectExchange(exchange);
           }}
         >
           <Row className="items-center  gap-5 h-full">
@@ -90,7 +109,7 @@ const ExchangeSwitcher: FC = () => {
         </DropdownMenu.Item>
       );
     },
-    [changePercentage, selectExchange, selectedExchange?.provider_id]
+    [canSelectOverall, changePercentage, selectExchange, selectedExchange?.provider_id]
   );
 
   const dropdown = useMemo(() => {

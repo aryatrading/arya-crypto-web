@@ -97,7 +97,7 @@ const AuthedSmartAllocation: FC = () => {
     const noAllocation = useMemo(() => {
         return (
             <Col className="items-center justify-center col-span-full gap-10">
-                <ExchangeSwitcher />
+                <ExchangeSwitcher canSelectOverall={false}/>
                 <Row className="justify-center">
                     <Col className="items-center">
                         <Row className="items-center gap-5">
@@ -184,7 +184,7 @@ const AuthedSmartAllocation: FC = () => {
         return (
             <Col className="items-center justify-center col-span-full gap-10">
                 <Row className="w-full justify-between items-end">
-                    <ExchangeSwitcher />
+                    <ExchangeSwitcher canSelectOverall={false}/>
                 </Row>
                 {smartAllocationGraph}
                 {tabs}

@@ -84,8 +84,13 @@ const EditSmartAllocation: FC = () => {
 
     const distributeWeightsEqually = useCallback(() => {
         setSmartAllocationHoldings((oldState) => {
+            const removedItemsCount = oldState.filter(holding=>holding.removed).length;
             return oldState.map((holding) => {
-                return { ...holding, weight: 1 / oldState.length }
+                if(!holding.removed){
+                    return { ...holding, weight: 1 / (oldState.length - removedItemsCount) };
+                }else {
+                    return holding;
+                }
             })
         })
     }, [])
@@ -109,7 +114,7 @@ const EditSmartAllocation: FC = () => {
 
     const onRemoveAsset = useCallback((asset: SmartAllocationAssetType) => {
         setSmartAllocationHoldings((oldState) => {
-            return oldState.filter((holding) => holding.name !== asset.name);
+            return oldState.map((holding) => holding.name === asset.name ? { ...holding, removed: true, weight: 0 } : holding);
         })
     }, [])
 
@@ -129,12 +134,17 @@ const EditSmartAllocation: FC = () => {
                         <Row className="w-full justify-between gap-4 items-center font-bold text-white">
                             <Row className="flex-1 justify-between items-center">
                                 <AssetSelector
-                                    trigger={<Button disabled={!userHasSubscription} className="px-5 min-w-[5rem] bg-blue-1 h-10 rounded-md">Add asset</Button>}
+                                    trigger={<Button disabled={!userHasSubscription} className="px-5 min-w-[5rem] bg-blue-1 h-10 rounded-md">{t('common:addAsset')}</Button>}
                                     onClick={(selectedAsset) => {
                                         setSmartAllocationHoldings((oldState) => {
                                             const newState = [...oldState];
                                             const assetAlreadyExists = oldState.find(asset => selectedAsset?.symbol?.toLowerCase() === asset?.name?.toLowerCase());
-                                            if (!assetAlreadyExists) {
+                                            if (assetAlreadyExists) {
+                                                if (assetAlreadyExists.removed) {
+                                                    return oldState.map(holding => holding.name === selectedAsset.name ? { ...holding, removed: false } : { ...holding })
+                                                }
+                                            }
+                                            else {
                                                 if (selectedAsset?.symbol?.toLocaleLowerCase() !== USDTSymbol?.toLocaleLowerCase()) {
                                                     newState.push({
                                                         name: selectedAsset.symbol?.toUpperCase() ?? "",
@@ -149,7 +159,8 @@ const EditSmartAllocation: FC = () => {
                                                                 image: selectedAsset.iconUrl,
                                                                 price_change_percentage_24h: selectedAsset.pnl,
                                                             }
-                                                        }
+                                                        },
+                                                        removed: false,
                                                     })
                                                 }
                                             }
@@ -172,7 +183,7 @@ const EditSmartAllocation: FC = () => {
 
     const table = useMemo(() => {
         if (!isLoadingSmartAllocationHoldings || !isLoadingPredefinedAllocationHoldings) {
-
+            const filteredSmartAllocationHoldings = smartAllocationHoldings?.filter((a) => !a.removed);
 
             return (
                 <Row className="col-span-full overflow-auto">
@@ -192,20 +203,17 @@ const EditSmartAllocation: FC = () => {
                                     </Row>
                                 </th>
                                 <th>
-                                    <Button>
-                                        <TrashIcon width={20} height={20} color="white" />
-                                    </Button>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {!smartAllocationHoldings.length ?
+                            {!filteredSmartAllocationHoldings.length ?
                                 <tr>
                                     <td colSpan={7} className="row-span-full">
                                         {t('common:noAssets')}
                                     </td>
                                 </tr>
-                                : smartAllocationHoldings.map((asset) => {
+                                : filteredSmartAllocationHoldings.map((asset) => {
 
                                     const setWeight = asset.weight ?? 0;
                                     const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
@@ -248,7 +256,7 @@ const EditSmartAllocation: FC = () => {
                                                         <Slider.Thumb className="block w-4 h-4 bg-white rounded-full shadow-lg shadow-black-1 hover:bg-yellow-400 focus:outline-none" />
                                                     </Slider.Root>
                                                     <input
-                                                        className="bg-white text-black-1 w-12 h-8 text-center rounded-md text-sm p-0"
+                                                        className="bg-grey-3 focus-within:outline focus-within:outline-1 focus-within:outline-grey-1 w-12 h-8 text-center rounded-md text-sm p-0"
                                                         value={percentageFormat(setWeight * 100)}
                                                         type="number"
                                                         onChange={(event) => {
@@ -260,7 +268,7 @@ const EditSmartAllocation: FC = () => {
                                                 </Row>
                                             </td>
                                             <td>
-                                                {(!asset.current_weight && userHasSubscription) && <Button onClick={() => onRemoveAsset(asset)}>
+                                                {(userHasSubscription) && <Button onClick={() => onRemoveAsset(asset)}>
                                                     <XMarkIcon width={20} height={20} color="white" />
                                                 </Button>}
                                             </td>
@@ -327,7 +335,7 @@ const EditSmartAllocation: FC = () => {
             </Row>
             <Col className="col-span-full gap-5">
                 <Col className="justify-between gap-5 sm:flex-row">
-                    <ExchangeSwitcher />
+                    <ExchangeSwitcher canSelectOverall={false}/>
                     <Button className="h-11 w-36 rounded-md bg-blue-1" onClick={onSaveSmartAllocation} isLoading={isSavingSmartAllocation}>
                         {t('common:save')}
                     </Button>
