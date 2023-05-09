@@ -22,7 +22,7 @@
 
     tbody {
         tr {
-            border-bottom: 1px solid theme('colors.grey.5');
+            border-bottom: 1px solid theme('colors.black.2');
 
             &:first-child {
                 td {
@@ -37,7 +37,7 @@
     th {
         height: 38px;
         @apply  uppercase text-sm;
-        padding: 0 20px;
+        padding: 0 8px;
         &:first-child {
             padding-left: 20px;
         }

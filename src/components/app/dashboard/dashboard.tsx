@@ -165,13 +165,13 @@ const Dashboard: FC = () => {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>{t("common:name")}</th>
-              <th>{t("common:weight")}</th>
-              <th>{t("common:amount")}</th>
-              <th>{t("common:currentPrice")}</th>
-              <th>{t("common:value")}</th>
-              <th>{t("common:24hP/L")}</th>
-              <th>{t("common:exchange")}</th>
+              <th className="text-left">{t("common:name")}</th>
+              <th className="text-left">{t("common:weight")}</th>
+              <th className="text-right">{t("common:amount")}</th>
+              <th className="text-right">{t("common:currentPrice")}</th>
+              <th className="text-right">{t("common:value")}</th>
+              <th className="text-right">{t("common:24hP/L")}</th>
+              <th className="text-right">{t("common:exchange")}</th>
             </tr>
           </thead>
           <tbody>
@@ -191,10 +191,10 @@ const Dashboard: FC = () => {
                 return (
                   <tr key={asset.name}>
                     <td>
-                      <Link href={`/asset?symbol=${asset.asset_details?.symbol}`} className="flex flex-row gap-3 items-center">
-                        <Image src={asset?.asset_details?.image ?? ""} alt="" width={23} height={23} />
-                        <p>{asset?.asset_details?.name}</p>
-                        <span className="text-sm text-grey-1">{asset.name}</span>
+                      <Link href={`/asset?symbol=${asset.asset_details?.symbol}`} className="flex flex-row items-center">
+                        <Image className="mr-4" src={asset?.asset_details?.image ?? ""} alt="" width={23} height={23} />
+                        <p className="font-semibold mr-1">{asset?.asset_details?.name}</p>
+                        <span className="text-sm text-grey-1 font-semibold"> • {asset.name}</span>
                       </Link>
                     </td>
                     <td>
@@ -207,12 +207,21 @@ const Dashboard: FC = () => {
                         </Row>
                       </Row>
                     </td>
-                    <td>{formatNumber(asset.free ?? 0)} {asset.name}</td>
-                    <td>${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
-                    <td>${formatNumber((asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0))}</td>
-                    <td className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive })}>{formattedChangePercentage}% ({formattedChangePrice})</td>
+                    <td className="text-right">{formatNumber(asset.free ?? 0)} {asset.name}</td>
+                    <td className="text-right font-semibold">${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
+                    <td className="text-right">${formatNumber((asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0))}</td>
+                    <td className="text-right">
+                      <Row className="items-center justify-end ">
+                        <Row className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive }, "mr-4")}>{formattedChangePrice}</Row>
+                      
+                      <Row className={clsx({ "bg-green-2 text-green-1": isPriceChangePositive, "bg-red-2 text-red-1": !isPriceChangePositive }, "rounded-md py-1 px-2 font-semibold text-sm")}>
+                          {formattedChangePercentage}%
+                        </Row>
+                        </Row>
+                       
+                    </td>
                     <td>
-                      <Row className="gap-2">
+                      <Row className="text-right justify-end gap-2">
                         {tableExchangesImages}
                       </Row>
                     </td>
