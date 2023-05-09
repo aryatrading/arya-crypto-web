@@ -14,6 +14,7 @@ import TradingViewWidget from "../../shared/charts/tradingView/tradingView";
 import { AssetInformation } from "../../shared/containers/asset/assetInfotmation";
 import CoinProfitCalculator from "../../shared/coinProfitCalculator";
 import CoinConverter from "../../shared/coinConverter";
+import AssetTrade from "../trade/assetTrade";
 
 type seriesInterface = {
   title: string;
@@ -70,23 +71,28 @@ const AssetInformationTab: FC = () => {
           />
         </Row>
       </Row>
-      <div className="mt-7 mb-7">
-        {view === "price" ? (
-          <LineChart primaryLineData={timeseries} className="w-full h-80" />
-        ) : (
-          <TradingViewWidget />
-        )}
-      </div>
+      <Row className="gap-2">
+        <Col className="w-3/4">
+          <div className="mt-7 mb-7 ">
+            {view === "price" ? (
+              <LineChart primaryLineData={timeseries} className=" h-80" />
+            ) : (
+              <TradingViewWidget />
+            )}
+          </div>
 
-      <AssetInformation asset={asset} />
+          <AssetInformation asset={asset} />
 
-      <Col className="mt-14 gap-14">
-        <CoinProfitCalculator />
-        {asset?.id && <CoinConverter
-          preDefined
-          staticCoin={asset}
-        />}
-      </Col>
+          <Col className="mt-14 gap-14">
+            <CoinProfitCalculator />
+            {asset?.id && <CoinConverter preDefined staticCoin={asset} />}
+          </Col>
+        </Col>
+        <div className="w-3/12 mt-7">
+          <p className="mb-2 font-medium text-xl">Trade {asset.name}</p>
+          <AssetTrade />
+        </div>
+      </Row>
     </>
   );
 };

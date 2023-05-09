@@ -6,8 +6,13 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import Layout from "../../components/layout/layout";
 import Asset from "../../components/app/asset/asset";
-import { getAssetDetails, getAssetTimeseriesPrice } from "../../services/controllers/asset";
+import {
+  getAssetDetails,
+  getAssetTimeseriesPrice,
+} from "../../services/controllers/asset";
 import { clearAsset } from "../../services/redux/assetSlice";
+import { getAuth } from "firebase/auth";
+import { getApp } from "firebase/app";
 
 const AssetPage = () => {
   const dispatch = useDispatch();
@@ -15,6 +20,9 @@ const AssetPage = () => {
   const { symbol } = router.query;
 
   useEffect(() => {
+    // TODO: REMOVE BELOW LINE
+    getAuth(getApp()).signOut();
+
     getAssetDetails(symbol ?? "btc");
     getAssetTimeseriesPrice(symbol ?? "btc", "5min", 288);
 
@@ -39,7 +47,7 @@ export const getStaticProps: GetStaticProps<any> = async ({ locale }) => ({
       "auth",
       "nav",
       "asset",
-      "coin"
+      "coin",
     ])),
   },
 });
