@@ -120,13 +120,13 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
         return (
             <Col className="gap-10">
                 <Row className="w-full gap-5 items-center">
-                    <Col className="gap-5 flex-1 sm:gap-10 sm:flex-[3] sm:flex-row">
+                    <Col className="gap-5 flex-1 max-w-full md:gap-10 md:flex-[3] md:flex-row">
                         <Link href="smart-allocation/edit" className="w-max bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold shrink-0">{t('editPortfolio')}</Link>
                         {portfolioComposition}
                     </Col>
-                    <Row className="hidden sm:flex sm:flex-1"></Row>
+                    <Row className="hidden md:flex md:flex-1"></Row>
                 </Row>
-                <Col className="w-full gap-5 sm:flex-row">
+                <Col className="w-full gap-5 md:flex-row">
                     {table}
                     {reBalanceNow}
                 </Col>
