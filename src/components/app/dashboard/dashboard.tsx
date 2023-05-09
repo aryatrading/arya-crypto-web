@@ -21,6 +21,7 @@ import { MODE_DEBUG } from "../../../utils/constants/config"
 
 import styles from "./dashboard.module.scss"
 import Link from "next/link"
+import PageLoader from "../../shared/pageLoader/pageLoader"
 
 const Dashboard: FC = () => {
 
@@ -244,22 +245,12 @@ const Dashboard: FC = () => {
     }
   }, [portfolioHoldings.length, t, table]);
 
-  const loadingOverlay = useMemo(() => {
-    return (
-      <Col className="w-full h-full bg-white bg-opacity-40 fixed z-10 left-0 top-0 items-center justify-center">
-        <Col className="w-40 h-40 bg-slate-50 rounded-md">
-          <LoadingSpinner />
-        </Col>
-      </Col>
-    )
-  }, [])
-
   return (
     <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
       <ExchangeSwitcher />
       {charts}
       {holdingsTable}
-      {(isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) && loadingOverlay}
+      {(isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) && <PageLoader/>}
     </Col>
   )
 }
