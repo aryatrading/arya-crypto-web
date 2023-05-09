@@ -5,7 +5,6 @@ import { useTranslation } from "next-i18next";
 import { useAuthUser, withAuthUser } from "next-firebase-auth";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 import UserDefaultIcon from "../../svg/UserDefaultIcon";
 import SettingsIcon from "../../svg/SettingsIcon";
