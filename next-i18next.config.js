@@ -16,7 +16,8 @@ module.exports = {
       'market',
       "nav",
       'dashboard',
-      "coin"
+      "coin",
+      'smart-allocation'
     ],
     /** To avoid issues when deploying to some paas (vercel...) */
     localePath:

@@ -1,7 +1,13 @@
+import { chartDataType } from "../../components/shared/charts/graph/graph.type";
 import { AssetType } from "../../types/asset";
 import { CapitalizeString } from "../../utils/format_string";
 import { axiosInstance } from "../api/axiosConfig";
-import { setAsset } from "../redux/assetSlice";
+import {
+  setAsset,
+  setAssetHolding,
+  setOrders,
+  setTimesseries,
+} from "../redux/assetSlice";
 import { store } from "../redux/store";
 
 export const getAssetDetails = async (symbol?: any) => {
@@ -10,6 +16,9 @@ export const getAssetDetails = async (symbol?: any) => {
   );
 
   let _res = data.asset_details;
+  let _trade = data.trade;
+  let _holding = data.asset_holding_information;
+  let _orders = data?.trade?.orders ?? [];
 
   let _asset: AssetType = {};
 
@@ -28,6 +37,42 @@ export const getAssetDetails = async (symbol?: any) => {
   _asset.name = CapitalizeString(_res.id);
   _asset.priceChange = _res.price_change_24h.toFixed(3);
   _asset.circlSupply = _res.circulating_supply;
+  _asset.isHoldingAsset = _trade ? true : false;
 
   store.dispatch(setAsset(_asset));
+  store.dispatch(setAssetHolding(_holding));
+  store.dispatch(setOrders(_orders));
+};
+
+export const getAssetTimeseriesPrice = async (
+  symbol: string | string[],
+  interval: string,
+  output: number
+) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=${interval}&outputsize=${output}&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}`
+  );
+
+  const { values } = await response.json();
+
+  const _list: chartDataType[] = [];
+
+  for (var i = 0; i < values.length; i++) {
+    let item: chartDataType = {
+      value: parseFloat(values[i].open),
+      close: parseFloat(values[i].close),
+      time: (new Date(values[i].datetime).getTime() /
+        1000) as chartDataType["time"],
+      high: parseFloat(values[i].high),
+      low: parseFloat(values[i].low),
+      open: parseFloat(values[i].open),
+    };
+    _list.push(item);
+  }
+
+  store.dispatch(
+    setTimesseries(
+      _list.sort((a, b) => (a.time as number) - (b.time as number))
+    )
+  );
 };

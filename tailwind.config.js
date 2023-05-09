@@ -1,34 +1,32 @@
 /** @type {import('tailwindcss').Config} */
 
 // tailwind.config.js
-const { fontFamily } = require('tailwindcss/defaultTheme')
+import { fontFamily } from 'tailwindcss/defaultTheme'
 
-
-module.exports = {
-  darkMode: "class",
-  content: [
-    "./node_modules/flowbite-react/**/*.js",
-    "./src/**/*.{js,ts,jsx,tsx}",
-    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
-    "./node_modules/flowbite/**/*.js",
-  ],
-  theme: {
-    container: {
-      center: true,
-    },
+export const darkMode = "class"
+export const content = [
+  "./node_modules/flowbite-react/**/*.js",
+  "./src/**/*.{js,ts,jsx,tsx}",
+  'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
+  "./node_modules/flowbite/**/*.js"
+]
+export const theme = {
+  container: {
+    center: true,
+    padding: "2rem",
     screens: {
-      sm: '480px',
-      md: '768px',
-      lg: '976px',
-      xl: '1280px',
-      '2xl': '1440px',
+      "2xl": "1400px",
     },
-    extend: {
-      colors: {
-        green: {
-          1: "#22C55E",
-          2: "#0E3F2D",
+  },
+  extend: {
+    typography: (theme) => ({
+      DEFAULT: {
+        css: {
+          color: theme('colors.white'),
         },
+      },
+    }),
+    colors: {
         blue: {
           1: "#558AF2",
           2: "#84ADFF",
@@ -70,11 +68,10 @@ module.exports = {
         overlayShow: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
         contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
       },
+      fontFamily: {
+        sans: ['var(--poppins-font)', ...fontFamily.sans],
+      }
     },
-    fontFamily: {
-      sans: ['var(--poppins-font)', ...fontFamily.sans],
-    }
-  },
 }
 export const plugins = [
   require("flowbite/plugin")

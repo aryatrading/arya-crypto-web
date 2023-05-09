@@ -1,3 +1,6 @@
+import React from "react";
+import { Poppins } from "next/font/google";
+import { Provider } from "react-redux";
 import { appWithTranslation } from "next-i18next";
 import { ReactNode, ReactElement, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
@@ -6,16 +9,14 @@ import { initializeApp } from "firebase/app";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import "react-toastify/dist/ReactToastify.css";
+
 import AuthModalProvider from "../context/authModal.context";
 import { firebaseConfig } from "../services/firebase/auth/config";
 import { wrapper } from "../services/redux/store";
 import initAuth from "../initFirebaseAuth";
 import { axiosInstance } from "../services/api/axiosConfig";
-import "../styles/global.css";
-import React from "react";
+import "../styles/globals.css";
 import { FAVORITES_LIST } from "../utils/constants/config";
-import { Poppins } from "next/font/google";
-import { Provider } from "react-redux";
 import { initStoreData } from "../common/hooks/initStore";
 import "../services/api/socketConfig";
 
@@ -47,6 +48,9 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
 
     // Create the inital favorites list in localstorage
     localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
+
+    // Forcing dark mode
+    localStorage?.setItem('theme' , 'dark');
     if (localStorageToken) {
       axiosInstance.defaults.headers.common[
         "Authorization"

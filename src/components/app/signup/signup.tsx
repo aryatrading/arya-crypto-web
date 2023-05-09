@@ -12,10 +12,12 @@ import { registerUser, appleAuth, googleAuth } from "../../../services/firebase/
 import TextInput from "../../shared/form/inputs/textInput/input";
 import { logoIcon } from "../../../../public/assets/images/svg";
 import { apple, google } from "../../../../public/assets/images/svg/auth";
+import { useAuthModal } from "../../../context/authModal.context";
 
 
 const Signup: FC<any> = (props: any) => {
     const { t } = useTranslation(['auth', 'common']);
+    const { hideModal } = useAuthModal();
     const [is2FALoading, setIs2FALoading] = useState<boolean>(false)
     const [errorForm, setError] = useState<string | null>()
 
@@ -32,6 +34,7 @@ const Signup: FC<any> = (props: any) => {
         setIs2FALoading(true)
         try {
             await googleAuth()
+            hideModal()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -45,6 +48,7 @@ const Signup: FC<any> = (props: any) => {
         setIs2FALoading(true)
         try {
             await appleAuth()
+            hideModal()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -62,6 +66,9 @@ const Signup: FC<any> = (props: any) => {
                 validationSchema={signupValidationScheme}
                 onSubmit={(values, { setSubmitting }) => {
                     registerUser(values)
+                        .then(() => {
+                            hideModal()
+                        })
                         .catch(err => {
                             setError(err.message);
                         })
@@ -86,7 +93,7 @@ const Signup: FC<any> = (props: any) => {
                         </Col>
                         <Col className="items-center gap-4">
                             {errorForm && <span className='text-red-600'>{(errorForm || 'Invalid email or password!')}</span>}
-                            <Button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
+                            <Button className='text-white  focus:ring-4 font-medium rounded-lg text-sm py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
                                 <h5>{t('common:signup')}</h5>
                             </Button>
                         </Col>
@@ -95,7 +102,7 @@ const Signup: FC<any> = (props: any) => {
                 )}
             </Formik>
         )
-    }, [errorForm, signupValidationScheme, t])
+    }, [errorForm, hideModal, signupValidationScheme, t])
 
     return (
         <Row className='h-full w-full items-center justify-center'>
@@ -103,7 +110,7 @@ const Signup: FC<any> = (props: any) => {
                 <Col className="justify-start w-full max-w-[400px] gap-8">
                     <Row className="items-center gap-4">
                         <Image src={logoIcon} alt="Arya_Crypto" />
-                        <h1 className="font-extrabold text-white header-label">{t('signupHeader')}</h1>
+                        <h3 className="font-extrabold text-white header-label">{t('signupHeader')}</h3>
                     </Row>
                     {signupForm}
                     <Row className="gap-1 font-semibold text-sm self-center">
@@ -116,9 +123,9 @@ const Signup: FC<any> = (props: any) => {
                     </Row>
                     <Col className='gap-6 items-center justify-center'>
                         <Row className="w-full items-center gap-3">
-                            <Col className='flex-1 h-px bg-white'/>
+                            <Col className='flex-1 h-px bg-white' />
                             <h6 className="font-semibold text-lg">{t('or')}</h6>
-                            <Col className='flex-1 h-px bg-white'/>
+                            <Col className='flex-1 h-px bg-white' />
                         </Row>
                         <Row className="gap-8">
                             <Button className='' onClick={onGoogleAuth}

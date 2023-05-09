@@ -8,12 +8,11 @@ import { useTranslation } from "next-i18next"
 import { Col, Row } from "../../shared/layout/flex"
 import DoughnutChart from "../../shared/charts/doughnut/doughnut"
 import LineChart from "../../shared/charts/graph/graph"
-import Button from "../../shared/buttons/button"
 import ExchangeSwitcher from "../../shared/exchange-switcher/exchange-switcher"
 import { getPortfolioHoldings, getPortfolioSnapshots } from "../../../services/controllers/market"
 import { PortfolioAssetType, PortfolioSnapshotType } from "../../../types/exchange.types"
 import { chartDataType } from "../../shared/charts/graph/graph.type"
-import { percentageFormat, priceFormat } from "../../../utils/helpers/prices"
+import { percentageFormat, formatNumber } from "../../../utils/helpers/prices"
 import LoadingSpinner from "../../shared/loading-spinner/loading-spinner"
 import { selectConnectedExchanges, selectExchangeStoreStatus, selectSelectedExchange } from "../../../services/redux/exchangeSlice"
 import StatusAsync from "../../../utils/status-async"
@@ -21,250 +20,248 @@ import ExchangeImage from "../../shared/exchange-image/exchange-image"
 import { MODE_DEBUG } from "../../../utils/constants/config"
 
 import styles from "./dashboard.module.scss"
+import Link from "next/link"
 
 const Dashboard: FC = () => {
 
-    const [isLoadingPortfolioSnapshots, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
-    const [isLoadingPortfolioHoldings, setIsLoadingPortfolioHoldings] = useState<boolean>(false);
-    const [portfolioSnapshots, setPortfolioSnapshots] = useState<PortfolioSnapshotType[]>([]);
-    const [portfolioHoldings, setPortfolioHoldings] = useState<PortfolioAssetType[]>([]);
+  const [isLoadingPortfolioSnapshots, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
+  const [isLoadingPortfolioHoldings, setIsLoadingPortfolioHoldings] = useState<boolean>(false);
+  const [portfolioSnapshots, setPortfolioSnapshots] = useState<PortfolioSnapshotType[]>([]);
+  const [portfolioHoldings, setPortfolioHoldings] = useState<PortfolioAssetType[]>([]);
 
-    const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
-    const selectedExchange = useSelector(selectSelectedExchange);
-    const connectedExchanges = useSelector(selectConnectedExchanges);
+  const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
+  const selectedExchange = useSelector(selectSelectedExchange);
+  const connectedExchanges = useSelector(selectConnectedExchanges);
 
-    const { t } = useTranslation(["dashboard", "common"]);
-
-
-    const initPortfolioSnapshots = useCallback(() => {
-        setIsLoadingPortfolioSnapshots(true);
-        getPortfolioSnapshots(selectedExchange?.provider_id)
-            .then((res) => {
-                const data: any = res.data;
-                const exchangeSnapshotsData: PortfolioSnapshotType[] = data.data;
-
-                if (exchangeSnapshotsData) {
-                    exchangeSnapshotsData.sort((a, b) => ((new Date(a.created_at).getTime()) - new Date(b.created_at).getTime()));
-                    setPortfolioSnapshots(exchangeSnapshotsData);
-                }
-            })
-            .catch((error) => {
-                if (MODE_DEBUG)
-                    console.error("Error while getting portfolio Snapshots (getPortfolioSnapshots)", error)
-            })
-            .finally(() => {
-                setIsLoadingPortfolioSnapshots(false);
-            })
-    }, [selectedExchange?.provider_id])
+  const { t } = useTranslation(["dashboard", "common"]);
 
 
-    const getAssetUSDValue = (asset: PortfolioAssetType) => {
-        return (asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0)
+  const initPortfolioSnapshots = useCallback(() => {
+    setIsLoadingPortfolioSnapshots(true);
+    getPortfolioSnapshots(selectedExchange?.provider_id)
+      .then((res) => {
+        const data: any = res.data;
+        const exchangeSnapshotsData: PortfolioSnapshotType[] = data.data;
+
+        if (exchangeSnapshotsData) {
+          exchangeSnapshotsData.sort((a, b) => ((new Date(a.created_at).getTime()) - new Date(b.created_at).getTime()));
+          setPortfolioSnapshots(exchangeSnapshotsData);
+        }
+      })
+      .catch((error) => {
+        if (MODE_DEBUG)
+          console.error("Error while getting portfolio Snapshots (getPortfolioSnapshots)", error)
+      })
+      .finally(() => {
+        setIsLoadingPortfolioSnapshots(false);
+      })
+  }, [selectedExchange?.provider_id])
+
+
+  const getAssetUSDValue = (asset: PortfolioAssetType) => {
+    return (asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0)
+  }
+
+  const initPortfolioHoldings = useCallback(() => {
+
+    setIsLoadingPortfolioHoldings(true);
+    getPortfolioHoldings(selectedExchange?.provider_id)
+      .then((res) => {
+        const data: any = res?.data;
+        const assets: PortfolioAssetType[] = data?.data;
+        if (assets?.length) {
+          assets.sort((a, b) => (getAssetUSDValue(b) - getAssetUSDValue(a)));
+          setPortfolioHoldings(assets);
+        }
+
+      })
+      .catch((error) => {
+        if (MODE_DEBUG)
+          console.error("Error while getting portfolio holdings (getPortfolioHoldings)", error)
+      })
+      .finally(() => {
+        setIsLoadingPortfolioHoldings(false);
+      });
+
+  }, [selectedExchange?.provider_id]);
+
+
+  useEffect(() => {
+    initPortfolioSnapshots();
+    initPortfolioHoldings();
+  }, [initPortfolioSnapshots, initPortfolioHoldings]);
+
+
+  const portfolioDoughnutChart = useMemo(() => {
+
+    if (portfolioHoldings.length) {
+      return (
+        <Col className="sm:col-span-1 col-span-3">
+          <DoughnutChart
+            maxWidth="250px"
+            chartData={portfolioHoldings.map(asset => ({
+              label: asset.name ?? "",
+              value: (asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0),
+            }))}
+            title={t("common:portfolioComposition")}
+          />
+        </Col>
+      )
     }
+  }, [portfolioHoldings, t])
 
-    const initPortfolioHoldings = useCallback(() => {
+  const portfolioLineChart = useMemo(() => {
 
-        setIsLoadingPortfolioHoldings(true);
-        getPortfolioHoldings(selectedExchange?.provider_id)
-            .then((res) => {
-                const data: any = res?.data;
-                const assets: PortfolioAssetType[] = data?.data;
-                console.log({ assets })
-                if (assets?.length) {
-                    assets.sort((a, b) => (getAssetUSDValue(b) - getAssetUSDValue(a)));
-                    setPortfolioHoldings(assets);
-                }
+    const chartData: chartDataType[] = portfolioSnapshots?.map((snapshot) => {
 
-            })
-            .catch((error) => {
-                if (MODE_DEBUG)
-                    console.error("Error while getting portfolio holdings (getPortfolioHoldings)", error)
-            })
-            .finally(() => {
-                setIsLoadingPortfolioHoldings(false);
-            });
+      const time = new Date(snapshot.created_at).getTime();
+      return {
+        time: Math.floor((time / 1000)) as chartDataType["time"],
+        value: snapshot.total_evaluation ?? 0,
+      }
+    });
 
-    }, [selectedExchange?.provider_id]);
+    const smartAllocationData: chartDataType[] = portfolioSnapshots?.map((snapshot) => {
 
-
-    useEffect(() => {
-        initPortfolioSnapshots();
-        initPortfolioHoldings();
-    }, [initPortfolioSnapshots, initPortfolioHoldings]);
-
-
-    const portfolioDoughnutChart = useMemo(() => {
-
-        if (portfolioHoldings.length) {
-            return (
-                <Col className="sm:col-span-1 col-span-3">
-                    <DoughnutChart
-                        maxWidth="250px"
-                        chartData={portfolioHoldings.map(asset => ({
-                            label: asset.name ?? "",
-                            value: (asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0),
-                        }))}
-                        title={t("common:portfolioComposition")}
-                    />
-                </Col>
-            )
-        }
-    }, [portfolioHoldings, t])
-
-    const portfolioLineChart = useMemo(() => {
-
-        const chartData: chartDataType[] = portfolioSnapshots?.map((snapshot) => {
-
-            const time = new Date(snapshot.created_at).getTime();
-            return {
-                time: Math.floor((time / 1000)) as chartDataType["time"],
-                value: snapshot.total_evaluation ?? 0,
-            }
-        });
-
-        const smartAllocationData: chartDataType[] = portfolioSnapshots?.map((snapshot) => {
-
-            const time = new Date(snapshot.created_at).getTime();
-            return {
-                time: Math.floor((time / 1000)) as chartDataType["time"],
-                value: snapshot.smart_allocation_total_evaluation ?? 0,
-            }
-        });
-
-        return (
-            <LineChart primaryLineData={chartData} secondaryLineData={smartAllocationData} className={"sm:col-span-2 col-span-3 h-[400px]"} />
-        )
-
-    }, [portfolioSnapshots])
-
-    const charts = useMemo(() => {
-        return (
-            <Row className="grid grid-cols-3 col-span-12 gap-5 sm:h-[400px]">
-                {portfolioDoughnutChart}
-                {portfolioLineChart}
-            </Row>
-        )
-    }, [portfolioDoughnutChart, portfolioLineChart]);
-
-    const tableExchangesImages = useMemo(() => {
-        if (selectedExchange?.provider_id) {
-            return (
-                <ExchangeImage providerId={selectedExchange?.provider_id} ></ExchangeImage>
-            );
-        } else {
-            return connectedExchanges?.map((exchange) => {
-                return (
-                    <ExchangeImage key={exchange.name} providerId={exchange?.provider_id} ></ExchangeImage>
-                );
-            })
-        }
-    }, [connectedExchanges, selectedExchange?.provider_id])
-
-    const table = useMemo(() => {
-        return (
-            <Row className="w-full overflow-auto">
-                <table className={styles.table}>
-                    <thead>
-                        <tr>
-                            <th>{t("common:name")}</th>
-                            <th>{t("common:weight")}</th>
-                            <th>{t("common:amount")}</th>
-                            <th>{t("common:currentPrice")}</th>
-                            <th>{t("common:value")}</th>
-                            <th>{t("common:24hP/L")}</th>
-                            <th>{t("common:exchange")}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {!portfolioHoldings.length ?
-                            <tr>
-                                <td colSpan={7} className="row-span-full">{t("common:noAssets")}</td>
-                            </tr>
-                            : portfolioHoldings.map(asset => {
-                                const isPriceChangePositive = (asset?.asset_details?.price_change_percentage_24h ?? 0) > 0;
-                                const signal = isPriceChangePositive ? '+' : '-';
-
-                                const formattedChangePercentage = `${signal}${percentageFormat(Math.abs(asset?.asset_details?.price_change_percentage_24h ?? 0))}`;
-                                const formattedChangePrice = `${signal}$${priceFormat(Math.abs(asset?.asset_details?.price_change_24h ?? 0))}`;
-
-                                const assetPortfolioPercentage = asset.weight;
-
-                                return (
-                                    <tr key={asset.name}>
-                                        <td>
-                                            <Row className="gap-3 items-center">
-                                                <Image src={asset?.asset_details?.image ?? ""} alt="" width={23} height={23} />
-                                                <p>{asset?.asset_details?.name}</p>
-                                                <span className="text-sm text-grey-1">{asset.name}</span>
-                                            </Row>
-                                        </td>
-                                        <td>
-                                            <Row className="justify-between items-center w-[120px]">
-                                                <p>{percentageFormat(asset.weight ?? 0)}%</p>
-                                                <Row className="h-[5px] rounded-full w-[50px] bg-white">
-                                                    <Row className={`h-full rounded-full bg-blue-1`} style={{
-                                                        width: `${Math.ceil(assetPortfolioPercentage ?? 0)}%`
-                                                    }} />
-                                                </Row>
-                                            </Row>
-                                        </td>
-                                        <td>{priceFormat(asset.free ?? 0)} {asset.name}</td>
-                                        <td>${priceFormat(asset?.asset_details?.current_price ?? 0)}</td>
-                                        <td>${priceFormat((asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0))}</td>
-                                        <td className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive })}>{formattedChangePercentage}% ({formattedChangePrice})</td>
-                                        <td>
-                                            <Row className="gap-2">
-                                                {tableExchangesImages}
-                                            </Row>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                    </tbody>
-                </table>
-            </Row>
-        )
-    }, [portfolioHoldings, t, tableExchangesImages])
-
-    const holdingsTable = useMemo(() => {
-        if (portfolioHoldings.length) {
-            return (
-                <Col className="gap-5 col-span-12">
-                    <Row className="items-center justify-between w-full">
-                        <h3 className="text-2xl font-semibold">{t("yourHoldings")}</h3>
-                        <Button className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1">
-                            <PlusIcon width={15} />
-                            <p className="font-bold">
-                                {t('addAssets')}
-                            </p>
-                        </Button>
-                    </Row>
-                    {table}
-                </Col>
-            )
-        }
-    }, [portfolioHoldings.length, t, table]);
-
-    const loadingOverlay = useMemo(() => {
-        return (
-            <Col className="w-full h-full bg-white bg-opacity-40 fixed z-10 left-0 top-0 items-center justify-center">
-                <Col className="w-40 h-40 bg-slate-50 rounded-md">
-                    <LoadingSpinner />
-                </Col>
-            </Col>
-        )
-
-
-    }, [])
+      const time = new Date(snapshot.created_at).getTime();
+      return {
+        time: Math.floor((time / 1000)) as chartDataType["time"],
+        value: snapshot.smart_allocation_total_evaluation ?? 0,
+      }
+    });
 
     return (
-        <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
-            <ExchangeSwitcher />
-            {charts}
-            {holdingsTable}
-            {(isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) && loadingOverlay}
-        </Col>
+      <LineChart primaryLineData={chartData} secondaryLineData={smartAllocationData} className={"sm:col-span-2 col-span-3 h-[400px]"} />
     )
+
+  }, [portfolioSnapshots])
+
+  const charts = useMemo(() => {
+    return (
+      <Row className="grid grid-cols-3 col-span-12 gap-5 sm:h-[400px]">
+        {portfolioDoughnutChart}
+        {portfolioLineChart}
+      </Row>
+    )
+  }, [portfolioDoughnutChart, portfolioLineChart]);
+
+  const tableExchangesImages = useMemo(() => {
+    if (selectedExchange?.provider_id) {
+      return (
+        <ExchangeImage providerId={selectedExchange?.provider_id} ></ExchangeImage>
+      );
+    } else {
+      return connectedExchanges?.map((exchange) => {
+        return (
+          <ExchangeImage key={exchange.name} providerId={exchange?.provider_id} ></ExchangeImage>
+        );
+      })
+    }
+  }, [connectedExchanges, selectedExchange?.provider_id])
+
+  const table = useMemo(() => {
+    return (
+      <Row className="w-full overflow-auto">
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>{t("common:name")}</th>
+              <th>{t("common:weight")}</th>
+              <th>{t("common:amount")}</th>
+              <th>{t("common:currentPrice")}</th>
+              <th>{t("common:value")}</th>
+              <th>{t("common:24hP/L")}</th>
+              <th>{t("common:exchange")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {!portfolioHoldings.length ?
+              <tr>
+                <td colSpan={7} className="row-span-full">{t("common:noAssets")}</td>
+              </tr>
+              : portfolioHoldings.map(asset => {
+                const isPriceChangePositive = (asset?.asset_details?.price_change_percentage_24h ?? 0) > 0;
+                const signal = isPriceChangePositive ? '+' : '-';
+
+                const formattedChangePercentage = `${signal}${percentageFormat(Math.abs(asset?.asset_details?.price_change_percentage_24h ?? 0))}`;
+                const formattedChangePrice = `${signal}$${formatNumber(Math.abs(asset?.asset_details?.price_change_24h ?? 0))}`;
+
+                const assetPortfolioPercentage = asset.weight;
+
+                return (
+                  <tr key={asset.name}>
+                    <td>
+                      <Link href={`/asset?symbol=${asset.asset_details?.symbol}`} className="flex flex-row gap-3 items-center">
+                        <Image src={asset?.asset_details?.image ?? ""} alt="" width={23} height={23} />
+                        <p>{asset?.asset_details?.name}</p>
+                        <span className="text-sm text-grey-1">{asset.name}</span>
+                      </Link>
+                    </td>
+                    <td>
+                      <Row className="justify-between items-center w-[120px]">
+                        <p>{percentageFormat(asset.weight ?? 0)}%</p>
+                        <Row className="h-[5px] rounded-full w-[50px] bg-white">
+                          <Row className={`h-full rounded-full bg-blue-1`} style={{
+                            width: `${Math.ceil(assetPortfolioPercentage ?? 0)}%`
+                          }} />
+                        </Row>
+                      </Row>
+                    </td>
+                    <td>{formatNumber(asset.free ?? 0)} {asset.name}</td>
+                    <td>${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
+                    <td>${formatNumber((asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0))}</td>
+                    <td className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive })}>{formattedChangePercentage}% ({formattedChangePrice})</td>
+                    <td>
+                      <Row className="gap-2">
+                        {tableExchangesImages}
+                      </Row>
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </table>
+      </Row>
+    )
+  }, [portfolioHoldings, t, tableExchangesImages])
+
+  const holdingsTable = useMemo(() => {
+    if (portfolioHoldings.length) {
+      return (
+        <Col className="gap-5 col-span-12">
+          <Row className="items-center justify-between w-full">
+            <h3 className="text-2xl font-semibold">{t("yourHoldings")}</h3>
+            <Link href="/trade" className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1">
+              <PlusIcon width={15} />
+              <p className="font-bold">
+                {t('addAssets')}
+              </p>
+            </Link>
+          </Row>
+          {table}
+        </Col>
+      )
+    }
+  }, [portfolioHoldings.length, t, table]);
+
+  const loadingOverlay = useMemo(() => {
+    return (
+      <Col className="w-full h-full bg-white bg-opacity-40 fixed z-10 left-0 top-0 items-center justify-center">
+        <Col className="w-40 h-40 bg-slate-50 rounded-md">
+          <LoadingSpinner />
+        </Col>
+      </Col>
+    )
+  }, [])
+
+  return (
+    <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
+      <ExchangeSwitcher />
+      {charts}
+      {holdingsTable}
+      {(isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) && loadingOverlay}
+    </Col>
+  )
 }
 
 export default Dashboard;

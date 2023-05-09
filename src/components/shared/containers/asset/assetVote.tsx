@@ -5,13 +5,13 @@ import {
   ArrowTrendingUpIcon,
   ArrowTrendingDownIcon,
 } from "@heroicons/react/24/outline";
+import { useTranslation } from "next-i18next";
 
 const AssetVote: FC = ({}) => {
+  const { t } = useTranslation(["asset"]);
   return (
     <Col className="gap-3">
-      <p className="font-medium text-sm">
-        How do you feel about Bitcoin today?
-      </p>
+      <p className="font-medium text-sm">{t("assetvoting")}</p>
       <Row className="gap-2">
         <ShadowButton
           title="Bullish"
@@ -30,7 +30,7 @@ const AssetVote: FC = ({}) => {
           iconSvg={<ArrowTrendingDownIcon className="h-6 w-6 stroke-red-1" />}
         />
       </Row>
-      <p className="text-grey-1 text-xs">Vote to see results</p>
+      <p className="text-grey-1 text-xs">{t("vote")}</p>
     </Col>
   );
 };

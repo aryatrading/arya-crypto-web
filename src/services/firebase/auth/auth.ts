@@ -6,11 +6,13 @@ import {
     sendPasswordResetEmail,
     signInWithEmailAndPassword,
     signInWithPopup,
-    updateProfile
+    updateProfile,
+    updatePassword
 } from "firebase/auth";
 import { getApp } from 'firebase/app';
 
 import { MODE_DEBUG } from "../../../utils/constants/config";
+import { i18n } from "next-i18next";
 
 const googleProvider = new GoogleAuthProvider();
 const appleProvider = new OAuthProvider('apple.com');
@@ -84,6 +86,23 @@ export const resetPassword = async (email: string) => {
     const auth = getAuth(getApp());
     try {
         await sendPasswordResetEmail(auth, email)
+
+    } catch (error: any) {
+        throw Error(error.message);
+    }
+}
+
+export const changePassword = async (oldPassword: string, newPassword: string) => {
+    const auth = getAuth(getApp());
+    try {
+        if (auth.currentUser?.email) {
+            return signInWithEmailAndPassword(auth, auth.currentUser?.email, oldPassword)
+                .then(async () => {
+                    if (auth.currentUser) {
+                        await updatePassword(auth.currentUser, newPassword);
+                    }
+                });
+        }
 
     } catch (error: any) {
         throw Error(error.message);

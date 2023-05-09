@@ -34,6 +34,7 @@ const Login: FC<any> = (props: any) => {
         setIs2FALoading(true)
         try {
             await googleAuth()
+            hideModal()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -47,6 +48,7 @@ const Login: FC<any> = (props: any) => {
         setIs2FALoading(true)
         try {
             await appleAuth()
+            hideModal()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -64,6 +66,9 @@ const Login: FC<any> = (props: any) => {
                 validationSchema={loginFormSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     loginUserEmailPassword(values)
+                        .then(() => {
+                            hideModal()
+                        })
                         .catch(err => {
                             setError(err.message);
                         })
@@ -92,7 +97,7 @@ const Login: FC<any> = (props: any) => {
                         </div>
                         <Col className="items-center gap-4">
                             {errorForm && <span className='text-red-600'>{(errorForm || 'Invalid email or password!')}</span>}
-                            <Button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
+                            <Button className='text-white focus:ring-4 font-medium rounded-lg text-sm py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
                                 <h5>{t('common:signin')}</h5>
                             </Button>
                         </Col>
@@ -109,7 +114,7 @@ const Login: FC<any> = (props: any) => {
                 <Col className="justify-start w-full max-w-[400px] gap-8">
                     <Row className="items-center gap-4">
                         <Image src={logoIcon} alt="Arya_Crypto" />
-                        <h1 className="font-extrabold text-white header-label">{t('loginHeader')}</h1>
+                        <h3 className="font-extrabold text-white header-label">{t('loginHeader')}</h3>
                     </Row>
                     {loginForm}
                     <Col className='gap-6 items-center justify-center'>

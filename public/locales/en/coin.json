@@ -8,5 +8,10 @@
     "investmentResult": "Investment Result",
     "profit/loss": "Profit/Loss",
     "totalInvestmentAmount": "Total Investment Amount",
-    "totalExitAmount": "Total Exit Amount"
+    "totalExitAmount": "Total Exit Amount",
+    "cryptoConverter": "Crypto Converter",
+    "selectAsset": "Select Asset",
+    "searchAsset": "Search asset",
+    "emptySearch": "Empty Search",
+    "coins": "Coins"
 }

@@ -4,14 +4,12 @@ import AssetPnl from "./asset/assetPnl";
 
 type MarketProps = {
   bgColor: string;
-  textColor: string;
-  value: string;
+  value: number;
   title: string;
 };
 
 export const MarketStats: FC<MarketProps> = ({
   bgColor,
-  textColor,
   value,
   title,
 }) => {
@@ -21,7 +19,7 @@ export const MarketStats: FC<MarketProps> = ({
         <p className="text-[#F9FAFB] text-sm font-medium leading-5 items-center">
           {title}
         </p>
-        <AssetPnl value={value + "%"} textColor={textColor} isUp={+value > 0} />
+        <AssetPnl className={(value<0)?'text-red-1':'text-green-1'} value={value} />
       </Row>
       <p className="text-[#F9FAFB] text-xl font-medium leading-7 pt-2">
         $1,227,747,623,904

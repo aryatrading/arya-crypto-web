@@ -2,11 +2,11 @@ import { FC } from "react";
 import React from "react";
 import LoadingSpinner from "../loading-spinner/loading-spinner";
 
-interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
+export interface IButtonProps extends React.HTMLProps<HTMLButtonElement> {
   isLoading?: boolean;
   type?: "button" | "submit" | "reset" | undefined;
 }
-export const Button: FC<ButtonProps> = ({
+export const Button: FC<IButtonProps> = ({
   children,
   onClick,
   type = "button",
