@@ -100,14 +100,14 @@ const AuthedSmartAllocation: FC = () => {
                 <ExchangeSwitcher canSelectOverall={false}/>
                 <Row className="justify-center">
                     <Col className="items-center">
-                        <Row className="items-center gap-5">
+                        <Col className="items-center gap-5 sm:flex-row">
                             <SelectSmartAllocationPortfolioIcon />
-                            <p className="text-2xl">{t('selectAPresetOrCustomizeYourPortfolio')}</p>
-                        </Row>
-                        <p className="text-grey-1">{t('selectAPresetBelowOrCustomYourPortfolio')}</p>
+                            <p className="text-2xl text-center sm:text-start">{t('selectAPresetOrCustomizeYourPortfolio')}</p>
+                        </Col>
+                        <p className="text-grey-1 text-center sm:text-start">{t('selectAPresetBelowOrCustomYourPortfolio')}</p>
                     </Col>
                 </Row>
-                <Row className="items-center justify-center gap-5">
+                <Row className="items-center justify-center gap-5 flex-wrap">
                     {getPredefinedAllocationsButtons({
                         label: t('customizePortfolio'),
                         icon: <AdjustmentsHorizontalIcon width={35} height={35} />,
