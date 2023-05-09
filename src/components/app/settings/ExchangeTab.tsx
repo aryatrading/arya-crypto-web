@@ -265,6 +265,15 @@ const ExchangeTab = () => {
         );
     }, [closeModal]);
 
+    const connectToExchangeName = useMemo(() => {
+        if (selectedExchange?.provider_name) {
+            return selectedExchange?.provider_name?.charAt(0) + selectedExchange?.provider_name?.slice(1)?.toLowerCase()
+
+        } else {
+            return selectedExchange?.name?.charAt(0) + selectedExchange?.name?.slice(1)?.toLowerCase()
+        }
+    }, [selectedExchange]);
+
     return (
         <>
             {
@@ -285,7 +294,7 @@ const ExchangeTab = () => {
                                     <Button className={`w-full h-[44px] ${bg} rounded-md hover:bg-grey-4 px-5`} onClick={onClick}>
                                         <Row className='gap-3'>
                                             <ExchangeImage height={20} width={20} providerId={exchange.provider_id} />
-                                            <label className='font-bold text-white text-base'>{exchange?.create ? exchange.name.charAt(0).toUpperCase() + exchange.name.slice(1) : exchange.name}</label>
+                                            <label className='font-bold text-white text-base'>{exchange?.create ? exchange?.name?.charAt(0)?.toUpperCase() + exchange?.name?.slice(1) : exchange.name}</label>
                                         </Row>
                                     </Button>
                                 );
@@ -299,7 +308,7 @@ const ExchangeTab = () => {
                             </Button>}
                         </Col>
                         <Col className='flex-[3] border-l-[1px] border-grey-3 pl-8 gap-8'>
-                            <h1 className='font-bold text-lg'>{`Connect ${selectedExchange.provider_name.charAt(0) + selectedExchange.provider_name.slice(1).toLowerCase()}`}</h1>
+                            <h1 className='font-bold text-lg'>{`Connect ${connectToExchangeName}`}</h1>
 
                             {selectedExchange?.create ? form : display}
                         </Col>
