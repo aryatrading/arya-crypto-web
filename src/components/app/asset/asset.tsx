@@ -1,6 +1,5 @@
 import { FC, useMemo } from "react";
 import { useTranslation } from "next-i18next";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { useSelector } from "react-redux";
 
 import { AssetHeader } from "../../shared/containers/asset/assetDetailsHeader";
@@ -10,6 +9,8 @@ import { getAsset } from "../../../services/redux/assetSlice";
 import AssetVote from "../../shared/containers/asset/assetVote";
 import { formatNumber } from "../../../utils/helpers/prices";
 import AssetInformationTab from "./assetInformation";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import AssetHoldingTab from "./assetHolding";
 
 const Asset: FC = () => {
   const { t } = useTranslation(["asset"]);
@@ -31,7 +32,16 @@ const Asset: FC = () => {
         value: formatNumber(asset.dailyHigh ?? 0, true),
       },
     ];
-  }, [asset.circlSupply, asset.dailyHigh, asset.dailyLow, asset.dilutedValuation, asset.mrkCap, asset.supply, asset.volume, t]);
+  }, [
+    asset.circlSupply,
+    asset.dailyHigh,
+    asset.dailyLow,
+    asset.dilutedValuation,
+    asset.mrkCap,
+    asset.supply,
+    asset.volume,
+    t,
+  ]);
 
   return (
     <Col className="h-full w-full gap-12">
@@ -52,13 +62,18 @@ const Asset: FC = () => {
             <Tab className="font-bold text-lg outline-none cursor-pointer">
               {t("assetinfotab")}
             </Tab>
-            <Tab className="font-bold text-lg outline-none cursor-pointer">
-              {t("holdingsinfo")}
-            </Tab>
+            {asset?.isHoldingAsset ? (
+              <Tab className="font-bold text-lg outline-none cursor-pointer">
+                {t("holdingsinfo")}
+              </Tab>
+            ) : null}
           </Row>
         </TabList>
         <TabPanel>
           <AssetInformationTab />
+        </TabPanel>
+        <TabPanel>
+          <AssetHoldingTab />
         </TabPanel>
       </Tabs>
     </Col>

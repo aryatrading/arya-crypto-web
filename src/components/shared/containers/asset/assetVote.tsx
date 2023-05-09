@@ -11,7 +11,7 @@ const AssetVote: FC = ({}) => {
   const { t } = useTranslation(["asset"]);
   return (
     <Col className="gap-3">
-      <p className="font-medium text-sm">{t("assetvoting")}?</p>
+      <p className="font-medium text-sm">{t("assetvoting")}</p>
       <Row className="gap-2">
         <ShadowButton
           title="Bullish"
