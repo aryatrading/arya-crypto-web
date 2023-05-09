@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react"
+import { FC, createContext, useCallback, useEffect, useMemo, useState } from "react"
 import { Col, Row } from "../../../shared/layout/flex";
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher";
 import { PortfolioSnapshotType } from "../../../../types/exchange.types";
@@ -12,14 +12,32 @@ import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
 import { SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
 import { getSmartAllocation } from "../../../../services/controllers/market";
+import SmartAllocationAutomation from "./SmartAllocationAutomation/SmartAllocationAutomation";
+import { EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
+
+
+export interface ISmartAllocationContext {
+    rebalancingDate: Date|null,
+    rebalancingFrequency: EnumRebalancingFrequency|null,
+    isLoadingSmartAllocationData: boolean,
+    getSmartAllocationData: Function,
+}
+
+export const SmartAllocationContext = createContext<ISmartAllocationContext>({
+    rebalancingDate: null,
+    rebalancingFrequency: null,
+    isLoadingSmartAllocationData: false,
+    getSmartAllocationData: () => null,
+})
 
 const AuthedSmartAllocation: FC = () => {
     const [isLoadingPortfolioHoldings, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
     const [portfolioSnapshots, setPortfolioSnapshots] = useState<PortfolioSnapshotType[]>([]);
-
     const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
     const [smartAllocationTotalEvaluation, setSmartAllocationTotalEvaluation] = useState<number>(0);
+    const [rebalancingDate, setRebalancingDate] = useState<Date|null>(null);
+    const [rebalancingFrequency, setRebalancingFrequency] = useState<EnumRebalancingFrequency|null>(null);
 
     const selectedExchange = useSelector(selectSelectedExchange);
 
@@ -46,13 +64,29 @@ const AuthedSmartAllocation: FC = () => {
     }, [selectedExchange?.provider_id]);
 
     const initSmartAllocationHoldings = useCallback(() => {
+        if(!selectedExchange?.provider_id){
+            return;
+        }
         setIsLoadingSmartAllocationHoldings(true);
         getSmartAllocation(selectedExchange?.provider_id)
             .then((res) => {
+                if(MODE_DEBUG){
+                    console.log(res.data)
+                }
                 const data: any = res.data;
                 const holdings: SmartAllocationAssetType[] = data.assets;
                 setSmartAllocationTotalEvaluation(data.total_asset_value);
 
+                if(data.frequency){
+                    setRebalancingFrequency(data.frequency);
+                }else{
+                    setRebalancingFrequency(null);
+                }
+                if(data.next_run_time){
+                    setRebalancingDate(new Date(data.next_run_time));
+                }else{
+                    setRebalancingDate(null);
+                }
                 if (holdings) {
                     holdings.sort((a, b) => ((b.current_weight) - (a.current_weight)));
                     setSmartAllocationHoldings(holdings);
@@ -127,9 +161,8 @@ const AuthedSmartAllocation: FC = () => {
 
     const tabs = useMemo(() => {
 
-        console.log({ smartAllocationHoldings })
         return (
-            <Tabs className="w-full font-light" selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
+            <Tabs defaultIndex={1} className="w-full font-light" selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
                 <TabList className="w-full border-b-[1px] border-grey-3 mb-6">
                     <Row className='gap-4'>
                         <Tab className=" text-sm outline-none cursor-pointer">Your holdings</Tab>
@@ -141,14 +174,14 @@ const AuthedSmartAllocation: FC = () => {
                     <SmartAllocationHoldingsTab smartAllocationHoldings={smartAllocationHoldings} smartAllocationTotalEvaluation={smartAllocationTotalEvaluation} />
                 </TabPanel>
                 <TabPanel>
-
+                    <SmartAllocationAutomation/>
                 </TabPanel>
                 <TabPanel>
 
                 </TabPanel>
             </Tabs>
         )
-    }, [smartAllocationHoldings]);
+    }, [smartAllocationHoldings, smartAllocationTotalEvaluation]);
 
     const withAllocation = useMemo(() => {
         return (
@@ -163,9 +196,11 @@ const AuthedSmartAllocation: FC = () => {
     }, [smartAllocationGraph, tabs]);
 
     return (
-        <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
-            {withAllocation}
-        </Col>
+        <SmartAllocationContext.Provider value={{rebalancingDate, rebalancingFrequency,isLoadingSmartAllocationData:isLoadingSmartAllocationHoldings,getSmartAllocationData:initSmartAllocationHoldings}}>
+            <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
+                {withAllocation}
+            </Col>
+        </SmartAllocationContext.Provider>
     )
 }
 

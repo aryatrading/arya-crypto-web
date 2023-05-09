@@ -13,7 +13,10 @@ module.exports = {
     localeNamespaces:[
       'common',
       'auth',
-      'market'
+      'market',
+      "nav",
+      'dashboard',
+      "coin"
     ],
     /** To avoid issues when deploying to some paas (vercel...) */
     localePath:
