@@ -5,7 +5,6 @@ import { useTranslation } from "next-i18next";
 import { useAuthUser, withAuthUser } from "next-firebase-auth";
 import { useRouter } from "next/router";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { useDispatch } from "react-redux";
 
 import UserDefaultIcon from "../../svg/UserDefaultIcon";
 import SettingsIcon from "../../svg/SettingsIcon";
@@ -16,15 +15,12 @@ import { logoIcon } from "../../../../public/assets/images/svg";
 import { useAuthModal } from "../../../context/authModal.context";
 import { navLinkData } from "../../../utils/constants/nav";
 import { AssetDropdown } from "../../shared/assetDropdown";
-import { setAsset } from "../../../services/redux/assetSlice";
-import { CapitalizeString } from "../../../utils/format_string";
 import { FRIcon } from "../../svg/FRIcon";
 import { ENIcon } from "../../shared/ENIcon";
 
 import NavLink from "./NavLink/NavLink";
 
 const Nav = () => {
-  const dispatch = useDispatch();
   const { id } = useAuthUser();
   const [collapse, setCollapse] = useState(false)
   const { modalTrigger, setVisibleSection } = useAuthModal();
@@ -125,21 +121,8 @@ const Nav = () => {
         </Row>
         <Row className="gap-3 justify-center items-center">
           <AssetDropdown
-            onClick={(asset) => {
-              console.log({ asset });
-              const data = {
-                iconUrl: asset.iconUrl,
-                id: asset.id,
-                rank: asset.rank,
-                currentPrice: asset.currentPrice,
-                symbol: asset.symbol.toLowerCase(),
-                pnl: asset.pnl,
-                mrkCap: asset.mrkCap,
-                volume: asset.volume,
-                name: CapitalizeString(asset.name),
-              };
-              dispatch(setAsset(data));
-              push(`/asset?symbol=${asset.symbol}`);
+            onClick={({ symbol }) => {
+              push(`/asset?symbol=${symbol}`);
             }}
             t={t}
             trigger={
