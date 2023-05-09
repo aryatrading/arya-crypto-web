@@ -11,7 +11,6 @@ const HomePage = (props: any) => {
     return (
         <Layout>
             <Dashboard />
-            <AssetSelector onClick={(asset) => false} trigger={<Button className='px-4 py-2 rounded bg-yellow-1 text-white'>selectAsset</Button>} />
         </Layout>
     )
 }
