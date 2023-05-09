@@ -1,8 +1,7 @@
 .table {
 
     width: 100%;
-    min-width: 800px;
-    // table-layout: fixed;
+    min-width: 1330px;
 
     thead {
         @apply text-grey-1;
@@ -20,20 +19,25 @@
 
             th:first-child {
                 @apply rounded-l-lg;
-                width: 50px;
+                width: 200px;
                 padding-left: 20px;
             }
 
             th:nth-child(2) {
-                width: 170px;
+                width: 100px;
             }
 
             th:nth-child(3),
             th:nth-child(4),
             th:nth-child(5),
-            th:nth-child(6),
-            th:nth-child(8) {
-                width: 120px;
+            th:nth-child(6) {
+                width: 135px;
+            }
+
+            th:last-child {
+                width: 50px;
+                vertical-align: middle;
+                @apply rounded-r-lg;
             }
         }
     }
@@ -55,16 +59,50 @@
                 text-align: left;
                 padding: 0 5px;
                 height: 70px;
-
-
+        
+        
                 &:only-child {
                     text-align: center;
                 }
-
+        
                 &:first-child {
                     padding-left: 20px;
+                }
+        
+                &:last-child {
+                    width: 50px;
                 }
             }
         }
     }
+
+
+    tfoot {
+        @apply text-grey-1;
+
+        tr {
+            @apply bg-black-2;
+
+            td {
+                @apply font-normal text-sm;
+                text-align: left;
+                padding: 0 20px;
+                height: 70px;
+        
+        
+                &:only-child {
+                    text-align: center;
+                }
+        
+                &:first-child {
+                    padding-left: 20px;
+                }
+        
+                &:last-child {
+                    width: 50px;
+                }
+            }
+        }
+    }
+
 }

@@ -1,20 +1,21 @@
-import { withAuthUser } from 'next-firebase-auth'
+import { AuthAction, withAuthUser } from 'next-firebase-auth'
 import Layout from '../../components/layout/layout'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { GetStaticProps } from 'next';
-import SmartAllocation from '../../components/app/smart-allocation/smart-allocation';
+import EditSmartAllocation from '../../components/app/smart-allocation/edit-smart-allocation/edit-smart-allocation';
 
-const SmartAllocationPage = (props: any) => {
+const EditSmartAllocationPage = (props: any) => {
 
     return (
         <Layout>
-            <SmartAllocation/>
+            <EditSmartAllocation />
         </Layout>
     )
 }
 
 export default withAuthUser({
-})(SmartAllocationPage)
+    whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+})(EditSmartAllocationPage)
 
 
 export const getStaticProps: GetStaticProps<any> = async ({
