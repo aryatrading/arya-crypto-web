@@ -3,8 +3,6 @@ import Layout from '../../components/layout/layout'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { GetStaticProps } from 'next';
 import Dashboard from '../../components/app/dashboard/dashboard';
-import AssetSelector from '../../components/shared/AssetSelector/AssetSelector';
-import Button from '../../components/shared/buttons/button';
 
 const HomePage = (props: any) => {
 
