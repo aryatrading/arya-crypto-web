@@ -1,5 +1,5 @@
 import { FC, useCallback, useMemo } from "react";
-import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/solid"
+import { PlayIcon, PlusIcon } from "@heroicons/react/24/solid"
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
@@ -65,8 +65,8 @@ const ExchangeSwitcher: FC = () => {
         <DropdownMenu.Item
           key={exchange.name}
           className={clsx(
-            { "bg-grey-4": isSelected, "bg-grey-2": !isSelected },
-            "h-20 py-3 px-9 rounded-md cursor-pointer"
+            { "bg-grey-4": isSelected, "": !isSelected },
+            "h-20 py-3 px-9 cursor-pointer"
           )}
           onClick={() => {
             selectExchange(exchange);
@@ -96,27 +96,27 @@ const ExchangeSwitcher: FC = () => {
 
   const dropdown = useMemo(() => {
     return (
-      <DropdownMenu.Root>
+      <DropdownMenu.Root modal={false}>
         <DropdownMenu.Trigger asChild>
           <button
             className="bg-white rounded-full p-2 "
             aria-label="Customise options"
           >
-            <ChevronDownIcon height="12px" width="12px" color="#558AF2" />
+            <PlayIcon className="rotate-90 text-blue-1" height="15px" width="15px"/>
           </button>
         </DropdownMenu.Trigger>
 
-        <DropdownMenu.Portal className="z-10">
+        <DropdownMenu.Portal>
           <DropdownMenu.Content
-            className="min-w-[420px] bg-grey-2 rounded-md overflow-hidden"
+            className="min-w-[420px] bg-grey-3 rounded-md overflow-hidden z-10"
             sideOffset={15}
           >
             {connectedExchanges?.map((exchange) => dropdownItem(exchange))}
 
             <DropdownMenu.Item className={"p-4 rounded-md"} disabled={true}>
               <Row className="items-center gap-5 h-full">
-                <Link href="settings" className="py-3 px-4 rounded-md bg-blue-1">
-                  <Row className="gap-1">
+                <Link href="settings" className="w-full py-3 px-2 rounded-md bg-grey-2">
+                  <Row className="w-full font-bold justify-center gap-1">
                     <PlusIcon width={20} />
                     <p className="text-bold">{t("addExchange")}</p>
                   </Row>
