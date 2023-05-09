@@ -86,7 +86,11 @@ const ExchangeTab = () => {
                         openModal('connect');
                         setSubmitting(false);
                     }).catch((err) => {
-                        toast.error(err);
+                        if (err?.response?.data?.error) {
+                            toast.error(err?.response?.data?.error);
+                        } else {
+                            toast.error(err.toString());
+                        }
                         setSubmitting(false);
                     });
                 }}
