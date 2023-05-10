@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { AssetType } from "../../../types/asset";
-import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
 import { Col, Row } from "../layout/flex";
 import { useSelector } from "react-redux";
 import { selectAssetLivePrice } from "../../../services/redux/marketSlice";

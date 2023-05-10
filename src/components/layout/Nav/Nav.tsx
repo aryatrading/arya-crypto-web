@@ -51,7 +51,7 @@ const Nav = () => {
       }
       else {
         return <Row className="gap-4 items-center">
-          <Button className="px-6 py-3 font-semi-medium text-white"
+          <Button className="px-6 py-3 font-semibold text-white"
             onClick={() => {
               setVisibleSection('login');
               modalTrigger.show();
@@ -130,7 +130,7 @@ const Nav = () => {
             t={t}
             trigger={
               <button aria-label="Customise options" className="active:outline-none">
-                <Row className="bg-grey-3 sm:w-full h-[40px] rounded-sm px-4 hidden sm:flex">
+                <Row className="bg-grey-3 sm:w-full h-[40px] rounded-lg px-4 hidden sm:flex">
                   <MagnifyingGlassIcon width="20px" color="#6B7280" />
                   <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:outline-none border-transparent" type="text" placeholder={t('coin:searchAsset').toString()} disabled />
                 </Row>

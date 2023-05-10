@@ -24,7 +24,7 @@ const NavLink = ({ NavIcon, navTitle, Hover, active = false, className, ...props
     >
       {(!!Hover && (isHover || active)) ? <Hover className="transition-all w-5 h-5" /> : <NavIcon className="transition-all w-5 h-5" />}
       {!!navTitle && (
-        <h2 className={twMerge("transition-all text-white font-medium text-sm", `${(!!Hover && (isHover || active)) && 'text-blue-1'}`)}>
+        <h2 className={twMerge("transition-all text-white font-semibold text-sm", `${(!!Hover && (isHover || active)) && 'text-blue-1'}`)}>
           {t(navTitle)}
         </h2>
       )}
