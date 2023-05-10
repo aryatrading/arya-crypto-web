@@ -12,10 +12,12 @@ import { registerUser, appleAuth, googleAuth } from "../../../services/firebase/
 import TextInput from "../../shared/form/inputs/textInput/input";
 import { logoIcon } from "../../../../public/assets/images/svg";
 import { apple, google } from "../../../../public/assets/images/svg/auth";
+import { useAuthModal } from "../../../context/authModal.context";
 
 
 const Signup: FC<any> = (props: any) => {
     const { t } = useTranslation(['auth', 'common']);
+    const { hideModal } = useAuthModal();
     const [is2FALoading, setIs2FALoading] = useState<boolean>(false)
     const [errorForm, setError] = useState<string | null>()
 
@@ -32,6 +34,7 @@ const Signup: FC<any> = (props: any) => {
         setIs2FALoading(true)
         try {
             await googleAuth()
+            hideModal()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -45,6 +48,7 @@ const Signup: FC<any> = (props: any) => {
         setIs2FALoading(true)
         try {
             await appleAuth()
+            hideModal()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -62,6 +66,9 @@ const Signup: FC<any> = (props: any) => {
                 validationSchema={signupValidationScheme}
                 onSubmit={(values, { setSubmitting }) => {
                     registerUser(values)
+                        .then(() => {
+                            hideModal()
+                        })
                         .catch(err => {
                             setError(err.message);
                         })
@@ -95,7 +102,7 @@ const Signup: FC<any> = (props: any) => {
                 )}
             </Formik>
         )
-    }, [errorForm, signupValidationScheme, t])
+    }, [errorForm, hideModal, signupValidationScheme, t])
 
     return (
         <Row className='h-full w-full items-center justify-center'>

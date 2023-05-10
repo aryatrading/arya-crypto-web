@@ -8,7 +8,6 @@ import { useTranslation } from "next-i18next"
 import { Col, Row } from "../../shared/layout/flex"
 import DoughnutChart from "../../shared/charts/doughnut/doughnut"
 import LineChart from "../../shared/charts/graph/graph"
-import Button from "../../shared/buttons/button"
 import ExchangeSwitcher from "../../shared/exchange-switcher/exchange-switcher"
 import { getPortfolioHoldings, getPortfolioSnapshots } from "../../../services/controllers/market"
 import { PortfolioAssetType, PortfolioSnapshotType } from "../../../types/exchange.types"
@@ -21,6 +20,8 @@ import ExchangeImage from "../../shared/exchange-image/exchange-image"
 import { MODE_DEBUG } from "../../../utils/constants/config"
 
 import styles from "./dashboard.module.scss"
+import Link from "next/link"
+import PageLoader from "../../shared/pageLoader/pageLoader"
 
 const Dashboard: FC = () => {
 
@@ -145,19 +146,21 @@ const Dashboard: FC = () => {
     )
   }, [portfolioDoughnutChart, portfolioLineChart]);
 
-  const tableExchangesImages = useMemo(() => {
-    if (selectedExchange?.provider_id) {
-      return (
-        <ExchangeImage providerId={selectedExchange?.provider_id} ></ExchangeImage>
-      );
-    } else {
-      return connectedExchanges?.map((exchange) => {
+  const tableExchangesImages = useCallback((exchanges_ids?: number[]) => {
+    if (exchanges_ids?.length) {
+      return exchanges_ids?.map((exchangeId) => {
         return (
-          <ExchangeImage key={exchange.name} providerId={exchange?.provider_id} ></ExchangeImage>
+          <ExchangeImage key={exchangeId} providerId={exchangeId} ></ExchangeImage>
         );
       })
+    } else {
+      if (selectedExchange?.provider_id) {
+        return (
+          <ExchangeImage providerId={selectedExchange?.provider_id} ></ExchangeImage>
+        );
+      }
     }
-  }, [connectedExchanges, selectedExchange?.provider_id])
+  }, [selectedExchange?.provider_id])
 
   const table = useMemo(() => {
     return (
@@ -191,11 +194,11 @@ const Dashboard: FC = () => {
                 return (
                   <tr key={asset.name}>
                     <td>
-                      <Row className="gap-3 items-center">
+                      <Link href={`/asset?symbol=${asset.asset_details?.symbol}`} className="flex flex-row gap-3 items-center">
                         <Image src={asset?.asset_details?.image ?? ""} alt="" width={23} height={23} />
                         <p>{asset?.asset_details?.name}</p>
                         <span className="text-sm text-grey-1">{asset.name}</span>
-                      </Row>
+                      </Link>
                     </td>
                     <td>
                       <Row className="justify-between items-center w-[120px]">
@@ -213,7 +216,7 @@ const Dashboard: FC = () => {
                     <td className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive })}>{formattedChangePercentage}% ({formattedChangePrice})</td>
                     <td>
                       <Row className="gap-2">
-                        {tableExchangesImages}
+                        {tableExchangesImages(asset?.exchanges_ids)}
                       </Row>
                     </td>
                   </tr>
@@ -231,12 +234,12 @@ const Dashboard: FC = () => {
         <Col className="gap-5 col-span-12">
           <Row className="items-center justify-between w-full">
             <h3 className="text-2xl font-semibold">{t("yourHoldings")}</h3>
-            <Button className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1">
+            <Link href="/trade" className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1">
               <PlusIcon width={15} />
               <p className="font-bold">
                 {t('addAssets')}
               </p>
-            </Button>
+            </Link>
           </Row>
           {table}
         </Col>
@@ -244,22 +247,12 @@ const Dashboard: FC = () => {
     }
   }, [portfolioHoldings.length, t, table]);
 
-  const loadingOverlay = useMemo(() => {
-    return (
-      <Col className="w-full h-full bg-white bg-opacity-40 fixed z-10 left-0 top-0 items-center justify-center">
-        <Col className="w-40 h-40 bg-slate-50 rounded-md">
-          <LoadingSpinner />
-        </Col>
-      </Col>
-    )
-  }, [])
-
   return (
     <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
       <ExchangeSwitcher />
       {charts}
       {holdingsTable}
-      {(isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) && loadingOverlay}
+      {(isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) && <PageLoader />}
     </Col>
   )
 }

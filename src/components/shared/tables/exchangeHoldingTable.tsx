@@ -64,22 +64,10 @@ export const ExhangeHoldingTable: FC = () => {
                 </td>
                 <td className="font-medium leading-6 text-white flex flex-row mt-5">
                   <AssetPnl
-                    value={
-                      elm.pnl_percent >= 0
-                        ? `+${elm.pnl_percent}%`
-                        : elm.pnl_percent + "%"
-                    }
-                    bgColor={elm.pnl_percent < 0 ? "bg-red-2" : "bg-green-2"}
-                    textColor={
-                      elm.pnl_percent < 0 ? "text-red-1" : "text-green-1"
-                    }
-                    isUp={elm.pnl_percent >= 0}
+                    value={elm.pnl_percent}
                   />
                   <AssetPnl
-                    value={formatNumber(elm.pnl_value ?? 0)}
-                    textColor={
-                      elm.pnl_value! <= 0 ? "text-red-1" : "text-green-1"
-                    }
+                    value={elm.pnl_value ?? 0}
                   />
                 </td>
               </tr>

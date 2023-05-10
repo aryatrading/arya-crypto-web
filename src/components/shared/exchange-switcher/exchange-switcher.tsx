@@ -1,5 +1,5 @@
-import { FC, useCallback, useMemo } from "react";
-import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/solid"
+import { FC, useCallback, useEffect, useMemo } from "react";
+import { PlayIcon, PlusIcon } from "@heroicons/react/24/solid"
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
@@ -17,9 +17,9 @@ import LoadingSpinner from "../loading-spinner/loading-spinner";
 import AsyncStatusWrapper from "../async-status-wrapper/async-status-wrapper";
 import ExchangeImage from "../exchange-image/exchange-image";
 import { ExchangeType } from "../../../types/exchange.types";
-import Button from "../buttons/button";
+import Link from "next/link";
 
-const ExchangeSwitcher: FC = () => {
+const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall = true }) => {
   const selectedExchange = useSelector(selectSelectedExchange);
   const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
   const connectedExchanges = useSelector(selectConnectedExchanges);
@@ -27,6 +27,18 @@ const ExchangeSwitcher: FC = () => {
   const dispatch = useDispatch();
 
   const { t } = useTranslation(["common"]);
+
+
+  useEffect(() => {
+    if (!canSelectOverall) {
+      if (!selectedExchange?.provider_id) {
+        const notOverallExchange = connectedExchanges?.find(exchange => exchange.provider_id);
+        if (notOverallExchange) {
+          dispatch(setSelectedExchange(notOverallExchange));
+        }
+      }
+    }
+  }, [canSelectOverall, connectedExchanges, dispatch, selectedExchange?.provider_id])
 
   const changePercentage = useCallback((exchange: ExchangeType | null) => {
     const changeIn24h = exchange?.["24h_change_percentage"] ?? 0;
@@ -38,14 +50,15 @@ const ExchangeSwitcher: FC = () => {
     )}`;
 
     return (
-      <p
-        className={clsx({
-          "text-green-1 ": isPriceChangePositive,
-          "text-red-1": !isPriceChangePositive,
-        })}
-      >
-        {formattedChangePercentage}%
-      </p>
+
+      <Row className={clsx("p-1 rounded-md", {
+        "text-green-1 bg-green-2": isPriceChangePositive,
+        "text-red-1 bg-red-2": !isPriceChangePositive,
+      })}>
+        <p>
+          {formattedChangePercentage}%
+        </p>
+      </Row>
     );
   }, []);
 
@@ -60,15 +73,22 @@ const ExchangeSwitcher: FC = () => {
     (exchange: ExchangeType) => {
       const isSelected =
         selectedExchange?.provider_id === exchange?.provider_id;
+      const isNotSelectable = !exchange?.provider_id && !canSelectOverall;
       return (
         <DropdownMenu.Item
+          disabled={isNotSelectable}
           key={exchange.name}
           className={clsx(
-            { "bg-grey-4": isSelected, "bg-grey-2": !isSelected },
-            "h-20 py-3 px-9 rounded-md cursor-pointer"
+            {
+              "bg-grey-4": isSelected,
+              "bg-grey-2": !isSelected,
+              "cursor-pointer": !isNotSelectable
+            },
+            "h-20 py-3 px-9 rounded-md"
           )}
           onClick={() => {
-            selectExchange(exchange);
+            if (!isNotSelectable)
+              selectExchange(exchange);
           }}
         >
           <Row className="items-center  gap-5 h-full">
@@ -90,36 +110,36 @@ const ExchangeSwitcher: FC = () => {
         </DropdownMenu.Item>
       );
     },
-    [changePercentage, selectExchange, selectedExchange?.provider_id]
+    [canSelectOverall, changePercentage, selectExchange, selectedExchange?.provider_id]
   );
 
   const dropdown = useMemo(() => {
     return (
-      <DropdownMenu.Root>
+      <DropdownMenu.Root modal={false}>
         <DropdownMenu.Trigger asChild>
           <button
             className="bg-white rounded-full p-2 "
             aria-label="Customise options"
           >
-            <ChevronDownIcon height="12px" width="12px" color="#558AF2" />
+            <PlayIcon className="rotate-90 text-blue-1" height="15px" width="15px" />
           </button>
         </DropdownMenu.Trigger>
 
-        <DropdownMenu.Portal className="z-10">
+        <DropdownMenu.Portal>
           <DropdownMenu.Content
-            className="min-w-[420px] bg-grey-2 rounded-md overflow-hidden"
+            className="min-w-[420px] bg-grey-3 rounded-md overflow-hidden z-10"
             sideOffset={15}
           >
             {connectedExchanges?.map((exchange) => dropdownItem(exchange))}
 
             <DropdownMenu.Item className={"p-4 rounded-md"} disabled={true}>
               <Row className="items-center gap-5 h-full">
-                <Button className="py-3 px-4 rounded-md bg-blue-1">
-                  <Row className="gap-1">
+                <Link href="settings" className="w-full py-3 px-2 rounded-md bg-grey-2">
+                  <Row className="w-full font-bold justify-center gap-1">
                     <PlusIcon width={20} />
                     <p className="text-bold">{t("addExchange")}</p>
                   </Row>
-                </Button>
+                </Link>
               </Row>
             </DropdownMenu.Item>
           </DropdownMenu.Content>
@@ -148,9 +168,7 @@ const ExchangeSwitcher: FC = () => {
             {formatNumber(selectedExchange?.last_5m_evaluation ?? 0, true)}{" "}
             <span className="text-2xl">USD</span>
           </h3>
-          <Row className="bg-green-2 p-1 rounded-md">
-            {changePercentage(selectedExchange)}
-          </Row>
+          {changePercentage(selectedExchange)}
         </Row>
       </Col>
     </AsyncStatusWrapper>
