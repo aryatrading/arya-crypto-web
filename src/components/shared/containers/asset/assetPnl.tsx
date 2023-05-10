@@ -3,6 +3,7 @@ import { PlayIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { Row } from "../../layout/flex";
 import { twMerge } from "tailwind-merge";
+import { percentageFormat } from "../../../../utils/helpers/prices";
 
 interface  IAssetPnlProps  {
   value: number;
@@ -29,8 +30,8 @@ const AssetPnl: FC<IAssetPnlProps> = ({ value, className, transform}) => {
   const handleValue = useCallback(
     () => {
       if(value){
-        return <p className={`text-sm font-semibold ${(isProfit===null)?'text-grey-1':''}`}>
-        {transform?transform(value??0):`${isProfit?'+':''}${value}%`}
+        return <p className={`text-xs font-medium ${(isProfit===null)?'text-grey-1':''}`}>
+        {transform?transform(value??0):`${isProfit?'+':''}${percentageFormat(value)}%`}
       </p>
       }
       else{

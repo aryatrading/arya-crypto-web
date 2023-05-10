@@ -29,5 +29,9 @@
     "fetchAssetErr": "Error fetching asset",
     "searchforAsset": "Search for an Asset",
     "noAssetFound": "No Assets Found...",
-    "searchAsset": "Search Asset"
+    "searchAsset": "Search Asset",
+    "monthly": "Monthly",
+    "exitStrategy": "Exit Strategy",
+    "somethingWentWrong": "Something went wrong",
+    "save": "Save"
 }
