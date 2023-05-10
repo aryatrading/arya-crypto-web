@@ -9,6 +9,7 @@ import {
   setTimesseries,
 } from "../redux/assetSlice";
 import { store } from "../redux/store";
+import { setTo } from "../redux/swapSlice";
 
 export const getAssetDetails = async (symbol?: any) => {
   let { data } = await axiosInstance.get(
@@ -43,6 +44,14 @@ export const getAssetDetails = async (symbol?: any) => {
   store.dispatch(setAsset(_asset));
   store.dispatch(setAssetHolding(_holding));
   store.dispatch(setOrders(_orders));
+  store.dispatch(
+    setTo({
+      symbol: _res.symbol.toUpperCase(),
+      quantity: 0,
+      price: _asset.currentPrice,
+      iconUrl: _asset.iconUrl,
+    })
+  );
 };
 
 export const getAssetTimeseriesPrice = async (
@@ -91,4 +100,12 @@ export const castVote = async (vote: string, assetId: number) => {
   );
 
   return data;
+};
+
+export const getFree = async (symbol: string, provider: number) => {
+  const { data } = await axiosInstance.get(
+    `trade-engine/assets/${symbol}/?provider=${provider}`
+  );
+
+  return data[provider];
 };

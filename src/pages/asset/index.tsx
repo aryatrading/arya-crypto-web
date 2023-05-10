@@ -11,8 +11,7 @@ import {
   getAssetTimeseriesPrice,
 } from "../../services/controllers/asset";
 import { clearAsset } from "../../services/redux/assetSlice";
-import { getAuth } from "firebase/auth";
-import { getApp } from "firebase/app";
+import { clearSwap } from "../../services/redux/swapSlice";
 
 const AssetPage = () => {
   const dispatch = useDispatch();
@@ -20,14 +19,12 @@ const AssetPage = () => {
   const { symbol } = router.query;
 
   useEffect(() => {
-    // TODO: REMOVE BELOW LINE
-    getAuth(getApp()).signOut();
-
     getAssetDetails(symbol ?? "btc");
     getAssetTimeseriesPrice(symbol ?? "btc", "5min", 288);
 
     return () => {
       dispatch(clearAsset());
+      dispatch(clearSwap());
     };
   }, [symbol]);
 

@@ -25,15 +25,15 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
           bgColor="bg-grey-5"
           textColor="font-medium text-xs"
           border="rounded"
-          onClick={() => console.log("d")}
+          onClick={() => null}
           title={`${t("rank")} #${asset.rank ?? 0}`}
         />
         <ShadowButton
           bgColor="bg-grey-5"
           textColor="font-medium text-xs"
           border="rounded"
-          onClick={() => console.log("d")}
-          iconSvg={<StarIcon className="w-4 h-4 fill-orage-1 stroke-0" />}
+          onClick={() => null}
+          iconSvg={<StarIcon className="w-4 h-4 fill-orange-1 stroke-0" />}
           title="1.8k"
         />
       </Row>
@@ -45,14 +45,16 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
       <Row className="gap-2 items-center">
         <p className="font-medium text-4xl">
           {formatNumber(
-            _assetprice[asset.symbol?.toLowerCase() ?? "eth"] ??
+            _assetprice[asset.symbol?.toLowerCase() ?? "btc"] ??
               asset.currentPrice,
             true
           )}
         </p>
         <AssetPnl
           value={asset.pnl}
-          className={asset.pnl <= 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"}
+          className={
+            asset.pnl <= 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"
+          }
         />
         <AssetPnl
           value={asset.priceChange!}

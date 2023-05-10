@@ -53,6 +53,9 @@ export const theme = {
       },
       yellow: {
         1: "#F3BA2F"
+      },
+      orange: {
+        1: "#F7931A"
       }
     },
     fontFamily: {

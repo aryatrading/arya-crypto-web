@@ -26,3 +26,11 @@ export interface AssetType {
   isHoldingAsset?: boolean;
   description?: string;
 }
+
+export interface AssetSwapType {
+  symbol?: string;
+  quantity?: number;
+  iconUrl?: string;
+  availableBalance?: number;
+  price?: number;
+}

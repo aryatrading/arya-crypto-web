@@ -37,5 +37,7 @@
     "cancelled": "Annulé",
     "executed": "Excecuté",
     "error": "Erreur d'exécution",
-    "error_voting": "Erreur de vote, réessayez!"
+    "error_voting": "Erreur de vote, réessayez!",
+    "selectAsset": "Sélectionner",
+    "searchAsset": "Recherche"
 }

@@ -37,5 +37,7 @@
     "cancelled": "Cancelled",
     "executed": "Executed",
     "error": "Error Executing",
-    "error_voting": "Error casting vote, try again!"
+    "error_voting": "Error casting vote, try again!",
+    "selectAsset": "Select",
+    "searchAsset": "Search"
 }

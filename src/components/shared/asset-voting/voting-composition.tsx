@@ -11,6 +11,7 @@ export const VotingComposition: FC<VotingCompositionProps> = ({ votes }) => {
   const assetLine = useCallback((weight: number, index: number) => {
     return (
       <Row
+        key={index}
         className={`h-full ${bgColors[index % bgColors.length]}`}
         style={{ width: `${weight * 100}%` }}
       />
