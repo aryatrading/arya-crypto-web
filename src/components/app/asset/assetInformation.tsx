@@ -14,6 +14,8 @@ import TradingViewWidget from "../../shared/charts/tradingView/tradingView";
 import { AssetInformation } from "../../shared/containers/asset/assetInfotmation";
 import CoinProfitCalculator from "../../shared/coinProfitCalculator";
 import CoinConverter from "../../shared/coinConverter";
+import { PostTypes } from "../../../types/asset";
+import { Post } from "../community/Post";
 
 type seriesInterface = {
   title: string;
@@ -26,6 +28,7 @@ const AssetInformationTab: FC = () => {
   const { t } = useTranslation(["asset"]);
   const asset = useSelector(getAsset);
   const timeseries = useSelector(getAssetTimeseries);
+  const { posts } = useSelector(({ posts }: any) => posts);
   const [activeSeries, setActiveSeries] = useState("24H");
   const [view, setView] = useState("price");
 
@@ -50,44 +53,61 @@ const AssetInformationTab: FC = () => {
   };
 
   return (
-    <>
-      <Row className="justify-between items-center">
-        <p className="font-medium text-xl">
-          {asset.name} {t("price_chart")}
-        </p>
-        <Row className="gap-3">
-          {view === "price" ? (
+    <Row className="flex-1">
+      <Col className="flex-1">
+        <Row className="justify-between items-center">
+          <p className="font-medium text-xl">
+            {asset.name} {t("price_chart")}
+          </p>
+          <Row className="gap-3">
+            {view === "price" ? (
+              <TimeseriesPicker
+                series={assetTimeseries}
+                active={activeSeries}
+                onclick={(e: seriesInterface) => onSeriesClick(e)}
+              />
+            ) : null}
             <TimeseriesPicker
-              series={assetTimeseries}
-              active={activeSeries}
-              onclick={(e: seriesInterface) => onSeriesClick(e)}
+              series={assetGraphToggles}
+              active={view}
+              onclick={(e: seriesInterface) => setView(e.value)}
             />
-          ) : null}
-          <TimeseriesPicker
-            series={assetGraphToggles}
-            active={view}
-            onclick={(e: seriesInterface) => setView(e.value)}
-          />
+          </Row>
         </Row>
-      </Row>
-      <div className="mt-7 mb-7">
-        {view === "price" ? (
-          <LineChart primaryLineData={timeseries} className="w-full h-80" />
-        ) : (
-          <TradingViewWidget />
-        )}
-      </div>
+        <div className="mt-7 mb-7">
+          {view === "price" ? (
+            <LineChart primaryLineData={timeseries} className="w-full h-80" />
+          ) : (
+            <TradingViewWidget />
+          )}
+        </div>
 
-      <AssetInformation asset={asset} />
+        <AssetInformation asset={asset} />
 
-      <Col className="mt-14 gap-14">
-        <CoinProfitCalculator />
-        {asset?.id && <CoinConverter
-          preDefined
-          staticCoin={asset}
-        />}
+        <Col className="mt-14 gap-14">
+          <CoinProfitCalculator />
+          {asset?.id && <CoinConverter
+            preDefined
+            staticCoin={asset}
+          />}
+        </Col>
       </Col>
-    </>
+      <Col className="flex-[0.5] ps-6">
+        {/* Community widget */}
+        {posts.length > 0 && <>
+          <h3 className="font-extrabold text-white header-label pb-6">{t('communityTitle', { coin: asset.name })}</h3>
+          <Col className="w-full min-h-[300px] bg-black-2 rounded-md px-10 py-5">
+            {posts?.slice(0, 2)?.map((post: PostTypes) => {
+              return (
+                <Post post={post} />
+              );
+            })}
+
+            <a href={`https://arya-web-app.vercel.app/asset/?s=${asset.symbol}&m=crypto&t=USD&n=${asset.name}/US%20Dollar`} className="text-white text-base font-bold underline text-center" target='_blank' rel="noreferrer">See More  +</a>
+          </Col>
+        </>}
+      </Col>
+    </Row>
   );
 };
 
