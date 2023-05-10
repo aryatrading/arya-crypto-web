@@ -33,6 +33,7 @@ interface AssetDropdownTypes {
   showTopCoinsList?: boolean;
   showContentHeaderLabel?: boolean;
   contentHeaderLabel?: string;
+  removeAsset?: string | string[] | undefined;
 }
 
 export const AssetDropdown = ({
@@ -47,6 +48,7 @@ export const AssetDropdown = ({
   align,
   showTopCoinsList,
   disabled,
+  removeAsset,
 }: AssetDropdownTypes) => {
   const [coins, setCoins] = useState<AssetType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -60,7 +62,13 @@ export const AssetDropdown = ({
   useEffect(() => {
     fetchAssets(keyword, resultLimit)
       .then((response: AssetType[]) => {
-        setCoins(response);
+        if (removeAsset) {
+          setCoins(
+            response.filter((elm) => elm.symbol?.toLowerCase() !== removeAsset)
+          );
+        } else {
+          setCoins(response);
+        }
         setLoading(false);
       })
       .catch((err) => {

@@ -17,13 +17,10 @@ const AssetTradeToInput: FC = () => {
   const fromAsset = useSelector(getFrom);
   const _assetprice = useSelector(selectAssetLivePrice);
 
-  const qty = useMemo(() => {
-    return (
-      (fromAsset.quantity *
-        _assetprice[fromAsset?.symbol?.toLowerCase() ?? "btc"]) /
-      _assetprice[asset?.symbol?.toLowerCase() ?? "btc"]
-    );
-  }, [fromAsset.quantity, asset.symbol]);
+  const qty =
+    (fromAsset.quantity *
+      _assetprice[fromAsset?.symbol?.toLowerCase() ?? "btc"]) /
+    _assetprice[asset?.symbol?.toLowerCase() ?? "btc"];
 
   return (
     <Col className="bg-black-1 rounded-md px-4 py-2 gap-4 w-full">
@@ -59,6 +56,7 @@ const AssetTradeToInput: FC = () => {
               t={t}
               disabled={false}
               title={asset.symbol}
+              removeAsset={symbol}
             />
           )}
         </Row>

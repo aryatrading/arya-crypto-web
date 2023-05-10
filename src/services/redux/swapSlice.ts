@@ -35,7 +35,7 @@ export const swapSlice = createSlice({
       state.provider = action.payload;
     },
     clearSwap: (state) => {
-      (state.from = {}), (state.to = {});
+      state.from = {};
     },
   },
 });

@@ -31,7 +31,7 @@ const AssetTradeFromInput: FC = () => {
     if (asset?.symbol) {
       onFromSelect(asset);
     }
-  }, [asset.symbol]);
+  }, [asset.symbol, symbol]);
 
   const onFromSelect = async (elm: any) => {
     setLoading(true);
@@ -101,6 +101,7 @@ const AssetTradeFromInput: FC = () => {
               t={t}
               disabled={false}
               title={asset.symbol ?? "Select"}
+              removeAsset={symbol}
             />
           )}
         </Row>
