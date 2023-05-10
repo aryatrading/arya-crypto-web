@@ -22,5 +22,19 @@
     "distributeEqually": "Distribute equally",
     "smartAllocationWasSavedSuccessfully": "Smart allocation was saved successfully",
     "makeSureToAllocate100%OfYourPortfolio": "Make sure to allocate 100% of your portfolio",
-    "editYourSmartAllocation": "Edit your smart allocation"
+    "editYourSmartAllocation": "Edit your smart allocation",
+    "currentRebalancingFrequency": "Current Rebalancing Frequency",
+    "noRebalancingFrequencySet": "Rebalancing is not set",
+    "RebalancingDetail": "Rebalancing is set to",
+    "NextRebalancingAt":"next rebalancing is at",
+    "WhatIsRebalancingFrequency": "What is Rebalancing Frequency",
+    "RebalancingFrequencyDescription": "Rebalancing frequency is the frequency at which your portfolio will be rebalanced. Rebalancing is the process of realigning the weightings of a portfolio of assets. Rebalancing involves periodically buying or selling assets in a portfolio to maintain an original or desired level of asset allocation or risk",
+    "chooseFrequency": "Choose a time frequency",
+    "setRebalancingFrequency": "Set Rebalancing frequency",
+    "updateFrequencyTitle":"Update Rebalancing Frequency?",
+    "updateFrequencyDescription":"This will update the rebalancing frequency and change the next rebalancing date. Are you sure you want to continue?",
+    "updateFrequency":"Update Frequency",
+    "deleteFrequencyTitle":"Delete Rebalancing Frequency?",
+    "deleteFrequencyDescription":"This will delete the rebalancing frequency and your portfolio wont rebalance as scheduled. Are you sure you want to continue?",
+    "deleteFrequency":"Delete Frequency"
 }
