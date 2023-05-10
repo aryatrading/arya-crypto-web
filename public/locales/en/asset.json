@@ -36,5 +36,6 @@
     "pending": "Pending",
     "cancelled": "Cancelled",
     "executed": "Executed",
-    "error": "Error Executing"
+    "error": "Error Executing",
+    "communityTitle": "{{coin}} in the community"
 }
