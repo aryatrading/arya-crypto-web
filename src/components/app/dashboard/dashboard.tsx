@@ -146,19 +146,21 @@ const Dashboard: FC = () => {
     )
   }, [portfolioDoughnutChart, portfolioLineChart]);
 
-  const tableExchangesImages = useMemo(() => {
-    if (selectedExchange?.provider_id) {
-      return (
-        <ExchangeImage providerId={selectedExchange?.provider_id} ></ExchangeImage>
-      );
-    } else {
-      return connectedExchanges?.map((exchange) => {
+  const tableExchangesImages = useCallback((exchanges_ids?: number[]) => {
+    if (exchanges_ids?.length) {
+      return exchanges_ids?.map((exchangeId) => {
         return (
-          <ExchangeImage key={exchange.name} providerId={exchange?.provider_id} ></ExchangeImage>
+          <ExchangeImage key={exchangeId} providerId={exchangeId} ></ExchangeImage>
         );
       })
+    } else {
+      if (selectedExchange?.provider_id) {
+        return (
+          <ExchangeImage providerId={selectedExchange?.provider_id} ></ExchangeImage>
+        );
+      }
     }
-  }, [connectedExchanges, selectedExchange?.provider_id])
+  }, [selectedExchange?.provider_id])
 
   const table = useMemo(() => {
     return (
@@ -214,7 +216,7 @@ const Dashboard: FC = () => {
                     <td className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive })}>{formattedChangePercentage}% ({formattedChangePrice})</td>
                     <td>
                       <Row className="gap-2">
-                        {tableExchangesImages}
+                        {tableExchangesImages(asset?.exchanges_ids)}
                       </Row>
                     </td>
                   </tr>
@@ -250,7 +252,7 @@ const Dashboard: FC = () => {
       <ExchangeSwitcher />
       {charts}
       {holdingsTable}
-      {(isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) && <PageLoader/>}
+      {(isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) && <PageLoader />}
     </Col>
   )
 }
