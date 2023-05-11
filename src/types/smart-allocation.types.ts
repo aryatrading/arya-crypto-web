@@ -1,3 +1,4 @@
+import { EnumExitStrategyTrigger, EnumRebalancingFrequency, EnumSmartAllocationAssetStatus } from "../utils/constants/smartAllocation"
 import { PortfolioAssetDetailsType } from "./exchange.types"
 
 export type SmartAllocationResponseType = {
@@ -6,8 +7,8 @@ export type SmartAllocationResponseType = {
     user_id?: number,
     provider?: number,
     provider_name?: string,
-    frequency?: SmartAllocationFrequency,
-    status?: SmartAllocationAssetStatus,
+    frequency?: EnumRebalancingFrequency,
+    status?:EnumSmartAllocationAssetStatus,
     base_asset_value?: number,
     created_at?: string,
     modified_at?: string,
@@ -25,7 +26,7 @@ export type SmartAllocationAssetType = {
     current_value?: number,
     executed_amount?: number,
     weight?: number,
-    status?: SmartAllocationAssetStatus,
+    status?: EnumSmartAllocationAssetStatus,
     last_executed_time?: null,
     executable?: boolean,
     expected_value?: number,
@@ -50,20 +51,21 @@ export type SaveSmartAllocationAssetType = {
     name?: string,
     weight?: number,
     id?: number,
-    status?: SmartAllocationAssetStatus
+    status?: EnumSmartAllocationAssetStatus
 }
 
-export enum SmartAllocationAssetStatus {
-    ACTIVE = "ACTIVE",
-    DELETED = "DELETED",
+export type SmartAllocationExitStrategyType = {
+    id: number;
+    exit_type: EnumExitStrategyTrigger;
+    status: string;
+    provider: number;
+    exit_value: number;
+    created_time: string;
+    exit_percentage: number;
+    executed_asset_data: string;
+    executed_asset_total_evaluation: number;
+    completed_at: Date | null;
+    executed_at: Date | null;
+    provider_name: string;
 }
 
-export enum SmartAllocationFrequency {
-    MONTHLY = "MONTHLY"
-}
-
-export enum PredefinedSmartAllocationPortfolio {
-    top5 = "top5",
-    top10 = "top10",
-    top15 = "top15",
-}

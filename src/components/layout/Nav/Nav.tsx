@@ -111,7 +111,7 @@ const Nav = () => {
   }, [asPath, locale, pathname, push, query]);
 
   return (
-    <Col className="w-full bg-black-2 fixed lg:relative rounded-b-lg z-20">
+    <Col className="w-full bg-black-2 fixed lg:relative z-20">
       <Row className="container w-full h-[72px] justify-between">
         <Row className="xl:gap-20 md:gap-16 items-center">
           <Link href={"/home"}>

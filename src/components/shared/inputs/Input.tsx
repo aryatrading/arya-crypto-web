@@ -7,7 +7,7 @@ interface InputProps extends React.HTMLProps<HTMLInputElement> {
 
 const Input: FC<InputProps> = ({className,...props}) => {
   return (
-    <input className={twMerge('bg-transparent focus-visible:outline-none',className)} {...props} />
+    <input className={twMerge('bg-transparent focus-visible:outline-none border-transparent focus:border-transparent focus:ring-0',className)} {...props} />
   )
 }
 

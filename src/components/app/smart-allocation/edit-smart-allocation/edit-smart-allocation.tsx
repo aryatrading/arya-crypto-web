@@ -3,7 +3,7 @@ import { Col, Row } from "../../../shared/layout/flex"
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher"
 import Button from "../../../shared/buttons/button"
 import PortfolioComposition from "../../../shared/portfolio-composition/portfolio-composition"
-import { PredefinedSmartAllocationPortfolio, SaveSmartAllocationAssetType, SmartAllocationAssetStatus, SmartAllocationAssetType } from "../../../../types/smart-allocation.types"
+import { SaveSmartAllocationAssetType, SmartAllocationAssetType } from "../../../../types/smart-allocation.types"
 import { useSelector } from "react-redux"
 import { selectSelectedExchange } from "../../../../services/redux/exchangeSlice"
 import { MODE_DEBUG } from "../../../../utils/constants/config"
@@ -12,7 +12,6 @@ import { percentageFormat, formatNumber } from "../../../../utils/helpers/prices
 import Image from "next/image"
 import clsx from "clsx"
 import styles from "./edit-smart-allocation.module.scss";
-import { TrashIcon } from "@heroicons/react/24/outline"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import { USDTSymbol } from "../../../../utils/constants/market"
 import * as Slider from '@radix-ui/react-slider';
@@ -23,6 +22,7 @@ import AssetSelector from "../../../shared/AssetSelector/AssetSelector"
 import { getPredefinedPortfolioHoldings, getSmartAllocation, updateSmartAllocation } from "../../../../services/controllers/smart-allocation"
 import { toast } from "react-toastify"
 import { useRouter } from "next/router"
+import { EnumPredefinedSmartAllocationPortfolio, EnumSmartAllocationAssetStatus } from "../../../../utils/constants/smartAllocation"
 
 
 
@@ -59,7 +59,7 @@ const EditSmartAllocation: FC = () => {
                     const predefinedPortfolioId = router?.query?.portfolio;
                     if (predefinedPortfolioId) {
                         setIsLoadingPredefinedAllocationHoldings(true);
-                        getPredefinedPortfolioHoldings(predefinedPortfolioId as PredefinedSmartAllocationPortfolio)?.then((res) => {
+                        getPredefinedPortfolioHoldings(predefinedPortfolioId as EnumPredefinedSmartAllocationPortfolio)?.then((res) => {
                             setSmartAllocationHoldings(res);
                         }).finally(() => {
                             setIsLoadingPredefinedAllocationHoldings(false);
@@ -296,7 +296,7 @@ const EditSmartAllocation: FC = () => {
                         {
                             name: holding.name,
                             weight: holding.weight,
-                            status: ((holding.weight ?? 0) > 0) ? SmartAllocationAssetStatus.ACTIVE : SmartAllocationAssetStatus.DELETED,
+                            status: ((holding.weight ?? 0) > 0) ? EnumSmartAllocationAssetStatus.ACTIVE : EnumSmartAllocationAssetStatus.DELETED,
                             id: holding.id,
                         })
                 });

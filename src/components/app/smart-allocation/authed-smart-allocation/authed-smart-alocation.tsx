@@ -10,7 +10,7 @@ import { chartDataType } from "../../../shared/charts/graph/graph.type";
 import LineChart from "../../../shared/charts/graph/graph";
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
-import { PredefinedSmartAllocationPortfolio, SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
+import { SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
 import PageLoader from "../../../shared/pageLoader/pageLoader";
 import { getSmartAllocation } from "../../../../services/controllers/smart-allocation";
 import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
@@ -19,7 +19,7 @@ import Link from "next/link";
 import clsx from "clsx";
 import { SelectSmartAllocationPortfolioIcon } from "../../../svg/smart-allocation/customize-portfolio-icon";
 import { useTranslation } from "next-i18next";
-import { EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
+import { EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
 import SmartAllocationAutomation from "./SmartAllocationAutomation/SmartAllocationAutomation";
 
 
@@ -152,19 +152,19 @@ const AuthedSmartAllocation: FC = () => {
                     {getPredefinedAllocationsButtons({
                         label: t('currentTop5Coins'),
                         icon: <Top5Icon />,
-                        href: `smart-allocation/edit?portfolio=${PredefinedSmartAllocationPortfolio.top5}`,
+                        href: `smart-allocation/edit?portfolio=${EnumPredefinedSmartAllocationPortfolio.top5}`,
                         isCustom: false,
                     })}
                     {getPredefinedAllocationsButtons({
                         label: t('currentTop10Coins'),
                         icon: <Top10Icon />,
-                        href: `smart-allocation/edit?portfolio=${PredefinedSmartAllocationPortfolio.top10}`,
+                        href: `smart-allocation/edit?portfolio=${EnumPredefinedSmartAllocationPortfolio.top10}`,
                         isCustom: false,
                     })}
                     {getPredefinedAllocationsButtons({
                         label: t('currentTop15Coins'),
                         icon: <Top15Icon />,
-                        href: `smart-allocation/edit?portfolio=${PredefinedSmartAllocationPortfolio.top15}`,
+                        href: `smart-allocation/edit?portfolio=${EnumPredefinedSmartAllocationPortfolio.top15}`,
                         isCustom: false,
                     })}
                 </Row>

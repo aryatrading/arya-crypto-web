@@ -2,11 +2,9 @@ import moment from 'moment'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { EnumRebalancingFrequency } from '../../../../../../utils/constants/smartAllocation'
-import { CapitalizeString } from '../../../../../../utils/format_string'
 import Button from '../../../../../shared/buttons/button'
 import { Col, Row } from '../../../../../shared/layout/flex'
 import { useSelector } from 'react-redux'
-import { setRebalancingFrequency } from '../../../../../../services/controllers/market'
 import { selectSelectedExchange } from '../../../../../../services/redux/exchangeSlice'
 import { MODE_DEBUG } from '../../../../../../utils/constants/config'
 import { SmartAllocationContext } from '../../authed-smart-alocation'
@@ -15,6 +13,7 @@ import * as Checkbox from '@radix-ui/react-checkbox'
 import { toast } from 'react-toastify'
 import { CheckIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useTranslation } from 'next-i18next'
+import { setRebalancingFrequency } from '../../../../../../services/controllers/smart-allocation'
 
 const SmartAllocationRebalancing = () => {
     const {rebalancingDate,rebalancingFrequency,getSmartAllocationData} = useContext(SmartAllocationContext)
@@ -88,7 +87,7 @@ const SmartAllocationRebalancing = () => {
       () => {
         return <AlertDialog.Root open={rebalanceModalOpen} onOpenChange={setRebalanceModalOpen} >
                 <AlertDialog.Trigger asChild>
-                    <Button className='bg-blue-1 w-56 py-3 rounded-lg font-semibold text-xs'>{t('setRebalancingFrequency')}</Button>
+                    <Button className='bg-blue-1 py-3 rounded-lg font-semibold text-xs w-full md:w-56'>{t('setRebalancingFrequency')}</Button>
                 </AlertDialog.Trigger>
                 <AlertDialog.Portal>
                     <AlertDialog.Overlay className="dialog-overlay data-[state=open]:animate-overlayShow" />

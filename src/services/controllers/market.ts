@@ -1,5 +1,4 @@
 import { AssetType } from "../../types/asset";
-import { EnumRebalancingFrequency } from "../../utils/constants/smartAllocation";
 import { axiosInstance } from "../api/axiosConfig";
 import { setAllProviders } from "../redux/exchangeSlice";
 import { storeMrkAssets } from "../redux/marketSlice";
@@ -73,14 +72,6 @@ export const getConnectedProviders = async () => {
   return await axiosInstance.get(`/exchange/connected-keys`);
 };
 
-
-export const getSmartAllocation = async (providerId?: number) => {
-  return await axiosInstance.get(
-    `/trade-engine/smart-allocation`,
-    { params: { provider: providerId } }
-  );
-}
-
 export const getAddableProviders = async () => {
   axiosInstance.get(`/general/providers`).then(response => {
     if (response.data.length) {
@@ -97,15 +88,4 @@ export const getAddableProviders = async () => {
   });
 };
 
-export const setRebalancingFrequency = async (providerId: number, frequency: EnumRebalancingFrequency|null,rebalanceNow:boolean) => {
-  const frequencyParams = {
-    provider: providerId, 
-    frequency: frequency,
-    rebalance_portfolio:rebalanceNow
-  }
-  return await axiosInstance.put(
-    `/trade-engine/smart-allocation/frequency`,
-    null,
-    {params:frequencyParams}
-  );
-}
+

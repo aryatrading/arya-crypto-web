@@ -37,5 +37,6 @@
     "exitStrategy": "Exit Strategy",
     "somethingWentWrong": "Something went wrong",
     "save": "Save",
-    "cancel":"Cancel"
+    "cancel":"Cancel",
+    "sell": "Sell"
 }
