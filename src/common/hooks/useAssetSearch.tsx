@@ -1,11 +1,14 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import _ from 'lodash';
+import { useSelector } from 'react-redux';
+import { useTransition, config } from 'react-spring';
+
 import { MODE_DEBUG } from '../../utils/constants/config';
 import { fetchAssets } from '../../services/controllers/market';
-import _ from 'lodash';
 import { AssetType } from '../../types/asset';
-import { useSelector } from 'react-redux';
 
-const useAssetSearch = () => {
+
+const useAssetSearch = ({ fullModal }: { fullModal: boolean }) => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [showDialog, setShowDialog] = useState<boolean>(false);
     const [fetchingError, setFetchingError] = useState<boolean>(false);
@@ -14,6 +17,13 @@ const useAssetSearch = () => {
 
     const { assetLivePrice } = useSelector((state: any) => state.market);
 
+    const transitions = useTransition(showDialog, {
+        from: { opacity: 0, y: -10 },
+        enter: { opacity: 1, y: 0 },
+        leave: { opacity: 0, y: -10 },
+        config: config.stiff,
+    });
+
     const handleSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     }, []);
@@ -21,7 +31,7 @@ const useAssetSearch = () => {
     const fetchFilteredAssets = useCallback(() => {
         setIsSearching(true);
         setFilteredAssets(null);
-        fetchAssets(searchTerm, searchTerm.length <= 0 ? 10 : 100)
+        fetchAssets(searchTerm, searchTerm.length <= 0 ? fullModal ? 20 : 10 : 100)
             .then((res) => {
                 setFilteredAssets(res);
             })
@@ -51,7 +61,7 @@ const useAssetSearch = () => {
         fetchFilteredAssets();
     }, [fetchFilteredAssets]);
 
-    return { fetchingError, isSearching, filteredAssets, searchTerm, fetchFilteredAssets, debouncedSearch, assetLivePrice, showDialog, setShowDialog }
+    return { fetchingError, isSearching, filteredAssets, searchTerm, fetchFilteredAssets, debouncedSearch, assetLivePrice, showDialog, setShowDialog, transitions }
 }
 
 export default useAssetSearch
