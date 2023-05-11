@@ -68,7 +68,7 @@ export const SearchAssetInput = ({ onClick, t }: AssetDropdownTypes) => {
                             if (keyword !== '') {
                                 return;
                             }
-                            setTimeout(() => setFocused(false), 100);
+                            setTimeout(() => setFocused(false), 200);
                         }}
                         onChange={onChangeKeyword} />
 
