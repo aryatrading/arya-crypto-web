@@ -85,8 +85,8 @@ const AssetTrade: FC = () => {
             <p className="text-center font-semibold text-base">Trade</p>
           )}
         </Button>
-        <Button className="rounded-md bg-transparent text-white w-full">
-          <p className="text-center font-semibold text-base">Advance Mode</p>
+        <Button className="rounded-md bg-transparent text-white font-semibold w-full">
+          <p className="mt-2 text-center font-semibold text-sm ">Advance Mode</p>
         </Button>
       </Col>
     </Col>

@@ -44,7 +44,7 @@ export const AssetDropdown = ({
   t,
   contentHeaderLabel,
   side,
-  sideOffset = 0,
+  sideOffset = 15,
   align,
   showTopCoinsList,
   disabled,
