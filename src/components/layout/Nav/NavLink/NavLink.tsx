@@ -18,13 +18,13 @@ const NavLink = ({ NavIcon, navTitle, Hover, active = false, className, ...props
   return (
     <Link
       {...props}
-      className={twMerge("group flex justify-start items-center gap-3 lg:justify-center py-3 px-6 lg:p-0 lg:border-b-0", `${!!Hover && 'border-b-2 border-grey-3'}`, className)}
+      className={twMerge("transition-all group flex justify-start items-center gap-3 lg:justify-center py-3 px-6 lg:p-0 lg:border-b-0", `${!!Hover && 'border-b-2 border-grey-3'}`, className)}
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => { setIsHover(false) }}
     >
-      {(!!Hover && (isHover || active)) ? <Hover className="w-5 h-5" /> : <NavIcon className="w-5 h-5" />}
+      {(!!Hover && (isHover || active)) ? <Hover className="transition-all w-5 h-5" /> : <NavIcon className="transition-all w-5 h-5" />}
       {!!navTitle && (
-        <h2 className={twMerge("text-white font-medium text-sm", `${(!!Hover && (isHover || active)) && 'text-blue-1'}`)}>
+        <h2 className={twMerge("transition-all text-white font-semibold text-sm", `${(!!Hover && (isHover || active)) && 'text-blue-1'}`)}>
           {t(navTitle)}
         </h2>
       )}
