@@ -19,7 +19,7 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
   const _assetprice = useSelector(selectAssetLivePrice);
 
   return (
-    <Col className="gap-2">
+    <Col className="gap-3">
       <Row className="gap-2">
         <ShadowButton
           bgColor="bg-grey-5"
@@ -33,7 +33,7 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
           textColor="font-medium text-xs"
           border="rounded"
           onClick={() => console.log("d")}
-          iconSvg={<StarIcon className="w-4 h-4 fill-orage-1 stroke-0" />}
+          iconSvg={<StarIcon className="w-4 h-4 fill-orange-1" />}
           title="1.8k"
         />
       </Row>

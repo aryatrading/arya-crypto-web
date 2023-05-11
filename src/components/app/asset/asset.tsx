@@ -58,8 +58,8 @@ const Asset: FC = () => {
       </Row>
       <Tabs selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
         <TabList className="border-b-[1px] border-grey-3 mb-6">
-          <Row className="gap-4">
-            <Tab className="font-bold text-lg outline-none cursor-pointer">
+          <Row className="gap-6">
+            <Tab className="font-semibold text-sm outline-none cursor-pointer">
               {t("assetinfotab")}
             </Tab>
             {asset?.isHoldingAsset ? (
