@@ -59,8 +59,8 @@ const AssetTradeFromInput: FC = () => {
   return (
     <Col className="bg-black-1 rounded-md px-4 py-2 gap-4 w-full">
       <Row className="flex justify-between">
-        <p className="font-medium text-base">From</p>
-        <p className="font-medium text-base">
+        <p className="font-medium text-gray-500 text-sm">From</p>
+        <p className="font-medium text-gray-500 text-sm">
           Balance: {formatNumber(asset.availableBalance)} {asset.symbol}
         </p>
       </Row>
@@ -102,6 +102,7 @@ const AssetTradeFromInput: FC = () => {
               disabled={false}
               title={asset.symbol ?? "Select"}
               removeAsset={symbol}
+              showContentHeaderLabel={false}
             />
           )}
         </Row>

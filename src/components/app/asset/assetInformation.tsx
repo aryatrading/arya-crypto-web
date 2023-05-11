@@ -71,8 +71,8 @@ const AssetInformationTab: FC = () => {
           />
         </Row>
       </Row>
-      <Row className="gap-2">
-        <Col className="w-3/4">
+      <Row className="gap-6">
+        <Col className="w-4/6">
           <div className="mt-7 mb-7 ">
             {view === "price" ? (
               <LineChart primaryLineData={timeseries} className=" h-80" />
@@ -88,7 +88,7 @@ const AssetInformationTab: FC = () => {
             {asset?.id && <CoinConverter preDefined staticCoin={asset} />}
           </Col>
         </Col>
-        <div className="w-3/12 mt-7">
+        <div className="w-2/6 mt-7">
           <p className="mb-2 font-medium text-xl">Trade {asset.name}</p>
           <AssetTrade />
         </div>
