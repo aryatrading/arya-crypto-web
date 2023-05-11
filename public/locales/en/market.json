@@ -5,7 +5,7 @@
     "all": "All",
     "rank": "Rank",
     "name": "Name",
-    "pnl": "24h P/L",
+    "pnl": "Change (24Hr)",
     "currentprice": "Current Price",
     "priceinbtc": "Price in BTC",
     "marketcap": "Market Cap.",

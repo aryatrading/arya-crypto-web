@@ -28,7 +28,7 @@ const AssetRow = ({ icon, name, symbol, className }: IAssetRowProps) => {
                     {name}
                 </span>
                 <span className="text-grey-1 text-xs md:text-sm ">
-                    {symbol?.toUpperCase()}
+                •  {symbol?.toUpperCase()}
                 </span>
             </div>
         </Row>

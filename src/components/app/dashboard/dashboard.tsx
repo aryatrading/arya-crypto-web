@@ -21,6 +21,7 @@ import { MODE_DEBUG } from "../../../utils/constants/config"
 
 import styles from "./dashboard.module.scss"
 import Link from "next/link"
+import PageLoader from "../../shared/pageLoader/pageLoader"
 
 const Dashboard: FC = () => {
 
@@ -145,19 +146,21 @@ const Dashboard: FC = () => {
     )
   }, [portfolioDoughnutChart, portfolioLineChart]);
 
-  const tableExchangesImages = useMemo(() => {
-    if (selectedExchange?.provider_id) {
-      return (
-        <ExchangeImage providerId={selectedExchange?.provider_id} ></ExchangeImage>
-      );
-    } else {
-      return connectedExchanges?.map((exchange) => {
+  const tableExchangesImages = useCallback((exchanges_ids?: number[]) => {
+    if (exchanges_ids?.length) {
+      return exchanges_ids?.map((exchangeId) => {
         return (
-          <ExchangeImage key={exchange.name} providerId={exchange?.provider_id} ></ExchangeImage>
+          <ExchangeImage key={exchangeId} providerId={exchangeId} ></ExchangeImage>
         );
       })
+    } else {
+      if (selectedExchange?.provider_id) {
+        return (
+          <ExchangeImage providerId={selectedExchange?.provider_id} ></ExchangeImage>
+        );
+      }
     }
-  }, [connectedExchanges, selectedExchange?.provider_id])
+  }, [selectedExchange?.provider_id])
 
   const table = useMemo(() => {
     return (
@@ -165,13 +168,13 @@ const Dashboard: FC = () => {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>{t("common:name")}</th>
-              <th>{t("common:weight")}</th>
-              <th>{t("common:amount")}</th>
-              <th>{t("common:currentPrice")}</th>
-              <th>{t("common:value")}</th>
-              <th>{t("common:24hP/L")}</th>
-              <th>{t("common:exchange")}</th>
+              <th className="text-left">{t("common:name")}</th>
+              <th className="text-left">{t("common:weight")}</th>
+              <th className="text-right">{t("common:amount")}</th>
+              <th className="text-right">{t("common:currentPrice")}</th>
+              <th className="text-right">{t("common:value")}</th>
+              <th className="text-right">{t("common:24hP/L")}</th>
+              <th className="text-right">{t("common:exchange")}</th>
             </tr>
           </thead>
           <tbody>
@@ -189,12 +192,12 @@ const Dashboard: FC = () => {
                 const assetPortfolioPercentage = asset.weight;
 
                 return (
-                  <tr key={asset.name}>
+                  <tr className="hover:bg-black-2/25 hover:bg-blend-darken cursor-pointer" key={asset.name}>
                     <td>
-                      <Link href={`/asset?symbol=${asset.asset_details?.symbol}`} className="flex flex-row gap-3 items-center">
-                        <Image src={asset?.asset_details?.image ?? ""} alt="" width={23} height={23} />
-                        <p>{asset?.asset_details?.name}</p>
-                        <span className="text-sm text-grey-1">{asset.name}</span>
+                      <Link href={`/asset?symbol=${asset.asset_details?.symbol}`} className="flex flex-row items-center">
+                        <Image className="mr-4" src={asset?.asset_details?.image ?? ""} alt="" width={23} height={23} />
+                        <p className="font-semibold mr-1">{asset?.asset_details?.name}</p>
+                        <span className="text-sm text-grey-1 font-semibold"> • {asset.name}</span>
                       </Link>
                     </td>
                     <td>
@@ -207,13 +210,22 @@ const Dashboard: FC = () => {
                         </Row>
                       </Row>
                     </td>
-                    <td>{formatNumber(asset.free ?? 0)} {asset.name}</td>
-                    <td>${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
-                    <td>${formatNumber((asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0))}</td>
-                    <td className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive })}>{formattedChangePercentage}% ({formattedChangePrice})</td>
+                    <td className="text-right">{formatNumber(asset.free ?? 0)} {asset.name}</td>
+                    <td className="text-right font-semibold">${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
+                    <td className="text-right">${formatNumber((asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0))}</td>
+                    <td className="text-right">
+                      <Row className="items-center justify-end ">
+                        <Row className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive }, "mr-4")}>{formattedChangePrice}</Row>
+                      
+                      <Row className={clsx({ "bg-green-2 text-green-1": isPriceChangePositive, "bg-red-2 text-red-1": !isPriceChangePositive }, "rounded-md py-1 px-2 font-semibold text-sm")}>
+                          {formattedChangePercentage}%
+                        </Row>
+                        </Row>
+                       
+                    </td>
                     <td>
-                      <Row className="gap-2">
-                        {tableExchangesImages}
+                      <Row className="text-right justify-end gap-2">
+                        {tableExchangesImages(asset?.exchanges_ids)}
                       </Row>
                     </td>
                   </tr>
@@ -244,22 +256,12 @@ const Dashboard: FC = () => {
     }
   }, [portfolioHoldings.length, t, table]);
 
-  const loadingOverlay = useMemo(() => {
-    return (
-      <Col className="w-full h-full bg-white bg-opacity-40 fixed z-10 left-0 top-0 items-center justify-center">
-        <Col className="w-40 h-40 bg-slate-50 rounded-md">
-          <LoadingSpinner />
-        </Col>
-      </Col>
-    )
-  }, [])
-
   return (
     <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
       <ExchangeSwitcher />
       {charts}
       {holdingsTable}
-      {(isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) && loadingOverlay}
+      {(isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) && <PageLoader />}
     </Col>
   )
 }

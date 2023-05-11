@@ -17,7 +17,6 @@ import LoadingSpinner from "../loading-spinner/loading-spinner";
 import AsyncStatusWrapper from "../async-status-wrapper/async-status-wrapper";
 import ExchangeImage from "../exchange-image/exchange-image";
 import { ExchangeType } from "../../../types/exchange.types";
-import Button from "../buttons/button";
 import Link from "next/link";
 
 const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall = true }) => {
@@ -51,14 +50,15 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
     )}`;
 
     return (
-      <p
-        className={clsx({
-          "text-green-1 ": isPriceChangePositive,
-          "text-red-1": !isPriceChangePositive,
-        })}
-      >
-        {formattedChangePercentage}%
-      </p>
+
+      <Row className={clsx("p-1 rounded-md", {
+        "text-green-1 bg-green-2": isPriceChangePositive,
+        "text-red-1 bg-red-2": !isPriceChangePositive,
+      })}>
+        <p>
+          {formattedChangePercentage}%
+        </p>
+      </Row>
     );
   }, []);
 
@@ -121,7 +121,7 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
             className="bg-white rounded-full p-2 "
             aria-label="Customise options"
           >
-            <PlayIcon className="rotate-90 text-blue-1" height="15px" width="15px"/>
+            <PlayIcon className="rotate-90 text-blue-1" height="15px" width="15px" />
           </button>
         </DropdownMenu.Trigger>
 
@@ -168,9 +168,7 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
             {formatNumber(selectedExchange?.last_5m_evaluation ?? 0, true)}{" "}
             <span className="text-2xl">USD</span>
           </h3>
-          <Row className="bg-green-2 p-1 rounded-md">
-            {changePercentage(selectedExchange)}
-          </Row>
+          {changePercentage(selectedExchange)}
         </Row>
       </Col>
     </AsyncStatusWrapper>
