@@ -111,13 +111,8 @@ const Nav = () => {
   }, [asPath, locale, pathname, push, query]);
 
   return (
-<<<<<<< HEAD
-    <Col className="w-full bg-black-2 fixed lg:relative z-20">
-      <Row className="container w-full h-[72px] justify-between">
-=======
     <Col className="w-full bg-black-2 border-b border-gray-800 shadow-md  fixed lg:relative z-20">
       <Row className="container w-full py-2 justify-between">
->>>>>>> CRW-80-smart-allocation-view-screen-automation-tab-rebalancing-sheduling
         <Row className="xl:gap-20 md:gap-16 items-center">
           <Link href={"/home"}>
             <Image
