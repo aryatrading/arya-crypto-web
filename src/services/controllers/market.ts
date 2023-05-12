@@ -51,7 +51,7 @@ export const fetchAssets = async (search?: string, limit: number = 100) => {
     }
   }
   if (limit === 100) {
-    store.dispatch(storeMrkAssets(_assets));
+    store?.dispatch(storeMrkAssets(_assets));
   }
   return _assets;
 };
