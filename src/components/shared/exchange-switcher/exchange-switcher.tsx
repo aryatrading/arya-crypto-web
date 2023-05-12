@@ -90,7 +90,7 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
               selectExchange(exchange);
           }}
         >
-          <Row className="items-center  gap-5 h-full">
+          <Row className="items-center gap-5 h-full">
             <ExchangeImage
               providerId={exchange?.provider_id}
               width={37}
@@ -132,14 +132,15 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
 
         <DropdownMenu.Portal>
           <DropdownMenu.Content
-          sideOffset={15}
-            className="bg-grey-3 rounded-md overflow-hidden z-10"
+            sideOffset={15}
+            align="start"
+            className="w-[400px] max-w-[calc(100%_-_28px)] bg-grey-3 rounded-md overflow-hidden z-10"
           >
             {connectedExchanges?.map((exchange) => dropdownItem(exchange))}
 
             <DropdownMenu.Item className={"p-4 rounded-md"} disabled={true}>
               <Row className="items-center gap-5 h-full">
-                <Link href="settings" className="w-full py-3 px-2 rounded-md">
+                <Link href="settings" className="w-full py-3 px-2 rounded-md bg-grey-2">
                   <Row className="w-full font-bold justify-center gap-1">
                     <PlusIcon width={20} />
                     <p className="text-bold">{t("addExchange")}</p>
@@ -160,7 +161,7 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
       whenPendingComponent={<LoadingSpinner />}
       whenRejectedComponent={<></>}
     >
-      <Col className="col-span-12 items-start gap-1">
+      <Col className="w-full items-start gap-3.5">
         {dropdown}
         <Row className="items-center gap-3">
           <h3 className="text-2xl sm:text-4xl font-bold">

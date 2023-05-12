@@ -1,3 +1,4 @@
+import { GraphDataRange } from "../../components/shared/charts/graph/graph.type";
 import { AssetType } from "../../types/asset";
 import { axiosInstance } from "../api/axiosConfig";
 import { setAllProviders } from "../redux/exchangeSlice";
@@ -56,9 +57,9 @@ export const fetchAssets = async (search?: string, limit: number = 100) => {
   return _assets;
 };
 
-export const getPortfolioSnapshots = async (providerId?: number | null) => {
+export const getPortfolioSnapshots = async (providerId?: number | null, range?: GraphDataRange) => {
   return await axiosInstance.get(`/trade-engine/portfolio-snapshots/`, {
-    params: { provider: providerId, range: "year" },
+    params: { provider: providerId, range },
   });
 };
 

@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 type ShadowButtonProps = {
-  title: string;
+  title?: string;
   iconSvg?: any;
   border?: string;
   bgColor?: string;
@@ -24,7 +24,7 @@ export const ShadowButton: FC<ShadowButtonProps> = ({
       onClick={() => onClick!()}
     >
       {iconSvg ?? null}
-      <h3 className={`${textColor} font-semibold text-sm`}>{title}</h3>
+      {title && <h3 className={`${textColor} font-semibold text-sm`}>{title}</h3>}
     </div>
   );
 };
