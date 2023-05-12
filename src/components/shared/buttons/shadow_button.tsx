@@ -7,7 +7,7 @@ type ShadowButtonProps = {
   bgColor?: string;
   onClick: Function;
   textColor: string;
-  textSize: string;
+  textSize?: string;
 
 };
 
@@ -18,7 +18,7 @@ export const ShadowButton: FC<ShadowButtonProps> = ({
   bgColor,
   onClick,
   textColor,
-  textSize,
+  textSize = 'text-base',
 }) => {
   return (
     <div
