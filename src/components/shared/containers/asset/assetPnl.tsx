@@ -42,7 +42,7 @@ const AssetPnl: FC<IAssetPnlProps> = ({ value, className, transform}) => {
   )
   
   return (
-    <Row className={twMerge(`w-20 h-5 rounded  justify-center items-center gap-1`,className)}>
+    <Row className={twMerge(`py-1 px-2 rounded-md text-sm font-semibold justify-center items-center gap-1`,className)}>
       {(isProfit !== null) && (
         <PlayIcon
           className={`w-3 h-3 ${
