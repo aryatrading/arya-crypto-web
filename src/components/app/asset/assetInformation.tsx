@@ -53,18 +53,20 @@ const AssetInformationTab: FC = () => {
   };
 
   return (
-    <>
-      <Row className="justify-between items-center">
-        <h2 className="font-medium text-xl ">
-          <span className="uppercase">{asset.symbol}</span> {t("price_chart")}
-        </h2>
-        <Row className="gap-3">
-          {view === "price" ? (
-            <TimeseriesPicker
-              series={assetGraphToggles}
-              active={view}
-              onclick={(e: seriesInterface) => setView(e.value)}
-            />
+    <Row className="flex-1 flex">
+      <Col className="flex-1">
+        <Row className="justify-between items-center">
+          <h2 className="font-medium text-xl">
+            <span className="uppercase">{asset.symbol}</span> {t("price_chart")}
+          </h2>
+          <Row className="gap-3">
+            {view === "price" ? (
+              <TimeseriesPicker
+                series={assetTimeseries}
+                active={activeSeries}
+                onclick={(e: seriesInterface) => onSeriesClick(e)}
+              />
+            ) : null}
           </Row>
         </Row>
         <div className="mt-7 mb-7">
