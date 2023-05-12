@@ -1,6 +1,8 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { MagnifyingGlassIcon, PlayIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import clsx from "clsx";
 
@@ -8,11 +10,10 @@ import { Col, Row } from "../layout/flex";
 import { fetchAssets } from "../../../services/controllers/market";
 import { AssetType } from "../../../types/asset";
 import LoadingSpinner from "../loading-spinner/loading-spinner";
+import CloseIcon from "../../svg/Shared/CloseIcon";
 import Button from "../buttons/button";
 
 import styles from './index.module.scss';
-import { useRouter } from "next/router";
-import CloseIcon from "../../svg/Shared/CloseIcon";
 
 interface AssetDropdownTypes {
     onClick?: (x: any) => void,
@@ -20,13 +21,14 @@ interface AssetDropdownTypes {
 }
 
 export const SearchAssetInput = ({ onClick, t }: AssetDropdownTypes) => {
+    const { t } = useTranslation(['']);
     const [coins, setCoins] = useState<AssetType[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [keyword, setKeyword] = useState<string>('');
     const [focused, setFocused] = useState<boolean>();
     const { push } = useRouter();
 
-    const resultLimit = useMemo(() => keyword !== '' ? 50 : 10, [keyword]);
+    const resultLimit = useMemo(() => keyword !== '' ? 50 : 5, [keyword]);
 
     useEffect(() => {
         fetchAssets(keyword, resultLimit).then((response: AssetType[]) => {
@@ -80,10 +82,10 @@ export const SearchAssetInput = ({ onClick, t }: AssetDropdownTypes) => {
                     </Button>}
                 </Row>
             </Button>
-            {focused && <Col className={clsx("w-[400px] h-[300px] bg-grey-2 top-16 right-0 absolute items-center rounded-md overflow-scroll p-4", styles.list)}>
+            {focused && <Col className={clsx("w-[400px] max-h-[300px] bg-grey-2 top-16 right-0 absolute items-center rounded-md overflow-auto p-4", styles.list)}>
                 {loading ? <LoadingSpinner /> :
                     coins.length === 0 ?
-                        <span className="w-full mx-4 text-center">No asset with this keyword!<br /><br />{keyword}</span>
+                        <span className="w-full mx-4 text-center">{t('empty')}<br /><br />{keyword}</span>
                         :
                         coins.map(coin => {
                             return (
@@ -110,7 +112,7 @@ export const SearchAssetInput = ({ onClick, t }: AssetDropdownTypes) => {
                                                         <PlayIcon className={`w-2 h-2  fill-green-1 -rotate-90 stroke-0`} />
                                                         : null
                                             }
-                                            <p className={clsx({ "text-red-1": coin.pnl < 0, "text-green-1": coin.pnl > 0, "text-grey-1": coin.pnl === 0 }, "font-bold text-xs tracking-[1px]")}>USD {coin?.currentPrice}</p>
+                                            <p className={clsx({ "text-red-1": coin.pnl < 0, "text-green-1": coin.pnl > 0, "text-grey-1": coin.pnl === 0 }, "font-bold text-xs tracking-[1px]")}>${coin?.currentPrice}</p>
                                         </Row>
                                     </Row>
                                 </Button>
