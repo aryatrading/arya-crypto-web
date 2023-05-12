@@ -30,6 +30,7 @@ export const TimeseriesPicker: FC<TimeseriesProps> = ({
             }
             bgColor={active === elm.key ? "bg-blue-3" : "bg-grey-2"}
             textColor={active === elm.key ? "text-blue-2" : ""}
+            textSize="text-xs"
           />
         );
       })}
