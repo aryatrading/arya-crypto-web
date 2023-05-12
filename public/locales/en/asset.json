@@ -43,5 +43,6 @@
     "cancelled": "Cancelled",
     "executed": "Executed",
     "error": "Error Executing",
-    "assetprice": "{{name}} Price"
+    "assetprice": "{{name}} Price",
+    "market" : "Market"
 }

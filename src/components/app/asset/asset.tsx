@@ -46,10 +46,10 @@ const Asset: FC = () => {
   return (
     <Col className="h-full w-full gap-12">
       <Row className="text-grey-1 gap-1">
-        <span>market</span>
+        <span>{t("market")}</span>
         <span> / </span>
         <h1 className="">
-          {t("pricelivedata", {name} )}
+          {t("pricelivedata", {asset} )}
         </h1>
       </Row>
       <Row className="justify-between">

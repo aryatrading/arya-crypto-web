@@ -41,5 +41,6 @@
     "cancelled": "Annulé",
     "executed": "Excecuté",
     "error": "Erreur d'exécution",
-    "assetprice": "Prix du {{name}}"
+    "assetprice": "Prix du {{name}}",
+    "market" : "Marché"
 }
