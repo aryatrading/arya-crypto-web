@@ -36,5 +36,6 @@
     "pending": "Pending",
     "cancelled": "Cancelled",
     "executed": "Executed",
-    "error": "Error Executing"
+    "error": "Error Executing",
+    "empty": "No asset with this keyword!"
 }

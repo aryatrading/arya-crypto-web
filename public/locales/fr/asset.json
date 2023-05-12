@@ -36,5 +36,6 @@
     "pending": "En attente",
     "cancelled": "Annulé",
     "executed": "Excecuté",
-    "error": "Erreur d'exécution"
+    "error": "Erreur d'exécution",
+    "empty": "Aucun élément avec ce mot-clé !"
 }
