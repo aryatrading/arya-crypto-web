@@ -168,7 +168,7 @@ const Dashboard: FC = () => {
       return (
         <Col className="w-full items-center justify-center gap-5">
           {selectedChart === "doughnut" ? portfolioDoughnutChart : portfolioLineChart}
-          <Row className="w-full h-10 justify-between gap-2">
+          <Row className="w-full h-10 justify-between gap-2 overflow-auto">
             <Row className="gap-1">
               <ShadowButton
                 onClick={() => { console.log("doughnut"); setSelectedChart('doughnut') }}
