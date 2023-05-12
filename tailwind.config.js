@@ -41,7 +41,9 @@ export const theme = {
           2: "#111827",
           3: "#1F2A41",
           4: "#2B3958",
-          5: '#1E293B'
+          5: "#1C1C1C",
+          6: '#1E293B',
+          7: '#334155',
         },
         black: {
           1: "#030712",
@@ -49,9 +51,6 @@ export const theme = {
         },
         yellow: {
           1: "#F3BA2F"
-        },
-        orage: {
-          1: "#F7931A"
         }
       },
       keyframes: {
