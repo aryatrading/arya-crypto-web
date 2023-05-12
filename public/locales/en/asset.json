@@ -7,12 +7,18 @@
     "dailylow": "Daily Low",
     "dailyhigh": "Daily High",
     "rank": "Rank",
-    "pricelivedata": "Price Live Data",
-    "pricetday": "price today is ",
+    "pricelivedata": "Live {{asset.name}} Price and Information",
+    "drop": ", it reduced by ",
+    "increase": ", it increqsed by ",
+    "suply": " with a 24-hour trading volume of $",
+    "cap": "The {{asset.name}} market Cap. is $",
+    "circsuply": "and a circulating supply of",
+    "totalsupplyof": " for a maximum of ",
+    "pricetday": "The price of {{asset.name}} today is  ",
     "twentyfourvolume": " with a 24-hour trading volume of ",
     "pricechange": "price change is",
-    "lasttwentyfour": "in the last 24 hours. It has a circulating supply of",
-    "totalsupplyof": "coins and a total supply of",
+    "lasttwentyfour": "",
+
     "binanceexchange": "If you are looking to buy or sell, Binance is currently the most active exchange.",
     "whatis": "What is",
     "price_chart": "live price Chart",
@@ -36,5 +42,6 @@
     "pending": "Pending",
     "cancelled": "Cancelled",
     "executed": "Executed",
-    "error": "Error Executing"
+    "error": "Error Executing",
+    "assetprice": "{{name}} Price"
 }

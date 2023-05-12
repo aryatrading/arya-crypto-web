@@ -13,25 +13,28 @@ type AssetInformationProps = {
 export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
   const { t } = useTranslation(["asset"]);
   const _assetprice = useSelector(selectAssetLivePrice);
-
+const name = asset.name
   return (
     <Col className="gap-11">
       <Col className="gap-4">
         <h2 className="font-medium text-xl">
-          {asset.name} ({asset.symbol?.toUpperCase()})  {t("pricelivedata")}
+          {t("pricelivedata",{asset} )}
         </h2>
         <p className="font-medium text-sm">
-          {asset.name} ({asset.symbol?.toUpperCase()})  {t("pricetday")}
-          {formatNumber(
-            _assetprice[asset.symbol?.toLowerCase() ?? ""] ??
-              asset.currentPrice,
-            true
-          )}
-          {t("twentyfourvolume")} {formatNumber(asset.volume ?? 0)}.{" "}
-          {asset.symbol?.toUpperCase()} {t("pricechange")} {asset.pnl}%{" "}
-          {t("lasttwentyfour")} {formatNumber(asset.circlSupply ?? 0)}{" "}
-          {asset.symbol?.toUpperCase()} {t("totalsupplyof")}{" "}
-          {formatNumber(asset.supply ?? 0)}. {t("binanceexchange")}
+          <strong>{t("pricetday", {asset})}
+          {formatNumber(_assetprice[asset.symbol?.toLowerCase() ?? ""] ?? asset.currentPrice, true )}
+          </strong>
+          {asset.pnl <= 0 ? t("drop") : t("increase")}
+          {asset.pnl}%{" "}
+          {t("suply", {asset})}
+          {formatNumber(asset.volume ?? 0)}{" "}
+            {t("lasttwentyfour")}<br/>
+            {t("cap", {asset})}
+            {formatNumber(asset.mrkCap ?? 0)}{" "}
+            {" "}{t("circsuply")}{" "}
+           {formatNumber(asset.circlSupply ?? 0)}{" "}{asset.symbol?.toUpperCase()}{" "}
+           {t("totalsupplyof")}{" "}
+          {formatNumber(asset.supply ?? 0)}{" "}{asset.symbol?.toUpperCase()}.
         </p>
       </Col>
       <Col className="gap-4">

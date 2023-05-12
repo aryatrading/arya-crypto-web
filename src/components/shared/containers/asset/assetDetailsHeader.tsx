@@ -16,8 +16,9 @@ type AssetHeaderProps = {
 
 export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
   const { t } = useTranslation(["asset"]);
+  const name = asset.name
   const _assetprice = useSelector(selectAssetLivePrice);
-
+ 
   return (
     <Col className="gap-3">
       <Row className="gap-2">
@@ -42,6 +43,8 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
         name={asset.name}
         symbol={asset.symbol?.toUpperCase()}
       />
+      <Col>
+        <h2 className="text-grey-1 text-xs">{t("assetprice", { name })} ({asset.symbol?.toUpperCase()})</h2>
       <Row className="gap-2 items-center">
         <p className="font-medium text-4xl">
           {formatNumber(
@@ -60,6 +63,8 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
           transform={formatNumber}
         />
       </Row>
+      </Col>
+
     </Col>
   );
 };
