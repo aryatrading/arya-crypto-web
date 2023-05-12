@@ -1,15 +1,16 @@
 import { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
+import { PlayIcon, ArrowTrendingDownIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import moment from 'moment';
 import clsx from 'clsx';
 
 import { Col, Row } from '../../shared/layout/flex';
 import { PostTypes } from '../../../types/asset';
 import { fetchPendingMarketItemLogos, getMarketKey, userPic } from '../../../services/firebase/community/posts';
+import { formatNumber, shortNumberFormat } from '../../../utils/helpers/prices';
 import Button from '../../shared/buttons/button';
 import { playVideoIcon } from '../../svg/playIcon';
-import { ArrowDown } from '../../svg/arrowDown';
-import { ArrowUp } from '../../svg/arrowUp';
 import { LikeIcon } from '../../svg/likeIcon';
 import { CommentsIcon } from '../../svg/commentsIcon';
 import { ShareIcon } from '../../svg/shareIcon';
@@ -20,6 +21,7 @@ import { awardsImages } from './awards';
 import styles from './index.module.scss';
 
 export const Post: FC<{ post: PostTypes }> = ({ post }: { post: PostTypes }) => {
+    const { t } = useTranslation();
     const [logo, setLogo] = useState<any>();
     const [postMediaList, setPostMediaList] = useState<any>([]);
     const marketKey: string = useMemo(() => getMarketKey(post.FinancialData?.Instrument?.MarketItem?.Symbol?.toLowerCase(), post.FinancialData?.Instrument?.MarketItem?.Market?.toLowerCase(), post.FinancialData?.Instrument?.MarketItem?.To?.toLowerCase()), [post.FinancialData?.Instrument?.MarketItem?.Market, post.FinancialData?.Instrument?.MarketItem?.Symbol, post.FinancialData?.Instrument?.MarketItem?.To]);
@@ -70,9 +72,9 @@ export const Post: FC<{ post: PostTypes }> = ({ post }: { post: PostTypes }) => 
     const awardCount = useMemo(() => Object.keys(post?.AwardsCount || {})?.length, [post?.AwardsCount]);
     const icon = useMemo(() =>
         post?.FinancialData?.Sell ?
-            <ArrowDown />
+            <ArrowTrendingDownIcon className='stroke-red-1 w-3 h-3 rotate-12' />
             :
-            <ArrowUp />
+            <ArrowTrendingUpIcon className='stroke-green-1 w-3 h-3 -rotate-12' />
         , [post?.FinancialData?.Sell]);
 
 
@@ -96,12 +98,12 @@ export const Post: FC<{ post: PostTypes }> = ({ post }: { post: PostTypes }) => 
                 </Col>
                 {post?.FinancialData?.Sell != null && <Row className={clsx({ "bg-green-2": !post?.FinancialData?.Sell, "bg-red-2": post?.FinancialData?.Sell }, 'px-3.5 py-1 rounded-md items-center gap-1')}>
                     {icon}
-                    <span className={clsx({ "text-green-1": !post?.FinancialData?.Sell, "text-red-1": post?.FinancialData?.Sell }, 'text-xs font-bold')}>{!post?.FinancialData?.Sell ? "Buy" : "Sell"}</span>
+                    <span className={clsx({ "text-green-1": !post?.FinancialData?.Sell, "text-red-1": post?.FinancialData?.Sell }, 'text-xs font-bold')}>{!post?.FinancialData?.Sell ? t('buy') : t('sell')}</span>
                 </Row>}
             </Row >
             <p className='my-2 font-medium text-sm'>
                 {post.Text?.slice(0, post.Text.length > 140 ? 120 : post.Text.length)} {post?.Text?.length ? post?.Text?.length > 140 && "..." : ''}
-                {post?.Text?.length ? post?.Text?.length > 140 && <span className='text-blue-1 underline'> read more</span> : ''}
+                {post?.Text?.length ? post?.Text?.length > 140 && <span className='text-blue-1 underline'> {t('readMore')}</span> : ''}
             </p>
 
             {post?.Audio && <AudioDisplay />}
@@ -132,12 +134,12 @@ export const Post: FC<{ post: PostTypes }> = ({ post }: { post: PostTypes }) => 
             }
 
             {
-                post?.FinancialData && <Row className='w-full min-h-[60px] bg-grey-3 rounded-md px-4 py-2 justify-between items-center my-2'>
+                post?.FinancialData && <Row className='w-full min-h-[60px] bg-grey-7 rounded-md px-4 py-2 justify-between items-center my-2'>
                     <Row className='gap-2 items-center'>
                         <Image src={logoURL} alt='test' width={36} height={36} className='max-h-[36px]' />
                         <Col className='gap-1'>
                             <span className='text-white text-sm font-bold'>{post.FinancialData.Instrument?.MarketItem?.Symbol}/{post.FinancialData.Instrument?.MarketItem?.To}</span>
-                            <span className='text-white text-sm font-bold'>${post.FinancialData.PriceEvaluations?.[0].Price}</span>
+                            <span className='text-white text-sm font-bold'>${formatNumber(post.FinancialData.PriceEvaluations?.[0].Price || 0)}</span>
                         </Col>
                     </Row>
 
@@ -145,13 +147,11 @@ export const Post: FC<{ post: PostTypes }> = ({ post }: { post: PostTypes }) => 
                         <Col className='gap-1'>
                             {post?.FinancialData?.Sell != null && <Row className={clsx({ "bg-green-2": !post?.FinancialData?.Sell, "bg-red-2": post?.FinancialData?.Sell }, 'px-3.5 py-1 rounded-md items-center gap-1')}>
                                 {icon}
-                                <span className={clsx({ "text-green-1": !post?.FinancialData?.Sell, "text-red-1": post?.FinancialData?.Sell }, 'text-xs font-bold')}>{!post?.FinancialData?.Sell ? "Buy" : "Sell"}</span>
+                                <span className={clsx({ "text-green-1": !post?.FinancialData?.Sell, "text-red-1": post?.FinancialData?.Sell }, 'text-xs font-bold')}>{!post?.FinancialData?.Sell ? t('buy') : t('sell')}</span>
                             </Row>}
-                            {post.FinancialData.EntryValue && <span className='text-white text-sm font-bold'>Entry {post.FinancialData.EntryValue}</span>}
+                            {post.FinancialData.EntryValue && <span className='text-white text-sm font-bold'>{t('entry')} {formatNumber(post.FinancialData.EntryValue)}</span>}
                         </Col>
-                        <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5.79181 10.5719C6.18027 11.2189 7.1181 11.2189 7.50655 10.5719L12.4936 2.26471C12.8938 1.59819 12.4137 0.75 11.6363 0.75L1.6621 0.75C0.884694 0.75 0.404597 1.59819 0.804733 2.26471L5.79181 10.5719Z" fill="#ACB3BA" />
-                        </svg>
+                        <PlayIcon className='w-3 h-3 stroke-current rotate-90' />
                     </Row>
                 </Row>
             }
@@ -164,7 +164,7 @@ export const Post: FC<{ post: PostTypes }> = ({ post }: { post: PostTypes }) => 
                             return (
                                 <Row key={e} className='gap-2 items-center'>
                                     <Image src={awardsImages[e]} alt='award' width={20} height={20} />
-                                    <span className='text-white font-bold text-sm'>{post.AwardsCount?.[e] || ''}</span>
+                                    <span className='text-white font-bold text-sm'>{shortNumberFormat(post.AwardsCount?.[e]) || ''}</span>
                                 </Row>
                             );
                         })}
@@ -177,21 +177,21 @@ export const Post: FC<{ post: PostTypes }> = ({ post }: { post: PostTypes }) => 
                 <Row className='justify-evenly items-center my-2'>
                     <Row className='items-center gap-2'>
                         <LikeIcon />
-                        <span>{post.ReactionCounts?.Likes || 0}</span>
+                        <span>{shortNumberFormat(post.ReactionCounts?.Likes || 0)}</span>
                     </Row>
                     <Row className='items-center gap-2'>
                         <CommentsIcon />
 
-                        <span>{post.CommentsCount || 0}</span>
+                        <span>{shortNumberFormat(post.CommentsCount || 0)}</span>
                     </Row>
                     <Row className='items-center gap-2'>
                         <ShareIcon />
-                        <span>{post.SharesCount || 0}</span>
+                        <span>{shortNumberFormat(post.SharesCount || 0)}</span>
                     </Row>
                     <Row className='items-center gap-2'>
                         <AwardIcon />
 
-                        <span>{awardCount || 0}</span>
+                        <span>{shortNumberFormat(awardCount || 0)}</span>
                     </Row>
                 </Row>
             }

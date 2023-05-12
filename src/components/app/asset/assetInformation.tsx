@@ -96,7 +96,7 @@ const AssetInformationTab: FC = () => {
         {/* Community widget */}
         {posts.length > 0 && <>
           <h3 className="font-extrabold text-white header-label pb-6">{t('communityTitle', { coin: asset.name })}</h3>
-          <Col className="w-full min-h-[300px] bg-black-2 rounded-md px-10 py-5">
+          <Col className="w-full min-h-[300px] bg-grey-6 rounded-md px-10 py-5">
             {posts?.slice(0, 2)?.map((post: PostTypes) => {
               return (
                 <Post post={post} />

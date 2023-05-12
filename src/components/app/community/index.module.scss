@@ -8,7 +8,6 @@
         grid-column: span 2;
         position: relative;
         overflow: hidden;
-        border: 1px solid var(--greyish-3);
         cursor: pointer;
     }
 
@@ -17,7 +16,7 @@
         height: 100%;
         position: absolute;
         background-color: rgba(0, 0, 0, 0.652);
-        color: var(--white);
+        color: 'white';
     }
 
     .video-container {
@@ -31,7 +30,7 @@
         object-fit: contain;
         object-position: center;
         max-height: 480px;
-        background-color: #2B3958;
+        background-color: theme('colors.grey.7');
         border-radius: 4px;
     }
 
