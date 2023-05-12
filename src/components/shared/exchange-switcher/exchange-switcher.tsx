@@ -81,7 +81,6 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
           className={clsx(
             {
               "bg-grey-4": isSelected,
-              "bg-grey-2": !isSelected,
               "cursor-pointer": !isNotSelectable
             },
             "h-20 py-3 px-9 rounded-md"
@@ -116,25 +115,31 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
   const dropdown = useMemo(() => {
     return (
       <DropdownMenu.Root modal={false}>
-        <DropdownMenu.Trigger asChild>
-          <button
-            className="bg-white rounded-full p-2 "
-            aria-label="Customise options"
-          >
-            <PlayIcon className="rotate-90 text-blue-1" height="15px" width="15px" />
-          </button>
+        <DropdownMenu.Trigger>
+          <Row className="w-[300px] items-center justify-start gap-4">
+            <ExchangeImage providerId={selectedExchange?.provider_id} />
+            <h3 className="text-xl sm:text-3xl font-bold capitalize">
+              {selectedExchange?.name?.toLowerCase()}
+            </h3>
+            <button
+              className="bg-white rounded-full p-2 "
+              aria-label="Customise options"
+            >
+              <PlayIcon className="rotate-90 text-blue-1" height="15px" width="15px" />
+            </button>
+          </Row>
         </DropdownMenu.Trigger>
 
         <DropdownMenu.Portal>
           <DropdownMenu.Content
-            className="min-w-[420px] bg-grey-3 rounded-md overflow-hidden z-10"
-            sideOffset={15}
+          sideOffset={15}
+            className="bg-grey-3 rounded-md overflow-hidden z-10"
           >
             {connectedExchanges?.map((exchange) => dropdownItem(exchange))}
 
             <DropdownMenu.Item className={"p-4 rounded-md"} disabled={true}>
               <Row className="items-center gap-5 h-full">
-                <Link href="settings" className="w-full py-3 px-2 rounded-md bg-grey-2">
+                <Link href="settings" className="w-full py-3 px-2 rounded-md">
                   <Row className="w-full font-bold justify-center gap-1">
                     <PlusIcon width={20} />
                     <p className="text-bold">{t("addExchange")}</p>
@@ -146,7 +151,7 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
     );
-  }, [connectedExchanges, dropdownItem, t]);
+  }, [connectedExchanges, dropdownItem, selectedExchange?.name, selectedExchange?.provider_id, t]);
 
   return (
     <AsyncStatusWrapper
@@ -156,15 +161,9 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
       whenRejectedComponent={<></>}
     >
       <Col className="col-span-12 items-start gap-1">
-        <Row className="items-center justify-center gap-4 z-10">
-          <ExchangeImage providerId={selectedExchange?.provider_id} />
-          <h3 className="text-3xl font-bold capitalize">
-            {selectedExchange?.name?.toLowerCase()}
-          </h3>
-          {dropdown}
-        </Row>
+        {dropdown}
         <Row className="items-center gap-3">
-          <h3 className="text-4xl font-bold">
+          <h3 className="text-2xl sm:text-4xl font-bold">
             {formatNumber(selectedExchange?.last_5m_evaluation ?? 0, true)}{" "}
             <span className="text-2xl">USD</span>
           </h3>

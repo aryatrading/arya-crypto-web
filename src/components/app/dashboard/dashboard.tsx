@@ -13,7 +13,6 @@ import { getPortfolioHoldings, getPortfolioSnapshots } from "../../../services/c
 import { PortfolioAssetType, PortfolioSnapshotType } from "../../../types/exchange.types"
 import { chartDataType } from "../../shared/charts/graph/graph.type"
 import { percentageFormat, formatNumber } from "../../../utils/helpers/prices"
-import LoadingSpinner from "../../shared/loading-spinner/loading-spinner"
 import { selectConnectedExchanges, selectExchangeStoreStatus, selectSelectedExchange } from "../../../services/redux/exchangeSlice"
 import StatusAsync from "../../../utils/status-async"
 import ExchangeImage from "../../shared/exchange-image/exchange-image"
