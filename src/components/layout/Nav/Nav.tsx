@@ -51,7 +51,7 @@ const Nav = () => {
       }
       else {
         return <Row className="gap-4 items-center">
-          <Button className="px-6 py-3 font-semi-medium text-white"
+          <Button className="px-6 py-3 font-semibold text-white"
             onClick={() => {
               setVisibleSection('login');
               modalTrigger.show();
@@ -111,8 +111,8 @@ const Nav = () => {
   }, [asPath, locale, pathname, push, query]);
 
   return (
-    <Col className="w-full bg-black-2 fixed lg:relative rounded-b-lg z-20">
-      <Row className="container w-full h-[72px] justify-between">
+    <Col className="w-full bg-black-2 border-b border-gray-800 shadow-md  fixed lg:relative z-20">
+      <Row className="container w-full py-2 justify-between">
         <Row className="xl:gap-20 md:gap-16 items-center">
           <Link href={"/home"}>
             <Image
@@ -130,7 +130,7 @@ const Nav = () => {
             t={t}
             trigger={
               <button aria-label="Customise options" className="active:outline-none">
-                <Row className="bg-grey-3 sm:w-full h-[40px] rounded-sm px-4 hidden sm:flex">
+                <Row className="bg-grey-3 sm:w-full h-[40px] rounded-lg px-4 hidden sm:flex">
                   <MagnifyingGlassIcon width="20px" color="#6B7280" />
                   <input id="assets search" className="font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:outline-none border-transparent" type="text" placeholder={t('coin:searchAsset').toString()} disabled />
                 </Row>

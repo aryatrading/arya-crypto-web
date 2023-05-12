@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { AssetType } from "../../../types/asset";
-import { marketAssetsHeader } from "../../../utils/tableHead/marketAssetsHead";
 import { Col, Row } from "../layout/flex";
 import { useSelector } from "react-redux";
 import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
@@ -12,7 +11,7 @@ import AssetPnl from "../containers/asset/assetPnl";
 import { useRouter } from "next/navigation";
 import { formatNumber } from "../../../utils/helpers/prices";
 import AssetRow from "../AssetRow/AssetRow";
-
+import styles from "./assetsTable.module.scss"
 type AssetsTableProps = {
   assets: AssetType[];
   header: String[];
@@ -68,8 +67,8 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
 
   return (
     <Col className="flex items-center justify-center flex-1 gap-10 w-full">
-      <table className="w-full text-sm text-left text-gray-400">
-        <thead className="text-xs text-gray-1">
+      <table className={styles.table}>
+        <thead>
           <tr>
             {header.map((elm, index) => {
               return (
@@ -77,11 +76,9 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                   key={index}
                   scope="col"
                   className={
-                    index === 0
-                      ? "px-6 py-3 rounded-l-lg bg-black-2 font-medium"
-                      : index === marketAssetsHeader.length - 1
-                      ? "rounded-r-lg bg-black-2 font-medium"
-                      : "bg-black-2 h-14 font-medium"
+                    index > 1
+                      ? "text-right"
+                      : "text-left"
                   }
                 >
                   {elm}
@@ -95,16 +92,17 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
             return (
               <tr
                 key={index}
-                className="hover:bg-grey-1 cursor-pointer"
+                className="hover:bg-black-2/25 hover:bg-blend-darken cursor-pointer"
                 onClick={() => router.push(`/asset?symbol=${elm.symbol}`)}
               >
                 <th
                   scope="row"
-                  className="px-6 py-4 font-medium leading-6 text-white"
+                  className="px-6 py-4 font-bold leading-6 text-white"
                 >
                   {elm.rank}
                 </th>
-                <td>
+                <td
+                >
                   <AssetRow
                     icon={elm.iconUrl ?? ""}
                     name={elm.name ?? ""}
@@ -112,7 +110,8 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                     className="font-medium"
                   />
                 </td>
-                <td>
+                <td className="text-right">
+                <Row className="justify-end">
                   <AssetPnl
                     value={elm.pnl}
                     className={
@@ -120,31 +119,33 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                         ? "bg-red-2 text-red-1"
                         : "bg-green-2 text-green-1"
                     }
-                  />
+                    />
+                    </Row>
                 </td>
-                <td className="font-medium leading-6 text-white">
+                <td className="font-medium leading-6 text-white text-right font-semibold">
                   {formatNumber(
                     _assetprice[elm.symbol ?? ""] ?? elm.currentPrice,
                     true
                   )}
                 </td>
-                <td className="font-medium leading-6 text-white">
+                <td className="font-medium leading-6 text-white text-right">
                   {!!_assetprice &&
                     (
                       _assetprice[elm.symbol ?? ""] / _assetprice["btc"]
                     ).toFixed(7)}
                 </td>
-                <td className="font-medium leading-6 text-white">
+                <td className="font-medium leading-6 text-white text-right">
                   {formatNumber(elm.mrkCap ?? 0, true)}
                 </td>
-                <td className="font-medium leading-6 text-white">
+                <td className="font-medium leading-6 text-white text-right">
                   {formatNumber(elm.volume ?? 0, true)}
                 </td>
                 <td
-                  className="font-medium  text-white"
+                  className="font-medium  text-white text-right"
                   onClick={() => handleFavoritesToggle(elm)}
                 >
-                  <StarIcon className={renderFavoritesSvg(elm)} />
+                  <Row className="justify-end"><StarIcon className={renderFavoritesSvg(elm)} /></Row>
+                  
                 </td>
               </tr>
             );

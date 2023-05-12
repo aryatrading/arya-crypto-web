@@ -46,8 +46,8 @@ const ExchangeTab = () => {
         return Yup.object().shape({
             portfolioname: Yup.string().min(4).required(t('common:required').toString()),
             creationDate: Yup.string().required(t('common:required').toString()),
-            apiKey: Yup.string().min(64).required(t('common:required').toString()),
-            apiSecret: Yup.string().min(64).required(t('common:required').toString()),
+            apiKey: Yup.string().min(10).required(t('common:required').toString()),
+            apiSecret: Yup.string().min(10).required(t('common:required').toString()),
         });
     }, [t]);
 

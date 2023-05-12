@@ -3,6 +3,7 @@ import { PlayIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { Row } from "../../layout/flex";
 import { twMerge } from "tailwind-merge";
+import { percentageFormat } from "../../../../utils/helpers/prices";
 
 interface  IAssetPnlProps  {
   value: number;
@@ -29,19 +30,19 @@ const AssetPnl: FC<IAssetPnlProps> = ({ value, className, transform}) => {
   const handleValue = useCallback(
     () => {
       if(value){
-        return <p className={`text-xs font-medium ${(isProfit===null)?'text-grey-1':''}`}>
-        {transform?transform(value??0):`${isProfit?'+':''}${value}%`}
+        return <p className={`text-sm font-semibold ${(isProfit===null)?'text-grey-1':''}`}>
+        {transform?transform(value??0):`${isProfit?'+':''}${percentageFormat(value)}%`}
       </p>
       }
       else{
-        return <span className="text-grey-1 text-xs font-medium">N/A</span>
+        return <span className="text-grey-1 text-sm font-semibold">N/A</span>
       }
     },
     [isProfit, transform, value],
   )
   
   return (
-    <Row className={twMerge(`w-20 h-5 rounded  justify-center items-center gap-1`,className)}>
+    <Row className={twMerge(`py-1 px-2 rounded-md text-sm font-semibold justify-center items-center gap-1`,className)}>
       {(isProfit !== null) && (
         <PlayIcon
           className={`w-3 h-3 ${
