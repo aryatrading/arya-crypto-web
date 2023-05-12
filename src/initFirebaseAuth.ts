@@ -10,7 +10,7 @@ const initAuth = () => {
 
     const auth = getAuth(getApp());
     auth.onAuthStateChanged(async (user) => {
-        const idToken = await user?.getIdToken();
+        const idToken = await user?.getIdToken(true);
         if (idToken) {
             localStorage.setItem("idToken", idToken);
             axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;

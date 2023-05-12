@@ -1,4 +1,5 @@
-import { PredefinedSmartAllocationPortfolio, SaveSmartAllocationAssetType, SmartAllocationAssetDetails, SmartAllocationResponseType } from "../../types/smart-allocation.types";
+import { SaveSmartAllocationAssetType, SmartAllocationAssetDetails, SmartAllocationResponseType } from "../../types/smart-allocation.types";
+import { EnumExitStrategyTrigger, EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from "../../utils/constants/smartAllocation";
 import { axiosInstance } from "../api/axiosConfig";
 
 export const getSmartAllocation = async (providerId?: number) => {
@@ -43,21 +44,21 @@ function topCoinToHolding<SmartAllocationAssetType>(coin: SmartAllocationAssetDe
     }) as SmartAllocationAssetType;
 }
 
-export function getPredefinedPortfolioHoldings(predefinedPortfolioId: PredefinedSmartAllocationPortfolio) {
+export function getPredefinedPortfolioHoldings(predefinedPortfolioId: EnumPredefinedSmartAllocationPortfolio) {
 
     if (predefinedPortfolioId) {
         switch (predefinedPortfolioId) {
-            case PredefinedSmartAllocationPortfolio.top5:
+            case EnumPredefinedSmartAllocationPortfolio.top5:
                 return getTopCoins({ coins: 5 }).then((res) => {
                     const data = res.data;
                     return data.map((coin: any) => topCoinToHolding(coin));
                 })
-            case PredefinedSmartAllocationPortfolio.top10:
+            case EnumPredefinedSmartAllocationPortfolio.top10:
                 return getTopCoins({ coins: 10 }).then((res) => {
                     const data = res.data;
                     return data.map((coin: any) => topCoinToHolding(coin));
                 })
-            case PredefinedSmartAllocationPortfolio.top15:
+            case EnumPredefinedSmartAllocationPortfolio.top15:
                 return getTopCoins({ coins: 15 }).then((res) => {
                     const data = res.data;
                     return data.map((coin: any) => topCoinToHolding(coin));
@@ -66,4 +67,70 @@ export function getPredefinedPortfolioHoldings(predefinedPortfolioId: Predefined
                 return null;
         }
     }
+}
+
+export const setRebalancingFrequency = async (providerId: number, frequency: EnumRebalancingFrequency|null,rebalanceNow:boolean) => {
+    const frequencyParams = {
+      provider: providerId, 
+      frequency: frequency,
+      rebalance_portfolio:rebalanceNow
+    }
+    return await axiosInstance.put(
+      `/trade-engine/smart-allocation/frequency`,
+      null,
+      {params:frequencyParams}
+    );
+  }
+
+export const createExitStrategy = async (providerId: number, exitType: EnumExitStrategyTrigger, exitValue:number, exitPercentage:number) => {
+    const exitStrategyParams = {
+        provider: providerId
+    }
+    const exitStrategyBody = {
+        exit_type: exitType,
+        status:'ACTIVE',
+        exit_value:exitValue,
+        exit_percentage:exitPercentage
+    }
+    return await axiosInstance.post(
+        `/trade-engine/smart-allocation/exit`,
+        exitStrategyBody,
+        {params:exitStrategyParams}
+      );
+}
+
+export const updateExitStrategy = async (providerId: number, exitType: EnumExitStrategyTrigger, exitValue:number, exitPercentage:number) => {
+    const exitStrategyParams = {
+        provider: providerId
+    }
+    const exitStrategyBody = {
+        exit_type: exitType,
+        exit_value:exitValue,
+        exit_percentage:exitPercentage
+    }
+    return await axiosInstance.put(
+        `/trade-engine/smart-allocation/exit`,
+        exitStrategyBody,
+        {params:exitStrategyParams}
+      );
+}
+
+export const getExitStrategy = async (providerId: number) => {
+    const exitStrategyParams = {
+        provider: providerId
+    }
+    return await axiosInstance.get(
+        `/trade-engine/smart-allocation/exit`,
+        {params:exitStrategyParams}
+      );
+}
+
+export const deleteExitStrategy = async (providerId: number) => {
+    const exitStrategyParams = {
+        provider: providerId
+    }
+    return await axiosInstance.delete(
+        `/trade-engine/smart-allocation/exit`,
+        {params:exitStrategyParams}
+    );
 }

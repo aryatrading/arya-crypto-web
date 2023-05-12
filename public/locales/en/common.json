@@ -30,8 +30,13 @@
     "searchforAsset": "Search for an Asset",
     "noAssetFound": "No Assets Found...",
     "searchAsset": "Search Asset",
-    "monthly": "Monthly",
+    "none": "None",
+    "MONTHLY": "Monthly",
+    "QUARTERLY": "Quarterly",
+    "YEARLY": "Yearly",
     "exitStrategy": "Exit Strategy",
     "somethingWentWrong": "Something went wrong",
-    "save": "Save"
+    "save": "Save",
+    "cancel":"Cancel",
+    "sell": "Sell"
 }
