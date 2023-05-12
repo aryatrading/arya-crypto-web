@@ -3,6 +3,7 @@ import { collection, orderBy, query, onSnapshot, QuerySnapshot, FirestoreError, 
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { setPosts } from '../../redux/postsSlice';
 import { store } from '../../redux/store';
+import { PostTypes } from '../../../types/asset';
 
 const db = getFirestore(getApp());
 const functions = getFunctions(getApp(), 'europe-west3');
@@ -22,7 +23,7 @@ export const getPosts = async ({
     }
 
     return searchHttpsCallable(options).then((response: any) => {
-        store.dispatch(setPosts(response?.data?.posts || []))
+        store.dispatch(setPosts(response?.data?.posts.filter((post: PostTypes) => post?.RestrictedTo == null) || []))
     });
 }
 

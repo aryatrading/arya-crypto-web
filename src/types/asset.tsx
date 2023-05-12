@@ -126,4 +126,5 @@ export interface PostTypes {
   },
   SharesCount?: number,
   Audio?: string,
+  RestrictedTo?: string,
 }
