@@ -37,5 +37,6 @@
     "cancelled": "Annulé",
     "executed": "Excecuté",
     "error": "Erreur d'exécution",
-    "empty": "Aucun élément avec ce mot-clé !"
+    "empty": "Aucun élément avec ce mot-clé !",
+    "seeMore": "En savoir plus"
 }

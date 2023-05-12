@@ -37,5 +37,6 @@
     "cancelled": "Cancelled",
     "executed": "Executed",
     "error": "Error Executing",
-    "empty": "No asset with this keyword!"
+    "empty": "No asset with this keyword!",
+    "seeMore": "Explore more"
 }
