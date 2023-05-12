@@ -40,7 +40,7 @@
     "currentExitStrategy" : "Stratégie de sortie actuelle",
     "noExitStrategySet" : "Vous n'avez pas défini de stratégie de sortie",
     "haveExitStrategy" : "Lorsque Portfloio <blueText>{{assetChangeType}} {{assetChangeValue}}</blueText> vous <blueText>vendrez {{assetSellPercentage}}</blueText> de votre portefeuille global",
-    "RISES_BY" : "Rises by",
+    "RISES_BY" : "S'élève de",
     "REACHES" : "Atteint",
     "whatIsExitStrategy" : "Qu'est-ce que la stratégie de sortie",
     "exitStrategyDescription" : "Définir un plan d'urgence pour vendre une partie de la valeur de votre portefeuille lorsqu'il atteint un certain seuil pour l'USDT",
@@ -58,6 +58,6 @@
     "deleteExitStrategyDescription" : "Êtes-vous sûr de vouloir supprimer cette stratégie de sortie ?",
     "deleteExitStrategy" : "Supprimer la stratégie de sortie",
     "setExitStrategy" : "Définir une stratégie de sortie", 
-    "createExitStrategyTitle" : "Create Exit Strategy ?",
+    "createExitStrategyTitle" : "Créer une stratégie de sortie",
     "createExitStrategyDescription" : "Êtes-vous sûr de vouloir créer cette stratégie de sortie ?"
 }

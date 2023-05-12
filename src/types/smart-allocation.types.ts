@@ -69,3 +69,10 @@ export type SmartAllocationExitStrategyType = {
     provider_name: string;
 }
 
+export interface ISmartAllocationContext {
+    rebalancingDate: Date|null,
+    rebalancingFrequency: EnumRebalancingFrequency|null,
+    isLoadingSmartAllocationData: boolean,
+    getSmartAllocationData: Function,
+}
+

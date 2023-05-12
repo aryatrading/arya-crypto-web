@@ -10,7 +10,7 @@ import { chartDataType } from "../../../shared/charts/graph/graph.type";
 import LineChart from "../../../shared/charts/graph/graph";
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
-import { SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
+import { ISmartAllocationContext, SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
 import PageLoader from "../../../shared/pageLoader/pageLoader";
 import { getSmartAllocation } from "../../../../services/controllers/smart-allocation";
 import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
@@ -23,12 +23,7 @@ import { EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from
 import SmartAllocationAutomation from "./SmartAllocationAutomation/SmartAllocationAutomation";
 
 
-export interface ISmartAllocationContext {
-    rebalancingDate: Date|null,
-    rebalancingFrequency: EnumRebalancingFrequency|null,
-    isLoadingSmartAllocationData: boolean,
-    getSmartAllocationData: Function,
-}
+
 
 export const SmartAllocationContext = createContext<ISmartAllocationContext>({
     rebalancingDate: null,
@@ -194,7 +189,7 @@ const AuthedSmartAllocation: FC = () => {
 
     const tabs = useMemo(() => {
         return (
-            <Tabs defaultIndex={1} className="w-full font-light" selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
+            <Tabs className="w-full font-light" selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
                 <TabList className="w-full border-b-[1px] border-grey-3 mb-6">
                     <Row className='gap-4'>
                         <Tab className="text-sm outline-none cursor-pointer px-5">{t('yourHoldings')}</Tab>

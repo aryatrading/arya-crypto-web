@@ -33,5 +33,11 @@
     "monthly": "Mensuel",
     "exitStrategy": "Stratégie de sortie",
     "somethingWentWrong": "Quelque chose n'a pas fonctionné",
-    "save": "Économiser"
+    "save": "Économiser",
+    "none": "aucun",
+    "MONTHLY": "Mensuel",
+    "QUARTERLY": "Trimestriel",
+    "YEARLY": "Annuel",
+    "cancel":"Annuler",
+    "sell": "Vendre"
 }

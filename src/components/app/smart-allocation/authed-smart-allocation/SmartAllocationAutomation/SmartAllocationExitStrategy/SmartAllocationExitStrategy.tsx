@@ -35,9 +35,8 @@ const SmartAllocationExitStrategy = () => {
         setLoading(true)
         getExitStrategy(selectedExchange?.provider_id).then((res) =>{
             const {data} = res
-            console.log(data)
             if(data){
-                console.log(data)
+                
                 setCurrentExitStrategy(data)
                 const {exit_percentage,exit_type,exit_value} = data
                 if(exit_type === EnumExitStrategyTrigger.RisesBy){
