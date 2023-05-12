@@ -37,5 +37,9 @@
     "cancelled": "Cancelled",
     "executed": "Executed",
     "error": "Error Executing",
-    "communityTitle": "{{coin}} in the community"
+    "communityTitle": "{{coin}} in the community",
+    "buy": "Buy",
+    "sell": "Sell",
+    "readMore": "read more",
+    "entry": "Entry"
 }
