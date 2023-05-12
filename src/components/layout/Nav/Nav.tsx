@@ -25,7 +25,7 @@ const Nav = () => {
   const { id } = useAuthUser();
   const [collapse, setCollapse] = useState(false)
   const { modalTrigger, setVisibleSection } = useAuthModal();
-  const { t } = useTranslation(['nav', 'coin']);
+  const { t } = useTranslation(['nav', 'coin', 'asset']);
   const { pathname, push, locale, asPath, query } = useRouter()
 
   const userOptions = useCallback(

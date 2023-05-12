@@ -2,7 +2,6 @@ import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { MagnifyingGlassIcon, PlayIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import clsx from "clsx";
 
@@ -21,7 +20,6 @@ interface AssetDropdownTypes {
 }
 
 export const SearchAssetInput = ({ onClick, t }: AssetDropdownTypes) => {
-    const { t } = useTranslation(['']);
     const [coins, setCoins] = useState<AssetType[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [keyword, setKeyword] = useState<string>('');
@@ -85,7 +83,7 @@ export const SearchAssetInput = ({ onClick, t }: AssetDropdownTypes) => {
             {focused && <Col className={clsx("w-[400px] max-h-[300px] bg-grey-2 top-16 right-0 absolute items-center rounded-md overflow-auto p-4", styles.list)}>
                 {loading ? <LoadingSpinner /> :
                     coins.length === 0 ?
-                        <span className="w-full mx-4 text-center">{t('empty')}<br /><br />{keyword}</span>
+                        <span className="w-full mx-4 text-center">{t('asset:empty')}<br /><br />{keyword}</span>
                         :
                         coins.map(coin => {
                             return (
@@ -119,6 +117,9 @@ export const SearchAssetInput = ({ onClick, t }: AssetDropdownTypes) => {
                             );
                         })
                 }
+                <p className="capitalize font-extrabold text-base underline underline-offset-2 text-grey-1 cursor-pointer z-50 text-center mt-10" onClick={() => {
+                    push('/market');
+                }}>{t('asset:seeMore')}</p>
             </Col>}
         </Col>
     );
