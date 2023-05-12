@@ -17,11 +17,11 @@ export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
   return (
     <Col className="gap-11">
       <Col className="gap-4">
-        <p className="font-medium text-xl">
-          {asset.name} {t("pricelivedata")}
-        </p>
-        <p className="font-semibold text-sm">
-          {asset.name} {t("pricetday")}
+        <h2 className="font-medium text-xl">
+          {asset.name} ({asset.symbol?.toUpperCase()})  {t("pricelivedata")}
+        </h2>
+        <p className="font-medium text-sm">
+          {asset.name} ({asset.symbol?.toUpperCase()})  {t("pricetday")}
           {formatNumber(
             _assetprice[asset.symbol?.toLowerCase() ?? ""] ??
               asset.currentPrice,
@@ -35,11 +35,11 @@ export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
         </p>
       </Col>
       <Col className="gap-4">
-        <p className="font-medium text-xl">
-          {t("whatis")} {asset.name}
-        </p>
+        <h2 className="font-medium text-xl">
+          {t("whatis")} {asset.name} ({asset.symbol?.toUpperCase()})
+        </h2>
         {/* The content below will be returned from the backend, keeping it hardcoded for now. */}
-        <p className="font-semibold text-sm">
+        <p className="font-regular text-sm">
           Bitcoin is a decentralized cryptocurrency originally described in a
           2008 whitepaper by a person, or group of people, using the alias
           Satoshi Nakamoto. It was launched soon after, in January 2009. Bitcoin

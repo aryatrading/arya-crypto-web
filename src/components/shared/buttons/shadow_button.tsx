@@ -7,6 +7,8 @@ type ShadowButtonProps = {
   bgColor?: string;
   onClick: Function;
   textColor: string;
+  textSize: string;
+
 };
 
 export const ShadowButton: FC<ShadowButtonProps> = ({
@@ -16,6 +18,7 @@ export const ShadowButton: FC<ShadowButtonProps> = ({
   bgColor,
   onClick,
   textColor,
+  textSize,
 }) => {
   return (
     <div
@@ -24,7 +27,7 @@ export const ShadowButton: FC<ShadowButtonProps> = ({
       onClick={() => onClick!()}
     >
       {iconSvg ?? null}
-      <h3 className={`${textColor} font-semibold text-sm`}>{title}</h3>
+      <span className={`${textColor} ${textSize} font-semibold text-sm`}>{title}</span>
     </div>
   );
 };

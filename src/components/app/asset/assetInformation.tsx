@@ -52,8 +52,8 @@ const AssetInformationTab: FC = () => {
   return (
     <>
       <Row className="justify-between items-center">
-        <p className="font-medium text-xl">
-          {asset.name} {t("price_chart")}
+        <p className="font-medium text-xl ">
+          <span className="uppercase">{asset.symbol}</span> {t("price_chart")}
         </p>
         <Row className="gap-3">
           {view === "price" ? (
