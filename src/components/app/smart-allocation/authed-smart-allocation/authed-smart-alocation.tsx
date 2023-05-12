@@ -3,7 +3,7 @@ import { Col, Row } from "../../../shared/layout/flex";
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher";
 import { PortfolioSnapshotType } from "../../../../types/exchange.types";
 import { getPortfolioSnapshots } from "../../../../services/controllers/market";
-import { selectSelectedExchange } from "../../../../services/redux/exchangeSlice";
+import { selectConnectedExchanges, selectSelectedExchange } from "../../../../services/redux/exchangeSlice";
 import { useSelector } from "react-redux";
 import { MODE_DEBUG } from "../../../../utils/constants/config";
 import { chartDataType } from "../../../shared/charts/graph/graph.type";
@@ -19,10 +19,11 @@ import Link from "next/link";
 import clsx from "clsx";
 import { SelectSmartAllocationPortfolioIcon } from "../../../svg/smart-allocation/customize-portfolio-icon";
 import { useTranslation } from "next-i18next";
+import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/no-exchange-connected-page";
 
 const AuthedSmartAllocation: FC = () => {
 
-    const {t} = useTranslation(['smart-allocation']);
+    const { t } = useTranslation(['smart-allocation']);
 
     const [isLoadingPortfolioHoldings, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
     const [portfolioSnapshots, setPortfolioSnapshots] = useState<PortfolioSnapshotType[]>([]);
@@ -32,6 +33,7 @@ const AuthedSmartAllocation: FC = () => {
     const [smartAllocationTotalEvaluation, setSmartAllocationTotalEvaluation] = useState<number>(0);
 
     const selectedExchange = useSelector(selectSelectedExchange);
+    const connectedExchanges = useSelector(selectConnectedExchanges);
 
 
     const initPortfolioSnapshots = useCallback(() => {
@@ -80,9 +82,11 @@ const AuthedSmartAllocation: FC = () => {
 
 
     useEffect(() => {
-        initPortfolioSnapshots();
-        initSmartAllocationHoldings();
-    }, [initPortfolioSnapshots, initSmartAllocationHoldings]);
+        if (selectedExchange?.provider_id) {
+            initPortfolioSnapshots();
+            initSmartAllocationHoldings();
+        }
+    }, [initPortfolioSnapshots, initSmartAllocationHoldings, selectedExchange?.provider_id]);
 
 
     const getPredefinedAllocationsButtons = useCallback(({ label, icon, href, isCustom }: { label: string, icon: any, href: string, isCustom: boolean }) => {
@@ -97,7 +101,7 @@ const AuthedSmartAllocation: FC = () => {
     const noAllocation = useMemo(() => {
         return (
             <Col className="items-center justify-center col-span-full gap-10">
-                <ExchangeSwitcher canSelectOverall={false}/>
+                <ExchangeSwitcher canSelectOverall={false} />
                 <Row className="justify-center">
                     <Col className="items-center">
                         <Col className="items-center gap-5 sm:flex-row">
@@ -184,7 +188,7 @@ const AuthedSmartAllocation: FC = () => {
         return (
             <Col className="items-center justify-center col-span-full gap-10">
                 <Row className="w-full justify-between items-end">
-                    <ExchangeSwitcher canSelectOverall={false}/>
+                    <ExchangeSwitcher canSelectOverall={false} />
                 </Row>
                 {smartAllocationGraph}
                 {tabs}
@@ -192,12 +196,22 @@ const AuthedSmartAllocation: FC = () => {
         )
     }, [smartAllocationGraph, tabs]);
 
-    return (
-        <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
-            {(isLoadingSmartAllocationHoldings || isLoadingPortfolioHoldings) && <PageLoader />}
-            {smartAllocationExists ? withAllocation : noAllocation}
-        </Col>
-    )
+    if (isLoadingSmartAllocationHoldings || isLoadingPortfolioHoldings) {
+        return <PageLoader />;
+    } else {
+        const connectedExchangesWithProviders = connectedExchanges?.filter(exchange => exchange.provider_id);
+        if (connectedExchangesWithProviders?.length) {
+            return (
+                <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
+                    {smartAllocationExists ? withAllocation : noAllocation}
+                </Col>
+            )
+        } else {
+            return (
+                <NoConnectedExchangePage />
+            )
+        }
+    }
 }
 
 export default AuthedSmartAllocation;

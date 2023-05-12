@@ -14,7 +14,7 @@ import { getPortfolioHoldings, getPortfolioSnapshots } from "../../../services/c
 import { PortfolioAssetType, PortfolioSnapshotType } from "../../../types/exchange.types"
 import { GraphDataRange, chartDataType } from "../../shared/charts/graph/graph.type"
 import { percentageFormat, formatNumber } from "../../../utils/helpers/prices"
-import { selectExchangeStoreStatus, selectSelectedExchange } from "../../../services/redux/exchangeSlice"
+import { selectConnectedExchanges, selectExchangeStoreStatus, selectSelectedExchange } from "../../../services/redux/exchangeSlice"
 import StatusAsync from "../../../utils/status-async"
 import ExchangeImage from "../../shared/exchange-image/exchange-image"
 import { MODE_DEBUG } from "../../../utils/constants/config"
@@ -29,6 +29,7 @@ import AssetPnl from "../../shared/containers/asset/assetPnl"
 import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries"
 import { portfolioGraphDataRanges } from "../../../utils/constants/dashboard"
 import { ShadowButton } from "../../shared/buttons/shadow_button"
+import NoConnectedExchangePage from "../../shared/no-exchange-connected-page/no-exchange-connected-page"
 
 const Dashboard: FC = () => {
 
@@ -41,6 +42,7 @@ const Dashboard: FC = () => {
 
   const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
   const selectedExchange = useSelector(selectSelectedExchange);
+  const connectedExchanges = useSelector(selectConnectedExchanges);
 
   const isTabletOrMobileScreen = useMediaQuery({ query: `(max-width: ${screens.md})` })
 
@@ -380,14 +382,26 @@ const Dashboard: FC = () => {
     }
   }, [portfolioHoldings.length, t, table]);
 
-  return (
-    <Col className="w-full gap-10 lg:gap-16 pb-20 items-start justify-start">
-      <ExchangeSwitcher />
-      {charts}
-      {holdingsTable}
-      {(isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) && <PageLoader />}
-    </Col>
-  )
+
+
+  if (isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) {
+    return <PageLoader />;
+  } else {
+    const connectedExchangesWithProviders = connectedExchanges?.filter(exchange => exchange.provider_id);
+    if (connectedExchangesWithProviders?.length) {
+      return (
+        <Col className="w-full gap-10 lg:gap-16 pb-20 items-start justify-start">
+          <ExchangeSwitcher />
+          {charts}
+          {holdingsTable}
+        </Col>
+      )
+    } else {
+      return (
+        <NoConnectedExchangePage />
+      )
+    }
+  }
 }
 
 export default Dashboard;

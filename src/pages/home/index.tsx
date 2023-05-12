@@ -2,13 +2,13 @@ import { withAuthUser } from 'next-firebase-auth'
 import Layout from '../../components/layout/layout'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { GetStaticProps } from 'next';
-import Dashboard from '../../components/app/dashboard/dashboard';
+import Home from '../../components/app/home/home';
 
 const HomePage = (props: any) => {
 
     return (
         <Layout>
-            <Dashboard />
+            <Home />
         </Layout>
     )
 }

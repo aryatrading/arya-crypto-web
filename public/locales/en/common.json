@@ -33,5 +33,7 @@
     "monthly": "Monthly",
     "exitStrategy": "Exit Strategy",
     "somethingWentWrong": "Something went wrong",
-    "save": "Save"
+    "save": "Save",
+    "connectYourExchanges": "Connect your exchanges",
+    "goToSettings": "Go to settings"
 }
