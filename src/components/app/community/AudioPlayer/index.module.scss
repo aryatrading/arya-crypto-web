@@ -1,0 +1,33 @@
+.audio-display-wrapper {
+    height: 45px;
+    padding: 0 7px;
+    gap: 8px;
+
+
+    .record-btn {
+        height: 100%;
+        aspect-ratio: 1;
+        flex-shrink: 0;
+        border-radius: 8px;
+
+        button {
+
+            svg {
+                height: 18px;
+                width: 18px;
+
+                path {
+                    fill: #01A385;
+                }
+            }
+
+        }
+    }
+
+    .audio-c {
+        height: 100%;
+        border-radius: 8px;
+        padding: 13px 23px;
+        gap: 20px;
+    }
+}

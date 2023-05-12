@@ -9,7 +9,7 @@ type AssetStats = {
 export const AssetStatistics: FC<AssetStats> = ({ title, value }) => {
   return (
     <Col>
-      <p className="font-medium text-sm text-grey-1">{title}</p>
+      <h3 className="font-medium text-sm text-grey-1">{title}</h3>
       <p className="font-medium text-xl">{value}</p>
     </Col>
   );
