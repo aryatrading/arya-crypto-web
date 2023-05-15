@@ -13,10 +13,13 @@ export const content = [
 export const theme = {
   container: {
     center: true,
-    padding: "2rem",
-    screens: {
-      "2xl": "1400px",
-    },
+  },
+  screens: {
+    sm: '480px',
+    md: '768px',
+    lg: '976px',
+    xl: '1280px',
+    '2xl': '1440px',
   },
   extend: {
     typography: (theme) => ({
@@ -27,51 +30,59 @@ export const theme = {
       },
     }),
     colors: {
-        blue: {
-          1: "#558AF2",
-          2: "#84ADFF",
-          3: "#213660"
-        },
-        red: {
-          1: "#F2323F",
-          2: "#440C10",
-        },
-        grey: {
-          1: "#6B7280",
-          2: "#111827",
-          3: "#1F2A41",
-          4: "#2B3958",
-          5: "#1C1C1C",
-          6: '#1E293B',
-          7: '#334155',
-        },
-        black: {
-          1: "#030712",
-          2: "#0E1421"
-        },
-        yellow: {
-          1: "#F3BA2F"
-        }
+      green: {
+        1: "#22C55E",
+        2: "#0E3F2D",
       },
-      keyframes: {
-        overlayShow: {
-          from: { opacity: 0 },
-          to: { opacity: .3 },
-        },
-        contentShow: {
-          from: { opacity: 0, transform: 'translate(-50%, -48%) scale(0.96)' },
-          to: { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
-        },
+      blue: {
+        1: "#558AF2",
+        2: "#84ADFF",
+        3: "#213660"
       },
-      animation: {
-        overlayShow: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
-        contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+      red: {
+        1: "#F2323F",
+        2: "#440C10",
       },
-      fontFamily: {
-        sans: ['var(--poppins-font)', ...fontFamily.sans],
+      grey: {
+        1: "#6B7280",
+        2: "#111827",
+        3: "#1F2A41",
+        4: "#2B3958",
+        5: "#1C1C1C",
+        6: '#1E293B',
+        7: '#334155',
+      },
+      black: {
+        1: "#030712",
+        2: "#0E1421"
+      },
+      yellow: {
+        1: "#F3BA2F"
+      },
+      orage: {
+        1: "#F7931A"
       }
     },
+    keyframes: {
+      overlayShow: {
+        from: { opacity: 0 },
+        to: { opacity: .3 },
+      },
+      contentShow: {
+        from: { opacity: 0, transform: 'translate(-50%, -48%) scale(0.96)' },
+        to: { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+      },
+    },
+    animation: {
+      overlayShow: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+      contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+    },
+  },
+  fontFamily: {
+    sans: ['var(--poppins-font)', ...fontFamily.sans],
+  }
 }
+
 export const plugins = [
   require("flowbite/plugin")
 ]
