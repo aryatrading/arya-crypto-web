@@ -38,9 +38,9 @@ const Market: FC = () => {
   }, [_assets, tab]);
 
   return (
-    <div className="h-full w-full items-center justify-center ">
+    <div className="h-full w-full ">
       <Col className="flex items-center justify-center flex-1">
-        <Col className="h-32 mb-40 lg:mb-20 flex justify-center">
+        <Col className="h-32 mb-40 mt-20 lg:mb-20 flex justify-center">
           <p className="text-center  text-[#F9FAFB] font-medium text-4xl mb-10">
             {tab === "all" ? t("cryptocurrencies") : t("favorites")}
           </p>
@@ -83,6 +83,7 @@ const Market: FC = () => {
             />
           </Row>
         </Row>
+
         <AssetsTable assets={assets() ?? []} />
       </Col>
     </div>

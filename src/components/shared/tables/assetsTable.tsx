@@ -14,6 +14,7 @@ import AssetRow from "../AssetRow/AssetRow";
 import styles from "./assetsTable.module.scss";
 import { useMediaQuery } from "react-responsive";
 import { screens } from "tailwindcss/defaultTheme";
+import { asset } from "../../../utils/constants/dummyData";
 
 type AssetsTableProps = {
   assets: AssetType[];
@@ -25,6 +26,10 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
   const _assetprice = useSelector(selectAssetLivePrice);
   const isTabletOrMobileScreen = useMediaQuery({
     query: `(max-width:950px)`,
+  });
+
+  const isMobileScreen = useMediaQuery({
+    query: `(max-width:600px)`,
   });
 
   let [header, setheader] = useState([
@@ -47,7 +52,15 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
         t("currentprice") ?? "",
         "",
       ]);
-    } else
+    } else if (isMobileScreen) {
+      setheader([
+        t("rank") ?? "",
+        t("name") ?? "",
+
+        t("currentprice") ?? "",
+        "",
+      ]);
+    } else {
       setheader([
         t("rank") ?? "",
         t("name") ?? "",
@@ -58,6 +71,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
         t("volume") ?? "",
         "",
       ]);
+    }
   }, [isTabletOrMobileScreen]);
 
   const renderFavoritesSvg = (asset: AssetType) => {
@@ -110,76 +124,91 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
             })}
           </tr>
         </thead>
-        <tbody>
-          {assets.map((elm, index) => {
-            return (
-              <tr
-                key={index}
-                className="hover:bg-black-2/25 hover:bg-blend-darken cursor-pointer"
-                onClick={() => router.push(`/asset?symbol=${elm.symbol}`)}
-              >
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-bold leading-6 text-white"
+        {assets.length ? (
+          <tbody>
+            {assets.map((elm, index) => {
+              return (
+                <tr
+                  key={index}
+                  className="hover:bg-black-2/25 hover:bg-blend-darken cursor-pointer"
+                  onClick={() => router.push(`/asset?symbol=${elm.symbol}`)}
                 >
-                  {elm.rank}
-                </th>
-                <td>
-                  <AssetRow
-                    icon={elm.iconUrl ?? ""}
-                    name={elm.name ?? ""}
-                    symbol={elm.symbol ?? ""}
-                    className="font-medium"
-                  />
-                </td>
-                <td className="text-right">
-                  <Row className="justify-end">
-                    <AssetPnl
-                      value={elm.pnl}
-                      className={
-                        elm.pnl <= 0
-                          ? "bg-red-2 text-red-1"
-                          : "bg-green-2 text-green-1"
-                      }
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-bold leading-6 text-white"
+                  >
+                    {elm.rank}
+                  </th>
+                  <td>
+                    <AssetRow
+                      icon={elm.iconUrl ?? ""}
+                      name={elm.name ?? ""}
+                      symbol={elm.symbol ?? ""}
+                      className="font-medium"
                     />
-                  </Row>
-                </td>
-                <td className="font-medium leading-6 text-white text-right font-semibold">
-                  {formatNumber(
-                    _assetprice[elm.symbol ?? ""] ?? elm.currentPrice,
-                    true
-                  )}
-                </td>
-                {!isTabletOrMobileScreen ? (
-                  <>
-                    <td className="font-medium leading-6 text-white text-right">
-                      {!!_assetprice &&
-                        (
-                          _assetprice[elm.symbol ?? ""] / _assetprice["btc"]
-                        ).toFixed(7)}
+                  </td>
+                  <td className="text-right">
+                    <Row className="justify-end">
+                      <AssetPnl
+                        value={elm.pnl}
+                        className={
+                          elm.pnl <= 0
+                            ? "bg-red-2 text-red-1"
+                            : "bg-green-2 text-green-1"
+                        }
+                      />
+                    </Row>
+                  </td>
+                  {!isTabletOrMobileScreen && !isMobileScreen ? (
+                    <td className="font-medium leading-6 text-white text-right font-semibold">
+                      {formatNumber(
+                        _assetprice[elm.symbol ?? ""] ?? elm.currentPrice,
+                        true
+                      )}
                     </td>
-                    <td className="font-medium leading-6 text-white text-right">
-                      {formatNumber(elm.mrkCap ?? 0, true)}
-                    </td>
-                    <td className="font-medium leading-6 text-white text-right">
-                      {formatNumber(elm.volume ?? 0, true)}
-                    </td>
-                  </>
-                ) : null}
+                  ) : null}
 
-                <td
-                  className="font-medium  text-white text-right"
-                  onClick={() => handleFavoritesToggle(elm)}
-                >
-                  <Row className="justify-end">
-                    <StarIcon className={renderFavoritesSvg(elm)} />
-                  </Row>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
+                  {!isTabletOrMobileScreen ? (
+                    <>
+                      <td className="font-medium leading-6 text-white text-right">
+                        {!!_assetprice &&
+                          (
+                            _assetprice[elm.symbol ?? ""] / _assetprice["btc"]
+                          ).toFixed(7)}
+                      </td>
+                      <td className="font-medium leading-6 text-white text-right">
+                        {formatNumber(elm.mrkCap ?? 0, true)}
+                      </td>
+                      <td className="font-medium leading-6 text-white text-right">
+                        {formatNumber(elm.volume ?? 0, true)}
+                      </td>
+                    </>
+                  ) : null}
+
+                  <td
+                    className="font-medium  text-white text-right"
+                    onClick={() => handleFavoritesToggle(elm)}
+                  >
+                    <Row className="justify-end">
+                      <StarIcon className={renderFavoritesSvg(elm)} />
+                    </Row>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        ) : null}
       </table>
+      {assets.length === 0 ? (
+        <div className="w-full  flex justify-center">
+          <Col className="text-center gap-3">
+            <p className="font-semibold text-4xl">Your watchlist is empty</p>
+            <p className="text-2xl text-grey-1">
+              Start building your watchlist adding assets to your favorites list
+            </p>
+          </Col>
+        </div>
+      ) : null}
     </Col>
   );
 };
