@@ -68,6 +68,11 @@ const AssetInformationTab: FC = () => {
                 onclick={(e: seriesInterface) => onSeriesClick(e)}
               />
             ) : null}
+            <TimeseriesPicker
+              series={assetGraphToggles}
+              active={view}
+              onclick={(e: seriesInterface) => setView(e.key)}
+            />
           </Row>
         </Row>
         <div className="mt-7 mb-7">
@@ -85,7 +90,11 @@ const AssetInformationTab: FC = () => {
           {asset?.id && <CoinConverter preDefined staticCoin={asset} />}
         </Col>
       </Col>
-      <Col className="flex-[0.5] ps-6">
+      <Col className="flex-[0.5] ps-6 gap-5">
+        <p className="text-base font-semibold">
+          {t("trade_title")} {asset?.name ?? ""}
+        </p>
+        <AssetTrade />
         {/* Community widget */}
         {posts.length > 0 && (
           <>

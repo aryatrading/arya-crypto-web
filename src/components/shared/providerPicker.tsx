@@ -43,7 +43,7 @@ export const ProviderDropDown: FC = () => {
         </button>
       </DropdownMenu.Trigger>
 
-      <DropdownMenu.Content className="min-w-[290px] bg-white rounded-md p-[5px] bg-black-1">
+      <DropdownMenu.Content className="min-w-[410px] bg-white rounded-md p-[5px] bg-black-1">
         {exchanges?.map((elm) => {
           return (
             <DropdownMenu.Item
