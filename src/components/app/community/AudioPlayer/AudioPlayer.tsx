@@ -4,7 +4,7 @@ import { Col, Row } from "../../../shared/layout/flex";
 import Button from "../../../shared/buttons/button";
 import clsx from "clsx";
 import { playAudioIcon } from "../../../svg/playAudioIcon";
-import { audioWave } from "../../../svg/audioWave";
+import { AudioWave } from "../../../svg/audioWave";
 
 const AudioDisplay: FC = () => {
 
@@ -13,12 +13,12 @@ const AudioDisplay: FC = () => {
             <Button className={clsx("flex justify-center items-center bg-grey-7", styles['record-btn'])}>
                 {playAudioIcon}
             </Button>
-            <Row className={clsx('w-full bg-grey-7', styles['audio-c'])}>
+            <Row className={clsx('w-auto bg-grey-7', styles['audio-c'])}>
                 <Col className={styles['audio-speed']}>
                     <h6 className="text-white text-sm mb-10">00:00</h6>
                 </Col>
-                <Col className="w-full">
-                    {audioWave}
+                <Col className="w-full md:w-auto overflow-hidden">
+                    <AudioWave width="100%" />
                 </Col>
                 <Col className={clsx(styles['audio-speed'], "items-center justify-center")}>
                     <h6 className="text-white">1x</h6>
