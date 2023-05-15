@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { AssetType } from "../../../types/asset";
 import { Col, Row } from "../layout/flex";
 import { useSelector } from "react-redux";
@@ -11,18 +11,23 @@ import AssetPnl from "../containers/asset/assetPnl";
 import { useRouter } from "next/navigation";
 import { formatNumber } from "../../../utils/helpers/prices";
 import AssetRow from "../AssetRow/AssetRow";
-import styles from "./assetsTable.module.scss"
+import styles from "./assetsTable.module.scss";
+import { useMediaQuery } from "react-responsive";
+import { screens } from "tailwindcss/defaultTheme";
+
 type AssetsTableProps = {
   assets: AssetType[];
-  header: String[];
 };
 
-export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
+export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
   const router = useRouter();
   const { t } = useTranslation(["market"]);
   const _assetprice = useSelector(selectAssetLivePrice);
+  const isTabletOrMobileScreen = useMediaQuery({
+    query: `(max-width:950px)`,
+  });
 
-  header = [
+  let [header, setheader] = useState([
     t("rank") ?? "",
     t("name") ?? "",
     t("pnl") ?? "",
@@ -31,7 +36,29 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
     t("marketcap") ?? "",
     t("volume") ?? "",
     "",
-  ];
+  ]);
+
+  useEffect(() => {
+    if (isTabletOrMobileScreen) {
+      setheader([
+        t("rank") ?? "",
+        t("name") ?? "",
+        t("pnl") ?? "",
+        t("currentprice") ?? "",
+        "",
+      ]);
+    } else
+      setheader([
+        t("rank") ?? "",
+        t("name") ?? "",
+        t("pnl") ?? "",
+        t("currentprice") ?? "",
+        t("priceinbtc") ?? "",
+        t("marketcap") ?? "",
+        t("volume") ?? "",
+        "",
+      ]);
+  }, [isTabletOrMobileScreen]);
 
   const renderFavoritesSvg = (asset: AssetType) => {
     let _list = localStorage.getItem(FAVORITES_LIST);
@@ -75,11 +102,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                 <th
                   key={index}
                   scope="col"
-                  className={
-                    index > 1
-                      ? "text-right"
-                      : "text-left"
-                  }
+                  className={index > 1 ? "text-right" : "text-left"}
                 >
                   {elm}
                 </th>
@@ -101,8 +124,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                 >
                   {elm.rank}
                 </th>
-                <td
-                >
+                <td>
                   <AssetRow
                     icon={elm.iconUrl ?? ""}
                     name={elm.name ?? ""}
@@ -111,16 +133,16 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                   />
                 </td>
                 <td className="text-right">
-                <Row className="justify-end">
-                  <AssetPnl
-                    value={elm.pnl}
-                    className={
-                      elm.pnl <= 0
-                        ? "bg-red-2 text-red-1"
-                        : "bg-green-2 text-green-1"
-                    }
+                  <Row className="justify-end">
+                    <AssetPnl
+                      value={elm.pnl}
+                      className={
+                        elm.pnl <= 0
+                          ? "bg-red-2 text-red-1"
+                          : "bg-green-2 text-green-1"
+                      }
                     />
-                    </Row>
+                  </Row>
                 </td>
                 <td className="font-medium leading-6 text-white text-right font-semibold">
                   {formatNumber(
@@ -128,24 +150,30 @@ export const AssetsTable: FC<AssetsTableProps> = ({ header, assets }) => {
                     true
                   )}
                 </td>
-                <td className="font-medium leading-6 text-white text-right">
-                  {!!_assetprice &&
-                    (
-                      _assetprice[elm.symbol ?? ""] / _assetprice["btc"]
-                    ).toFixed(7)}
-                </td>
-                <td className="font-medium leading-6 text-white text-right">
-                  {formatNumber(elm.mrkCap ?? 0, true)}
-                </td>
-                <td className="font-medium leading-6 text-white text-right">
-                  {formatNumber(elm.volume ?? 0, true)}
-                </td>
+                {!isTabletOrMobileScreen ? (
+                  <>
+                    <td className="font-medium leading-6 text-white text-right">
+                      {!!_assetprice &&
+                        (
+                          _assetprice[elm.symbol ?? ""] / _assetprice["btc"]
+                        ).toFixed(7)}
+                    </td>
+                    <td className="font-medium leading-6 text-white text-right">
+                      {formatNumber(elm.mrkCap ?? 0, true)}
+                    </td>
+                    <td className="font-medium leading-6 text-white text-right">
+                      {formatNumber(elm.volume ?? 0, true)}
+                    </td>
+                  </>
+                ) : null}
+
                 <td
                   className="font-medium  text-white text-right"
                   onClick={() => handleFavoritesToggle(elm)}
                 >
-                  <Row className="justify-end"><StarIcon className={renderFavoritesSvg(elm)} /></Row>
-                  
+                  <Row className="justify-end">
+                    <StarIcon className={renderFavoritesSvg(elm)} />
+                  </Row>
                 </td>
               </tr>
             );
