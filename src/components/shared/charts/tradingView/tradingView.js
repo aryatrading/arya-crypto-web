@@ -1,7 +1,7 @@
 // TradingViewWidget.jsx
 
 import React, { useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 
 let tvScriptLoadingPromise;
 
