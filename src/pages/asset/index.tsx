@@ -6,8 +6,12 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import Layout from "../../components/layout/layout";
 import Asset from "../../components/app/asset/asset";
-import { getAssetDetails, getAssetTimeseriesPrice } from "../../services/controllers/asset";
+import {
+  getAssetDetails,
+  getAssetTimeseriesPrice,
+} from "../../services/controllers/asset";
 import { clearAsset } from "../../services/redux/assetSlice";
+import { clearSwap } from "../../services/redux/swapSlice";
 import { getPosts } from "../../services/firebase/community/posts";
 
 const AssetPage = () => {
@@ -19,11 +23,12 @@ const AssetPage = () => {
     getAssetDetails(symbol ?? "btc");
     getAssetTimeseriesPrice(symbol ?? "btc", "5min", 288);
     if (symbol) {
-      getPosts({ searchTerm: symbol?.toString() || '' });
+      getPosts({ searchTerm: symbol?.toString() || "" });
     }
 
     return () => {
       dispatch(clearAsset());
+      dispatch(clearSwap());
     };
   }, [symbol]);
 
@@ -43,7 +48,7 @@ export const getStaticProps: GetStaticProps<any> = async ({ locale }) => ({
       "auth",
       "nav",
       "asset",
-      "coin"
+      "coin",
     ])),
   },
 });
