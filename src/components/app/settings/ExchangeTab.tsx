@@ -52,12 +52,15 @@ const ExchangeTab = () => {
     }, [t]);
 
     useEffect(() => {
+        const connectedExchangesExceptOverall = connectedExchanges?.filter(e => e.provider_id != null);
         if (connectedExchanges?.filter(e => e.provider_id)?.length) {
-            setExchanges(connectedExchanges?.filter(e => e.provider_id != null));
+            setExchanges(connectedExchangesExceptOverall);
         }
 
         if (activeExchange?.provider_id != null) {
             setSelectedExchange(activeExchange || {});
+        } else {
+            setSelectedExchange(connectedExchangesExceptOverall?.[0] || {});
         }
     }, [connectedExchanges, activeExchange]);
 
