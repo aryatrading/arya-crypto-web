@@ -94,7 +94,7 @@ const Signup: FC<any> = (props: any) => {
                         <Col className="items-center gap-4">
                             {errorForm && <span className='text-red-600'>{(errorForm || 'Invalid email or password!')}</span>}
                             <Button className='text-white  focus:ring-4 font-medium rounded-lg text-sm py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
-                                <h5>{t('common:signup')}</h5>
+                                <span>{t('common:signup')}</span>
                             </Button>
                         </Col>
 
@@ -110,21 +110,21 @@ const Signup: FC<any> = (props: any) => {
                 <Col className="justify-start w-full max-w-[400px] gap-8">
                     <Row className="items-center gap-4">
                         <Image src={logoIcon} alt="Arya_Crypto" />
-                        <h3 className="font-extrabold text-white header-label">{t('signupHeader')}</h3>
+                        <span className="font-extrabold text-white header-label">{t('signupHeader')}</span>
                     </Row>
                     {signupForm}
                     <Row className="gap-1 font-semibold text-sm self-center">
-                        <h5 className="">{t('haveAccount')}</h5>
+                        <span className="">{t('haveAccount')}</span>
                         {props.changeSection ?
-                            <Button onClick={() => props.changeSection('login')} className='text-blue-1'><h5>{t('common:signin')}</h5></Button>
+                            <Button onClick={() => props.changeSection('login')} className='text-blue-1'><span>{t('common:signin')}</span></Button>
                             :
-                            <Link href={'/login'} className='text-blue-1'><h5>{t('common:signin')}</h5></Link>
+                            <Link href={'/login'} className='text-blue-1'><span>{t('common:signin')}</span></Link>
                         }
                     </Row>
                     <Col className='gap-6 items-center justify-center'>
                         <Row className="w-full items-center gap-3">
                             <Col className='flex-1 h-px bg-white' />
-                            <h6 className="font-semibold text-lg">{t('or')}</h6>
+                            <span className="font-semibold text-lg">{t('or')}</span>
                             <Col className='flex-1 h-px bg-white' />
                         </Row>
                         <Row className="gap-8">
@@ -138,11 +138,11 @@ const Signup: FC<any> = (props: any) => {
                             </Button>
                         </Row>
                         <Col className="font-semibold text-sm items-center">
-                            <h5 className="">{t('ByProceedingYouAgreeToARYACryptos')}</h5>
+                            <span className="">{t('ByProceedingYouAgreeToARYACryptos')}</span>
                             <Row className="gap-1">
-                                <Button className='text-blue-1'><h5>{t('TU')}</h5></Button>
+                                <Button className='text-blue-1'><span>{t('TU')}</span></Button>
                                 &
-                                <Button className='text-blue-1'><h5>{t('Pp')}</h5></Button>
+                                <Button className='text-blue-1'><span>{t('Pp')}</span></Button>
                             </Row>
                         </Col>
                     </Col>
