@@ -69,7 +69,7 @@ const AssetTradeFromInput: FC = () => {
       <Row className="items-center">
         <input
           className={clsx(inputClasses)}
-          value={asset.quantity}
+          value={asset.quantity ?? 0}
           maxLength={8}
           placeholder={asset.quantity}
           onChange={(e) =>
