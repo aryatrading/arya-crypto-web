@@ -29,7 +29,7 @@ const Footer = () => {
                {
                 footerLinks.map((section)=>{
                     return <Col key={_.uniqueId()} className='gap-4'>
-                        <h3 className='text-white text-base font-medium'>{section.name}</h3>
+                        <h5 className='text-white text-base font-medium'>{section.name}</h3>
                         <Col className='gap-3'>
                             {section.links.map((link)=>{
                                 return <Link key={_.uniqueId()} className='text-grey-1 hover:text-white' href={link.route}>{link.name}</Link>
@@ -39,7 +39,7 @@ const Footer = () => {
                 })
                }
                <Col className='gap-4'>
-                    <h3 className='text-white text-base font-medium'>Contact</h3>
+                    <h5 className='text-white text-base font-medium'>Contact</h3>
                     <Col className='gap-3'>
                         <Row>
                             <Link href={'mailto:aryacrypto@gmail.com'}><EmailIcon className='w-4 h-4 fill-current text-white'/></Link>
