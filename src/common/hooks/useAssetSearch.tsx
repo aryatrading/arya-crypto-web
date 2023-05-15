@@ -31,7 +31,7 @@ const useAssetSearch = ({ fullModal }: { fullModal: boolean }) => {
     const fetchFilteredAssets = useCallback(() => {
         setIsSearching(true);
         setFilteredAssets(null);
-        fetchAssets(searchTerm, searchTerm.length <= 0 ? fullModal ? 20 : 10 : 100)
+        fetchAssets(searchTerm, searchTerm.length <= 0 ? fullModal ? 20 : 5 : 100)
             .then((res) => {
                 setFilteredAssets(res);
             })
@@ -61,7 +61,7 @@ const useAssetSearch = ({ fullModal }: { fullModal: boolean }) => {
         fetchFilteredAssets();
     }, [fetchFilteredAssets]);
 
-    return { fetchingError, isSearching, filteredAssets, searchTerm, fetchFilteredAssets, debouncedSearch, assetLivePrice, showDialog, setShowDialog, transitions }
+    return { fetchingError, isSearching, filteredAssets, searchTerm, fetchFilteredAssets, debouncedSearch, assetLivePrice, showDialog, setShowDialog, transitions, setSearchTerm }
 }
 
 export default useAssetSearch

@@ -25,7 +25,7 @@ socket.onopen = async () => {
 };
 
 socket.onerror = (error: any) => {
-  if(MODE_DEBUG){
+  if (MODE_DEBUG) {
     console.log(`Error with web socket connection: ${error}`);
   }
   socket.close();
@@ -37,6 +37,6 @@ socket.onmessage = function (e: any) {
   let _symbol = symbol?.split("/")[0].toLowerCase();
 
   if (price && _symbol) {
-    store.dispatch(pricechange({ symbol: _symbol, price }));
+    store?.dispatch(pricechange({ symbol: _symbol, price }));
   }
 };

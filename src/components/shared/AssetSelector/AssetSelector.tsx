@@ -8,7 +8,6 @@ import { animated } from 'react-spring';
 import Button from '../buttons/button'
 import CloseIcon from '../../svg/Shared/CloseIcon'
 import { InputWithIcon } from '../inputs/Input'
-import SearchIcon from '../../svg/Shared/SearchIcon'
 import AssetRow from '../AssetRow/AssetRow'
 import useAssetSearch from '../../../common/hooks/useAssetSearch'
 import { Col, Row } from '../layout/flex'
@@ -92,7 +91,7 @@ const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClic
               {showDialogTitle && <Dialog.Title className="text-mauve12 m-0 text-2xl font-semibold">
                 {t('selectAsset')}
               </Dialog.Title>}
-              <InputWithIcon onChange={debouncedSearch} className='gap-3 bg-grey-3 px-3 py-4 rounded-md text-sm font-semibold focus-within:outline focus-within:outline-1 focus-within:outline-grey-1' placeholder='Search asset' icon={<SearchIcon className='stroke-current text-grey-1 w-3 h-3' />} />
+              <InputWithIcon onChange={debouncedSearch} className='gap-3 bg-grey-3 px-3 py-4 rounded-md text-sm font-semibold focus-within:outline focus-within:outline-1 focus-within:outline-grey-1' placeholder='Search asset' icon={<MagnifyingGlassIcon className='stroke-current text-grey-1 w-6 h-6' />} />
               <div className='flex flex-col w-full gap-4'>
                 <div className='grid grid-cols-2 font-semibold content-center px-2'>
                   <span className='text-start'>{t('name')}</span>
