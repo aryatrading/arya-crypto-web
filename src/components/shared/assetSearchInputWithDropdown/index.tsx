@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { MagnifyingGlassIcon, PlayIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -15,9 +15,10 @@ import useAssetSearch from "../../../common/hooks/useAssetSearch";
 interface AssetDropdownTypes {
     onClick?: (x: any) => void,
     t?: any,
+    trigger?: ({ searchTerm, debouncedSearch, setSearchTerm, setFocused }: { searchTerm: string, debouncedSearch: any, setSearchTerm: any, setFocused: any }) => ReactNode,
 }
 
-export const SearchAssetInput = ({ onClick, t }: AssetDropdownTypes) => {
+export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) => {
     const { searchTerm, isSearching, filteredAssets, debouncedSearch, assetLivePrice, setSearchTerm } = useAssetSearch({ fullModal: false });
     const [focused, setFocused] = useState<boolean>();
     const { push } = useRouter();
@@ -30,32 +31,34 @@ export const SearchAssetInput = ({ onClick, t }: AssetDropdownTypes) => {
                     input?.focus();
                 }
             }}>
-                <Row className="bg-transparent h-[40px] px-0 items-center md:bg-grey-3 md:px-4 rounded-md overflow-hidden">
-                    <MagnifyingGlassIcon width="20px" color="#6B7280" />
-                    <input
-                        className={clsx({ "w-[350px]": searchTerm !== null, "pr-8": searchTerm !== '' }, "font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:outline-none focus:border-transparent focus:ring-0 border-transparent", searchTerm !== '' ? null : styles['input-wrapper'])}
-                        type="text"
-                        id="searchInput"
-                        maxLength={20}
-                        placeholder={t('coin:searchAsset').toString()}
-                        onFocus={() => setTimeout(() => setFocused(true), 500)}
-                        onBlur={() => {
-                            if (searchTerm !== '') {
-                                return;
-                            }
-                            setTimeout(() => setFocused(false), 200);
-                        }}
-                        onChange={debouncedSearch} />
+                {trigger ? trigger({ searchTerm, debouncedSearch, setSearchTerm, setFocused }) :
+                    <Row className="bg-transparent h-[40px] px-0 items-center md:bg-grey-3 md:px-4 rounded-md overflow-hidden">
+                        <MagnifyingGlassIcon width="20px" color="#6B7280" />
+                        <input
+                            className={clsx({ "w-[350px]": searchTerm !== null, "pr-8": searchTerm !== '' }, "font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:outline-none focus:border-transparent focus:ring-0 border-transparent", searchTerm !== '' ? null : styles['input-wrapper'])}
+                            type="text"
+                            id="searchInput"
+                            maxLength={20}
+                            placeholder={t('coin:searchAsset').toString()}
+                            onFocus={() => setTimeout(() => setFocused(true), 500)}
+                            onBlur={() => {
+                                if (searchTerm !== '') {
+                                    return;
+                                }
+                                setTimeout(() => setFocused(false), 200);
+                            }}
+                            onChange={debouncedSearch} />
 
-                    {searchTerm !== '' && <Button className="p-1.5 bg-black-1 rounded-xl absolute right-4" onClick={() => {
-                        setFocused(false);
-                        setSearchTerm('');
-                    }}>
-                        <CloseIcon className="stroke-current text-[#89939F] w-2 h-2" />
-                    </Button>}
-                </Row>
+                        {searchTerm !== '' && <Button className="p-1.5 bg-black-1 rounded-xl absolute right-4" onClick={() => {
+                            setFocused(false);
+                            setSearchTerm('');
+                        }}>
+                            <CloseIcon className="stroke-current text-[#89939F] w-2 h-2" />
+                        </Button>}
+                    </Row>
+                }
             </Button>
-            {focused && <Col className={clsx("w-[400px] max-h-[300px] bg-grey-2 top-16 right-0 absolute items-center rounded-md overflow-auto p-4", styles.list)}>
+            {focused && <Col className={clsx({ "w-full": trigger, "w-[400px]": !trigger }, "max-h-[300px] bg-grey-2 top-16 right-0 absolute items-center rounded-md overflow-auto p-4 z-50", trigger ? null : styles.list)}>
                 {isSearching ? <LoadingSpinner /> :
                     filteredAssets?.length === 0 ?
                         <span className="w-full mx-4 text-center">{t('asset:empty')}<br /><br />{searchTerm}</span>
@@ -92,9 +95,9 @@ export const SearchAssetInput = ({ onClick, t }: AssetDropdownTypes) => {
                             );
                         })
                 }
-                <p className="capitalize font-extrabold text-base underline underline-offset-2 text-grey-1 cursor-pointer z-50 text-center mt-10" onClick={() => {
+                {!trigger && <p className="capitalize font-extrabold text-base underline underline-offset-2 text-grey-1 cursor-pointer z-50 text-center mt-10" onClick={() => {
                     push('/market');
-                }}>{t('asset:seeMore')}</p>
+                }}>{t('asset:seeMore')}</p>}
             </Col>}
         </Col>
     );

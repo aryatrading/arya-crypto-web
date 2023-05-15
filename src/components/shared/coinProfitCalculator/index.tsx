@@ -1,5 +1,5 @@
 import { useTranslation } from "next-i18next";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import { CurrencyDollarIcon, MagnifyingGlassIcon, ArrowDownCircleIcon, ArrowUpCircleIcon } from '@heroicons/react/24/outline';
 
@@ -7,26 +7,28 @@ import { Col, Row } from "../layout/flex";
 import { ChevronUp } from "../../svg/chevron-up";
 import { ChevronDown } from "../../svg/chevron-down";
 import Button from "../buttons/button";
-import { CloseIcon } from "../../svg/close";
+import CloseIcon from "../../svg/Shared/CloseIcon";
+import { SearchAssetInput } from "../assetSearchInputWithDropdown";
 
-const Input = ({ icon, placeholder, value, onClear, ...rest }: any) => (
+const Input = ({ icon, placeholder, value, onClear, type = "number", ...rest }: any) => (
     <Row className="bg-grey-3 w-full h-[50px] rounded-md px-4 gap-2 relative">
         {icon}
-        <input className="font-bold text-base text-white bg-transparent flex-1 pl-2 focus:ring-0 border-0" value={value} type="number" placeholder={placeholder} {...rest} />
+        <input className="font-bold text-base text-white bg-transparent flex-1 pl-2 focus:ring-0 border-0" value={value} type={type} placeholder={placeholder} {...rest} />
         {!!value && <Button className="absolute right-3 bottom-[14px] bg-grey-3 px-1.5 py-1.5 rounded-xl" onClick={onClear}>
-            <CloseIcon />
+            <CloseIcon className="stroke-current text-[#89939F] w-2 h-2" />
         </Button>}
     </Row>
 );
 
 export const CoinProfitCalculator = () => {
-    const { t } = useTranslation(["coin"]);
-    const [coin, setCoin] = useState();
+    const { t } = useTranslation(["coin", "asset"]);
     const [buyPrice, setBuyPrice] = useState('');
     const [sellPrice, setSellPrice] = useState('');
     const [investment, setInvestment] = useState('');
     const [profit, setProfit] = useState(0);
     const [totalExitAmount, setTotalExitAmount] = useState(0);
+
+    const ref = useRef<any>();
 
     useEffect(() => {
         const xProfit = ((parseFloat(investment) || 0) / (parseFloat(buyPrice) || 1)) * ((parseFloat(sellPrice) || 0) - (parseFloat(buyPrice) || 0));
@@ -65,13 +67,47 @@ export const CoinProfitCalculator = () => {
         }
     }, []);
 
+    const customInput = useCallback(({ debouncedSearch, searchTerm, setSearchTerm, setFocused }: any) => (
+        <Row className="bg-grey-3 w-full h-[50px] rounded-md px-4 gap-2 relative justify-center">
+            <MagnifyingGlassIcon width="24px" color="#6B7280" />
+            <input
+                ref={ref}
+                className="font-bold text-base text-white bg-transparent flex-1 pl-2 focus:ring-0 border-0"
+                onChange={debouncedSearch}
+                placeholder={t('coin').toString()}
+                type="text"
+                onFocus={() => setFocused(true)}
+                onBlur={() => {
+                    if (searchTerm !== '') {
+                        return;
+                    }
+                    setTimeout(() => setFocused(false), 200);
+                }} />
+            {(searchTerm !== '' || ref?.current?.value || ref?.current?.value !== '') && <Button
+                className="absolute right-3 bottom-[14px] bg-grey-3 px-1.5 py-1.5 rounded-xl"
+                onClick={() => {
+                    setFocused(false);
+                    setSearchTerm('');
+                    ref.current.value = '';
+                }}>
+                <CloseIcon className="stroke-current text-[#89939F] w-2 h-2" />
+            </Button>}
+        </Row>
+    ), [t]);
+
+    const onClick = useCallback((data: any) => {
+        ref.current.value = data.name;
+        setBuyPrice(data.currentPrice.toString());
+        setSellPrice(data.currentPrice.toString());
+    }, []);
+
     return (
-        <Col className="container gap-6 w-full items-center lg:flex-row">
+        <Col className="gap-6 w-full items-center lg:flex-row ">
             <Col className="gap-6 flex-1 w-full">
                 <Row className="w-full gap-6">
                     <Row className="w-full gap-6 md:flex-nowrap flex-wrap">
                         <Col className="w-full md:w-1/2 gap-6">
-                            <Input icon={<MagnifyingGlassIcon width="24px" color="#6B7280" />} placeholder={t('coin').toString()} />
+                            <SearchAssetInput trigger={customInput} t={t} onClick={onClick} />
 
                             <Input onChange={({ target: { value } }: any) => updateInputs(value, 'inv')} value={investment} placeholder={t('investment')} icon={<CurrencyDollarIcon width="24px" color="#6B7280" />} onClear={() => onClear('inv')} />
                         </Col>
