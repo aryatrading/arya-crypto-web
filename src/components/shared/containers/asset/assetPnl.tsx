@@ -30,12 +30,12 @@ const AssetPnl: FC<IAssetPnlProps> = ({ value, className, transform}) => {
   const handleValue = useCallback(
     () => {
       if(value){
-        return <p className={`text-xs font-medium ${(isProfit===null)?'text-grey-1':''}`}>
+        return <p className={`text-sm font-semibold ${(isProfit===null)?'text-grey-1':''}`}>
         {transform?transform(value??0):`${isProfit?'+':''}${percentageFormat(value)}%`}
       </p>
       }
       else{
-        return <span className="text-grey-1 text-xs font-medium">N/A</span>
+        return <span className="text-grey-1 text-sm font-semibold">N/A</span>
       }
     },
     [isProfit, transform, value],

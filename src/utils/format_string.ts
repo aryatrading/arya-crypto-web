@@ -3,7 +3,7 @@ export const CapitalizeString = (word: string) => {
 
   const firstLetterCap = firstLetter.toUpperCase();
 
-  const remainingLetters = word.slice(1);
+  const remainingLetters = word.slice(1).toLowerCase();
 
   return firstLetterCap + remainingLetters;
 };
