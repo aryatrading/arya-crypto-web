@@ -13,7 +13,6 @@ const initialState: ExchangeStateType = {
     connectedExchanges: [],
     allProviders: [],
   },
-  error: null,
 };
 
 export const selectExchangeData = (state: AppState) => state.exchange?.data;
@@ -45,12 +44,6 @@ export const exchangeSlice = createSlice({
     ) => {
       state.status = action.payload;
     },
-    setExchangeStoreError: (
-      state: ExchangeStateType,
-      action: { payload: Error | null }
-    ) => {
-      state.error = action.payload;
-    },
     setConnectedExchanges: (
       state: ExchangeStateType,
       action: { payload: ExchangeType[] }
@@ -73,7 +66,6 @@ export const exchangeSlice = createSlice({
 });
 
 export const {
-  setExchangeStoreError,
   setSelectedExchange,
   setConnectedExchanges,
   setExchangeStoreAsyncStatus,

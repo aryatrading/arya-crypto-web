@@ -75,6 +75,7 @@ const Nav = () => {
     return <div className={className}>
       {
         navLinkData.map((navLink) => <NavLink
+          key={navLink.title}
           active={pathname === navLink.route}
           href={navLink.route}
           navTitle={navLink.title}

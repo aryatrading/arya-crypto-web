@@ -11,7 +11,7 @@ export const DisccounetAlertIcon = () => (
       stroke="#F2323F"
       strokeWidth="4"
       stroke-miterlimit="10"
-      stroke-linecap="round"
+      strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
@@ -24,7 +24,7 @@ export const DisccounetAlertIcon = () => (
       d="M25 25.1478L25 20.7728"
       stroke="white"
       strokeWidth="1.5"
-      stroke-linecap="round"
+      strokeLinecap="round"
     />
     <circle cx="25" cy="29.8353" r="1.25" fill="white" />
   </svg>

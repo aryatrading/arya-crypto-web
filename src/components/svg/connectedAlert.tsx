@@ -11,14 +11,14 @@ export const ConnectedAlertIcon = () => (
       stroke="#558AF2"
       strokeWidth="4"
       stroke-miterlimit="10"
-      stroke-linecap="round"
+      strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M33 20L22.3333 30L17 25"
       stroke="#558AF2"
       strokeWidth="4"
-      stroke-linecap="round"
+      strokeLinecap="round"
       strokeLinejoin="round"
     />
   </svg>
