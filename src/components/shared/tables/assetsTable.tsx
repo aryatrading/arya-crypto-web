@@ -202,10 +202,8 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
       {assets.length === 0 ? (
         <div className="w-full  flex justify-center">
           <Col className="text-center gap-3">
-            <p className="font-semibold text-4xl">Your watchlist is empty</p>
-            <p className="text-2xl text-grey-1">
-              Start building your watchlist adding assets to your favorites list
-            </p>
+            <p className="font-semibold text-4xl">{t("no_assets")}</p>
+            <p className="text-2xl text-grey-1">{t("no_assets_sub")}</p>
           </Col>
         </div>
       ) : null}
