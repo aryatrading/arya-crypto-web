@@ -1,21 +1,26 @@
 import { FC, useMemo } from "react";
+import { useMediaQuery } from "react-responsive";
+import { screens } from "tailwindcss/defaultTheme";
+import { useTranslation } from "next-i18next";
+import Image from "next/image";
+import clsx from "clsx";
+import Link from "next/link";
+
 import { Col, Row } from "../../../../../shared/layout/flex";
 import Button from "../../../../../shared/buttons/button";
-import { useTranslation } from "next-i18next";
 import styles from "./smart-allocation-holdings-tab.module.scss";
 import { percentageFormat, formatNumber } from "../../../../../../utils/helpers/prices";
-import Image from "next/image";
 import { CustomizeAllocationIcon } from "../../../../../svg/smart-allocation/customize-portfolio-icon";
 import { SmartAllocationAssetType } from "../../../../../../types/smart-allocation.types";
-import clsx from "clsx";
 import PortfolioComposition from "../../../../../shared/portfolio-composition/portfolio-composition";
-import Link from "next/link";
 import { USDTSymbol } from "../../../../../../utils/constants/market";
 import AssetPnl from "../../../../../shared/containers/asset/assetPnl";
 
 const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
 
     const { t } = useTranslation(['smart-allocation']);
+
+    const isTabletOrMobileScreen = useMediaQuery({ query: `(max-width: ${screens.md})` })
 
     const portfolioComposition = useMemo(() => {
         return (
@@ -122,7 +127,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                 <Row className="w-full gap-5 items-center">
                     <Col className="gap-5 flex-1 max-w-full md:gap-10 md:flex-[3] md:flex-row">
                         <Link href="smart-allocation/edit" className="w-max bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold shrink-0">{t('editPortfolio')}</Link>
-                        {portfolioComposition}
+                        {!isTabletOrMobileScreen && portfolioComposition}
                     </Col>
                     <Row className="hidden md:flex md:flex-1"></Row>
                 </Row>

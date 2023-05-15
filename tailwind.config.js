@@ -13,6 +13,7 @@ export const content = [
 export const theme = {
   container: {
     center: true,
+    padding: "1.5rem"
   },
   screens: {
     sm: '480px',

@@ -1,27 +1,31 @@
 import { FC, createContext, useCallback, useEffect, useMemo, useState } from "react"
+import { useMediaQuery } from "react-responsive";
+import { screens } from "tailwindcss/defaultTheme";
+import { useSelector } from "react-redux";
+import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
+import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
+import clsx from "clsx";
+import { useTranslation } from "next-i18next";
+
 import { Col, Row } from "../../../shared/layout/flex";
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher";
 import { PortfolioSnapshotType } from "../../../../types/exchange.types";
 import { getPortfolioSnapshots } from "../../../../services/controllers/market";
 import { selectConnectedExchanges, selectSelectedExchange } from "../../../../services/redux/exchangeSlice";
-import { useSelector } from "react-redux";
 import { MODE_DEBUG } from "../../../../utils/constants/config";
 import { chartDataType } from "../../../shared/charts/graph/graph.type";
 import LineChart from "../../../shared/charts/graph/graph";
-import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
 import { ISmartAllocationContext, SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
 import PageLoader from "../../../shared/pageLoader/pageLoader";
 import { getSmartAllocation } from "../../../../services/controllers/smart-allocation";
-import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
 import { Top10Icon, Top15Icon, Top5Icon } from "../../../svg/smart-allocation/top-coins-icons";
-import Link from "next/link";
-import clsx from "clsx";
 import { SelectSmartAllocationPortfolioIcon } from "../../../svg/smart-allocation/customize-portfolio-icon";
-import { useTranslation } from "next-i18next";
 import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/no-exchange-connected-page";
 import { EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
 import SmartAllocationAutomation from "./SmartAllocationAutomation/SmartAllocationAutomation";
+import PortfolioComposition from "../../../shared/portfolio-composition/portfolio-composition";
 
 
 
@@ -48,6 +52,8 @@ const AuthedSmartAllocation: FC = () => {
 
     const selectedExchange = useSelector(selectSelectedExchange);
     const connectedExchanges = useSelector(selectConnectedExchanges);
+
+    const isTabletOrMobileScreen = useMediaQuery({ query: `(max-width: ${screens.md})` })
 
 
     const initPortfolioSnapshots = useCallback(() => {
@@ -121,8 +127,8 @@ const AuthedSmartAllocation: FC = () => {
 
     const getPredefinedAllocationsButtons = useCallback(({ label, icon, href, isCustom }: { label: string, icon: any, href: string, isCustom: boolean }) => {
         return (
-            <Link href={href} className={clsx("flex flex-col w-64 aspect-video rounded-md items-center justify-center gap-5", { "bg-blue-1": isCustom, "bg-blue-3": !isCustom, })}>
-                <Row className="w-16 items-center justify-center aspect-square rounded-full bg-blue-3">{icon}</Row>
+            <Link href={href} className={clsx("flex flex-col w-52 md:w-64 aspect-[180/118] rounded-md items-center justify-center gap-2", { "bg-blue-1": isCustom, "bg-blue-3": !isCustom, })}>
+                <Row className="w-1/4 items-center justify-center aspect-square rounded-full bg-blue-3">{icon}</Row>
                 <p className="text-white font-bold">{label}</p>
             </Link>
         )
@@ -130,15 +136,15 @@ const AuthedSmartAllocation: FC = () => {
 
     const noAllocation = useMemo(() => {
         return (
-            <Col className="items-center justify-center col-span-full gap-10">
+            <Col className="md:items-center justify-center col-span-full gap-10">
                 <ExchangeSwitcher canSelectOverall={false} />
                 <Row className="justify-center">
-                    <Col className="items-center">
-                        <Col className="items-center gap-5 sm:flex-row">
+                    <Col className="items-center gap-5">
+                        <Col className="items-center gap-5 md:flex-row">
                             <SelectSmartAllocationPortfolioIcon />
-                            <p className="text-2xl text-center sm:text-start">{t('selectAPresetOrCustomizeYourPortfolio')}</p>
+                            <p className="text-2xl max-w-xs md:max-w-none font-semibold text-center md:text-start">{t('selectAPresetOrCustomizeYourPortfolio')}</p>
                         </Col>
-                        <p className="text-grey-1 text-center sm:text-start">{t('selectAPresetBelowOrCustomYourPortfolio')}</p>
+                        <p className="text-grey-1 text-center md:text-start">{t('selectAPresetBelowOrCustomYourPortfolio')}</p>
                     </Col>
                 </Row>
                 <Row className="items-center justify-center gap-5 flex-wrap">
@@ -172,6 +178,17 @@ const AuthedSmartAllocation: FC = () => {
     }, [getPredefinedAllocationsButtons, t]);
 
 
+    const portfolioComposition = useMemo(() => {
+        return (
+            <PortfolioComposition portfolioAssets={smartAllocationHoldings.map(asset => {
+                return {
+                    name: (asset.name ?? ''),
+                    weight: (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1)
+                };
+            })} />
+        )
+    }, [smartAllocationHoldings, smartAllocationTotalEvaluation]);
+
     const smartAllocationGraph = useMemo(() => {
 
         if (portfolioSnapshots.length) {
@@ -185,11 +202,14 @@ const AuthedSmartAllocation: FC = () => {
             });
 
             return (
-                <LineChart primaryLineData={smartAllocationData} className={"w-full h-[400px]"} />
+                <Col className="w-full gap-5">
+                    {isTabletOrMobileScreen && portfolioComposition}
+                    <LineChart primaryLineData={smartAllocationData} className={"w-full h-[200px] md:h-[400px]"} />
+                </Col>
             )
 
         }
-    }, [portfolioSnapshots]);
+    }, [isTabletOrMobileScreen, portfolioComposition, portfolioSnapshots]);
 
     const tabs = useMemo(() => {
         return (
