@@ -49,7 +49,7 @@ const Asset: FC = () => {
         <span>{t("market")}</span>
         <span> / </span>
         <h1 className="">
-          {t("pricelivedata", {asset} )}
+          {t("pricelivedata", { asset })}
         </h1>
       </Row>
       <Row className="justify-between">
@@ -70,7 +70,7 @@ const Asset: FC = () => {
               {t("assetinfotab")}
             </Tab>
             {asset?.isHoldingAsset ? (
-              <Tab className="font-bold text-lg outline-none cursor-pointer">
+              <Tab className="font-bold text-sm outline-none cursor-pointer">
                 {t("holdingsinfo")}
               </Tab>
             ) : null}

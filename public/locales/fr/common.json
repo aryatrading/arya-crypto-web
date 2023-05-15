@@ -35,5 +35,11 @@
     "somethingWentWrong": "Quelque chose n'a pas fonctionné",
     "save": "Économiser",
     "connectYourExchanges": "Connectez vos échanges",
-    "goToSettings": "Aller dans les paramètres"
+    "goToSettings": "Aller dans les paramètres",
+    "none": "aucun",
+    "MONTHLY": "Mensuel",
+    "QUARTERLY": "Trimestriel",
+    "YEARLY": "Annuel",
+    "cancel":"Annuler",
+    "sell": "Vendre"
 }

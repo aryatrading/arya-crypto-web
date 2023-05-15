@@ -13,10 +13,13 @@ export const content = [
 export const theme = {
   container: {
     center: true,
-    padding: "2rem",
-    screens: {
-      "2xl": "1400px",
-    },
+  },
+  screens: {
+    sm: '480px',
+    md: '768px',
+    lg: '976px',
+    xl: '1280px',
+    '2xl': '1440px',
   },
   extend: {
     typography: (theme) => ({
@@ -55,13 +58,31 @@ export const theme = {
       },
       yellow: {
         1: "#F3BA2F"
+      },
+      orage: {
+        1: "#F7931A"
       }
     },
-    fontFamily: {
-      sans: ['var(--poppins-font)', ...fontFamily.sans],
-    }
+    keyframes: {
+      overlayShow: {
+        from: { opacity: 0 },
+        to: { opacity: .3 },
+      },
+      contentShow: {
+        from: { opacity: 0, transform: 'translate(-50%, -48%) scale(0.96)' },
+        to: { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+      },
+    },
+    animation: {
+      overlayShow: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+      contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+    },
   },
+  fontFamily: {
+    sans: ['var(--poppins-font)', ...fontFamily.sans],
+  }
 }
+
 export const plugins = [
   require("flowbite/plugin")
 ]

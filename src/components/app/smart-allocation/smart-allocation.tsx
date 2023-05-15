@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { Col } from "../../shared/layout/flex";
 import AuthedSmartAllocation from "./authed-smart-allocation/authed-smart-alocation";
 import { useAuthUser } from "next-firebase-auth";
 

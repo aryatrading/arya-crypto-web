@@ -73,14 +73,6 @@ export const getConnectedProviders = async () => {
   return await axiosInstance.get(`/exchange/connected-keys`);
 };
 
-
-export const getSmartAllocation = async (providerId?: number) => {
-  return await axiosInstance.get(
-    `/trade-engine/smart-allocation`,
-    { params: { provider: providerId } }
-  );
-}
-
 export const getAddableProviders = async () => {
   axiosInstance.get(`/general/providers`).then(response => {
     if (response.data.length) {
@@ -96,3 +88,5 @@ export const getAddableProviders = async () => {
     }
   });
 };
+
+

@@ -14,6 +14,9 @@ module.exports = {
       'common',
       'auth',
       'market',
+      "nav",
+      'dashboard',
+      "coin",
       'smart-allocation'
     ],
     /** To avoid issues when deploying to some paas (vercel...) */
