@@ -88,15 +88,10 @@ const AssetInformationTab: FC = () => {
             {asset?.id && <CoinConverter preDefined staticCoin={asset} />}
           </Col>
         </Col>
-<<<<<<< HEAD
         <div className="w-3/12 mt-7">
           <p className="mb-2 font-medium text-xl">
             {t("trade_title")} {asset.name}
           </p>
-=======
-        <div className="w-2/6 mt-7">
-          <p className="mb-2 font-medium text-xl">Trade {asset.name}</p>
->>>>>>> fd206ceecdfb304d678672b29aadfba930e6a5c0
           <AssetTrade />
         </div>
       </Row>
