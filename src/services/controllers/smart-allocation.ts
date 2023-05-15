@@ -3,6 +3,7 @@ import { EnumExitStrategyTrigger, EnumPredefinedSmartAllocationPortfolio, EnumRe
 import { axiosInstance } from "../api/axiosConfig";
 
 export const getSmartAllocation = async (providerId?: number) => {
+    
     return await axiosInstance.get<SmartAllocationResponseType>(
         `/trade-engine/smart-allocation`,
         { params: { provider: providerId } }
@@ -133,4 +134,10 @@ export const deleteExitStrategy = async (providerId: number) => {
         `/trade-engine/smart-allocation/exit`,
         {params:exitStrategyParams}
     );
+}
+
+export function getSmartAllocationTradeLogs(providerId : number ) {
+    return axiosInstance.get('/trade-engine/smart-allocation/orders-logs', {
+        params: { provider: providerId }
+    });
 }

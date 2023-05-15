@@ -21,8 +21,7 @@ import { SelectSmartAllocationPortfolioIcon } from "../../../svg/smart-allocatio
 import { useTranslation } from "next-i18next";
 import { EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
 import SmartAllocationAutomation from "./SmartAllocationAutomation/SmartAllocationAutomation";
-
-
+import SmartAllocationTradeLog from "./smart-allocation-tabs/SmartAllocationTradeLog/SmartAllocationTradeLog";
 
 
 export const SmartAllocationContext = createContext<ISmartAllocationContext>({
@@ -70,9 +69,12 @@ const AuthedSmartAllocation: FC = () => {
     }, [selectedExchange?.provider_id]);
 
     const initSmartAllocationHoldings = useCallback(() => {
-        if(!selectedExchange?.provider_id){
-            return;
-        }
+        if(!selectedExchange?.provider_id) {
+            if(MODE_DEBUG){
+                console.log('initSmartAllocationHolding: selectedExchange?.provider_id is false', selectedExchange?.provider_id)
+            }
+            return
+        };
         setIsLoadingSmartAllocationHoldings(true);
         getSmartAllocation(selectedExchange?.provider_id)
             .then((res) => {
@@ -204,7 +206,7 @@ const AuthedSmartAllocation: FC = () => {
                     <SmartAllocationAutomation/>
                 </TabPanel>
                 <TabPanel>
-
+                    <SmartAllocationTradeLog/>
                 </TabPanel>
             </Tabs>
         )

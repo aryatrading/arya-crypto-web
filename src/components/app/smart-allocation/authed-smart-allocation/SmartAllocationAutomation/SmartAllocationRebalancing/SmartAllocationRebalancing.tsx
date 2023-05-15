@@ -87,7 +87,7 @@ const SmartAllocationRebalancing = () => {
       () => {
         return <AlertDialog.Root open={rebalanceModalOpen} onOpenChange={setRebalanceModalOpen} >
                 <AlertDialog.Trigger asChild>
-                    <Button className='bg-blue-1 py-3 rounded-lg font-semibold text-xs w-full md:w-56'>{t('setRebalancingFrequency')}</Button>
+                    <Button className='bg-blue-1 py-3 px-6 rounded-lg font-semibold text-xs w-fit'>{t('setRebalancingFrequency')}</Button>
                 </AlertDialog.Trigger>
                 <AlertDialog.Portal>
                     <AlertDialog.Overlay className="dialog-overlay data-[state=open]:animate-overlayShow" />
