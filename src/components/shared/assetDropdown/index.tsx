@@ -105,9 +105,9 @@ export const AssetDropdown = ({
               width={22}
               height={22}
             />
-            <Row className="gap-2 items-center flex-1">
-              <p className="capitalize font-extrabold text-sm">{data?.name}</p>
-              <p className="capitalize font-medium text-xs">{data?.symbol}</p>
+            <Row className="gap-1 items-center flex-1">
+              <p className="capitalize font-semibold text-sm">{data?.name}</p>
+              <p className="uppercase font-semibold text-sm text-grey-1"> • {data?.symbol}</p>
             </Row>
             <Row className="items-center justify-center gap-1">
               {data.pnl < 0 ? (
@@ -124,7 +124,7 @@ export const AssetDropdown = ({
                     "text-green-1": data.pnl > 0,
                     "text-grey-1": data.pnl === 0,
                   },
-                  "font-bold text-sm tracking-[1px]"
+                  "font-semibold text-sm tracking-[1px]"
                 )}
               >
                 USD {data?.currentPrice}
@@ -153,12 +153,12 @@ export const AssetDropdown = ({
               disabled={disabled}
               className="active:outline-none"
             >
-              <Row className="gap-4 items-center">
-                <h3 className="font-extrabold text-white">
+              <Row className="gap-2 items-center">
+                <span className="font-semibold text-sm text-white">
                   {title || t("coins")}
-                </h3>
+                </span>
                 {!disabled && (
-                  <ChevronDownIcon height="20px" width="20px" color="#fff" />
+                  <ChevronDownIcon height="16px" width="16px" color="#fff" />
                 )}
               </Row>
             </button>
@@ -172,7 +172,7 @@ export const AssetDropdown = ({
                 "min-w-[400px] max-h-[340px]": !showTopCoinsList,
                 "min-w-[500px] max-h-[440px]": showTopCoinsList,
               },
-              "bg-grey-2 rounded-md overflow-auto z-50"
+              "bg-grey-2 shadow-md shadow-black-1 rounded-md overflow-auto z-50"
             )}
             sideOffset={sideOffset}
             align={align}

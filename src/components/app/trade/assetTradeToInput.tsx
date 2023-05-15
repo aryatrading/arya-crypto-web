@@ -42,8 +42,8 @@ const AssetTradeToInput: FC = () => {
   return (
     <Col className="bg-black-1 rounded-md px-4 py-2 gap-4 w-full">
       <Row className="flex justify-between">
-        <p className="font-medium text-base">To</p>
-        <p className="font-medium text-base text-grey-1">
+        <p className="font-semibold text-sm text-grey-1">To</p>
+        <p className="font-semibold text-sm text-grey-1">
           Price ~{" "}
           {formatNumber(
             _assetprice[asset.symbol?.toLowerCase() ?? "btc"] ?? asset.price,
@@ -63,7 +63,7 @@ const AssetTradeToInput: FC = () => {
         <Row className="gap-2 items-center">
           <img className="w-5 h-5 rounded-full" src={asset.iconUrl} alt="new" />
           {symbol === asset?.symbol?.toLowerCase() ? (
-            <p>{asset.symbol}</p>
+            <p className="font-semibold text-sm">{asset.symbol}</p>
           ) : (
             <AssetDropdown
               onClick={(data: any) => {

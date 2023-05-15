@@ -104,6 +104,7 @@ const AssetTradeFromInput: FC = () => {
               disabled={false}
               title={asset.symbol ?? t("selectAsset")}
               removeAsset={symbol}
+              showContentHeaderLabel={false}
             />
           )}
         </Row>
