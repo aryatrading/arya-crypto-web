@@ -39,5 +39,10 @@
     "error": "Error Executing",
     "error_voting": "Error casting vote, try again!",
     "selectAsset": "Select",
-    "searchAsset": "Search"
+    "searchAsset": "Search",
+    "trade_title": "Trade",
+    "advance_mode": "Advance Mode",
+    "from_title": "From",
+    "balance_title": "Balance",
+    "max_title": "Max"
 }

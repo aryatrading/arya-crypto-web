@@ -13,14 +13,16 @@ import {
   swap,
 } from "../../../services/redux/swapSlice";
 import { SwapTradeType } from "../../../types/trade";
-import { getAsset } from "../../../services/redux/assetSlice";
 import LoadingSpinner from "../../shared/loading-spinner/loading-spinner";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { createSwapTrade } from "../../../services/controllers/trade";
 import { getAssetDetails } from "../../../services/controllers/asset";
+import { ProviderDropDown } from "../../shared/providerPicker";
+import { useTranslation } from "next-i18next";
 
 const AssetTrade: FC = () => {
+  const { t } = useTranslation(["asset"]);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -65,7 +67,9 @@ const AssetTrade: FC = () => {
   };
 
   return (
-    <Col className="bg-grey-2 px-5 py-5 rounded-md gap-10 items-center">
+    <Col className="bg-grey-2 px-5 py-5 rounded-md gap-5 items-center">
+      <ProviderDropDown />
+
       <AssetTradeFromInput />
       <Button
         onClick={() => onswapClick()}
@@ -77,16 +81,20 @@ const AssetTrade: FC = () => {
       <Col className="w-full gap-3">
         <Button
           className=" p-2 rounded-md bg-green-1 text-white w-full"
-          onClick={() => onTradePress()}
+          onClick={onTradePress}
         >
           {loading ? (
             <LoadingSpinner />
           ) : (
-            <p className="text-center font-semibold text-base">Trade</p>
+            <p className="text-center font-semibold text-base">
+              {t("trade_title")}
+            </p>
           )}
         </Button>
         <Button className="rounded-md bg-transparent text-white w-full">
-          <p className="text-center font-semibold text-base">Advance Mode</p>
+          <p className="text-center font-semibold text-base">
+            {t("advance_mode")}
+          </p>
         </Button>
       </Col>
     </Col>

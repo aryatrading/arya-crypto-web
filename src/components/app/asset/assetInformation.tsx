@@ -89,7 +89,9 @@ const AssetInformationTab: FC = () => {
           </Col>
         </Col>
         <div className="w-3/12 mt-7">
-          <p className="mb-2 font-medium text-xl">Trade {asset.name}</p>
+          <p className="mb-2 font-medium text-xl">
+            {t("trade_title")} {asset.name}
+          </p>
           <AssetTrade />
         </div>
       </Row>

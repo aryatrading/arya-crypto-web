@@ -46,7 +46,7 @@ const AssetTradeFromInput: FC = () => {
         price: elm.currentPrice,
         quantity: 0,
         iconUrl: elm.iconUrl,
-        availableBalance: data.free,
+        availableBalance: data?.free ?? 0,
       })
     );
     setLoading(false);
@@ -59,9 +59,10 @@ const AssetTradeFromInput: FC = () => {
   return (
     <Col className="bg-black-1 rounded-md px-4 py-2 gap-4 w-full">
       <Row className="flex justify-between">
-        <p className="font-medium text-base">From</p>
+        <p className="font-medium text-base">{t("from_title")}</p>
         <p className="font-medium text-base">
-          Balance: {formatNumber(asset.availableBalance)} {asset.symbol}
+          {t("balance_title")}: {formatNumber(asset.availableBalance)}{" "}
+          {asset.symbol}
         </p>
       </Row>
 
@@ -77,8 +78,8 @@ const AssetTradeFromInput: FC = () => {
         />
         <Row className="gap-2 items-center">
           <ShadowButton
-            title="Max"
-            onClick={() => onMaxPress()}
+            title={t("max_title")}
+            onClick={onMaxPress}
             py="py-1"
             border="rounded-md"
             bgColor="bg-transparent"
@@ -98,9 +99,10 @@ const AssetTradeFromInput: FC = () => {
           ) : (
             <AssetDropdown
               onClick={(data: any) => onFromSelect(data)}
+              align="end"
               t={t}
               disabled={false}
-              title={asset.symbol ?? "Select"}
+              title={asset.symbol ?? t("selectAsset")}
               removeAsset={symbol}
             />
           )}

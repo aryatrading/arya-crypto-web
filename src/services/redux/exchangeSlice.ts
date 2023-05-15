@@ -17,35 +17,67 @@ const initialState: ExchangeStateType = {
 };
 
 export const selectExchangeData = (state: AppState) => state.exchange?.data;
-export const selectSelectedExchange = createSelector([selectExchangeData], (data: ExchangeStateType["data"]) => (data?.selectedExchange));
-export const selectConnectedExchanges = createSelector([selectExchangeData], (data: ExchangeStateType["data"]) => (data?.connectedExchanges));
-export const selectAllProviders = createSelector([selectExchangeData], (data: ExchangeStateType["data"]) => (data?.allProviders));
+export const selectSelectedExchange = createSelector(
+  [selectExchangeData],
+  (data: ExchangeStateType["data"]) => data?.selectedExchange
+);
+export const selectConnectedExchanges = createSelector(
+  [selectExchangeData],
+  (data: ExchangeStateType["data"]) => data?.connectedExchanges
+);
+export const selectAllProviders = createSelector(
+  [selectExchangeData],
+  (data: ExchangeStateType["data"]) => data?.allProviders
+);
 
-
-export const selectExchangeStoreStatus = createSelector([(state: AppState) => state.exchange?.status], (status: StatusAsync) => (status));
+export const selectExchangeStoreStatus = createSelector(
+  [(state: AppState) => state.exchange?.status],
+  (status: StatusAsync) => status
+);
 
 export const exchangeSlice = createSlice({
   name: "exchange",
   initialState,
   reducers: {
-    setExchangeStoreAsyncStatus: (state: ExchangeStateType, action: { payload: StatusAsync }) => {
+    setExchangeStoreAsyncStatus: (
+      state: ExchangeStateType,
+      action: { payload: StatusAsync }
+    ) => {
       state.status = action.payload;
     },
-    setExchangeStoreError: (state: ExchangeStateType, action: { payload: Error | null }) => {
+    setExchangeStoreError: (
+      state: ExchangeStateType,
+      action: { payload: Error | null }
+    ) => {
       state.error = action.payload;
     },
-    setConnectedExchanges: (state: ExchangeStateType, action: { payload: ExchangeType[] }) => {
+    setConnectedExchanges: (
+      state: ExchangeStateType,
+      action: { payload: ExchangeType[] }
+    ) => {
       state.data.connectedExchanges = action.payload;
     },
-    setSelectedExchange: (state: ExchangeStateType, action: { payload: ExchangeType }) => {
+    setSelectedExchange: (
+      state: ExchangeStateType,
+      action: { payload: ExchangeType }
+    ) => {
       state.data.selectedExchange = action.payload;
     },
-    setAllProviders: (state: ExchangeStateType, action: { payload: ProviderType[] }) => {
+    setAllProviders: (
+      state: ExchangeStateType,
+      action: { payload: ProviderType[] }
+    ) => {
       state.data.allProviders = action.payload;
-    }
+    },
   },
 });
 
-export const { setExchangeStoreError, setSelectedExchange, setConnectedExchanges, setExchangeStoreAsyncStatus, setAllProviders } = exchangeSlice.actions;
+export const {
+  setExchangeStoreError,
+  setSelectedExchange,
+  setConnectedExchanges,
+  setExchangeStoreAsyncStatus,
+  setAllProviders,
+} = exchangeSlice.actions;
 
 export default exchangeSlice.reducer;
