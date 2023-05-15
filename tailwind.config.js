@@ -15,13 +15,6 @@ export const theme = {
     center: true,
     padding: "1.5rem"
   },
-  screens: {
-    sm: '480px',
-    md: '768px',
-    lg: '976px',
-    xl: '1280px',
-    '2xl': '1440px',
-  },
   extend: {
     typography: (theme) => ({
       DEFAULT: {
@@ -30,6 +23,9 @@ export const theme = {
         },
       },
     }),
+    screens: {
+      '2xl': '1440px',
+    },
     colors: {
       green: {
         1: "#22C55E",
@@ -60,7 +56,7 @@ export const theme = {
       yellow: {
         1: "#F3BA2F"
       },
-      orage: {
+      orange: {
         1: "#F7931A"
       }
     },
