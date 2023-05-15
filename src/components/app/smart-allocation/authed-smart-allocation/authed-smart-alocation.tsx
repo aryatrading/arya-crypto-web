@@ -214,12 +214,10 @@ const AuthedSmartAllocation: FC = () => {
     const tabs = useMemo(() => {
         return (
             <Tabs className="w-full font-light" selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
-                <TabList className="w-full border-b-[1px] border-grey-3 mb-6">
-                    <Row className='gap-4'>
-                        <Tab className="text-sm outline-none cursor-pointer px-5">{t('yourHoldings')}</Tab>
-                        <Tab className="text-sm outline-none cursor-pointer px-5">{t('automation')}</Tab>
-                        <Tab className="text-sm outline-none cursor-pointer px-5">{t('portfolioTradeHistory')}</Tab>
-                    </Row>
+                <TabList className="flex overflow-auto w-full border-b-[1px] border-grey-3 mb-6">
+                    <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">{t('yourHoldings')}</Tab>
+                    <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">{t('automation')}</Tab>
+                    <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">{t('portfolioTradeHistory')}</Tab>
                 </TabList>
                 <TabPanel>
                     <SmartAllocationHoldingsTab smartAllocationHoldings={smartAllocationHoldings} smartAllocationTotalEvaluation={smartAllocationTotalEvaluation} />
