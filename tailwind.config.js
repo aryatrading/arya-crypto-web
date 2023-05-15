@@ -13,10 +13,7 @@ export const content = [
 export const theme = {
   container: {
     center: true,
-    padding: "2rem",
-    screens: {
-      "2xl": "1400px",
-    },
+    padding: "2rem"
   },
   extend: {
     typography: (theme) => ({
@@ -26,6 +23,9 @@ export const theme = {
         },
       },
     }),
+    screens: {
+      '2xl': '1440px',
+    },
     colors: {
       green: {
         1: "#22C55E",
@@ -46,6 +46,8 @@ export const theme = {
         3: "#1F2A41",
         4: "#2B3958",
         5: "#1C1C1C",
+        6: '#1E293B',
+        7: '#334155',
       },
       black: {
         1: "#030712",
@@ -58,11 +60,26 @@ export const theme = {
         1: "#F7931A"
       }
     },
-    fontFamily: {
-      sans: ['var(--poppins-font)', ...fontFamily.sans],
-    }
+    keyframes: {
+      overlayShow: {
+        from: { opacity: 0 },
+        to: { opacity: .3 },
+      },
+      contentShow: {
+        from: { opacity: 0, transform: 'translate(-50%, -48%) scale(0.96)' },
+        to: { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+      },
+    },
+    animation: {
+      overlayShow: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+      contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+    },
   },
+  fontFamily: {
+    sans: ['var(--poppins-font)', ...fontFamily.sans],
+  }
 }
+
 export const plugins = [
   require("flowbite/plugin")
 ]

@@ -37,7 +37,7 @@ export const shortNumberFormat = (number: number) => {
 export const percentageFormat = (number: number) => {
   if (number) {
     if (Math.abs(number) < 1) {
-      return numeral(number).format("0a[.]0000");
+      return numeral(number).format("0a[.]00");
     }
     return numeral(number).format("0a[.]00");
   }

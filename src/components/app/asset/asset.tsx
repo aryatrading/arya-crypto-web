@@ -15,7 +15,7 @@ import AssetHoldingTab from "./assetHolding";
 const Asset: FC = () => {
   const { t } = useTranslation(["asset"]);
   const asset = useSelector(getAsset);
-
+  const name = asset.name
   const stats = useMemo(() => {
     return [
       { title: t("mrkCap"), value: formatNumber(asset.mrkCap ?? 0, true) },
@@ -45,6 +45,13 @@ const Asset: FC = () => {
 
   return (
     <Col className="h-full w-full gap-12">
+      <Row className="text-grey-1 gap-1">
+        <span>{t("market")}</span>
+        <span> / </span>
+        <h1 className="">
+          {t("pricelivedata", { asset })}
+        </h1>
+      </Row>
       <Row className="justify-between">
         <AssetHeader asset={asset} />
         <AssetVote />
@@ -58,12 +65,12 @@ const Asset: FC = () => {
       </Row>
       <Tabs selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
         <TabList className="border-b-[1px] border-grey-3 mb-6">
-          <Row className="gap-4">
-            <Tab className="font-bold text-lg outline-none cursor-pointer">
+          <Row className="gap-6">
+            <Tab className="font-semibold text-sm outline-none cursor-pointer">
               {t("assetinfotab")}
             </Tab>
             {asset?.isHoldingAsset ? (
-              <Tab className="font-bold text-lg outline-none cursor-pointer">
+              <Tab className="font-bold text-sm outline-none cursor-pointer">
                 {t("holdingsinfo")}
               </Tab>
             ) : null}

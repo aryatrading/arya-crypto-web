@@ -2,7 +2,7 @@
 
     width: 100%;
     min-width: 800px;
-    table-layout: fixed;
+    table-layout: auto;
 
     thead {
         @apply text-grey-1;
@@ -26,18 +26,17 @@
 
             &:first-child {
                 td {
-                    height: 80px;
+                    height: 50px;
                     vertical-align: bottom;
-                    padding-bottom: 20px;
+                    padding-bottom: 12px;
                 }
             }
         }
     }
 
     th {
-        height: 55px;
-        @apply font-normal;
-        text-align: left;
+        height: 38px;
+        @apply uppercase text-sm;
         padding: 0 20px;
 
         &:first-child {
@@ -46,11 +45,8 @@
     }
 
     td {
-        @apply font-normal;
-        text-align: left;
-        padding: 0 20px;
-        height: 70px;
-
+        padding: 0 8px;
+        height: 50px;
 
         &:only-child {
             text-align: center;
@@ -58,6 +54,10 @@
 
         &:first-child {
             padding-left: 20px;
+        }
+
+        &:last-child {
+            padding-right: 20px;
         }
     }
 

@@ -12,6 +12,7 @@ import {
 } from "../../services/controllers/asset";
 import { clearAsset } from "../../services/redux/assetSlice";
 import { clearSwap } from "../../services/redux/swapSlice";
+import { getPosts } from "../../services/firebase/community/posts";
 
 const AssetPage = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,9 @@ const AssetPage = () => {
   useEffect(() => {
     getAssetDetails(symbol ?? "btc");
     getAssetTimeseriesPrice(symbol ?? "btc", "5min", 288);
+    if (symbol) {
+      getPosts({ searchTerm: symbol?.toString() || "" });
+    }
 
     return () => {
       dispatch(clearAsset());

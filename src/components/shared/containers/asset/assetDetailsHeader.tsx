@@ -16,10 +16,11 @@ type AssetHeaderProps = {
 
 export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
   const { t } = useTranslation(["asset"]);
+  const name = asset.name;
   const _assetprice = useSelector(selectAssetLivePrice);
 
   return (
-    <Col className="gap-2">
+    <Col className="gap-3">
       <Row className="gap-2">
         <ShadowButton
           bgColor="bg-grey-5"
@@ -42,26 +43,31 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
         name={asset.name}
         symbol={asset.symbol?.toUpperCase()}
       />
-      <Row className="gap-2 items-center">
-        <p className="font-medium text-4xl">
-          {formatNumber(
-            _assetprice[asset.symbol?.toLowerCase() ?? "btc"] ??
-              asset.currentPrice,
-            true
-          )}
-        </p>
-        <AssetPnl
-          value={asset.pnl}
-          className={
-            asset.pnl <= 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"
-          }
-        />
-        <AssetPnl
-          value={asset.priceChange!}
-          className={asset.priceChange! <= 0 ? "text-red-1" : "text-green-1"}
-          transform={formatNumber}
-        />
-      </Row>
+      <Col>
+        <h2 className="text-grey-1 text-xs">
+          {t("assetprice", { name })} ({asset.symbol?.toUpperCase()})
+        </h2>
+        <Row className="gap-2 items-center">
+          <p className="font-medium text-4xl">
+            {formatNumber(
+              _assetprice[asset.symbol?.toLowerCase() ?? "btc"] ??
+                asset.currentPrice,
+              true
+            )}
+          </p>
+          <AssetPnl
+            value={asset.pnl}
+            className={
+              asset.pnl <= 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"
+            }
+          />
+          <AssetPnl
+            value={asset.priceChange!}
+            className={asset.priceChange! <= 0 ? "text-red-1" : "text-green-1"}
+            transform={formatNumber}
+          />
+        </Row>
+      </Col>
     </Col>
   );
 };

@@ -67,7 +67,7 @@ export const getAssetTimeseriesPrice = async (
 
   const _list: chartDataType[] = [];
 
-  for (var i = 0; i < values.length; i++) {
+  for (var i = 0; i < values?.length; i++) {
     let item: chartDataType = {
       value: parseFloat(values[i].open),
       close: parseFloat(values[i].close),

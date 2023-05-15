@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react"
+import { FC, createContext, useCallback, useEffect, useMemo, useState } from "react"
 import { Col, Row } from "../../../shared/layout/flex";
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher";
 import { PortfolioSnapshotType } from "../../../../types/exchange.types";
@@ -10,7 +10,7 @@ import { chartDataType } from "../../../shared/charts/graph/graph.type";
 import LineChart from "../../../shared/charts/graph/graph";
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
-import { PredefinedSmartAllocationPortfolio, SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
+import { ISmartAllocationContext, SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
 import PageLoader from "../../../shared/pageLoader/pageLoader";
 import { getSmartAllocation } from "../../../../services/controllers/smart-allocation";
 import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
@@ -19,6 +19,18 @@ import Link from "next/link";
 import clsx from "clsx";
 import { SelectSmartAllocationPortfolioIcon } from "../../../svg/smart-allocation/customize-portfolio-icon";
 import { useTranslation } from "next-i18next";
+import { EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
+import SmartAllocationAutomation from "./SmartAllocationAutomation/SmartAllocationAutomation";
+
+
+
+
+export const SmartAllocationContext = createContext<ISmartAllocationContext>({
+    rebalancingDate: null,
+    rebalancingFrequency: null,
+    isLoadingSmartAllocationData: false,
+    getSmartAllocationData: () => null,
+})
 
 const AuthedSmartAllocation: FC = () => {
 
@@ -30,6 +42,8 @@ const AuthedSmartAllocation: FC = () => {
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
     const [smartAllocationExists, setSmartAllocationExists] = useState<boolean>(false);
     const [smartAllocationTotalEvaluation, setSmartAllocationTotalEvaluation] = useState<number>(0);
+    const [rebalancingDate, setRebalancingDate] = useState<Date|null>(null);
+    const [rebalancingFrequency, setRebalancingFrequency] = useState<EnumRebalancingFrequency|null>(null);
 
     const selectedExchange = useSelector(selectSelectedExchange);
 
@@ -56,14 +70,30 @@ const AuthedSmartAllocation: FC = () => {
     }, [selectedExchange?.provider_id]);
 
     const initSmartAllocationHoldings = useCallback(() => {
+        if(!selectedExchange?.provider_id){
+            return;
+        }
         setIsLoadingSmartAllocationHoldings(true);
         getSmartAllocation(selectedExchange?.provider_id)
             .then((res) => {
+                if(MODE_DEBUG){
+                    console.log(res.data)
+                }
                 const data: any = res.data;
                 const holdings: SmartAllocationAssetType[] = data.assets;
                 setSmartAllocationTotalEvaluation(data.total_asset_value);
                 setSmartAllocationExists(data?.exists ?? false);
 
+                if(data.frequency){
+                    setRebalancingFrequency(data.frequency);
+                }else{
+                    setRebalancingFrequency(null);
+                }
+                if(data.next_run_time){
+                    setRebalancingDate(new Date(data.next_run_time));
+                }else{
+                    setRebalancingDate(null);
+                }
                 if (holdings && data.exists) {
                     holdings.sort((a, b) => ((b?.current_weight ?? 0) - (a?.current_weight ?? 0)));
                     setSmartAllocationHoldings(holdings);
@@ -117,19 +147,19 @@ const AuthedSmartAllocation: FC = () => {
                     {getPredefinedAllocationsButtons({
                         label: t('currentTop5Coins'),
                         icon: <Top5Icon />,
-                        href: `smart-allocation/edit?portfolio=${PredefinedSmartAllocationPortfolio.top5}`,
+                        href: `smart-allocation/edit?portfolio=${EnumPredefinedSmartAllocationPortfolio.top5}`,
                         isCustom: false,
                     })}
                     {getPredefinedAllocationsButtons({
                         label: t('currentTop10Coins'),
                         icon: <Top10Icon />,
-                        href: `smart-allocation/edit?portfolio=${PredefinedSmartAllocationPortfolio.top10}`,
+                        href: `smart-allocation/edit?portfolio=${EnumPredefinedSmartAllocationPortfolio.top10}`,
                         isCustom: false,
                     })}
                     {getPredefinedAllocationsButtons({
                         label: t('currentTop15Coins'),
                         icon: <Top15Icon />,
-                        href: `smart-allocation/edit?portfolio=${PredefinedSmartAllocationPortfolio.top15}`,
+                        href: `smart-allocation/edit?portfolio=${EnumPredefinedSmartAllocationPortfolio.top15}`,
                         isCustom: false,
                     })}
                 </Row>
@@ -171,7 +201,7 @@ const AuthedSmartAllocation: FC = () => {
                     <SmartAllocationHoldingsTab smartAllocationHoldings={smartAllocationHoldings} smartAllocationTotalEvaluation={smartAllocationTotalEvaluation} />
                 </TabPanel>
                 <TabPanel>
-
+                    <SmartAllocationAutomation/>
                 </TabPanel>
                 <TabPanel>
 
@@ -193,10 +223,12 @@ const AuthedSmartAllocation: FC = () => {
     }, [smartAllocationGraph, tabs]);
 
     return (
-        <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
-            {(isLoadingSmartAllocationHoldings || isLoadingPortfolioHoldings) && <PageLoader />}
-            {smartAllocationExists ? withAllocation : noAllocation}
-        </Col>
+        <SmartAllocationContext.Provider value={{rebalancingDate, rebalancingFrequency,isLoadingSmartAllocationData:isLoadingSmartAllocationHoldings,getSmartAllocationData:initSmartAllocationHoldings}}>
+            <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
+                {(isLoadingSmartAllocationHoldings || isLoadingPortfolioHoldings) && <PageLoader />}
+                {smartAllocationExists ? withAllocation : noAllocation}
+            </Col>
+        </SmartAllocationContext.Provider>
     )
 }
 
