@@ -42,6 +42,8 @@
     "cancelled": "Cancelled",
     "executed": "Executed",
     "error": "Error Executing",
+    "empty": "No asset with this keyword!",
+    "seeMore": "Explore more",
     "error_voting": "Error casting vote, try again!",
     "selectAsset": "Select",
     "searchAsset": "Search",
