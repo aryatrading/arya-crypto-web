@@ -13,13 +13,7 @@ export const content = [
 export const theme = {
   container: {
     center: true,
-  },
-  screens: {
-    sm: '480px',
-    md: '768px',
-    lg: '976px',
-    xl: '1280px',
-    '2xl': '1440px',
+    padding: "2rem"
   },
   extend: {
     typography: (theme) => ({
@@ -29,6 +23,9 @@ export const theme = {
         },
       },
     }),
+    screens: {
+      '2xl': '1440px',
+    },
     colors: {
       green: {
         1: "#22C55E",
@@ -59,7 +56,7 @@ export const theme = {
       yellow: {
         1: "#F3BA2F"
       },
-      orage: {
+      orange: {
         1: "#F7931A"
       }
     },

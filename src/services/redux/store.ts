@@ -5,6 +5,7 @@ import user from "./userSlice";
 import market from "./marketSlice";
 import exchange from "./exchangeSlice";
 import assetReducer from "./assetSlice";
+import swapReducer from "./swapSlice";
 import posts from "./postsSlice";
 
 import { MODE_DEBUG } from "../../utils/constants/config";
@@ -14,7 +15,8 @@ const combineReducer = combineReducers({
   market,
   exchange,
   asset: assetReducer,
-  posts
+  swap: swapReducer,
+  posts,
 });
 
 export const reducer = (state: any, action: any) => {

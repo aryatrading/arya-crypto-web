@@ -43,11 +43,19 @@
     "error": "Erreur d'exécution",
     "empty": "Aucun élément avec ce mot-clé !",
     "seeMore": "En savoir plus",
+    "error_voting": "Erreur de vote, réessayez!",
+    "selectAsset": "Sélectionner",
+    "searchAsset": "Recherche",
+    "trade_title": "Commerce",
+    "advance_mode": "Mode avancé",
+    "from_title": "De",
+    "balance_title": "Équilibre",
+    "max_title": "Max",
     "communityTitle": "{{coin}} dans la communauté",
     "buy": "Acheter",
     "sell": "Vendre",
     "readMore": "En savoir plus",
     "entry": "Entrée",
     "assetprice": "Prix du {{name}}",
-    "market" : "Marché"
+    "market": "Marché"
 }
