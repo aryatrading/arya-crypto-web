@@ -118,9 +118,9 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
         <DropdownMenu.Trigger>
           <Row className="w-[300px] items-center justify-start gap-4">
             <ExchangeImage providerId={selectedExchange?.provider_id} />
-            <h3 className="text-xl sm:text-3xl font-bold capitalize">
+            <p className="text-xl sm:text-3xl font-bold capitalize">
               {selectedExchange?.name?.toLowerCase()}
-            </h3>
+            </p>
             <button
               className="bg-white rounded-full p-2 "
               aria-label="Customise options"
@@ -164,10 +164,10 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
       <Col className="w-full items-start gap-3.5">
         {dropdown}
         <Row className="items-center gap-3">
-          <h3 className="text-2xl sm:text-4xl font-bold">
+          <p className="text-3xl sm:text-4xl font-bold">
             {formatNumber(selectedExchange?.last_5m_evaluation ?? 0, true)}{" "}
             <span className="text-2xl">USD</span>
-          </h3>
+          </p>
           {changePercentage(selectedExchange)}
         </Row>
       </Col>
