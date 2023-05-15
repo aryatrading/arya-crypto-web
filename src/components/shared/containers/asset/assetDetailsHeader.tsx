@@ -16,9 +16,9 @@ type AssetHeaderProps = {
 
 export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
   const { t } = useTranslation(["asset"]);
-  const name = asset.name
+  const name = asset.name;
   const _assetprice = useSelector(selectAssetLivePrice);
- 
+
   return (
     <Col className="gap-3">
       <Row className="gap-2">
@@ -26,15 +26,15 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
           bgColor="bg-grey-5"
           textColor="font-medium text-xs"
           border="rounded"
-          onClick={() => console.log("d")}
+          onClick={() => null}
           title={`${t("rank")} #${asset.rank ?? 0}`}
         />
         <ShadowButton
           bgColor="bg-grey-5"
           textColor="font-medium text-xs"
           border="rounded"
-          onClick={() => console.log("d")}
-          iconSvg={<StarIcon className="w-4 h-4 fill-orange-1" />}
+          onClick={() => null}
+          iconSvg={<StarIcon className="w-4 h-4 fill-orange-1 stroke-0" />}
           title="1.8k"
         />
       </Row>
@@ -44,27 +44,30 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
         symbol={asset.symbol?.toUpperCase()}
       />
       <Col>
-        <h2 className="text-grey-1 text-xs">{t("assetprice", { name })} ({asset.symbol?.toUpperCase()})</h2>
-      <Row className="gap-2 items-center">
-        <p className="font-medium text-4xl">
-          {formatNumber(
-            _assetprice[asset.symbol?.toLowerCase() ?? "eth"] ??
-              asset.currentPrice,
-            true
-          )}
-        </p>
-        <AssetPnl
-          value={asset.pnl}
-          className={asset.pnl <= 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"}
-        />
-        <AssetPnl
-          value={asset.priceChange!}
-          className={asset.priceChange! <= 0 ? "text-red-1" : "text-green-1"}
-          transform={formatNumber}
-        />
-      </Row>
+        <h2 className="text-grey-1 text-xs">
+          {t("assetprice", { name })} ({asset.symbol?.toUpperCase()})
+        </h2>
+        <Row className="gap-2 items-center">
+          <p className="font-medium text-4xl">
+            {formatNumber(
+              _assetprice[asset.symbol?.toLowerCase() ?? "btc"] ??
+                asset.currentPrice,
+              true
+            )}
+          </p>
+          <AssetPnl
+            value={asset.pnl}
+            className={
+              asset.pnl <= 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"
+            }
+          />
+          <AssetPnl
+            value={asset.priceChange!}
+            className={asset.priceChange! <= 0 ? "text-red-1" : "text-green-1"}
+            transform={formatNumber}
+          />
+        </Row>
       </Col>
-
     </Col>
   );
 };

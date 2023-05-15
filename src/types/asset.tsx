@@ -24,6 +24,15 @@ export interface AssetType {
   priceChange?: number;
   circlSupply?: number;
   isHoldingAsset?: boolean;
+  description?: string;
+}
+
+export interface AssetSwapType {
+  symbol?: string;
+  quantity?: number;
+  iconUrl?: string;
+  availableBalance?: number;
+  price?: number;
 }
 
 

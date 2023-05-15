@@ -14,6 +14,7 @@ import TradingViewWidget from "../../shared/charts/tradingView/tradingView";
 import { AssetInformation } from "../../shared/containers/asset/assetInfotmation";
 import CoinProfitCalculator from "../../shared/coinProfitCalculator";
 import CoinConverter from "../../shared/coinConverter";
+import AssetTrade from "../trade/assetTrade";
 import { PostTypes } from "../../../types/asset";
 import { Post } from "../community/Post";
 
@@ -67,6 +68,11 @@ const AssetInformationTab: FC = () => {
                 onclick={(e: seriesInterface) => onSeriesClick(e)}
               />
             ) : null}
+            <TimeseriesPicker
+              series={assetGraphToggles}
+              active={view}
+              onclick={(e: seriesInterface) => setView(e.key)}
+            />
           </Row>
         </Row>
         <div className="mt-7 mb-7">
@@ -81,26 +87,36 @@ const AssetInformationTab: FC = () => {
 
         <Col className="mt-14 gap-14">
           <CoinProfitCalculator />
-          {asset?.id && <CoinConverter
-            preDefined
-            staticCoin={asset}
-          />}
+          {asset?.id && <CoinConverter preDefined staticCoin={asset} />}
         </Col>
       </Col>
-      <Col className="flex-[0.5] ps-6">
+      <Col className="flex-[0.5] ps-6 gap-5">
+        <p className="text-base font-semibold">
+          {t("trade_title")} {asset?.name ?? ""}
+        </p>
+        <AssetTrade />
         {/* Community widget */}
-        {posts.length > 0 && <>
-          <h3 className="font-extrabold text-white header-label pb-6">{t('communityTitle', { coin: asset.name })}</h3>
-          <Col className="w-full min-h-[300px] bg-grey-6 rounded-md px-10 py-5">
-            {posts?.slice(0, 2)?.map((post: PostTypes) => {
-              return (
-                <Post post={post} />
-              );
-            })}
+        {posts.length > 0 && (
+          <>
+            <h3 className="font-extrabold text-white header-label pb-6">
+              {t("communityTitle", { coin: asset.name })}
+            </h3>
+            <Col className="w-full min-h-[300px] bg-grey-6 rounded-md px-10 py-5">
+              {posts?.slice(0, 2)?.map((post: PostTypes) => {
+                return <Post post={post} />;
+              })}
 
-            <a href={`https://arya-web-app.vercel.app/asset/?s=${asset.symbol}&m=crypto&t=USD&n=${asset.name}/US%20Dollar`} className="text-white text-base font-bold underline text-center" target='_blank' rel="noreferrer">See More  +</a>
-          </Col>
-        </>}
+              <a
+                href={`https://arya-web-app.vercel.app/asset/?s=${asset.symbol}&m=crypto&t=USD&n=${asset.name}/US%20Dollar`}
+                className="text-white text-base font-bold underline text-center"
+                target="_blank"
+                rel="noreferrer"
+              >
+                See More +
+              </a>
+            </Col>
+          </>
+        )}
       </Col>
     </Row>
   );

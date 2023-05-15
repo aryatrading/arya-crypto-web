@@ -7,8 +7,9 @@ type ShadowButtonProps = {
   bgColor?: string;
   onClick: Function;
   textColor: string;
+  px?: string;
+  py?: string;
   textSize?: string;
-
 };
 
 export const ShadowButton: FC<ShadowButtonProps> = ({
@@ -18,16 +19,21 @@ export const ShadowButton: FC<ShadowButtonProps> = ({
   bgColor,
   onClick,
   textColor,
-  textSize = 'text-base',
+  px = "px-5",
+  py = "py-2.5",
+  textSize = "text-base",
 }) => {
   return (
     <div
-      className={`flex flex-row items-center gap-2 justify-center px-5 py-2.5 ${border ?? ""
-        } ${bgColor} hover:cursor-pointer`}
+      className={`flex flex-row items-center gap-2 justify-center ${px} ${py} ${
+        border ?? ""
+      } ${bgColor} hover:cursor-pointer`}
       onClick={() => onClick!()}
     >
       {iconSvg ?? null}
-      <span className={`${textColor} ${textSize} font-semibold text-sm`}>{title}</span>
+      <span className={`${textColor} ${textSize} font-semibold text-sm`}>
+        {title}
+      </span>
     </div>
   );
 };
