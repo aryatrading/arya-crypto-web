@@ -56,7 +56,7 @@ export const theme = {
       yellow: {
         1: "#F3BA2F"
       },
-      orage: {
+      orange: {
         1: "#F7931A"
       }
     },
