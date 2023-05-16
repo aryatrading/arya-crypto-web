@@ -79,16 +79,24 @@ const Nav = () => {
         return <Row className="gap-4 items-center">
           <Button className="px-6 py-3 font-semibold text-white hidden md:block"
             onClick={() => {
-              setVisibleSection('login');
-              modalTrigger.show();
+              if (window.innerWidth <= 900) {
+                push('/login')
+              } else {
+                setVisibleSection('login');
+                modalTrigger.show();
+              }
             }}
           >
             {t('common:login')}
           </Button>
           <Button className="bg-blue-3 px-6 py-3 min-w-[100px] text-blue-1 text-sm rounded-md font-medium hidden md:block"
             onClick={() => {
-              setVisibleSection('signup');
-              modalTrigger.show();
+              if (window.innerWidth <= 900) {
+                push('/signup')
+              } else {
+                setVisibleSection('signup');
+                modalTrigger.show();
+              }
             }}
           > {t('common:signup')}
           </Button>
