@@ -24,7 +24,7 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
     const { push } = useRouter();
 
     return (
-        <Col className="relative hidden md:flex">
+        <Col className={clsx({ "hidden": !trigger }, "relative md:flex")}>
             <Button onClick={() => {
                 if (window?.innerWidth < 768) {
                     const input = document.getElementById('searchInput');
