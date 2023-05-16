@@ -13,8 +13,7 @@ import { getPortfolioHoldings, getPortfolioSnapshots } from "../../../services/c
 import { PortfolioAssetType, PortfolioSnapshotType } from "../../../types/exchange.types"
 import { chartDataType } from "../../shared/charts/graph/graph.type"
 import { percentageFormat, formatNumber } from "../../../utils/helpers/prices"
-import LoadingSpinner from "../../shared/loading-spinner/loading-spinner"
-import { selectConnectedExchanges, selectExchangeStoreStatus, selectSelectedExchange } from "../../../services/redux/exchangeSlice"
+import { selectExchangeStoreStatus, selectSelectedExchange } from "../../../services/redux/exchangeSlice"
 import StatusAsync from "../../../utils/status-async"
 import ExchangeImage from "../../shared/exchange-image/exchange-image"
 import { MODE_DEBUG } from "../../../utils/constants/config"
@@ -24,7 +23,6 @@ import Link from "next/link"
 import PageLoader from "../../shared/pageLoader/pageLoader"
 
 const Dashboard: FC = () => {
-
   const [isLoadingPortfolioSnapshots, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
   const [isLoadingPortfolioHoldings, setIsLoadingPortfolioHoldings] = useState<boolean>(false);
   const [portfolioSnapshots, setPortfolioSnapshots] = useState<PortfolioSnapshotType[]>([]);
@@ -32,7 +30,6 @@ const Dashboard: FC = () => {
 
   const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
   const selectedExchange = useSelector(selectSelectedExchange);
-  const connectedExchanges = useSelector(selectConnectedExchanges);
 
   const { t } = useTranslation(["dashboard", "common"]);
 
@@ -216,12 +213,12 @@ const Dashboard: FC = () => {
                     <td className="text-right">
                       <Row className="items-center justify-end ">
                         <Row className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive }, "mr-4")}>{formattedChangePrice}</Row>
-                      
-                      <Row className={clsx({ "bg-green-2 text-green-1": isPriceChangePositive, "bg-red-2 text-red-1": !isPriceChangePositive }, "rounded-md py-1 px-2 font-semibold text-sm")}>
+
+                        <Row className={clsx({ "bg-green-2 text-green-1": isPriceChangePositive, "bg-red-2 text-red-1": !isPriceChangePositive }, "rounded-md py-1 px-2 font-semibold text-sm")}>
                           {formattedChangePercentage}%
                         </Row>
-                        </Row>
-                       
+                      </Row>
+
                     </td>
                     <td>
                       <Row className="text-right justify-end gap-2">
