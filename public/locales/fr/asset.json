@@ -41,6 +41,8 @@
     "cancelled": "Annulé",
     "executed": "Excecuté",
     "error": "Erreur d'exécution",
+    "empty": "Aucun élément avec ce mot-clé !",
+    "seeMore": "En savoir plus",
     "error_voting": "Erreur de vote, réessayez!",
     "selectAsset": "Sélectionner",
     "searchAsset": "Recherche",

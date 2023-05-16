@@ -1,4 +1,4 @@
-import { setConnectedExchanges, setExchangeStoreAsyncStatus, setExchangeStoreError, setSelectedExchange } from "../../services/redux/exchangeSlice";
+import { setConnectedExchanges, setExchangeStoreAsyncStatus, setSelectedExchange } from "../../services/redux/exchangeSlice";
 import { getConnectedProviders } from "../../services/controllers/market";
 import { ExchangeType } from "../../types/exchange.types";
 import StatusAsync from "../../utils/status-async";
@@ -6,7 +6,10 @@ import { store } from "../../services/redux/store";
 import { overallExchangeName } from "../../utils/constants/dashboard";
 
 export const initStoreData = () => {
-    initExchangeStore();
+    const exchnageDataStatus = store?.getState()?.exchange?.status;
+    if (exchnageDataStatus !== StatusAsync.RESOLVED){
+        initExchangeStore();
+    }
 }
 
 async function initExchangeStore() {
@@ -16,7 +19,6 @@ async function initExchangeStore() {
     ]).then(() => {
         store?.dispatch(setExchangeStoreAsyncStatus(StatusAsync.RESOLVED));
     }).catch((error) => {
-        store?.dispatch(setExchangeStoreError(error));
         store?.dispatch(setExchangeStoreAsyncStatus(StatusAsync.REJECTED));
     });
 }
