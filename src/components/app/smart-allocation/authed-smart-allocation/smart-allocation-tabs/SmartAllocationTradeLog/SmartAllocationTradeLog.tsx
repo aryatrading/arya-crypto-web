@@ -32,23 +32,7 @@ const SmartAllocationTradeLog = () => {
                 if(MODE_DEBUG){
                   console.log("fetchSmartAllocationTradeLog: data", data)
                 }
-                setTradeLog([
-                  {
-                    "status": 200,
-                    "quantity": 1,
-                    "order_data": {
-                      "side": "BUY",
-                      "entry_type": "MARKET",
-                      "price_based": "False",
-                      "status_check_time": "2023-05-15T13:35:58.237145+00:00",
-                      "status_check_delay": 15
-                    },
-                    "settled_at": "2023-05-15T13:35:58.368000+00:00",
-                    "price": 27382.18,
-                    "asset_name": "btc",
-                    "order_id": 111
-                  }
-                ])
+                setTradeLog(data)
             })
         }
       ,
@@ -84,8 +68,8 @@ const SmartAllocationTradeLog = () => {
           <tr className='rounded-lg'>
             {smartAllocationTradeLogTableHead.map((item, index) => {
               return (
-                <th className=' first:rounded-l-lg last:rounded-r-lg text-left h-14 px-5 text-grey-1 text-sm' key={index}>
-                  {t(`common:${item}`)}
+                <th className={twMerge(' first:rounded-l-lg last:rounded-r-lg text-left h-14 px-5 text-grey-1 text-sm',item.className)} key={index}>
+                  {t(`common:${item.name}`)}
                 </th>
               )
             })
@@ -97,17 +81,34 @@ const SmartAllocationTradeLog = () => {
           {
             !!tradeLog.length?
             tradeLog.map((trade,index) => {
-              const tradeDate = moment(trade.settled_at).format('DD/MM/YYYY HH:mm:ss')
+              const tradeDate = moment(trade.settled_at).format('DD/MM/YY')
               return (
-                <tr key={trade.order_id}>
-                  <td className='h-14 px-5 font-medium text-sm'>{index+1}</td>
+                <tr key={trade.order_id} className='border-b border-grey-5'>
                   <td className='h-14 px-5 font-medium text-sm'>{
                     <span className={twMerge('flex w-16 h-6 rounded text-center justify-center items-center',trade.order_data.side==='BUY'?'text-red-1 bg-red-2':'text-green-1 bg-green-2')}>{trade.order_data.side}</span>
                   }</td>
-                  <td className='h-14 px-5 font-medium text-sm'>{t(`common:${statusCodes[trade.status]}`)}</td>
-                  <td className='h-14 px-5 font-medium text-sm'>{`${trade.quantity} ${trade.asset_name.toUpperCase()}`}</td>
-                  <td className='h-14 px-5 font-medium text-sm'>${trade.price}</td>
-                  <td className='h-14 px-5 font-medium text-sm'>{tradeDate}</td>
+                  <td className='h-14 px-5 font-medium text-sm'>
+                    <span className='flex flex-col justify-center gap-1'>
+                      <span>
+                        {t(`common:${statusCodes[trade.status]}`)}
+                      </span>
+                      <span className='md:hidden'>
+                        {tradeDate}
+                      </span>
+                    </span>
+                  </td>
+                  <td className='h-14 px-5 font-medium text-sm'>
+                    <span className='flex flex-col gap-1'>
+                      <span>
+                        {`${trade.quantity} ${trade.asset_name.toUpperCase()}`}
+                      </span>
+                      <span className='md:hidden'>
+                        ${trade.price}
+                      </span>
+                    </span>
+                  </td>
+                  <td className='h-14 px-5 font-medium text-sm hidden md:table-cell'>${trade.price}</td>
+                  <td className='h-14 px-5 font-medium text-sm hidden md:table-cell'>{tradeDate}</td>
                 </tr>
               )
             }):

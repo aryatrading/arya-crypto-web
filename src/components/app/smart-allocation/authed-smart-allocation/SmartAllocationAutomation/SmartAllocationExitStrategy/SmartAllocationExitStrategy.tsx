@@ -213,7 +213,7 @@ const SmartAllocationExitStrategy = () => {
         () => {
           return <AlertDialog.Root >
                   <AlertDialog.Trigger asChild>
-                      <Button className='bg-blue-1 w-full py-3 rounded-lg font-semibold text-xs md:w-56'>{
+                      <Button className='bg-blue-1 w-full py-3 px-6 rounded-lg font-semibold text-sm md:text-xs md:w-fit'>{
                             currentExitStrategy?
                             t('updateExitStrategy')
                             :t('setExitStrategy')
