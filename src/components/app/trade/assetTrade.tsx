@@ -38,6 +38,9 @@ const AssetTrade: FC = () => {
   };
 
   const onTradePress = async () => {
+    if (!provider) {
+      return toast.warn("Please select a provider to trade");
+    }
     if (!from.symbol || !from.quantity)
       return toast.warn("Please select a base asset");
 
