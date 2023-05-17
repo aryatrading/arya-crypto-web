@@ -38,6 +38,8 @@
     "MONTHLY": "Mensuel",
     "QUARTERLY": "Trimestriel",
     "YEARLY": "Annuel",
-    "cancel":"Annuler",
-    "sell": "Vendre"
+    "cancel": "Annuler",
+    "sell": "Vendre",
+    "english": "anglais",
+    "french": "français"
 }
