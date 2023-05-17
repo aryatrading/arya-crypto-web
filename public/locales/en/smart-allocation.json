@@ -1,3 +1,4 @@
+
 {
     "selectAPresetOrCustomizeYourPortfolio": "Select a preset or customize your portfolio",
     "selectAPresetBelowOrCustomYourPortfolio": "Select a preset below, or custom your portfolio.",
@@ -13,6 +14,7 @@
     "setWeight": "Set weight",
     "currentWeight": "Current weight",
     "rebalanceNow": "Rebalance now",
+    "rebalanceNowDescription": "The following trades will be execute if you choose to rebalance now.",
     "automaticRebalancingScheduled": "Automatic rebalancing scheduled",
     "nextRebalancingSchedule": "Next rebalancing schedule",
     "WhenCoinDropsByXAmountSellYAmountOfYourPortfolioForUSDT": "When {{coinName}} drops by {{dropPercent}} sell {{sellPercent}} of your portfolio for {{USDTSymbol}}",

@@ -38,5 +38,8 @@
     "somethingWentWrong": "Something went wrong",
     "save": "Save",
     "cancel":"Cancel",
-    "sell": "Sell"
+    "sell": "Sell",
+    "asset": "Asset",
+    "buy":"Buy",
+    "target":"Target"
 }

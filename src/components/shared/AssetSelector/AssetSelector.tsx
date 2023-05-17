@@ -59,7 +59,7 @@ const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClic
       }
     </Col>
   }
-    , [assetLivePrice, filteredAssets, onClick, t])
+    , [assetLivePrice, dismissOnClick, filteredAssets, onClick, setShowDialog, t])
 
 
   return (

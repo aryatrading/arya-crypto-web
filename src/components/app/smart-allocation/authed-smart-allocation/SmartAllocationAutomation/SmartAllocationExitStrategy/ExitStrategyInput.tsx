@@ -28,9 +28,11 @@ export default function ExitStrategyInput({ isPercentage,value,setValue }:IExitS
   };
 
   const handleIncrement = () => {
-    if(value<100){
+    if(isPercentage && value<100){
       setValue(value + 1);
+      return;
     }
+    setValue(value + 1);
   };
 
   const handleDecrement = () => {
@@ -58,7 +60,7 @@ export default function ExitStrategyInput({ isPercentage,value,setValue }:IExitS
           type="number"
           value={value}
           onChange={handleChange}
-          className={twMerge('p-0 bg-transparent border-0 text-center text-blue-1',isPercentage?'w-6':'w-8')}
+          className={twMerge('p-0 bg-transparent border-0 text-center text-blue-1',isPercentage?'md:w-6':'')}
           max={isPercentage ? 100 : undefined}
           min={0}
           onKeyDown={onKeyDown}

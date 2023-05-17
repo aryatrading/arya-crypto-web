@@ -39,5 +39,8 @@
     "QUARTERLY": "Trimestriel",
     "YEARLY": "Annuel",
     "cancel":"Annuler",
-    "sell": "Vendre"
+    "sell": "Vendre",
+    "asset": "Actif",
+    "buy":"Achat",
+    "target":"Target"
 }

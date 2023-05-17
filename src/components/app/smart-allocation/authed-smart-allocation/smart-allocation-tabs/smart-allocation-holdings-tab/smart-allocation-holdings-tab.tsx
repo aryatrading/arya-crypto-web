@@ -1,7 +1,6 @@
-import { FC, useMemo } from "react";
+import { FC, useContext, useMemo } from "react";
 import { Col, Row } from "../../../../../shared/layout/flex";
-import Button from "../../../../../shared/buttons/button";
-import { useTranslation } from "next-i18next";
+import { Trans, useTranslation } from "next-i18next";
 import styles from "./smart-allocation-holdings-tab.module.scss";
 import { percentageFormat, formatNumber } from "../../../../../../utils/helpers/prices";
 import Image from "next/image";
@@ -12,10 +11,15 @@ import PortfolioComposition from "../../../../../shared/portfolio-composition/po
 import Link from "next/link";
 import { USDTSymbol } from "../../../../../../utils/constants/market";
 import AssetPnl from "../../../../../shared/containers/asset/assetPnl";
+import { SmartAllocationContext } from "../../authed-smart-alocation";
+import moment from "moment";
+import { EnumExitStrategyTrigger } from "../../../../../../utils/constants/smartAllocation";
+import RebalancePreviewDialog from "./RebalancePreviewDialog/RebalancePreviewDialog";
 
 const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
 
     const { t } = useTranslation(['smart-allocation']);
+    const {rebalancingDate,rebalancingFrequency,exitStrategyData} = useContext(SmartAllocationContext)
 
     const portfolioComposition = useMemo(() => {
         return (
@@ -45,52 +49,48 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                         </tr>
                     </thead>
                     <tbody>
-                        {smartAllocationHoldings.map((asset, index) => {
-                            if (asset.name !== USDTSymbol) {
-                                const setWeight = asset.weight ?? 0;
-                                const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
+                        {smartAllocationHoldings.filter((asset)=>asset.name !== USDTSymbol).map((asset, index) => {
+                            const setWeight = asset.weight ?? 0;
+                            const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
 
-                                return (
-                                    <tr key={asset.name}>
-                                        <td>{index + 1}</td>
-                                        <td>
-                                            <Row className="gap-3 items-center">
-                                                <Image src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
-                                                <p>{asset.asset_details?.asset_data?.name}</p>
-                                                <span className="text-sm text-grey-1">{asset.name}</span>
+                            return (
+                                <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>
+                                        <Row className="gap-3 items-center">
+                                            <Image src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
+                                            <p>{asset.asset_details?.asset_data?.name}</p>
+                                            <span className="text-sm text-grey-1">{asset.name}</span>
+                                        </Row>
+                                    </td>
+                                    <td>
+                                        <AssetPnl
+                                            value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
+                                        />
+                                    </td>
+                                    <td>{formatNumber(asset?.ask_price ?? 0, true)}</td>
+                                    <td>{formatNumber(asset?.available ?? 0)}</td>
+                                    <td>{formatNumber(asset?.current_value ?? 0, true)}</td>
+                                    <td className="">
+                                        <Row className="gap-2 items-center">
+                                            <p>
+                                                {percentageFormat(setWeight * 100)}%
+                                            </p>
+                                            <Row className="w-16 rounded-full overflow-hidden bg-white flex-1" style={{ height: 10 }}>
+                                                <Row
+                                                    className={`bg-yellow-1 rounded-full`}
+                                                    style={{
+                                                        width: `${percentageFormat(setWeight * 100)}%`
+                                                    }}
+                                                />
                                             </Row>
-                                        </td>
-                                        <td>
-                                            <AssetPnl
-                                                value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
-                                            />
-                                        </td>
-                                        <td>{formatNumber(asset?.ask_price ?? 0, true)}</td>
-                                        <td>{formatNumber(asset?.available ?? 0)}</td>
-                                        <td>{formatNumber(asset?.current_value ?? 0, true)}</td>
-                                        <td className="">
-                                            <Row className="gap-2 items-center">
-                                                <p>
-                                                    {percentageFormat(setWeight * 100)}%
-                                                </p>
-                                                <Row className="w-16 rounded-full overflow-hidden bg-white flex-1" style={{ height: 10 }}>
-                                                    <Row
-                                                        className={`bg-yellow-1 rounded-full`}
-                                                        style={{
-                                                            width: `${percentageFormat(setWeight * 100)}%`
-                                                        }}
-                                                    />
-                                                </Row>
-                                            </Row>
-                                        </td>
-                                        <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
-                                            {percentageFormat((asset.current_weight ?? 0) * 100)}%
-                                        </td>
-                                    </tr>
-                                );
-                            } else {
-                                return <></>
-                            }
+                                        </Row>
+                                    </td>
+                                    <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
+                                        {percentageFormat((asset.current_weight ?? 0) * 100)}%
+                                    </td>
+                                </tr>
+                            );
                         })}
                     </tbody>
                 </table>
@@ -103,17 +103,26 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
     const reBalanceNow = useMemo(() => {
         return (
             <Col className="flex-1 gap-5">
-                <Button className="w-full bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold">{t('RebalanceNow')}</Button>
                 <Col className="gap-4">
+                    <RebalancePreviewDialog holdingData = {smartAllocationHoldings.filter((asset)=>asset.name !== USDTSymbol)}/>
                     <p className="font-bold text-grey-1">{t('automation')}</p>
-                    <p className="text-sm font-bold">{t('automaticRebalancingScheduled')} <span className="text-blue-1">{t('common:monthly')}</span></p>
-                    <p className="text-sm font-bold">{t('nextRebalancingSchedule')} : <span className="text-blue-1">01/12/2023</span></p>
+                    <p className="text-sm font-bold">{t('automaticRebalancingScheduled')} : <span className="text-blue-1">{t(`common:${rebalancingFrequency}`)}</span></p>
+                    <p className="text-sm font-bold">{t('nextRebalancingSchedule')} : <span className="text-blue-1">{moment(rebalancingDate).format('DD/MM/YY')}</span></p>
                     <p className="font-bold text-grey-1">{t('common:exitStrategy')}</p>
-                    <p className="text-sm font-bold">{t('WhenCoinDropsByXAmountSellYAmountOfYourPortfolioForUSDT', { coinName: "Bitcoin", dropPercent: "5%", sellPercent: "50%", USDTSymbol })}</p>
+                    {exitStrategyData&&<span className="text-sm font-medium">
+                        <Trans i18nKey={'smart-allocation:haveExitStrategy'}  
+                        
+                        components={{blueText:<span/>}}
+                        values={{assetChangeType:t( exitStrategyData.exit_type),
+                            assetChangeValue: `${exitStrategyData.exit_type===EnumExitStrategyTrigger.RisesBy?`${exitStrategyData.exit_value*100}%`:`${exitStrategyData.exit_value}$`}`,
+                            assetSellPercentage: `${exitStrategyData.exit_percentage*100}%`
+                        }}
+                        />
+                    </span>}
                 </Col>
             </Col>
         )
-    }, [])
+    }, [exitStrategyData, rebalancingDate, rebalancingFrequency, smartAllocationHoldings, t])
 
     if (smartAllocationHoldings?.length) {
 

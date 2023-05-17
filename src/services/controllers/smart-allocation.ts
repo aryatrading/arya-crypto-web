@@ -134,3 +134,13 @@ export const deleteExitStrategy = async (providerId: number) => {
         {params:exitStrategyParams}
     );
 }
+
+export const performRebalance = async (providerId: number) => {
+    const rebalanceNowParams = {
+        provider: providerId
+    }
+    return await axiosInstance.get(
+        `/trade-engine/smart-allocation/balance`,
+        {params:rebalanceNowParams}
+    );
+}
