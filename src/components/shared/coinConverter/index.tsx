@@ -106,7 +106,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
                             disabled={props?.preDefined}
                             title={firstCoin?.name}
                         />
-                        <Col className="h-full w-1 bg-black-1" />
+                        <Col className="h-[40px] w-[4px] bg-black-1" />
                         {numericInput(firstCoinAmount, onChnageFirstCoinAmount, !firstCoin?.name || !secondCoin?.name)}
                     </Row>
                     <Row className="gap-4 items-center bg-blue-3 px-4 rounded-md">
@@ -118,7 +118,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
                             t={t}
                             title={secondCoin?.name}
                         />
-                        <Col className="h-full w-1 bg-black-1" />
+                        <Col className="h-[40px] w-[4px] bg-black-1" />
                         {numericInput(secondCoinAmount, onChnageSecondCoinAmount, !secondCoin?.name || !secondCoin?.name)}
                     </Row>
                 </Col>
