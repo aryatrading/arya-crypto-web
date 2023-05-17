@@ -34,10 +34,14 @@
     "exitStrategy": "Stratégie de sortie",
     "somethingWentWrong": "Quelque chose n'a pas fonctionné",
     "save": "Économiser",
+    "connectYourExchanges": "Connectez vos échanges",
+    "goToSettings": "Aller dans les paramètres",
     "none": "aucun",
     "MONTHLY": "Mensuel",
     "QUARTERLY": "Trimestriel",
     "YEARLY": "Annuel",
-    "cancel":"Annuler",
-    "sell": "Vendre"
+    "cancel": "Annuler",
+    "sell": "Vendre",
+    "english": "anglais",
+    "french": "français"
 }
