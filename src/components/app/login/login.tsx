@@ -35,6 +35,7 @@ const Login: FC<any> = (props: any) => {
         try {
             await googleAuth()
             hideModal()
+            router.back()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -49,6 +50,7 @@ const Login: FC<any> = (props: any) => {
         try {
             await appleAuth()
             hideModal()
+            router.back()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -68,6 +70,7 @@ const Login: FC<any> = (props: any) => {
                     loginUserEmailPassword(values)
                         .then(() => {
                             hideModal()
+                            router.back()
                         })
                         .catch(err => {
                             setError(err.message);
