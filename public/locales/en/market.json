@@ -9,5 +9,7 @@
     "currentprice": "Current Price",
     "priceinbtc": "Price in BTC",
     "marketcap": "Market Cap.",
-    "volume": "volume 24H"
+    "volume": "volume 24H",
+    "no_assets": "Your watchlist is empty",
+    "no_assets_sub": "Start building your watchlist by adding assets to your favorites list"
 }
