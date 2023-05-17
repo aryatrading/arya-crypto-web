@@ -77,10 +77,10 @@ const DoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[], max
 
     if (chartData?.length) {
         return (
-            <Col className='justify-center items-start w-full gap-5 px-14'>
+            <Col className='justify-center items-start w-full gap-5'>
                 <p className='font-bold'>{title}</p>
                 <Row className='justify-center w-full'>
-                    <Row className={`max-w-[${maxWidth}]`}>
+                    <Row style={{maxWidth}}>
                         {doughnutChart}
                     </Row>
                 </Row>
