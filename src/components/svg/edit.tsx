@@ -10,14 +10,14 @@ export const EditIcon = () => (
       d="M1 16H4.75L16 4.75L12.25 1L1 12.25V16Z"
       stroke="#fff"
       strokeWidth="2"
-      stroke-linecap="round"
+      strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M8.5 5.5L11.5 8.5"
       stroke="#fff"
       strokeWidth="2"
-      stroke-linecap="round"
+      strokeLinecap="round"
       strokeLinejoin="round"
     />
   </svg>
