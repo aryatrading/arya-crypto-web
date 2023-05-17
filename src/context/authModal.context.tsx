@@ -11,6 +11,7 @@ import Button from "../components/shared/buttons/button";
 import { Col } from "../components/shared/layout/flex";
 import Login from "../components/app/login/login";
 import Signup from "../components/app/signup/signup";
+import clsx from "clsx";
 
 export const AuthModal = createContext({
   modalTrigger: { show: () => null, hide: () => null },
@@ -46,7 +47,7 @@ const AuthModalProvider: FC<any> = (props: any) => {
         aria-hidden="true"
         className="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
       >
-        <Col className="relative w-full max-w-md max-h-full">
+        <Col className={clsx({ "max-w-6xl": visibleSection === 'signup', "max-w-md": visibleSection !== 'signup' }, "relative w-full max-h-full")}>
           <Col className="relative rounded-lg shadow bg-gray-700 pt-5 pb-5">
             <Col className="gap-4 min-h-[550px]">
               <Button
