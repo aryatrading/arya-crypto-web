@@ -40,5 +40,9 @@
     "cancel": "Cancel",
     "sell": "Sell",
     "english": "English",
-    "french": "French"
+    "french": "French",
+    "connectYourExchanges": "Connect your exchanges",
+    "goToSettings": "Go to settings",
+    "cancel":"Cancel",
+    "sell": "Sell"
 }

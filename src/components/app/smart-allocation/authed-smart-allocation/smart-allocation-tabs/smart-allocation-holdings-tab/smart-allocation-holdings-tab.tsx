@@ -1,21 +1,25 @@
 import { FC, useMemo } from "react";
+import { useTranslation } from "next-i18next";
+import Image from "next/image";
+import clsx from "clsx";
+import Link from "next/link";
+
 import { Col, Row } from "../../../../../shared/layout/flex";
 import Button from "../../../../../shared/buttons/button";
-import { useTranslation } from "next-i18next";
 import styles from "./smart-allocation-holdings-tab.module.scss";
 import { percentageFormat, formatNumber } from "../../../../../../utils/helpers/prices";
-import Image from "next/image";
 import { CustomizeAllocationIcon } from "../../../../../svg/smart-allocation/customize-portfolio-icon";
 import { SmartAllocationAssetType } from "../../../../../../types/smart-allocation.types";
-import clsx from "clsx";
 import PortfolioComposition from "../../../../../shared/portfolio-composition/portfolio-composition";
-import Link from "next/link";
 import { USDTSymbol } from "../../../../../../utils/constants/market";
 import AssetPnl from "../../../../../shared/containers/asset/assetPnl";
+import { useResponsive } from "../../../../../../context/responsive.context";
 
 const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
 
     const { t } = useTranslation(['smart-allocation']);
+
+    const { isTabletOrMobileScreen } = useResponsive();
 
     const portfolioComposition = useMemo(() => {
         return (
@@ -103,7 +107,10 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
     const reBalanceNow = useMemo(() => {
         return (
             <Col className="flex-1 gap-5">
-                <Button className="w-full bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold">{t('RebalanceNow')}</Button>
+                <Row className="w-full gap-4 text-center">
+                    {isTabletOrMobileScreen && <Link href="smart-allocation/edit" className="flex-1 bg-blue-1 py-4 px-5 rounded-md text-sm font-bold">{t('editPortfolio')}</Link>}
+                    <Button className="flex-1 bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold">{t('RebalanceNow')}</Button>
+                </Row>
                 <Col className="gap-4">
                     <p className="font-bold text-grey-1">{t('automation')}</p>
                     <p className="text-sm font-bold">{t('automaticRebalancingScheduled')} <span className="text-blue-1">{t('common:monthly')}</span></p>
@@ -113,23 +120,23 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                 </Col>
             </Col>
         )
-    }, [])
+    }, [isTabletOrMobileScreen, t])
 
     if (smartAllocationHoldings?.length) {
 
         return (
             <Col className="gap-10">
-                <Row className="w-full gap-5 items-center">
+                {!isTabletOrMobileScreen && <Row className="w-full gap-5 items-center">
                     <Col className="gap-5 flex-1 max-w-full md:gap-10 md:flex-[3] md:flex-row">
                         <Link href="smart-allocation/edit" className="w-max bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold shrink-0">{t('editPortfolio')}</Link>
                         {portfolioComposition}
                     </Col>
                     <Row className="hidden md:flex md:flex-1"></Row>
-                </Row>
-                <Col className="w-full gap-5 md:flex-row">
+                </Row>}
+                <div className="flex flex-col-reverse w-full gap-5 md:flex-row">
                     {table}
                     {reBalanceNow}
-                </Col>
+                </div>
             </Col>
         )
     } else {

@@ -10,7 +10,7 @@ export const ExchangeImage: FC<{ providerId?: number, width?: number, height?: n
                 <Image src={`https://aryatrading-content.s3.eu-west-1.amazonaws.com/arya_crypto/exchanges_icons/${providerId}.svg`} alt="" width={width} height={height}></Image>
             )
         } else {
-            return <OverallExchangeIcon/>
+            return <OverallExchangeIcon width={width} height={height}/>
         }
     }, [height, providerId, width]);
 }
