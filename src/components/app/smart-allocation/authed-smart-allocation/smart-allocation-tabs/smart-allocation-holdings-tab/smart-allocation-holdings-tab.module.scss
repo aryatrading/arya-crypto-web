@@ -1,8 +1,7 @@
 .table {
 
     width: 100%;
-    min-width: 800px;
-    // table-layout: fixed;
+    table-layout: fixed;
 
     thead {
         @apply text-grey-1;
@@ -19,8 +18,7 @@
             }
 
             th:first-child {
-                @apply rounded-l-lg;
-                width: 50px;
+                @apply rounded-l-lg md:w-[50px];
                 padding-left: 20px;
             }
 

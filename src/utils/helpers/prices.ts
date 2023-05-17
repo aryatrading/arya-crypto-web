@@ -12,6 +12,8 @@ export const formatNumber = (number: number, isUSD = false) => {
       }
     }
     return (isUSD ? "$" : "") + numeral(number).format("0,0[.]00");
+  } else if (isUSD) {
+    return "$0"
   }
   return "0";
 };

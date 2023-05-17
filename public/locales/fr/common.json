@@ -41,5 +41,6 @@
     "QUARTERLY": "Trimestriel",
     "YEARLY": "Annuel",
     "cancel":"Annuler",
-    "sell": "Vendre"
+    "sell": "Vendre",
+    "total": "Total"
 }
