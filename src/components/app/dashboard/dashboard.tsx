@@ -32,7 +32,6 @@ import { useResponsive } from "../../../context/responsive.context";
 
 
 const Dashboard: FC = () => {
-
   const [isLoadingPortfolioSnapshots, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
   const [isLoadingPortfolioHoldings, setIsLoadingPortfolioHoldings] = useState<boolean>(false);
   const [portfolioSnapshots, setPortfolioSnapshots] = useState<PortfolioSnapshotType[]>([]);

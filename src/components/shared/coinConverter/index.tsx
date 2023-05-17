@@ -1,4 +1,4 @@
-import { ChangeEventHandler, useCallback, useState, useMemo, useEffect } from "react";
+import { ChangeEventHandler, useCallback, useState, useMemo } from "react";
 import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
 import clsx from "clsx";
