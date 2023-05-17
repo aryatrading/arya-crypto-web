@@ -1,35 +1,35 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react"
-import Image from "next/image"
-import clsx from "clsx"
 import { PlusIcon } from "@heroicons/react/24/solid"
-import { useSelector } from "react-redux"
 import { useTranslation } from "next-i18next"
-import { useMediaQuery } from "react-responsive"
+import { useSelector } from "react-redux"
+import Image from "next/image"
+import Link from "next/link"
+import clsx from "clsx"
 
-import { Col, Row } from "../../shared/layout/flex"
-import DoughnutChart from "../../shared/charts/doughnut/doughnut"
-import LineChart from "../../shared/charts/graph/graph"
-import ExchangeSwitcher from "../../shared/exchange-switcher/exchange-switcher"
+import { selectConnectedExchanges, selectExchangeStoreStatus, selectSelectedExchange } from "../../../services/redux/exchangeSlice"
+import NoConnectedExchangePage from "../../shared/no-exchange-connected-page/no-exchange-connected-page"
 import { getPortfolioHoldings, getPortfolioSnapshots } from "../../../services/controllers/market"
 import { PortfolioAssetType, PortfolioSnapshotType } from "../../../types/exchange.types"
 import { GraphDataRange, chartDataType } from "../../shared/charts/graph/graph.type"
+import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries"
+import ExchangeSwitcher from "../../shared/exchange-switcher/exchange-switcher"
 import { percentageFormat, formatNumber } from "../../../utils/helpers/prices"
-import { selectConnectedExchanges, selectExchangeStoreStatus, selectSelectedExchange } from "../../../services/redux/exchangeSlice"
-import StatusAsync from "../../../utils/status-async"
+import { portfolioGraphDataRanges } from "../../../utils/constants/dashboard"
 import ExchangeImage from "../../shared/exchange-image/exchange-image"
+import { ShadowButton } from "../../shared/buttons/shadow_button"
+import DoughnutChart from "../../shared/charts/doughnut/doughnut"
+import AssetPnl from "../../shared/containers/asset/assetPnl"
 import { MODE_DEBUG } from "../../../utils/constants/config"
+import PageLoader from "../../shared/pageLoader/pageLoader"
+import LineChart from "../../shared/charts/graph/graph"
+import StatusAsync from "../../../utils/status-async"
+import { Col, Row } from "../../shared/layout/flex"
 
 import styles from "./dashboard.module.scss"
-import Link from "next/link"
-import PageLoader from "../../shared/pageLoader/pageLoader"
+import { PieChartIcon } from "../../svg/pieChartIcon";
+import { LineChartIcon } from "../../svg/lineChartIcon";
+import { useResponsive } from "../../../context/responsive.context";
 
-
-import { screens } from 'tailwindcss/defaultTheme';
-import AssetPnl from "../../shared/containers/asset/assetPnl"
-import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries"
-import { portfolioGraphDataRanges } from "../../../utils/constants/dashboard"
-import { ShadowButton } from "../../shared/buttons/shadow_button"
-import NoConnectedExchangePage from "../../shared/no-exchange-connected-page/no-exchange-connected-page"
 
 const Dashboard: FC = () => {
 
@@ -44,7 +44,7 @@ const Dashboard: FC = () => {
   const selectedExchange = useSelector(selectSelectedExchange);
   const connectedExchanges = useSelector(selectConnectedExchanges);
 
-  const isTabletOrMobileScreen = useMediaQuery({ query: `(max-width: ${screens.md})` })
+  const { isTabletOrMobileScreen } = useResponsive();
 
   const { t } = useTranslation(["dashboard", "common"]);
 
@@ -126,9 +126,9 @@ const Dashboard: FC = () => {
     }
   }, [portfolioHoldings, t])
 
-  const onSeriesClick = async (series: any) => {
+  const onSeriesClick = useCallback(async (series: any) => {
     setActiveSeries(series.key);
-  };
+  }, []);
 
   const portfolioLineChart = useMemo(() => {
 
@@ -163,7 +163,7 @@ const Dashboard: FC = () => {
       </Col>
     )
 
-  }, [activeSeries, isTabletOrMobileScreen, portfolioSnapshots])
+  }, [activeSeries, isTabletOrMobileScreen, onSeriesClick, portfolioSnapshots])
 
   const charts = useMemo(() => {
     if (isTabletOrMobileScreen) {
@@ -173,13 +173,9 @@ const Dashboard: FC = () => {
           <Row className="w-full h-10 justify-between gap-2 overflow-auto">
             <Row className="gap-1">
               <ShadowButton
-                onClick={() => { console.log("doughnut"); setSelectedChart('doughnut') }}
+                onClick={() => { setSelectedChart('doughnut') }}
                 iconSvg={
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15Z" stroke={selectedChart === "doughnut" ? "#558AF2" : "#6B7280"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M12.6667 13.0556L8 8V1" stroke={selectedChart === "doughnut" ? "#558AF2" : "#6B7280"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M8 8H15" stroke={selectedChart === "doughnut" ? "#558AF2" : "#6B7280"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  <PieChartIcon stroke={selectedChart === "doughnut" ? "#558AF2" : "#6B7280"} />
                 }
                 border="rounded-l-md"
                 bgColor={selectedChart === "doughnut" ? "bg-blue-3" : "bg-grey-2"}
@@ -187,9 +183,7 @@ const Dashboard: FC = () => {
               />
               <ShadowButton
                 iconSvg={
-                  <svg width="18" height="11" viewBox="0 0 18 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M11.6857 0.572854C11.7939 0.16068 12.209 -0.0839232 12.6129 0.0265187L17.4389 1.34627C17.6328 1.39931 17.7982 1.5288 17.8986 1.70626C17.999 1.88372 18.0262 2.09462 17.9742 2.29255L16.6811 7.21793C16.5729 7.63011 16.1578 7.87471 15.7539 7.76427C15.35 7.65383 15.1104 7.23016 15.2186 6.81799L16.0357 3.7058C13.7583 5.13791 11.8645 6.97205 10.3902 9.06553C10.2605 9.24963 10.0582 9.36633 9.83676 9.3847C9.61535 9.40306 9.3972 9.32125 9.24012 9.16094L6.05635 5.91159L1.29235 10.7737C0.99671 11.0754 0.517377 11.0754 0.221733 10.7737C-0.0739109 10.472 -0.0739109 9.98276 0.221733 9.68103L5.52104 4.27258C5.81668 3.97085 6.29601 3.97085 6.59166 4.27258L9.69412 7.43894C11.2092 5.46845 13.0851 3.73784 15.2915 2.35881L12.221 1.51914C11.8172 1.40869 11.5775 0.985029 11.6857 0.572854Z" fill={selectedChart !== "doughnut" ? "#558AF2" : "#6B7280"} />
-                  </svg>
+                  <LineChartIcon pathFill={selectedChart !== "doughnut" ? "#558AF2" : "#6B7280"} />
                 }
                 onClick={() => { setSelectedChart('graph') }}
                 border="rounded-r-md"
@@ -213,7 +207,7 @@ const Dashboard: FC = () => {
         </Col>
       )
     }
-  }, [activeSeries, isTabletOrMobileScreen, portfolioDoughnutChart, portfolioLineChart, selectedChart]);
+  }, [activeSeries, isTabletOrMobileScreen, onSeriesClick, portfolioDoughnutChart, portfolioLineChart, selectedChart]);
 
   const tableExchangesImages = useCallback((exchanges_ids?: number[]) => {
     if (exchanges_ids?.length) {

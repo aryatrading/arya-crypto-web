@@ -19,6 +19,7 @@ import "../styles/globals.css";
 import { FAVORITES_LIST } from "../utils/constants/config";
 import { initStoreData } from "../common/hooks/initStore";
 import "../services/api/socketConfig";
+import ResponsiveProvider from "../context/responsive.context";
 
 const poppins = Poppins({
   variable: "--poppins-font",
@@ -50,7 +51,7 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
     localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
 
     // Forcing dark mode
-    localStorage?.setItem('theme' , 'dark');
+    localStorage?.setItem('theme', 'dark');
     if (localStorageToken) {
       axiosInstance.defaults.headers.common[
         "Authorization"
@@ -69,9 +70,11 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
     <Provider store={store}>
       <ThemeProvider attribute="class">
         <AuthModalProvider>
-          <main className={poppins.className}>
-            <Component {...props.pageProps} />
-          </main>
+          <ResponsiveProvider>
+            <main className={poppins.className}>
+              <Component {...props.pageProps} />
+            </main>
+          </ResponsiveProvider>
         </AuthModalProvider>
         <ToastContainer />
       </ThemeProvider>

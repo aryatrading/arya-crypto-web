@@ -1,6 +1,4 @@
 import { FC, useMemo } from "react";
-import { useMediaQuery } from "react-responsive";
-import { screens } from "tailwindcss/defaultTheme";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import clsx from "clsx";
@@ -15,12 +13,13 @@ import { SmartAllocationAssetType } from "../../../../../../types/smart-allocati
 import PortfolioComposition from "../../../../../shared/portfolio-composition/portfolio-composition";
 import { USDTSymbol } from "../../../../../../utils/constants/market";
 import AssetPnl from "../../../../../shared/containers/asset/assetPnl";
+import { useResponsive } from "../../../../../../context/responsive.context";
 
 const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
 
     const { t } = useTranslation(['smart-allocation']);
 
-    const isTabletOrMobileScreen = useMediaQuery({ query: `(max-width: ${screens.md})` })
+    const { isTabletOrMobileScreen } = useResponsive();
 
     const portfolioComposition = useMemo(() => {
         return (

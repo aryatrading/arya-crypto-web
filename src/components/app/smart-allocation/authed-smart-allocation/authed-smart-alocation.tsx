@@ -1,6 +1,4 @@
 import { FC, createContext, useCallback, useEffect, useMemo, useState } from "react"
-import { useMediaQuery } from "react-responsive";
-import { screens } from "tailwindcss/defaultTheme";
 import { useSelector } from "react-redux";
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
@@ -26,6 +24,7 @@ import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/
 import { EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
 import SmartAllocationAutomation from "./SmartAllocationAutomation/SmartAllocationAutomation";
 import PortfolioComposition from "../../../shared/portfolio-composition/portfolio-composition";
+import { useResponsive } from "../../../../context/responsive.context";
 
 
 
@@ -53,7 +52,7 @@ const AuthedSmartAllocation: FC = () => {
     const selectedExchange = useSelector(selectSelectedExchange);
     const connectedExchanges = useSelector(selectConnectedExchanges);
 
-    const isTabletOrMobileScreen = useMediaQuery({ query: `(max-width: ${screens.md})` })
+    const { isTabletOrMobileScreen } = useResponsive();
 
 
     const initPortfolioSnapshots = useCallback(() => {
