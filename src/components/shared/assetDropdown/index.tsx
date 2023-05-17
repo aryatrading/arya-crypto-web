@@ -151,7 +151,6 @@ export const AssetDropdown = ({
             <button
               aria-label="Customise options"
               disabled={disabled}
-              className="active:outline-none"
             >
               <Row className="gap-2 items-center">
                 <span className="font-semibold text-sm text-white">
