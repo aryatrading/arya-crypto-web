@@ -14,8 +14,6 @@ import { GraphDataRange, chartDataType } from "../../shared/charts/graph/graph.t
 import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries"
 import ExchangeSwitcher from "../../shared/exchange-switcher/exchange-switcher"
 import { percentageFormat, formatNumber } from "../../../utils/helpers/prices"
-import { selectExchangeStoreStatus, selectSelectedExchange } from "../../../services/redux/exchangeSlice"
-import StatusAsync from "../../../utils/status-async"
 import { portfolioGraphDataRanges } from "../../../utils/constants/dashboard"
 import ExchangeImage from "../../shared/exchange-image/exchange-image"
 import { ShadowButton } from "../../shared/buttons/shadow_button"
@@ -43,6 +41,7 @@ const Dashboard: FC = () => {
 
   const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
   const selectedExchange = useSelector(selectSelectedExchange);
+  const connectedExchanges = useSelector(selectConnectedExchanges);
 
   const { isTabletOrMobileScreen } = useResponsive();
 
@@ -350,59 +349,6 @@ const Dashboard: FC = () => {
         <table className={styles.table}>
           {tableHeader}
           <tbody>
-            {!portfolioHoldings.length ?
-              <tr>
-                <td colSpan={7} className="row-span-full">{t("common:noAssets")}</td>
-              </tr>
-              : portfolioHoldings.map(asset => {
-                const isPriceChangePositive = (asset?.asset_details?.price_change_percentage_24h ?? 0) > 0;
-                const signal = isPriceChangePositive ? '+' : '-';
-
-                const formattedChangePercentage = `${signal}${percentageFormat(Math.abs(asset?.asset_details?.price_change_percentage_24h ?? 0))}`;
-                const formattedChangePrice = `${signal}$${formatNumber(Math.abs(asset?.asset_details?.price_change_24h ?? 0))}`;
-
-                const assetPortfolioPercentage = asset.weight;
-
-                return (
-                  <tr className="hover:bg-black-2/25 hover:bg-blend-darken cursor-pointer" key={asset.name}>
-                    <td>
-                      <Link href={`/asset?symbol=${asset.asset_details?.symbol}`} className="flex flex-row items-center">
-                        <Image className="mr-4" src={asset?.asset_details?.image ?? ""} alt="" width={23} height={23} />
-                        <p className="font-semibold mr-1">{asset?.asset_details?.name}</p>
-                        <span className="text-sm text-grey-1 font-semibold"> • {asset.name}</span>
-                      </Link>
-                    </td>
-                    <td>
-                      <Row className="justify-between items-center w-[120px]">
-                        <p>{percentageFormat(asset.weight ?? 0)}%</p>
-                        <Row className="h-[5px] rounded-full w-[50px] bg-white">
-                          <Row className={`h-full rounded-full bg-blue-1`} style={{
-                            width: `${Math.ceil(assetPortfolioPercentage ?? 0)}%`
-                          }} />
-                        </Row>
-                      </Row>
-                    </td>
-                    <td className="text-right">{formatNumber(asset.free ?? 0)} {asset.name}</td>
-                    <td className="text-right font-semibold">${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
-                    <td className="text-right">${formatNumber((asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0))}</td>
-                    <td className="text-right">
-                      <Row className="items-center justify-end ">
-                        <Row className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive }, "mr-4")}>{formattedChangePrice}</Row>
-
-                        <Row className={clsx({ "bg-green-2 text-green-1": isPriceChangePositive, "bg-red-2 text-red-1": !isPriceChangePositive }, "rounded-md py-1 px-2 font-semibold text-sm")}>
-                          {formattedChangePercentage}%
-                        </Row>
-                      </Row>
-
-                    </td>
-                    <td>
-                      <Row className="text-right justify-end gap-2">
-                        {tableExchangesImages(asset?.exchanges_ids)}
-                      </Row>
-                    </td>
-                  </tr>
-                );
-              })}
             {tableBody}
           </tbody>
         </table>
