@@ -1,0 +1,51 @@
+@media only screen and (max-width: 768px) {
+    .input-wrapper {
+        -webkit-transition: width 0.5s ease-in-out;
+        -moz-transition: width 0.5s ease-in-out;
+        -o-transition: width 0.5s ease-in-out;
+        transition: width 0.5s ease-in-out;
+        width: 0px;
+    }
+
+    .input-wrapper:focus {
+        -webkit-transition: width 0.8s ease-in-out;
+        -moz-transition: width 0.8s ease-in-out;
+        -o-transition: width 0.8s ease-in-out;
+        transition: width 0.8s ease-in-out;
+
+        width: 160px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .input-wrapper {
+        -webkit-transition: width 0.5s ease-in-out;
+        -moz-transition: width 0.5s ease-in-out;
+        -o-transition: width 0.5s ease-in-out;
+        transition: width 0.5s ease-in-out;
+        width: 160px;
+    }
+
+    .input-wrapper:focus {
+        -webkit-transition: width 0.8s ease-in-out;
+        -moz-transition: width 0.8s ease-in-out;
+        -o-transition: width 0.8s ease-in-out;
+        transition: width 0.8s ease-in-out;
+
+        width: 350px;
+    }
+
+    .list {
+        animation: fadeIn 1s;
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+}

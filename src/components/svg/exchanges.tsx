@@ -11,21 +11,21 @@ export const ExchangesIcon = () => (
       stroke="#558AF2"
       strokeWidth="4"
       stroke-miterlimit="10"
-      stroke-linecap="round"
+      strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M34 32.7947C34 35.28 29.9706 37.2947 25 37.2947C20.0294 37.2947 16 35.28 16 32.7947"
       stroke="#558AF2"
       strokeWidth="3"
-      stroke-linecap="round"
+      strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M34 25.2947C34 27.78 29.9706 29.7947 25 29.7947C20.0294 29.7947 16 27.78 16 25.2947"
       stroke="#558AF2"
       strokeWidth="3"
-      stroke-linecap="round"
+      strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
@@ -33,7 +33,7 @@ export const ExchangesIcon = () => (
       fill="#558AF2"
       stroke="#558AF2"
       strokeWidth="3"
-      stroke-linecap="round"
+      strokeLinecap="round"
       strokeLinejoin="round"
     />
   </svg>

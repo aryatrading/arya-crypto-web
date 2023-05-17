@@ -7,7 +7,6 @@ export interface ExchangeStateType {
         connectedExchanges: ExchangeType[] | null,
         allProviders: ProviderType[] | null,
     }
-    error: Error | null,
 }
 
 export type ExchangeType = {
