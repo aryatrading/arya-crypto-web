@@ -12,3 +12,11 @@ export const createSwapTrade = async (
 
   return data;
 };
+
+export const getAssetAvailable = async (base: string, provider: number) => {
+  const { data } = await axiosInstance.get(
+    `trade-engine/assets/${base}/?provider=${provider}`
+  );
+
+  return data[provider].data.free;
+};

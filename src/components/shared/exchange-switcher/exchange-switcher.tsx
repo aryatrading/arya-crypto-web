@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useMemo } from "react";
-import { PlayIcon, PlusIcon } from "@heroicons/react/24/solid"
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { PlayIcon, PlusIcon } from "@heroicons/react/24/solid";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import { useTranslation } from "next-i18next";
@@ -19,7 +19,10 @@ import ExchangeImage from "../exchange-image/exchange-image";
 import { ExchangeType } from "../../../types/exchange.types";
 import Link from "next/link";
 
-const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall = true }) => {
+const ExchangeSwitcher: FC<{
+  canSelectOverall?: boolean;
+  hideExchangeStats?: boolean;
+}> = ({ canSelectOverall = true, hideExchangeStats = false }) => {
   const selectedExchange = useSelector(selectSelectedExchange);
   const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
   const connectedExchanges = useSelector(selectConnectedExchanges);
@@ -28,17 +31,23 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
 
   const { t } = useTranslation(["common"]);
 
-
   useEffect(() => {
     if (!canSelectOverall) {
       if (!selectedExchange?.provider_id) {
-        const notOverallExchange = connectedExchanges?.find(exchange => exchange.provider_id);
+        const notOverallExchange = connectedExchanges?.find(
+          (exchange) => exchange.provider_id
+        );
         if (notOverallExchange) {
           dispatch(setSelectedExchange(notOverallExchange));
         }
       }
     }
-  }, [canSelectOverall, connectedExchanges, dispatch, selectedExchange?.provider_id])
+  }, [
+    canSelectOverall,
+    connectedExchanges,
+    dispatch,
+    selectedExchange?.provider_id,
+  ]);
 
   const changePercentage = useCallback((exchange: ExchangeType | null) => {
     const changeIn24h = exchange?.["24h_change_percentage"] ?? 0;
@@ -50,14 +59,13 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
     )}`;
 
     return (
-
-      <Row className={clsx("p-1 rounded-md", {
-        "text-green-1 bg-green-2": isPriceChangePositive,
-        "text-red-1 bg-red-2": !isPriceChangePositive,
-      })}>
-        <p>
-          {formattedChangePercentage}%
-        </p>
+      <Row
+        className={clsx("p-1 rounded-md", {
+          "text-green-1 bg-green-2": isPriceChangePositive,
+          "text-red-1 bg-red-2": !isPriceChangePositive,
+        })}
+      >
+        <p>{formattedChangePercentage}%</p>
       </Row>
     );
   }, []);
@@ -82,13 +90,12 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
             {
               "bg-grey-4": isSelected,
               "bg-grey-2": !isSelected,
-              "cursor-pointer": !isNotSelectable
+              "cursor-pointer": !isNotSelectable,
             },
             "h-20 py-3 px-9 rounded-md"
           )}
           onClick={() => {
-            if (!isNotSelectable)
-              selectExchange(exchange);
+            if (!isNotSelectable) selectExchange(exchange);
           }}
         >
           <Row className="items-center  gap-5 h-full">
@@ -110,7 +117,12 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
         </DropdownMenu.Item>
       );
     },
-    [canSelectOverall, changePercentage, selectExchange, selectedExchange?.provider_id]
+    [
+      canSelectOverall,
+      changePercentage,
+      selectExchange,
+      selectedExchange?.provider_id,
+    ]
   );
 
   const dropdown = useMemo(() => {
@@ -121,7 +133,11 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
             className="bg-white rounded-full p-2 "
             aria-label="Customise options"
           >
-            <PlayIcon className="rotate-90 text-blue-1" height="15px" width="15px" />
+            <PlayIcon
+              className="rotate-90 text-blue-1"
+              height="15px"
+              width="15px"
+            />
           </button>
         </DropdownMenu.Trigger>
 
@@ -134,7 +150,10 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
 
             <DropdownMenu.Item className={"p-4 rounded-md"} disabled={true}>
               <Row className="items-center gap-5 h-full">
-                <Link href="settings" className="w-full py-3 px-2 rounded-md bg-grey-2">
+                <Link
+                  href="settings"
+                  className="w-full py-3 px-2 rounded-md bg-grey-2"
+                >
                   <Row className="w-full font-bold justify-center gap-1">
                     <PlusIcon width={20} />
                     <p className="text-bold">{t("addExchange")}</p>
@@ -163,13 +182,15 @@ const ExchangeSwitcher: FC<{ canSelectOverall?: boolean }> = ({ canSelectOverall
           </h3>
           {dropdown}
         </Row>
-        <Row className="items-center gap-3">
-          <h3 className="text-4xl font-bold">
-            {formatNumber(selectedExchange?.last_5m_evaluation ?? 0, true)}{" "}
-            <span className="text-2xl">USD</span>
-          </h3>
-          {changePercentage(selectedExchange)}
-        </Row>
+        {hideExchangeStats === false ? (
+          <Row className="items-center gap-3">
+            <h3 className="text-4xl font-bold">
+              {formatNumber(selectedExchange?.last_5m_evaluation ?? 0, true)}{" "}
+              <span className="text-2xl">USD</span>
+            </h3>
+            {changePercentage(selectedExchange)}
+          </Row>
+        ) : null}
       </Col>
     </AsyncStatusWrapper>
   );
