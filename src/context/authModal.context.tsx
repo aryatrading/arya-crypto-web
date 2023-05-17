@@ -12,6 +12,7 @@ import { Col } from "../components/shared/layout/flex";
 import Login from "../components/app/login/login";
 import Signup from "../components/app/signup/signup";
 import CloseIcon from "../components/svg/Shared/CloseIcon";
+import clsx from "clsx";
 
 export const AuthModal = createContext({
   modalTrigger: { show: () => null, hide: () => null },
@@ -48,24 +49,24 @@ const AuthModalProvider: FC<any> = (props: any) => {
         aria-hidden="true"
         className="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
       >
-        <Col className="relative rounded-lg shadow bg-black-2 p-5 w-full max-w-md max-h-full">
-          <Col className="gap-4 min-h-[450px]">
-            <Button
-              className="bg-transparent rounded-lg p-1.5 hover:bg-grey-7 ml-auto"
-              data-modal-hide="staticModal"
-              onClick={() => modalTrigger.hide()}
-            >
-              <CloseIcon className='stroke-current text-[#89939F] w-3 h-3' />
-            </Button>
-            {visibleSection === "login" ? (
-              <Login changeSection={setVisibleSection} />
-            ) : (
-              <Signup changeSection={setVisibleSection} />
-            )}
+        <Col className={clsx({ "max-w-6xl": visibleSection === 'signup', "max-w-md": visibleSection !== 'signup' }, "relative w-full max-h-full")}>
+          <Col className="relative rounded-lg shadow bg-gray-700 pt-5 pb-5">
+            <Col className="gap-4 min-h-[550px]">
+              <Button
+                className="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white me-8"
+                data-modal-hide="staticModal"
+                onClick={() => modalTrigger.hide()}>
+                  <CloseIcon className='stroke-current text-[#89939F] w-3 h-3' />
+              </Button>
+              {visibleSection === "login" ? (
+                <Login changeSection={setVisibleSection} />
+              ) : (
+                <Signup changeSection={setVisibleSection} />
+              )}
+            </Col>
           </Col>
         </Col>
       </Col>
-
       {props.children}
     </AuthModal.Provider>
   );
