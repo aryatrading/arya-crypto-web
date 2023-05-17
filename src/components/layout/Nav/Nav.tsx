@@ -95,7 +95,7 @@ const Nav = () => {
         </Row>
       }
     },
-    [modalTrigger, id, setVisibleSection, t],
+    [id, t, onLogout, setVisibleSection, modalTrigger],
   )
 
   const navLinks = (className: string) => {
