@@ -59,11 +59,11 @@ const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClic
       }
     </Col>
   }
-    , [assetLivePrice, filteredAssets, onClick, t])
+    , [assetLivePrice, dismissOnClick, filteredAssets, onClick, setShowDialog, t])
 
 
   return (
-    <Dialog.Root open={showDialog}>
+    <Dialog.Root modal={!fullModal} open={showDialog}>
       <Dialog.Trigger asChild onClick={() => setShowDialog(true)}>
         {trigger}
       </Dialog.Trigger>
@@ -110,7 +110,7 @@ const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClic
             </div>
           </Dialog.Content>
             :
-            <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-0 left-0 right-0 bottom-0 bg-grey-2 p-6 focus:outline-none font-sans flex flex-col gap-3 z-30" forceMount asChild>
+            <Dialog.Content className="fixed top-0 left-0 right-0 bottom-0 bg-grey-2 p-6 focus:outline-none font-sans flex flex-col gap-3 z-30" forceMount asChild>
               <animated.div style={styles}>
                 <Col className='flex flex-col gap-6 h-full'>
                   <Row className='w-full justify-end items-center gap-3'>

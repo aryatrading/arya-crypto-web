@@ -32,6 +32,7 @@ const AuthModalProvider: FC<any> = (props: any) => {
       placement: "center",
       backdrop: "static",
       closable: true,
+      backdropClasses: "bg-white absolute top-0 right-0 left-0 bottom-0 z-30 opacity-30"
     };
     const modal = new Modal($targetEl, options);
     setModalTrigger(modal);
@@ -54,26 +55,25 @@ const AuthModalProvider: FC<any> = (props: any) => {
                 className="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white me-8"
                 data-modal-hide="staticModal"
                 onClick={() => modalTrigger.hide()}
+            >
+              <svg
+                className="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </Button>
-              {visibleSection === "login" ? (
-                <Login changeSection={setVisibleSection} />
-              ) : (
-                <Signup changeSection={setVisibleSection} />
-              )}
-            </Col>
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+            </Button>
+            {visibleSection === "login" ? (
+              <Login changeSection={setVisibleSection} />
+            ) : (
+              <Signup changeSection={setVisibleSection} />
+            )}
           </Col>
         </Col>
       </Col>

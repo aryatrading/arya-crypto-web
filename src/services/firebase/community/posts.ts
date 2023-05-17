@@ -1,27 +1,9 @@
-import { getApp } from "@firebase/app";
-import {
-  collection,
-  orderBy,
-  query,
-  onSnapshot,
-  QuerySnapshot,
-  FirestoreError,
-  getFirestore,
-} from "firebase/firestore";
+import { getApp } from "firebase/app";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { setPosts } from "../../redux/postsSlice";
 import { store } from "../../redux/store";
 import { PostTypes } from "../../../types/asset";
 
-const db = getFirestore(getApp());
-const functions = getFunctions(getApp(), "europe-west3");
-
-const searchHttpsCallable = httpsCallable(functions, "search", {});
-const analyticsLogosHttpsCallable = httpsCallable(
-  functions,
-  "analyticsLogos",
-  {}
-);
 
 export const getPosts = async ({
   searchTerm,
@@ -30,6 +12,8 @@ export const getPosts = async ({
   searchTerm: string;
   modules?: "posts"[];
 }) => {
+  const functions = getFunctions(getApp(), "europe-west3");
+  const searchHttpsCallable = httpsCallable(functions, "search", {});
   store.dispatch(setPosts([]));
   const options = {
     search: searchTerm,
@@ -54,24 +38,6 @@ export const userPic = (user: any) => {
   return `https://firebasestorage.googleapis.com/v0/b/arya-9f90f.appspot.com/o/profile-images%2F${user.Id}?alt=media`;
 };
 
-export const streamPostUpdates = (
-  fullPostId: string,
-  snapshot: (snapshot: QuerySnapshot) => void,
-  error: (error: FirestoreError) => void
-) => {
-  const [authorId, postId] = fullPostId.split("/");
-  const collectionRef = collection(
-    db,
-    "users",
-    authorId,
-    "posts",
-    postId,
-    "updates"
-  );
-  const q = query(collectionRef, orderBy("Date", "desc"));
-  return onSnapshot(q, snapshot, error);
-};
-
 export const getMarketKey = (
   symbol?: string | null,
   market?: string | null,
@@ -84,6 +50,13 @@ export async function fetchPendingMarketItemLogos(
   marketItems: any,
   setLogo: any
 ) {
+  const functions = getFunctions(getApp(), "europe-west3");
+  const analyticsLogosHttpsCallable = httpsCallable(
+    functions,
+    "analyticsLogos",
+    {}
+  );
+
   await analyticsLogosHttpsCallable({
     marketItems,
   })

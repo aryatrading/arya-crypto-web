@@ -1,6 +1,7 @@
 import { FC, useCallback, useMemo, useState } from "react";
 import { ErrorMessage, Form, Formik } from "formik";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import * as Yup from 'yup';
@@ -20,6 +21,7 @@ const Signup: FC<any> = (props: any) => {
     const { hideModal } = useAuthModal();
     const [is2FALoading, setIs2FALoading] = useState<boolean>(false)
     const [errorForm, setError] = useState<string | null>()
+    const { back } = useRouter()
 
     const signupValidationScheme = useCallback(() => {
         return Yup.object().shape({
@@ -35,6 +37,7 @@ const Signup: FC<any> = (props: any) => {
         try {
             await googleAuth()
             hideModal()
+            back()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -49,6 +52,7 @@ const Signup: FC<any> = (props: any) => {
         try {
             await appleAuth()
             hideModal()
+            back()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -68,6 +72,7 @@ const Signup: FC<any> = (props: any) => {
                     registerUser(values)
                         .then(() => {
                             hideModal()
+                            back()
                         })
                         .catch(err => {
                             setError(err.message);
