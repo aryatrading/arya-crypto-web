@@ -18,7 +18,7 @@ export interface TradeType {
 }
 
 interface EntryOrderType {
-  type: string;
+  type?: string;
   trigger_price?: 0;
   order_type?: string;
   quantity?: number;
@@ -26,10 +26,10 @@ interface EntryOrderType {
   price_based?: boolean;
 }
 
-interface ProfitsType {
+export interface ProfitsType {
   order_id?: number;
   value: number;
-  quantity: number;
+  quantity?: number;
 }
 
 interface TrailingType {
@@ -38,4 +38,11 @@ interface TrailingType {
   stop_price?: number;
   trigger_value?: number;
   trailing_delta?: number;
+}
+
+export interface TradeValidations {
+  min_price?: number;
+  max_price?: number;
+  min_qty?: number;
+  max_qty?: number;
 }

@@ -5,9 +5,18 @@ import Layout from "../../components/layout/layout";
 import Trade from "../../components/app/trade/trade";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearTrade, setTrade } from "../../services/redux/tradeSlice";
-import { getAssetAvailable } from "../../services/controllers/trade";
+import {
+  clearTrade,
+  setOrderType,
+  setTrade,
+  setValidations,
+} from "../../services/redux/tradeSlice";
+import {
+  getAssetValidation,
+  getAssetAvailable,
+} from "../../services/controllers/trade";
 import { selectSelectedExchange } from "../../services/redux/exchangeSlice";
+import { TradeValidations } from "../../types/trade";
 
 const TradePage = () => {
   const dispatch = useDispatch();
@@ -28,6 +37,14 @@ const TradePage = () => {
           ),
         })
       );
+
+      let _validations: TradeValidations = await getAssetValidation(
+        `${symbol ?? "btc"}USDT`,
+        selectedExchange?.provider_id ?? 1
+      );
+
+      dispatch(setValidations(_validations));
+      dispatch(setOrderType({ orderType: "MARKET" }));
     })();
     return () => {
       dispatch(clearTrade());

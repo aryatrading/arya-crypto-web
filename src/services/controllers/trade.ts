@@ -20,3 +20,11 @@ export const getAssetAvailable = async (base: string, provider: number) => {
 
   return data[provider].data.free;
 };
+
+export const getAssetValidation = async (symbol: string, provider: number) => {
+  const { data } = await axiosInstance.get(
+    `trade-engine/symbols_rules/${symbol.toUpperCase()}?provider=${provider}`
+  );
+
+  return data;
+};
