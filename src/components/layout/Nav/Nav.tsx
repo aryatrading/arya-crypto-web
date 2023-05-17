@@ -5,8 +5,6 @@ import Image from "next/image";
 import { useTranslation } from "next-i18next";
 import { useAuthUser, withAuthUser } from "next-firebase-auth";
 import { useRouter } from "next/router";
-import { screens } from "tailwindcss/defaultTheme";
-import { useMediaQuery } from 'react-responsive';
 import { getAuth } from "firebase/auth";
 import { getApp } from "firebase/app";
 
@@ -26,6 +24,7 @@ import { SearchAssetInput } from "../../shared/assetSearchInputWithDropdown";
 
 import NavLink from "./NavLink/NavLink";
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/solid";
+import { useResponsive } from "../../../context/responsive.context";
 
 const Nav = () => {
   const { id } = useAuthUser();
@@ -33,7 +32,7 @@ const Nav = () => {
   const { modalTrigger, setVisibleSection } = useAuthModal();
   const { t } = useTranslation(['nav', 'coin', 'asset', 'common', 'auth']);
   const { pathname, push, locale, asPath, query } = useRouter()
-  const isMD = useMediaQuery({ query: `(max-width: ${screens.md})` });
+  const { isTabletOrMobileScreen } = useResponsive();
 
   const onLogout = useCallback(() => {
     getAuth(getApp()).signOut().then(() => {
@@ -79,7 +78,7 @@ const Nav = () => {
         return <Row className="gap-4 items-center">
           <Button className="px-6 py-3 font-semibold text-white hidden md:block"
             onClick={() => {
-              if (window.innerWidth <= 900) {
+              if (isTabletOrMobileScreen) {
                 push('/login')
               } else {
                 setVisibleSection('login');
@@ -91,7 +90,7 @@ const Nav = () => {
           </Button>
           <Button className="bg-blue-3 px-6 py-3 min-w-[100px] text-blue-1 text-sm rounded-md font-medium hidden md:block"
             onClick={() => {
-              if (window.innerWidth <= 900) {
+              if (isTabletOrMobileScreen) {
                 push('/signup')
               } else {
                 setVisibleSection('signup');
@@ -134,7 +133,7 @@ const Nav = () => {
         }} className="w-full h-full py-3">
           <Row className="gap-4 items-center justify-center">
             <FRIcon />
-            {isMD && <span className="text-sm font-bold">{t('common:french')}</span>}
+            {isTabletOrMobileScreen && <span className="text-sm font-bold">{t('common:french')}</span>}
           </Row>
         </Button>
       )
@@ -144,11 +143,11 @@ const Nav = () => {
       }} className="w-full h-full py-3">
         <Row className="gap-4 items-center justify-center">
           <ENIcon />
-          {isMD && <span className="text-sm font-bold">{t('common:english')}</span>}
+          {isTabletOrMobileScreen && <span className="text-sm font-bold">{t('common:english')}</span>}
         </Row>
       </Button>
     }
-  }, [asPath, locale, pathname, push, query, t, isMD]);
+  }, [asPath, locale, pathname, push, query, t, isTabletOrMobileScreen]);
 
   return (
     <Col className="w-full bg-black-2 border-b border-gray-800 shadow-md  fixed lg:relative z-20">
@@ -165,7 +164,7 @@ const Nav = () => {
         <Row className="gap-3 justify-center items-center">
           <SearchAssetInput t={t} />
           <Row className="gap-5">
-            {changeLanguageView(isMD)}
+            {changeLanguageView(isTabletOrMobileScreen)}
             {userOptions()}
           </Row>
           <AssetSelector
@@ -196,7 +195,7 @@ const Nav = () => {
                   <h3 className="text-white font-medium">{t('auth:logout')}</h3>
                 </Button>
                 <Row className="gap-4 items-center justify-center">
-                  <Col className="bg-grey-3 text-white text-sm rounded-md font-medium items-center flex-1 px-6">{changeLanguageView(!isMD)}</Col>
+                  <Col className="bg-grey-3 text-white text-sm rounded-md font-medium items-center flex-1 px-6">{changeLanguageView(!isTabletOrMobileScreen)}</Col>
 
                   <NavLink
                     href="/settings"
@@ -212,7 +211,7 @@ const Nav = () => {
               <Col className="gap-4">
                 <Link href='/signup' className="bg-blue-1 py-3 text-white text-sm rounded-md font-medium w-full text-center">{t('common:signup')}</Link>
                 <Link href='/login' className="bg-grey-3 py-3 text-white text-sm rounded-md font-medium w-full text-center">{t('common:login')}</Link>
-                <Col className="bg-grey-3 text-white text-sm rounded-md font-medium w-full items-center">{changeLanguageView(!isMD)}</Col>
+                <Col className="bg-grey-3 text-white text-sm rounded-md font-medium w-full items-center">{changeLanguageView(!isTabletOrMobileScreen)}</Col>
               </Col>
             }
           </Col>
