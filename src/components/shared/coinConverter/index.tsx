@@ -4,14 +4,13 @@ import { useSelector } from "react-redux";
 import clsx from "clsx";
 
 import { Col, Row } from "../layout/flex";
-import { ConvertButtonIcon } from "../../svg/convert-CTA";
 import Button from "../buttons/button";
 import { AssetType } from "../../../types/asset";
 import LoadingSpinner from "../loading-spinner/loading-spinner";
 import { converterTop6Coins, usdt } from "../../../utils/constants/defaultConverterList";
 import { AssetDropdown } from "../assetDropdown";
 
-const inputClasses = "font-medium text-white bg-transparent flex-1 h-[40px] pl-4 mr-12 border-transparent";
+const inputClasses = "font-medium text-white bg-transparent flex-1 h-[40px] pl-4 mr-12 border-transparent focus:ring-0 focus:border-0 focus:outline-none";
 
 const numericInput = (value: string | number, onChange: ChangeEventHandler, disabled: boolean) => {
     return (
@@ -86,7 +85,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
             }
         }
         return (
-            <Button key={e.symbol} className="btn bg-grey-3 rounded-md hover:bg-grey-4" onClick={onClick}>
+            <Button key={e.symbol} className="btn bg-blue-3 rounded-md hover:bg-grey-4" onClick={onClick}>
                 <label className="block text-sm text-white font-medium">{props.preDefined ? firstCoin?.name + ' > ' + e?.name : e?.name + ' > ' + usdt?.name}</label>
             </Button>
         );
@@ -95,9 +94,9 @@ export const CoinConverter = (props: CoinConverterTypes) => {
     return (
         <Col className="items-start w-full gap-10">
             <h3 className="font-extrabold text-white header-label">{t('cryptoConverter')}</h3>
-            <Row className="container  gap-12 w-full bg-grey-2 rounded-md px-10 py-4 flex-wrap">
-                <Col className="flex-[0.8] justify-center gap-6">
-                    <Row className="gap-4 items-center">
+            <Row className="flex-col gap-12 w-full bg-transparent rounded-md py-4 lg:flex-row items-start">
+                <Col className="flex-1 justify-center gap-6">
+                    <Row className="gap-4 items-center bg-blue-3 px-4 rounded-md">
                         <AssetDropdown
                             onClick={(data: any) => {
                                 setFirstCoin(data);
@@ -107,15 +106,10 @@ export const CoinConverter = (props: CoinConverterTypes) => {
                             disabled={props?.preDefined}
                             title={firstCoin?.name}
                         />
+                        <Col className="h-full w-1 bg-black-1" />
                         {numericInput(firstCoinAmount, onChnageFirstCoinAmount, !firstCoin?.name || !secondCoin?.name)}
                     </Row>
-                    <Row className="relative">
-                        <Row className="w-full h-1 bg-black-1" />
-                        <Button className="absolute right-0 bottom-[-22px]" disabled>
-                            <ConvertButtonIcon />
-                        </Button>
-                    </Row>
-                    <Row className="gap-4 items-center">
+                    <Row className="gap-4 items-center bg-blue-3 px-4 rounded-md">
                         <AssetDropdown
                             onClick={(data: any) => {
                                 setSecondCoin(data);
@@ -124,6 +118,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
                             t={t}
                             title={secondCoin?.name}
                         />
+                        <Col className="h-full w-1 bg-black-1" />
                         {numericInput(secondCoinAmount, onChnageSecondCoinAmount, !secondCoin?.name || !secondCoin?.name)}
                     </Row>
                 </Col>
