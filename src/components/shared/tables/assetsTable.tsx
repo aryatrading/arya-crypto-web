@@ -13,8 +13,6 @@ import { formatNumber } from "../../../utils/helpers/prices";
 import AssetRow from "../AssetRow/AssetRow";
 import styles from "./assetsTable.module.scss";
 import { useMediaQuery } from "react-responsive";
-import { screens } from "tailwindcss/defaultTheme";
-import { asset } from "../../../utils/constants/dummyData";
 
 type AssetsTableProps = {
   assets: AssetType[];
@@ -72,7 +70,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
         "",
       ]);
     }
-  }, [isTabletOrMobileScreen]);
+  }, [isTabletOrMobileScreen, isMobileScreen]);
 
   const renderFavoritesSvg = (asset: AssetType) => {
     let _list = localStorage.getItem(FAVORITES_LIST);
