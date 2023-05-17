@@ -9,7 +9,7 @@ interface initialStateType {
 }
 
 const initialState: initialStateType = {
-  provider: 1,
+  provider: null,
   from: {},
   to: {},
 };
@@ -40,7 +40,8 @@ export const swapSlice = createSlice({
   },
 });
 
-export const { setFrom, setTo, swap, clearSwap } = swapSlice.actions;
+export const { setFrom, setTo, swap, setProvider, clearSwap } =
+  swapSlice.actions;
 
 export const getFrom = (state: AppState) => state.swap.from;
 export const getTo = (state: AppState) => state.swap.to;

@@ -38,8 +38,10 @@ const AssetTrade: FC = () => {
   };
 
   const onTradePress = async () => {
-    if (!from.symbol || !from.quantity)
-      return toast.warn("Please select a base asset");
+    if (!provider) {
+      return toast.warn(t("select_provider"));
+    }
+    if (!from.symbol || !from.quantity) return toast.warn(t("select_base"));
 
     setLoading(true);
     const paylaod: SwapTradeType = {
@@ -60,9 +62,9 @@ const AssetTrade: FC = () => {
       .then(async () => {
         await getAssetDetails(symbol);
         dispatch(clearSwap());
-        toast.success("Swap trade created");
+        toast.success(t("swap_success"));
       })
-      .catch((error) => toast.error("Error creating trade"))
+      .catch((error) => toast.error(t("trade_error")))
       .finally(() => setLoading(false));
   };
 

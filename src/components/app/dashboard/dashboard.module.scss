@@ -1,7 +1,6 @@
 .table {
 
     width: 100%;
-    min-width: 800px;
     table-layout: auto;
 
     thead {
@@ -27,8 +26,6 @@
             &:first-child {
                 td {
                     height: 50px;
-                    vertical-align: bottom;
-                    padding-bottom: 12px;
                 }
             }
         }
@@ -60,5 +57,4 @@
             padding-right: 20px;
         }
     }
-
 }

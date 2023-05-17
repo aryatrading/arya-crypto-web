@@ -13,7 +13,7 @@ export const content = [
 export const theme = {
   container: {
     center: true,
-    padding: "2rem"
+    padding: "1.5rem"
   },
   extend: {
     typography: (theme) => ({
