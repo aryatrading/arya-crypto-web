@@ -80,3 +80,18 @@ export interface ISmartAllocationContext {
 
 }
 
+export interface ISmartAllocationOrderLog{
+    status: number;
+    quantity: number;
+    order_data: {
+        side: string;
+        entry_type: string;
+        price_based?: string;
+        status_check_time?: string;
+        status_check_delay?: number;
+    };
+    settled_at: string|null;
+    price: number;
+    asset_name: string;
+    order_id: number;
+}

@@ -6,10 +6,10 @@
     "currentTop10Coins": "Les 10 premières pièces actuelles",
     "currentTop15Coins": "Les 15 premières pièces actuelles",
     "yourHoldings": "Vos avoirs",
-    "automation": "Automation",
-    "portfolioTradeHistory": "Portfolio Trade History",
-    "holdingQuantity": "Holding Quantity",
-    "holdingValue": "Holding Value",
+    "automation": "Automatisation",
+    "portfolioTradeHistory": "Historique des transactions du portefeuille",
+    "holdingQuantity": "Quantité détenue",
+    "holdingValue": "Valeur du portefeuille",
     "setWeight": "Définir le poids",
     "currentWeight": "Poids actuel",
     "rebalanceNow": "Rééquilibrer maintenant",
@@ -60,5 +60,6 @@
     "deleteExitStrategy" : "Supprimer la stratégie de sortie",
     "setExitStrategy" : "Définir une stratégie de sortie", 
     "createExitStrategyTitle" : "Créer une stratégie de sortie",
-    "createExitStrategyDescription" : "Êtes-vous sûr de vouloir créer cette stratégie de sortie ?"
+    "createExitStrategyDescription" : "Êtes-vous sûr de vouloir créer cette stratégie de sortie ?",
+    "noTradeData" : "Vous n'avez pas effectué de transactions"
 }

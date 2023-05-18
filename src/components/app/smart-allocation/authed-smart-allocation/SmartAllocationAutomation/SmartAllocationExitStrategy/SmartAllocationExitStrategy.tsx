@@ -238,7 +238,7 @@ const SmartAllocationExitStrategy = () => {
     
   return (
     <Col className='items-start gap-7'>
-            <Row className='flex py-5 px-4 bg-black-2 rounded-lg lg:w-1/2 justify-between items-center'>
+            <Row className='flex py-5 px-4 bg-black-2 rounded-lg w-full lg:w-1/2 justify-between items-center'>
                 <Col className='gap-2 text-sm'>
                     {/* TODO:Fix the responsive after merge with tradeLog */}
                     <span className='font-semibold text-white'>{t('currentExitStrategy')}</span>
