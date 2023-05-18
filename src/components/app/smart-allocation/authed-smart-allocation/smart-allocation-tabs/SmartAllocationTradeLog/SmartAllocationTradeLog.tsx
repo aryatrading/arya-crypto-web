@@ -9,12 +9,13 @@ import { getStatusList } from '../../../../../../services/controllers/utils';
 import { EnumEntityNames } from '../../../../../../utils/constants/utils';
 import { twMerge } from 'tailwind-merge';
 import { useTranslation } from 'next-i18next';
+import { ISmartAllocationOrderLog } from '../../../../../../types/smart-allocation.types';
 
 const SmartAllocationTradeLog = () => {
     const selectedExchange = useSelector(selectSelectedExchange);
 
-    const [tradeLog, setTradeLog] = useState([] as any[])
-    const [statusCodes, setStatusCodes] = useState([] as any[])
+    const [tradeLog, setTradeLog] = useState<ISmartAllocationOrderLog[]>([])
+    const [statusCodes, setStatusCodes] = useState({})
 
     const {t} = useTranslation(['smart-allocation','common'])
 
