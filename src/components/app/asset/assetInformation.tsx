@@ -114,7 +114,7 @@ const AssetInformationTab: FC = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                See More +
+                {t('seeMore')} +
               </a>
             </Col>
           </Col>
