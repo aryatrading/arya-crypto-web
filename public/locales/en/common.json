@@ -44,5 +44,17 @@
     "connectYourExchanges": "Connect your exchanges",
     "goToSettings": "Go to settings",
     "cancel":"Cancel",
-    "sell": "Sell"
+    "sell": "Sell",
+    "#": "#",
+    "type": "Type",
+    "status": "Status",
+    "amount": "Amount",
+    "price": "Price",
+    "date": "Date",
+    "PENDING_ENTRY":"Pending Entry",
+    "ACTIVE":"Active",
+    "CANCELLED":"Cancelled",
+    "FULFILLED":"Fulfilled",
+    "BROKER_ERROR":"Broker Error",
+    "DATA_ERROR":"Data Error"
 }
