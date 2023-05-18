@@ -15,7 +15,7 @@ const SmartAllocationTradeLog = () => {
     const selectedExchange = useSelector(selectSelectedExchange);
 
     const [tradeLog, setTradeLog] = useState<ISmartAllocationOrderLog[]>([])
-    const [statusCodes, setStatusCodes] = useState({})
+    const [statusCodes, setStatusCodes] = useState<any>()
 
     const {t} = useTranslation(['smart-allocation','common'])
 
@@ -42,7 +42,7 @@ const SmartAllocationTradeLog = () => {
     const getOrderStatus = useCallback(
       () => {
         getStatusList(EnumEntityNames.order).then((res) => {
-          const {data} = res;
+          const {data}:{data:{name:string,value:number}[]} = res;
           if(MODE_DEBUG){
             console.log("getOrderStatus: data", data)
           }
