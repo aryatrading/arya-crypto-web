@@ -6,7 +6,10 @@ import { store } from "../../services/redux/store";
 import { overallExchangeName } from "../../utils/constants/dashboard";
 
 export const initStoreData = () => {
-    initExchangeStore();
+    const exchnageDataStatus = store?.getState()?.exchange?.status;
+    if (exchnageDataStatus !== StatusAsync.RESOLVED){
+        initExchangeStore();
+    }
 }
 
 async function initExchangeStore() {

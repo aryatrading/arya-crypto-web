@@ -9,6 +9,7 @@ import {
   setSelectedExchange,
 } from "../../services/redux/exchangeSlice";
 import ExchangeImage from "./exchange-image/exchange-image";
+import { setProvider } from "../../services/redux/swapSlice";
 
 export const ProviderDropDown: FC = () => {
   const dispatch = useDispatch();
@@ -47,7 +48,10 @@ export const ProviderDropDown: FC = () => {
         {exchanges?.map((elm) => {
           return (
             <DropdownMenu.Item
-              onClick={() => dispatch(setSelectedExchange(elm))}
+              onClick={() => {
+                dispatch(setProvider(elm.provider_id ?? 0));
+                dispatch(setSelectedExchange(elm));
+              }}
             >
               <Row className="gap-2">
                 <ExchangeImage
