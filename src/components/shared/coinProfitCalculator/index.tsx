@@ -118,29 +118,26 @@ export const CoinProfitCalculator = () => {
                     </Row>
                 </Row>
             </Col>
-            <Col className="border w-[300px] rounded-md border-grey-3 px-4 py-6 gap-4 self-start">
-                <Row className="gap-10">
+            <Col className="box-border grid grid-cols-2 flex-col gap-4 h-full md:border-l border-black-2 pl-4 py-2 self-start">
                     <Col>
                         <label className="text-base text-white font-bold">{t('totalInvestmentAmount')}</label>
-                        <Row className={"rounded-md items-center gap-1 h-[50px]"}>
                             <p className={clsx({ "text-green-1": profit >= 0, "text-red-1": profit < 0 }, "block text-lg text-green-1 font-bold")}>${investment !== '' ? parseFloat(investment).toFixed(2) : '0.00'}</p>
-                        </Row>
                     </Col>
                     <Col>
                         <label className="text-base text-white font-bold">{t('totalExitAmount')}</label>
-                        <Row className={"rounded-md items-center gap-1 h-[50px]"}>
                             <p className={clsx({ "text-green-1": profit >= 0, "text-red-1": profit < 0 }, "block text-lg text-green-1 font-bold")}>${totalExitAmount.toFixed(2)}</p>
-                        </Row>
-                    </Col>
-                </Row>
+                </Col>
+                <Col>
                 <label className="text-base text-white font-bold">{t('profit/loss')}</label>
-                <Row className={"h-1/5 max-w-[315px] rounded-md  items-center gap-1"}>
+                  <Row className="items-center gap-1">
                     {profit >= 0 ? <ChevronUp /> :
                         <ChevronDown />}
-                    <p className={clsx({ "text-green-1 ": profit >= 0, "text-red-1": profit < 0 }, "block text-lg text-green-1 font-bold")}>${profit.toFixed(2)} <span className={clsx({ "text-green-1 bg-green-2": profit >= 0, "text-red-1 bg-red-2": profit < 0 }, 'px-4 py-2')}>({totalProfitPercentage.toFixed(2)}%)</span></p>
-                </Row>
+                    <p className={clsx({ "text-green-1 ": profit >= 0, "text-red-1": profit < 0 }, "block text-lg text-green-1 font-bold")}>${profit.toFixed(2)} <span className={clsx({ "text-green-1": profit >= 0, "text-red-1": profit < 0 }, 'px-4 py-2')}>({totalProfitPercentage.toFixed(2)}%)</span></p>
+                    </Row>
+                </Col>
+                
+                </Col>
             </Col>
-        </Col>
     );
 };
 
