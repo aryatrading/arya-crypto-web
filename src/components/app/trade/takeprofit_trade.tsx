@@ -37,15 +37,13 @@ export const TakeprofitTrade: FC = () => {
         title="Price"
         value={trade.base_name ?? "USDT"}
         amount={values?.price ?? 0}
-        onchange={(e: string) => setValues({ ...values, price: parseInt(e) })}
+        onchange={(e: any) => setValues({ ...values, price: e })}
       />
       <TradeInput
         title="Quantity"
         value={trade.asset_name ?? "BTC"}
         amount={values.quantity}
-        onchange={(e: string) =>
-          setValues({ ...values, quantity: parseInt(e) })
-        }
+        onchange={(e: any) => setValues({ ...values, quantity: e })}
         header={available}
       />
       <div className="flex justify-center">
@@ -69,6 +67,7 @@ export const TakeprofitTrade: FC = () => {
       </Button>
       <p className="font-bold text-base">Take profits</p>
       <ProfitSet
+        content={`Sell {{qty}} ${trade.asset_name} at {{value}} USD`}
         profit={{ value: 3 }}
         symbol={trade.asset_name}
         quantity="3"

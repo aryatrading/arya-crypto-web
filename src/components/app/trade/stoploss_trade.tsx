@@ -40,6 +40,7 @@ export const StoplossTrade: FC = () => {
           return (
             <ProfitSet
               key={index}
+              content={`Sell at ${elm.value} USD`}
               profit={{ value: elm.value }}
               symbol={trade.asset_name}
               base="USD"

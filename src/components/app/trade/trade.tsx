@@ -8,6 +8,7 @@ import { EntryTrade } from "./entry_trade";
 import Button from "../../shared/buttons/button";
 import { StoplossTrade } from "./stoploss_trade";
 import { TakeprofitTrade } from "./takeprofit_trade";
+import { TrailingTrade } from "./trailing_trade";
 
 const Trade: FC = () => {
   const [activeTab, setActiveTab] = useState("entry");
@@ -41,25 +42,35 @@ const Trade: FC = () => {
     if (activeTab === "entry") return <EntryTrade />;
     if (activeTab === "stoploss") return <StoplossTrade />;
     if (activeTab === "takeprofit") return <TakeprofitTrade />;
+    if (activeTab === "trailing") return <TrailingTrade />;
   };
 
   return (
     <Col className="flex justify-start w-full gap-6">
       <ExchangeSwitcher hideExchangeStats={true} canSelectOverall={false} />
 
-      <TradingViewWidget height={500} />
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="lg:w-2/3">
+          <TradingViewWidget height={500} />
+        </div>
 
-      <Col className="bg-black-2  py-5 rounded-md gap-5 px-3 ">
-        <TimeseriesPicker
-          series={tradetabs}
-          active={activeTab}
-          onclick={(e: any) => setActiveTab(e.key)}
-        />
-        {renderTradeContent()}
-      </Col>
-      <Button className="bg-green-1 rounded-md py-3" onClick={() => {}}>
-        <p>Place order</p>
-      </Button>
+        <div>
+          <Col className="bg-black-2  py-5 rounded-md gap-5 px-3 ">
+            <TimeseriesPicker
+              series={tradetabs}
+              active={activeTab}
+              onclick={(e: any) => setActiveTab(e.key)}
+            />
+            {renderTradeContent()}
+          </Col>
+          <Button
+            className="bg-green-1 rounded-md py-3 mt-4  w-full"
+            onClick={() => {}}
+          >
+            <p>Place order</p>
+          </Button>
+        </div>
+      </div>
       <Tabs selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1">
         <TabList className="border-b-[1px] border-grey-3 mb-2">
           <Row className="gap-6">

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { ShadowButton } from "../../shared/buttons/shadow_button";
 import { Row } from "../../shared/layout/flex";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,10 +11,13 @@ import { Tab, TabList, Tabs } from "react-tabs";
 import { formatNumber } from "../../../utils/helpers/prices";
 import TradeInput from "../../shared/inputs/tradeInput";
 import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
+import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries";
+import { percentTabs } from "../../../utils/constants/profitsPercentage";
 
 export const EntryTrade: FC = () => {
   const dispatch = useDispatch();
   const _assetprice = useSelector(selectAssetLivePrice);
+  const [percent, setPercent] = useState("5");
   const trade = useSelector(getTrade);
 
   return (
@@ -85,6 +88,15 @@ export const EntryTrade: FC = () => {
         amount={trade?.entry_order?.quantity ?? 0.001}
         onchange={(e: string) => console.log(e)}
       />
+      <div className="flex justify-center">
+        <TimeseriesPicker
+          series={percentTabs}
+          active={percent}
+          onclick={(e: any) => {
+            setPercent(e.key);
+          }}
+        />
+      </div>
       <TradeInput
         title="Total"
         value={trade.base_name}
