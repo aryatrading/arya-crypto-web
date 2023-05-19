@@ -78,8 +78,8 @@ const AuthedSmartAllocation: FC = () => {
     }, [selectedExchange?.provider_id]);
 
     const initSmartAllocationHoldings = useCallback(() => {
-        if(!selectedExchange?.provider_id) {
-            if(MODE_DEBUG){
+        if (!selectedExchange?.provider_id) {
+            if (MODE_DEBUG) {
                 console.log('initSmartAllocationHolding: selectedExchange?.provider_id is false', selectedExchange?.provider_id)
             }
             return
@@ -185,6 +185,7 @@ const AuthedSmartAllocation: FC = () => {
         return (
             <PortfolioComposition portfolioAssets={smartAllocationHoldings.map(asset => {
                 return {
+                    symbol: asset.name ?? '',
                     name: (asset.name ?? ''),
                     weight: (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1)
                 };
@@ -229,7 +230,7 @@ const AuthedSmartAllocation: FC = () => {
                     <SmartAllocationAutomation />
                 </TabPanel>
                 <TabPanel>
-                    <SmartAllocationTradeLog/>
+                    <SmartAllocationTradeLog />
                 </TabPanel>
             </Tabs>
         )

@@ -2,12 +2,8 @@ import { FC, useMemo } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, ChartOptions, ChartData } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { Col, Row } from "../../layout/flex";
-import { colors, colorsHex } from "./doughnut";
-
-export type doughnutChartDataType = {
-    label: string,
-    value: number,
-}
+import { getCoinColor } from "../../../../utils/helpers/coinsColors";
+import { doughnutChartDataType } from "./doughnut";
 
 const CutoutDoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[] }> = ({ title, chartData }) => {
 
@@ -22,7 +18,8 @@ const CutoutDoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[
             chartData.forEach((data, index) => {
                 labels.push(data.label);
                 values.push(data.value);
-                backgroundColors.push(colorsHex[colors[index]]);
+                const backgroundColor = getCoinColor(data.coinSymbol, index);
+                backgroundColors.push(backgroundColor);
             })
 
             const data: ChartData<"doughnut", number[], string> = {

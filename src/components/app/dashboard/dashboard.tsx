@@ -29,6 +29,8 @@ import styles from "./dashboard.module.scss"
 import { PieChartIcon } from "../../svg/pieChartIcon";
 import { LineChartIcon } from "../../svg/lineChartIcon";
 import { useResponsive } from "../../../context/responsive.context";
+import { getCoinColor } from "../../../utils/helpers/coinsColors"
+import getMostCommonColor from "../../../common/hooks/useImageColor"
 
 
 const Dashboard: FC = () => {
@@ -105,7 +107,7 @@ const Dashboard: FC = () => {
     initPortfolioSnapshots();
     initPortfolioHoldings();
   }, [initPortfolioSnapshots, initPortfolioHoldings]);
-
+getMostCommonColor("https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663", "usdt")
 
   const portfolioDoughnutChart = useMemo(() => {
 
@@ -115,6 +117,7 @@ const Dashboard: FC = () => {
           <DoughnutChart
             maxWidth="min(100%, 300px)"
             chartData={portfolioHoldings.map(asset => ({
+              coinSymbol: asset.asset_details?.symbol??"",
               label: asset.name ?? "",
               value: (asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0),
             }))}
@@ -264,7 +267,7 @@ const Dashboard: FC = () => {
         </tr>
       )
     } else {
-      return portfolioHoldings.map(asset => {
+      return portfolioHoldings.map((asset, index) => {
         const isPriceChangePositive = (asset?.asset_details?.price_change_percentage_24h ?? 0) > 0;
         const signal = isPriceChangePositive ? '+' : '-';
 
@@ -272,6 +275,8 @@ const Dashboard: FC = () => {
         const formattedChangePrice = `${signal}$${formatNumber(Math.abs(asset?.asset_details?.price_change_24h ?? 0))}`;
 
         const assetPortfolioPercentage = asset.weight;
+
+        const coinColor = getCoinColor(asset.asset_details?.symbol ?? "", index);
 
 
         if (isTabletOrMobileScreen) {
@@ -311,8 +316,9 @@ const Dashboard: FC = () => {
                 <Row className="justify-between items-center w-[120px]">
                   <p>{percentageFormat(asset.weight ?? 0)}%</p>
                   <Row className="h-[5px] rounded-full w-[50px] bg-white">
-                    <Row className={`h-full rounded-full bg-blue-1`} style={{
-                      width: `${Math.ceil(assetPortfolioPercentage ?? 0)}%`
+                    <Row className={`h-full rounded-full`} style={{
+                      width: `${Math.ceil(assetPortfolioPercentage ?? 0)}%`,
+                      backgroundColor: coinColor,
                     }} />
                   </Row>
                 </Row>

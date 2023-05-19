@@ -2,7 +2,6 @@ import { FC, useCallback, useEffect, useMemo, useState } from "react"
 import { Col, Row } from "../../../shared/layout/flex"
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher"
 import Button from "../../../shared/buttons/button"
-import PortfolioComposition from "../../../shared/portfolio-composition/portfolio-composition"
 import { SaveSmartAllocationAssetType, SmartAllocationAssetType } from "../../../../types/smart-allocation.types"
 import { useSelector } from "react-redux"
 import { selectSelectedExchange } from "../../../../services/redux/exchangeSlice"
@@ -25,6 +24,7 @@ import { useRouter } from "next/router"
 import { EnumPredefinedSmartAllocationPortfolio, EnumSmartAllocationAssetStatus } from "../../../../utils/constants/smartAllocation"
 import { useResponsive } from "../../../../context/responsive.context"
 import { AssetType } from "../../../../types/asset"
+import CutoutDoughnutChart from "../../../shared/charts/doughnut/cutout-doughnut"
 
 
 
@@ -46,10 +46,9 @@ const EditSmartAllocation: FC = () => {
 
     const { isTabletOrMobileScreen } = useResponsive();
 
-
     const initSmartAllocationHoldings = useCallback(() => {
-        if(!selectedExchange?.provider_id) {
-            if(MODE_DEBUG){
+        if (!selectedExchange?.provider_id) {
+            if (MODE_DEBUG) {
                 console.log('initSmartAllocationHolding: selectedExchange?.provider_id is false', selectedExchange?.provider_id)
             }
             return
@@ -83,6 +82,7 @@ const EditSmartAllocation: FC = () => {
                     console.error("Error while initSmartAllocationHoldings (initSmartAllocationHoldings)", error)
             })
             .finally(() => {
+                setIsLoadingPredefinedAllocationHoldings(false);
                 setIsLoadingSmartAllocationHoldings(false);
             })
     }, [router?.query?.portfolio, selectedExchange?.provider_id]);
@@ -445,33 +445,30 @@ const EditSmartAllocation: FC = () => {
     } else {
         return (
             <Col className="grid grid-cols-12 gap-10 lg:gap-16 pb-20 items-start justify-start">
-                <Row className="w-full col-span-full gap-1 shrink-0 overflow-auto">
-                    <Link className="shrink-0" href="/smart-allocation">{t('common:smartAllocation')}</Link>
-                    <p>&gt;</p>
-                    <p className="shrink-0 text-blue-1 font-bold">{t('editYourSmartAllocation')}</p>
-                </Row>
-                <Col className="col-span-full gap-10">
-                    <Col className="justify-between gap-10 md:flex-row">
-                        <ExchangeSwitcher canSelectOverall={false} />
-                        {isTabletOrMobileScreen && < PortfolioComposition portfolioAssets={smartAllocationHoldings?.map(asset => {
-                            return {
-                                name: asset.name ?? "",
-                                weight: (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1)
-                            };
-                        })} />}
-                        <Row className="gap-5 items-end">
-                            <Button className="flex-1 md:flex-none h-11 w-36 rounded-md bg-blue-1" onClick={onSaveSmartAllocation} isLoading={isSavingSmartAllocation}>
+                <Col className="w-full md:flex-row justify-between col-span-full gap-5">
+                    <Col className="gap-10">
+                        <Row className="col-span-full gap-1 shrink-0 overflow-auto">
+                            <Link className="shrink-0" href="/smart-allocation">{t('common:smartAllocation')}</Link>
+                            <p>&gt;</p>
+                            <p className="shrink-0 text-blue-1 font-bold">{t('editYourSmartAllocation')}</p>
+                        </Row>
+                        <Col className="justify-between gap-5 sm:flex-row">
+                            <ExchangeSwitcher canSelectOverall={false} />
+                            <Button className="h-11 w-36 rounded-md bg-blue-1" onClick={onSaveSmartAllocation} isLoading={isSavingSmartAllocation}>
                                 {t('common:save')}
                             </Button>
-                            {isTabletOrMobileScreen && assetSelector}
-                        </Row>
+                        </Col>
                     </Col>
-                    {!isTabletOrMobileScreen && < PortfolioComposition portfolioAssets={smartAllocationHoldings?.map(asset => {
-                        return {
-                            name: asset.name ?? "",
-                            weight: (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1)
-                        };
-                    })} />}
+                    <Row className="flex-1 justify-around h-44 md:h-[300px] gap-5">
+                        <CutoutDoughnutChart
+                            title="Set weight"
+                            chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: asset.weight ?? 0, coinSymbol: asset.name ?? "" }))}
+                        />
+                        <CutoutDoughnutChart
+                            title="Current weight"
+                            chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" }))}
+                        />
+                    </Row>
                 </Col>
                 {table}
             </Col>

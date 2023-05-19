@@ -14,6 +14,8 @@ import PortfolioComposition from "../../../../../shared/portfolio-composition/po
 import { USDTSymbol } from "../../../../../../utils/constants/market";
 import AssetPnl from "../../../../../shared/containers/asset/assetPnl";
 import { useResponsive } from "../../../../../../context/responsive.context";
+import { getCoinColor } from "../../../../../../utils/helpers/coinsColors";
+import { chartDefaultColorsHex } from "../../../../../../utils/constants/customColors";
 
 const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
 
@@ -25,6 +27,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
         return (
             <PortfolioComposition portfolioAssets={smartAllocationHoldings.map(asset => {
                 return {
+                    symbol: asset.name ?? '',
                     name: (asset.name ?? ''),
                     weight: (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1)
                 };
@@ -66,6 +69,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
             if (asset.name !== USDTSymbol) {
                 const setWeight = asset.weight ?? 0;
                 const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
+                const coinColor = getCoinColor(asset.name??"", index);
 
                 if (isTabletOrMobileScreen) {
                     return (
@@ -120,9 +124,10 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                     </p>
                                     <Row className="w-16 rounded-full overflow-hidden bg-white flex-1" style={{ height: 10 }}>
                                         <Row
-                                            className={`bg-yellow-1 rounded-full`}
+                                            className={`rounded-full`}
                                             style={{
-                                                width: `${percentageFormat(setWeight * 100)}%`
+                                                width: `${percentageFormat(setWeight * 100)}%`,
+                                                backgroundColor: coinColor === "#ffffffff"? chartDefaultColorsHex[0]: coinColor,
                                             }}
                                         />
                                     </Row>
