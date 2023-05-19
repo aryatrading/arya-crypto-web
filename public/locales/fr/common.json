@@ -56,5 +56,6 @@
     "BROKER_ERROR" : "Erreur du courtier",
     "DATA_ERROR" : "Erreur de données",
     "english": "anglais",
-    "french": "français"
+    "french": "français",
+    "preview": "Avant-première"
 }

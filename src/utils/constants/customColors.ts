@@ -95,8 +95,10 @@ export const coinsColors: { [k: string]: string } = {
     "paxg": "#f9f9f9ff",
     "gusd": "#ffffffff",
     "ldo": "#ea837cff",
-    "trx" : "#c53027ff",
-    "usdt" : "#009494ff"
+    "trx": "#c53027ff",
+    "usdt": "#009494ff",
+    "ada": "#1f6cd4fe",
+    "wbtc": "#f4f4f4ff",
 }
 
 

@@ -17,7 +17,7 @@ const AssetRow = ({ icon, name, symbol, className }: IAssetRowProps) => {
             {!!icon &&
                 <Image
                     className="w-5 h-5 rounded-full md:w-7 md:h-7"
-                    src={icon}
+                    src={icon??""}
                     alt={`${name}-icon`}
                     width={28}
                     height={28}

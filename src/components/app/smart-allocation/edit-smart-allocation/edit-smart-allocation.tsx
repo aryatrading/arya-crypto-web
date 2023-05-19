@@ -446,27 +446,27 @@ const EditSmartAllocation: FC = () => {
         return (
             <Col className="grid grid-cols-12 gap-10 lg:gap-16 pb-20 items-start justify-start">
                 <Col className="w-full md:flex-row justify-between col-span-full gap-5">
-                    <Col className="gap-10">
+                    <Col className="gap-10 flex-1">
                         <Row className="col-span-full gap-1 shrink-0 overflow-auto">
                             <Link className="shrink-0" href="/smart-allocation">{t('common:smartAllocation')}</Link>
                             <p>&gt;</p>
                             <p className="shrink-0 text-blue-1 font-bold">{t('editYourSmartAllocation')}</p>
                         </Row>
-                        <Col className="justify-between gap-5 sm:flex-row">
+                        <Col className="justify-between gap-5">
                             <ExchangeSwitcher canSelectOverall={false} />
                             <Button className="h-11 w-36 rounded-md bg-blue-1" onClick={onSaveSmartAllocation} isLoading={isSavingSmartAllocation}>
-                                {t('common:save')}
+                                {t('common:preview')}
                             </Button>
                         </Col>
                     </Col>
-                    <Row className="flex-1 justify-around h-44 md:h-[300px] gap-5">
-                        <CutoutDoughnutChart
-                            title="Set weight"
-                            chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: asset.weight ?? 0, coinSymbol: asset.name ?? "" }))}
-                        />
+                    <Row className="flex-[2] justify-evenly h-44 md:h-[300px] gap-5">
                         <CutoutDoughnutChart
                             title="Current weight"
                             chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" }))}
+                        />
+                        <CutoutDoughnutChart
+                            title="Set weight"
+                            chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: asset.weight ?? 0, coinSymbol: asset.name ?? "" }))}
                         />
                     </Row>
                 </Col>

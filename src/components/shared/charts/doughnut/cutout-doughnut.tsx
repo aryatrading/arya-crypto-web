@@ -56,7 +56,7 @@ const CutoutDoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[
 
     if (chartData?.length) {
         return (
-            <Col className='justify-center items-center flex-1 relative gap-5 overflow-hidden aspect-square'>
+            <Col className='justify-center items-center relative gap-5 overflow-hidden aspect-square'>
                 <Row className='items-center justify-center font-bold inset-0 m-auto absolute'>
                     <p className='font-bold md:text-xl'>{title}</p>
                 </Row>
