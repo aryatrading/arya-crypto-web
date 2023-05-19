@@ -58,7 +58,7 @@ export default function ExitStrategyInput({ isPercentage,value,setValue }:IExitS
           type="number"
           value={value}
           onChange={handleChange}
-          className={twMerge('p-0 bg-transparent border-0 text-center text-blue-1',isPercentage?'w-6':'w-8')}
+          className={twMerge('p-0 bg-transparent border-0 text-center text-blue-1',isPercentage?'md:w-6':'')}
           max={isPercentage ? 100 : undefined}
           min={0}
           onKeyDown={onKeyDown}

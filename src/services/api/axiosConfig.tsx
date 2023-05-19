@@ -1,4 +1,8 @@
 import axios from "axios";
+import { getApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+
+const auth = getAuth(getApp())
 
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -14,8 +18,13 @@ axiosInstance.interceptors.request.use(
   async function (config) {
     if (typeof window !== 'undefined') {
       const localStorageToken = localStorage?.getItem("idToken");
-      if (localStorageToken) {
-        config.headers.authorization = `Bearer ${localStorageToken}`;
+      const idToken = await auth.currentUser?.getIdToken()
+      if (idToken) {
+        config.headers.Authorization = `Bearer ${idToken}`;
+        localStorage?.setItem("idToken", idToken);
+      }
+      else if (localStorageToken) {
+        config.headers.Authorization = `Bearer ${localStorageToken}`;
       }
     }
     return config;

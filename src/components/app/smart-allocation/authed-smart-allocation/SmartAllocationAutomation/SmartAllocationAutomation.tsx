@@ -6,7 +6,7 @@ const SmartAllocationAutomation = () => {
   return (
     <Col className='gap-7'>
         <SmartAllocationRebalancing/>
-        <hr className='border-grey-1 border'></hr>
+        <hr className='border-grey-5 border'></hr>
         <SmartAllocationExitStrategy/>
     </Col>
   )

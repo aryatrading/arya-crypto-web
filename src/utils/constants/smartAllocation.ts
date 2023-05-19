@@ -18,4 +18,4 @@ export enum EnumPredefinedSmartAllocationPortfolio {
     top5 = "top5",
     top10 = "top10",
     top15 = "top15",
-}
+} 
