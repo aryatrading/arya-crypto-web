@@ -9,6 +9,8 @@ import { ChevronDown } from "../../svg/chevron-down";
 import Button from "../buttons/button";
 import CloseIcon from "../../svg/Shared/CloseIcon";
 import { SearchAssetInput } from "../assetSearchInputWithDropdown";
+import AssetPnl from "../containers/asset/assetPnl";
+import { twMerge } from "tailwind-merge";
 
 const Input = ({ icon, placeholder, value, onClear, type = "number", ...rest }: any) => (
     <Row className="bg-grey-3 w-full h-[50px] rounded-md px-4 gap-2 relative">
@@ -102,7 +104,7 @@ export const CoinProfitCalculator = () => {
     }, []);
 
     return (
-        <Col className="gap-6 w-full items-center lg:flex-row ">
+        <Col className="gap-6 w-full items-center md:flex-row ">
             <Col className="gap-6 flex-1 w-full">
                 <Row className="w-full gap-6">
                     <Row className="w-full gap-6 md:flex-nowrap flex-wrap">
@@ -118,25 +120,26 @@ export const CoinProfitCalculator = () => {
                     </Row>
                 </Row>
             </Col>
-            <Col className="box-border grid grid-cols-2 flex-col gap-4 h-full md:border-l border-black-2 pl-4 py-2 self-start">
-                    <Col>
-                        <label className="text-base text-white font-bold">{t('totalInvestmentAmount')}</label>
-                            <p className={clsx({ "text-green-1": profit >= 0, "text-red-1": profit < 0 }, "block text-lg text-green-1 font-bold")}>${investment !== '' ? parseFloat(investment).toFixed(2) : '0.00'}</p>
+            <Row className="border gap-20 md:gap-3 rounded-md p-4 border-grey-1 text-sm font-semibold w-full  items-center md:w-auto md:flex-col sm:items-start">
+                <Col className="gap-4 sm:flex-row">
+                    <Col className="gap-2">
+                        <label>{t('totalInvestmentAmount')}</label>
+                        <p className={ profit < 0?"text-red-1":"text-green-1" }>${investment !== '' ? parseFloat(investment).toFixed(2) : '0.00'}</p>
                     </Col>
-                    <Col>
-                        <label className="text-base text-white font-bold">{t('totalExitAmount')}</label>
-                            <p className={clsx({ "text-green-1": profit >= 0, "text-red-1": profit < 0 }, "block text-lg text-green-1 font-bold")}>${totalExitAmount.toFixed(2)}</p>
+                    <Col className="gap-2">
+                        <label>{t('totalExitAmount')}</label>
+                        <p className={ profit < 0?"text-red-1":"text-green-1" }>${totalExitAmount.toFixed(2)}</p>
+                    </Col>
                 </Col>
-                <Col>
-                <label className="text-base text-white font-bold">{t('profit/loss')}</label>
-                  <Row className="items-center gap-1">
-                    {profit >= 0 ? <ChevronUp /> :
-                        <ChevronDown />}
-                    <p className={clsx({ "text-green-1 ": profit >= 0, "text-red-1": profit < 0 }, "block text-lg text-green-1 font-bold")}>${profit.toFixed(2)} <span className={clsx({ "text-green-1": profit >= 0, "text-red-1": profit < 0 }, 'px-4 py-2')}>({totalProfitPercentage.toFixed(2)}%)</span></p>
+                <Col className="gap-1 justify-start">
+                    <label>{t('profit/loss')}</label>
+                    <Row className="items-center gap-2 justify-start">
+                        <AssetPnl className={twMerge('px-0',profit < 0 ? " text-red-1" : " text-green-1")} value={Math.round(profit * 1e2)/1e2||0}/>
+                        <AssetPnl className={ totalProfitPercentage < 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"} value={Math.round(totalProfitPercentage * 1e2)/1e2||0}/>
                     </Row>
                 </Col>
                 
-                </Col>
+                </Row>
             </Col>
     );
 };
