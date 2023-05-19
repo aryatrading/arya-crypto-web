@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import TradeInput from "../../shared/inputs/tradeInput";
-import { getTrade } from "../../../services/redux/tradeSlice";
-import { useSelector } from "react-redux";
+import { addTakeProfit, getTrade } from "../../../services/redux/tradeSlice";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../../shared/buttons/button";
 import { ProfitSet } from "../../shared/containers/trade/profit_set";
 import { getAssetAvailable } from "../../../services/controllers/trade";
@@ -10,10 +10,11 @@ import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries"
 import { percentTabs } from "../../../utils/constants/profitsPercentage";
 
 export const TakeprofitTrade: FC = () => {
+  const dispatch = useDispatch();
   const trade = useSelector(getTrade);
   const selectedExchange = useSelector(selectSelectedExchange);
   const [values, setValues] = useState({
-    price: 0,
+    value: 0,
     quantity: 0,
   });
   const [available, setAvailable] = useState("");
@@ -30,14 +31,18 @@ export const TakeprofitTrade: FC = () => {
     })();
   }, [trade.symbol_name]);
 
+  const onAddTp = () => {
+    dispatch(addTakeProfit(values));
+  };
+
   return (
     <>
       <p className="font-bold text-base">Add take profit</p>
       <TradeInput
         title="Price"
         value={trade.base_name ?? "USDT"}
-        amount={values?.price ?? 0}
-        onchange={(e: any) => setValues({ ...values, price: e })}
+        amount={values?.value ?? 0}
+        onchange={(e: any) => setValues({ ...values, value: e })}
       />
       <TradeInput
         title="Quantity"
@@ -59,21 +64,31 @@ export const TakeprofitTrade: FC = () => {
           }}
         />
       </div>
-      <Button
-        className="bg-blue-3 rounded-md py-3"
-        onClick={() => console.log(".")}
-      >
+      <Button className="bg-blue-3 rounded-md py-3" onClick={() => onAddTp()}>
         <p>Add Take profit</p>
       </Button>
       <p className="font-bold text-base">Take profits</p>
-      <ProfitSet
+      {trade &&
+        trade?.take_profit?.map((elm: any, index: number) => {
+          return (
+            <ProfitSet
+              content={`Sell ${elm.quantity} ${trade.asset_name} at ${elm.value} USD`}
+              profit={{ value: 3 }}
+              symbol={trade.asset_name}
+              quantity="3"
+              base="USD"
+              action={() => console.log(",")}
+            />
+          );
+        })}
+      {/* <ProfitSet
         content={`Sell {{qty}} ${trade.asset_name} at {{value}} USD`}
         profit={{ value: 3 }}
         symbol={trade.asset_name}
         quantity="3"
         base="USD"
         action={() => console.log(",")}
-      />
+      /> */}
     </>
   );
 };

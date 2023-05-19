@@ -54,8 +54,9 @@ export const tradeSlice = createSlice({
     removeStoploss: (satte) => {
       satte.trade.stop_loss = [];
     },
-    addTakeProfit: (state, action: { payload: ProfitsType }) => {
-      // state.trade.take_profit = state.trade.take_profit?.push(action.payload);
+    addTakeProfit: (state, action: { payload: any }) => {
+      console.log(action.payload);
+      state.trade.take_profit = [action.payload];
     },
     clearTrade: (state) => {
       state.trade.symbol_name = "BTCUSDT";
@@ -74,6 +75,7 @@ export const {
   setValidations,
   addStoploss,
   removeStoploss,
+  addTakeProfit,
 } = tradeSlice.actions;
 
 export const getTrade = (state: AppState) => state.trade.trade;
