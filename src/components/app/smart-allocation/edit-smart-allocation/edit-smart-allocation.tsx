@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from "react"
 import { Col, Row } from "../../../shared/layout/flex"
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher"
 import Button from "../../../shared/buttons/button"
+import PortfolioComposition from "../../../shared/portfolio-composition/portfolio-composition"
 import { SaveSmartAllocationAssetType, SmartAllocationAssetType } from "../../../../types/smart-allocation.types"
 import { useSelector } from "react-redux"
 import { selectSelectedExchange } from "../../../../services/redux/exchangeSlice"
@@ -22,8 +23,6 @@ import { getPredefinedPortfolioHoldings, getSmartAllocation, updateSmartAllocati
 import { toast } from "react-toastify"
 import { useRouter } from "next/router"
 import { EnumPredefinedSmartAllocationPortfolio, EnumSmartAllocationAssetStatus } from "../../../../utils/constants/smartAllocation"
-import SEO from "../../../seo"
-import CutoutDoughnutChart from "../../../shared/charts/doughnut/cutout-doughnut"
 
 
 
@@ -45,8 +44,8 @@ const EditSmartAllocation: FC = () => {
 
 
     const initSmartAllocationHoldings = useCallback(() => {
-        if (!selectedExchange?.provider_id) {
-            if (MODE_DEBUG) {
+        if(!selectedExchange?.provider_id) {
+            if(MODE_DEBUG){
                 console.log('initSmartAllocationHolding: selectedExchange?.provider_id is false', selectedExchange?.provider_id)
             }
             return
@@ -91,11 +90,11 @@ const EditSmartAllocation: FC = () => {
 
     const distributeWeightsEqually = useCallback(() => {
         setSmartAllocationHoldings((oldState) => {
-            const removedItemsCount = oldState.filter(holding => holding.removed).length;
+            const removedItemsCount = oldState.filter(holding=>holding.removed).length;
             return oldState.map((holding) => {
-                if (!holding.removed) {
+                if(!holding.removed){
                     return { ...holding, weight: 1 / (oldState.length - removedItemsCount) };
-                } else {
+                }else {
                     return holding;
                 }
             })
@@ -330,47 +329,30 @@ const EditSmartAllocation: FC = () => {
                 toast.error(t('makeSureToAllocate100%OfYourPortfolio'));
             }
         }
-    }, [router, selectedExchange?.provider_id, smartAllocationAlreadyExists, smartAllocationHoldings, t]);
-
-
+    }, [router, selectedExchange?.provider_id, smartAllocationAlreadyExists, smartAllocationHoldings, t])
 
     return (
         <Col className="grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start gap-4">
-            <SEO title="Edit smart allocation" description="" />
-            {/* {(isLoadingSmartAllocationHoldings || isLoadingPredefinedAllocationHoldings) && <PageLoader />} */}
-            <Col className="w-full md:flex-row justify-between col-span-full gap-5">
-                <Col className="">
-                    <Row className="col-span-full gap-1 shrink-0 overflow-auto">
-                        <Link className="shrink-0" href="/smart-allocation">{t('common:smartAllocation')}</Link>
-                        <p>&gt;</p>
-                        <p className="shrink-0 text-blue-1 font-bold">{t('editYourSmartAllocation')}</p>
-                    </Row>
-                    <Col className="justify-between gap-5 sm:flex-row">
-                        <ExchangeSwitcher canSelectOverall={false} />
-                        <Button className="h-11 w-36 rounded-md bg-blue-1" onClick={onSaveSmartAllocation} isLoading={isSavingSmartAllocation}>
-                            {t('common:save')}
-                        </Button>
-                    </Col>
+            {(isLoadingSmartAllocationHoldings || isLoadingPredefinedAllocationHoldings) && <PageLoader />}
+            <Row className="w-full col-span-full gap-1 shrink-0 overflow-auto">
+                <Link className="shrink-0" href="/smart-allocation">{t('common:smartAllocation')}</Link>
+                <p>&gt;</p>
+                <p className="shrink-0 text-blue-1 font-bold">{t('editYourSmartAllocation')}</p>
+            </Row>
+            <Col className="col-span-full gap-5">
+                <Col className="justify-between gap-5 sm:flex-row">
+                    <ExchangeSwitcher canSelectOverall={false}/>
+                    <Button className="h-11 w-36 rounded-md bg-blue-1" onClick={onSaveSmartAllocation} isLoading={isSavingSmartAllocation}>
+                        {t('common:save')}
+                    </Button>
                 </Col>
-                <Row className="flex-1 justify-around h-44 md:h-[300px] gap-5">
-                    <CutoutDoughnutChart
-                        title="Set weight"
-                        chartData={[
-                            { label: "BTC", value: 0.5 },
-                            { label: "BTC", value: 0.25 },
-                            { label: "BTC", value: 0.20 },
-                            { label: "BTC", value: 0.1 },
-                        ]}
-                    />
-                    <CutoutDoughnutChart
-                        title="Current weight"
-                        chartData={[
-                            { label: "BTC", value: 0.25 },
-                            { label: "BTC", value: 0.25 },
-                            { label: "BTC", value: 0.25 },
-                            { label: "BTC", value: 0.25 },
-                        ]}
-                    />
+                <Row className="justify-between">
+                    <PortfolioComposition portfolioAssets={smartAllocationHoldings?.map(asset => {
+                        return {
+                            name: asset.name ?? "",
+                            weight: (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1)
+                        };
+                    })} />
                 </Row>
             </Col>
             {table}
