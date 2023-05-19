@@ -1,7 +1,8 @@
 .audio-display-wrapper {
     height: 45px;
-    padding: 0 7px;
     gap: 8px;
+    width: 100%;
+    overflow: hidden;
 
 
     .record-btn {

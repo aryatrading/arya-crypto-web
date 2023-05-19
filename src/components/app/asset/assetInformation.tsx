@@ -54,7 +54,7 @@ const AssetInformationTab: FC = () => {
   };
 
   return (
-    <Row className="flex-1 flex">
+    <Col className="lg:flex-row w-full ">
       <Col className="flex-1">
         <Row className="justify-between items-center">
           <h2 className="font-medium text-xl">
@@ -90,15 +90,17 @@ const AssetInformationTab: FC = () => {
           {asset?.id && <CoinConverter preDefined staticCoin={asset} />}
         </Col>
       </Col>
-      <Col className="flex-[0.5] ps-6 gap-5">
-        <p className="text-base font-semibold">
-          {t("trade_title")} {asset?.name ?? ""}
-        </p>
-        <AssetTrade />
+      <Col className="flex-[0.5] ps-6 gap-10">
+        <Col className="gap-5">
+          <p className="text-base font-semibold">
+            {t("trade_title")} {asset?.name ?? ""}
+          </p>
+          <AssetTrade />
+        </Col>
         {/* Community widget */}
         {posts.length > 0 && (
-          <>
-            <h3 className="font-extrabold text-white header-label pb-6">
+          <Col className="gap-5">
+            <h3 className="font-extrabold text-white header-label pb-2">
               {t("communityTitle", { coin: asset.name })}
             </h3>
             <Col className="w-full min-h-[300px] bg-grey-6 rounded-md px-10 py-5">
@@ -112,13 +114,13 @@ const AssetInformationTab: FC = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                See More +
+                {t('seeMore')} +
               </a>
             </Col>
-          </>
+          </Col>
         )}
       </Col>
-    </Row>
+    </Col>
   );
 };
 
