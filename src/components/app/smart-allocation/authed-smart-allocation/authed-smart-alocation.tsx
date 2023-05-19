@@ -23,6 +23,7 @@ import { SelectSmartAllocationPortfolioIcon } from "../../../svg/smart-allocatio
 import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/no-exchange-connected-page";
 import { EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
 import SmartAllocationAutomation from "./SmartAllocationAutomation/SmartAllocationAutomation";
+import SmartAllocationTradeLog from "./smart-allocation-tabs/SmartAllocationTradeLog/SmartAllocationTradeLog";
 import PortfolioComposition from "../../../shared/portfolio-composition/portfolio-composition";
 import { useResponsive } from "../../../../context/responsive.context";
 
@@ -77,9 +78,12 @@ const AuthedSmartAllocation: FC = () => {
     }, [selectedExchange?.provider_id]);
 
     const initSmartAllocationHoldings = useCallback(() => {
-        if (!selectedExchange?.provider_id) {
-            return;
-        }
+        if(!selectedExchange?.provider_id) {
+            if(MODE_DEBUG){
+                console.log('initSmartAllocationHolding: selectedExchange?.provider_id is false', selectedExchange?.provider_id)
+            }
+            return
+        };
         setIsLoadingSmartAllocationHoldings(true);
         getSmartAllocation(selectedExchange?.provider_id)
             .then((res) => {
@@ -225,7 +229,7 @@ const AuthedSmartAllocation: FC = () => {
                     <SmartAllocationAutomation />
                 </TabPanel>
                 <TabPanel>
-
+                    <SmartAllocationTradeLog/>
                 </TabPanel>
             </Tabs>
         )
