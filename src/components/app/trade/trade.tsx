@@ -3,15 +3,21 @@ import { Col, Row } from "../../shared/layout/flex";
 import ExchangeSwitcher from "../../shared/exchange-switcher/exchange-switcher";
 import TradingViewWidget from "../../shared/charts/tradingView/tradingView";
 import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries";
-import { Tab, TabList, Tabs } from "react-tabs";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { EntryTrade } from "./entry_trade";
 import Button from "../../shared/buttons/button";
 import { StoplossTrade } from "./stoploss_trade";
 import { TakeprofitTrade } from "./takeprofit_trade";
 import { TrailingTrade } from "./trailing_trade";
+import { useSelector } from "react-redux";
+import { getTrade, getValidations } from "../../../services/redux/tradeSlice";
+import { AssetTradeDropdown } from "../../shared/assetDropdown/assetTradeDropdown";
+import { Placeholder } from "../../shared/containers/placeholders";
 
 const Trade: FC = () => {
   const [activeTab, setActiveTab] = useState("entry");
+  const trade = useSelector(getTrade);
+  const validations = useSelector(getValidations);
 
   const tradetabs = useMemo(() => {
     return [
@@ -45,9 +51,15 @@ const Trade: FC = () => {
     if (activeTab === "trailing") return <TrailingTrade />;
   };
 
+  const onCreateTrade = () => {
+    // console.log(validations);
+    console.log(trade);
+  };
+
   return (
     <Col className="flex justify-start w-full gap-6">
       <ExchangeSwitcher hideExchangeStats={true} canSelectOverall={false} />
+      <AssetTradeDropdown />
 
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="lg:w-2/3">
@@ -65,7 +77,9 @@ const Trade: FC = () => {
           </Col>
           <Button
             className="bg-green-1 rounded-md py-3 mt-4  w-full"
-            onClick={() => {}}
+            onClick={() => {
+              onCreateTrade();
+            }}
           >
             <p>Place order</p>
           </Button>
@@ -82,6 +96,12 @@ const Trade: FC = () => {
             </Tab>
           </Row>
         </TabList>
+        <TabPanel>
+          <Placeholder content="You don't have any open orders" />
+        </TabPanel>
+        <TabPanel>
+          <Placeholder content="You don't have any order history" />
+        </TabPanel>
       </Tabs>
     </Col>
   );

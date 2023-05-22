@@ -6,14 +6,17 @@ import Trade from "../../components/app/trade/trade";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addTradables,
   clearTrade,
   setOrderType,
+  setPairs,
   setTrade,
   setValidations,
 } from "../../services/redux/tradeSlice";
 import {
   getAssetValidation,
   getAssetAvailable,
+  getAvailablePairs,
 } from "../../services/controllers/trade";
 import { selectSelectedExchange } from "../../services/redux/exchangeSlice";
 import { TradeValidations } from "../../types/trade";
@@ -42,6 +45,14 @@ const TradePage = () => {
         `${symbol ?? "btc"}USDT`,
         selectedExchange?.provider_id ?? 1
       );
+
+      let _pairs = await getAvailablePairs(
+        symbol ?? "btc",
+        selectedExchange?.provider_id ?? 1
+      );
+
+      dispatch(addTradables({ assets: _pairs._tradables }));
+      dispatch(setPairs({ pairs: _pairs._pairs }));
 
       dispatch(setValidations(_validations));
       dispatch(setOrderType({ orderType: "MARKET" }));

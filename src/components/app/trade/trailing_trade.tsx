@@ -5,6 +5,7 @@ import { TrailingPicker } from "../../shared/trailingPicker";
 import TradeInput from "../../shared/inputs/tradeInput";
 import { Button } from "../../shared/buttons/button";
 import { ProfitSet } from "../../shared/containers/trade/profit_set";
+import { PremiumBanner } from "../../shared/containers/premiumBanner";
 
 export const TrailingTrade: FC = () => {
   const trade = useSelector(getTrade);
@@ -15,6 +16,7 @@ export const TrailingTrade: FC = () => {
 
   return (
     <>
+      <PremiumBanner />
       <p className="font-bold text-base">Add Trailing</p>
       <TrailingPicker
         type={values.type}

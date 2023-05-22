@@ -28,3 +28,22 @@ export const getAssetValidation = async (symbol: string, provider: number) => {
 
   return data;
 };
+
+export const getAvailablePairs = async (symbol: any, provider: number) => {
+  const { data } = await axiosInstance.get(
+    `trade-engine/symbols/?provider=${provider}`
+  );
+
+  let _tradables: string[] = [];
+  let _pairs: string[] = [];
+
+  for (var i = 0; i < data.length; i++) {
+    _tradables.push(data[i].name);
+
+    if (data[i].name.startsWith(symbol.toUpperCase())) {
+      _pairs.push(data[i].name.split(symbol.toUpperCase())[1]);
+    }
+  }
+
+  return { _tradables, _pairs };
+};

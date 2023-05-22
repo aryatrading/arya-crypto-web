@@ -21,6 +21,7 @@ export const TimeseriesPicker: FC<TimeseriesProps> = ({
             key={index}
             title={elm.title}
             onClick={() => onclick(elm)}
+            showBadge={index % 2 === 0}
             border={
               index === 0
                 ? "rounded-l-md"

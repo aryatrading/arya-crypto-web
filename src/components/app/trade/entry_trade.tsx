@@ -5,7 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   getTrade,
   setOrderType,
+  setQuantity,
   setSide,
+  setTriggerPrice,
 } from "../../../services/redux/tradeSlice";
 import { Tab, TabList, Tabs } from "react-tabs";
 import { formatNumber } from "../../../utils/helpers/prices";
@@ -80,13 +82,17 @@ export const EntryTrade: FC = () => {
             ? _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ?? 0
             : trade?.entry_order?.trigger_price
         }
-        onchange={(e: string) => console.log(e)}
+        onchange={(e: string) =>
+          dispatch(setTriggerPrice({ price: parseInt(e) }))
+        }
       />
       <TradeInput
         title="Units"
         value={trade.asset_name}
-        amount={trade?.entry_order?.quantity ?? 0.001}
-        onchange={(e: string) => console.log(e)}
+        amount={trade?.entry_order?.quantity}
+        onchange={(e: string) =>
+          dispatch(setQuantity({ quantity: parseInt(e) }))
+        }
       />
       <div className="flex justify-center">
         <TimeseriesPicker
@@ -94,6 +100,9 @@ export const EntryTrade: FC = () => {
           active={percent}
           onclick={(e: any) => {
             setPercent(e.key);
+            dispatch(
+              setQuantity({ quantity: trade.available_quantity / e.key })
+            );
           }}
         />
       </div>

@@ -9,6 +9,7 @@ import {
 import Button from "../../shared/buttons/button";
 import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
 import { ProfitSet } from "../../shared/containers/trade/profit_set";
+import { PremiumBanner } from "../../shared/containers/premiumBanner";
 
 export const StoplossTrade: FC = () => {
   const trade = useSelector(getTrade);
@@ -20,6 +21,7 @@ export const StoplossTrade: FC = () => {
 
   return (
     <>
+      <PremiumBanner />
       <p className="font-bold text-base">Add stop loss</p>
       <TradeInput
         title="Price"
@@ -34,7 +36,10 @@ export const StoplossTrade: FC = () => {
       >
         <p>Add Stoploss</p>
       </Button>
-      <p className="font-bold text-base">Stop loss</p>
+      {trade && trade?.stop_loss?.length ? (
+        <p className="font-bold text-base">Stop loss</p>
+      ) : null}
+
       {trade &&
         trade?.stop_loss?.map((elm: any, index: number) => {
           return (

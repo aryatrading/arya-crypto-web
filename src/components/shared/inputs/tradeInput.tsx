@@ -5,7 +5,7 @@ interface InputProps {
   title: string;
   value: string;
   disabled?: boolean;
-  amount: number;
+  amount?: number | null;
   header?: string;
   onchange: Function;
 }
@@ -31,7 +31,7 @@ const TradeInput: FC<InputProps> = ({
             disabled={disabled}
             className="bg-transparent text-right font-bold focus:border-black-1 focus:outline-none focus:border-transparent focus:ring-0 border-transparent"
             maxLength={10}
-            value={amount ?? "0"}
+            value={amount ?? ""}
             onChange={(e) => onchange(e.target.value ?? 0)}
           />
           <p className="font-bold text-grey-1">{value}</p>
