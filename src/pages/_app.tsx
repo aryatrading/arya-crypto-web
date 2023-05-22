@@ -6,6 +6,7 @@ import { ReactNode, ReactElement, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "next-themes";
 import { initializeApp } from "firebase/app";
+import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,6 +21,7 @@ import { FAVORITES_LIST } from "../utils/constants/config";
 import { initStoreData } from "../common/hooks/initStore";
 import "../services/api/socketConfig";
 import ResponsiveProvider from "../context/responsive.context";
+import { getUserLanguage } from "../services/controllers/utils";
 
 const poppins = Poppins({
   variable: "--poppins-font",
@@ -44,8 +46,17 @@ try {
 }
 
 function App({ Component, ...rest }: AppPropsWithLayout) {
+  const { pathname, push, asPath, query } = useRouter();
   useEffect(() => {
     const localStorageToken = localStorage?.getItem("idToken");
+    const lang = window.localStorage.getItem('language');
+    if (lang == null) {
+      getUserLanguage().then(({ data }) => {
+        push({ pathname, query }, asPath, { locale: data.language })
+      });
+    } else {
+      push({ pathname, query }, asPath, { locale: lang })
+    }
 
     // Create the inital favorites list in localstorage
     localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
