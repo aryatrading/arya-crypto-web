@@ -15,8 +15,8 @@ import { useSelector } from "react-redux";
 import { NotificationType } from "../../types/notifications";
 import LoadingSpinner from "../../components/shared/loading-spinner/loading-spinner";
 import { EmptyIcon } from "../../components/svg/emptyNotification";
+import { notificationIcon, titleColor } from "../../utils/notifications";
 
-import notificationIcon, { titleColor } from "./utils";
 
 const NotificationPage = () => {
     const { t } = useTranslation(['notification']);

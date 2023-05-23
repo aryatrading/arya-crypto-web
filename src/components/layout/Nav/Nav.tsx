@@ -26,7 +26,7 @@ import { SearchAssetInput } from "../../shared/assetSearchInputWithDropdown";
 import { useResponsive } from "../../../context/responsive.context";
 import { saveUserLanguage } from "../../../services/controllers/utils";
 import { NotificationType } from "../../../types/notifications";
-import notificationIcon, { titleColor } from "../../../pages/notifications/utils";
+import { notificationIcon, titleColor } from "../../../utils/notifications";
 
 import NavLink from "./NavLink/NavLink";
 

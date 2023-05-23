@@ -1,6 +1,6 @@
 import { Cog6ToothIcon } from "@heroicons/react/24/solid";
-import ExchangeImage from "../../components/shared/exchange-image/exchange-image";
-import { PortfolioDefault } from "../../components/svg/navbar/portfolioIcon";
+import ExchangeImage from "../components/shared/exchange-image/exchange-image";
+import { PortfolioDefault } from "../components/svg/navbar/portfolioIcon";
 
 export const titleColor = (type: string | undefined) => {
     switch (type) {
@@ -18,7 +18,7 @@ export const titleColor = (type: string | undefined) => {
     }
 }
 
-const notificationIcon = (type: string, id?: number) => {
+export const notificationIcon = (type: string, id?: number) => {
     switch (type) {
         case "BUY_ORDER":
         case "SELL_ORDER":
@@ -34,5 +34,3 @@ const notificationIcon = (type: string, id?: number) => {
             return <PortfolioDefault className="stroke-white w-7 h-7" color="#0E1421" fill="white" />;
     }
 }
-
-export default notificationIcon;
