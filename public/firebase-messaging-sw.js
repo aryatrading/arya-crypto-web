@@ -23,6 +23,7 @@ messaging.onBackgroundMessage(function (payload) {
   const notificationOptions = {
     body: payload.notification.body,
   };
+  return new Notification(notificationTitle, notificationOptions);
   return self.registration.showNotification(
     notificationTitle,
     notificationOptions
