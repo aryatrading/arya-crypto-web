@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
+import { getMessaging, onMessage } from "firebase/messaging";
 
 import { firebaseCloudMessaging } from "../../../services/firebase/notifications/pushNotification.service";
-import { getMessaging, onMessage } from "firebase/messaging";
 import { getApp } from "firebase/app";
 
 function PushNotificationLayout({ children }: any) {
@@ -20,15 +20,14 @@ function PushNotificationLayout({ children }: any) {
         }
     }
 
-
     useEffect(() => {
         setToken();
 
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.addEventListener("message", (event) => {
-                showNotification(event.data);
-            });
-        }
+        // if ("serviceWorker" in navigator) {
+        //     navigator.serviceWorker.addEventListener("message", (event) => {
+        //         showNotification(event.data);
+        //     });
+        // }
         // Calls the getMessage() function if the token is there
         async function setToken() {
             try {
