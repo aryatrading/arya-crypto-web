@@ -13,7 +13,7 @@ function PushNotificationLayout({ children }: any) {
         }
         var icon = "https://uploads-ssl.webflow.com/62133fadfe3e62071a2d063e/6214aed8ff94c926b744afc9_Group%2012856.png"
 
-        var notification = new Notification(data.notification.title, { body: data.notification.body, icon });
+        var notification = new Notification('data.notification.title', { body: 'data.notification.body', icon });
         notification.onclick = () => {
             notification.close();
             window.parent.focus();
@@ -25,8 +25,8 @@ function PushNotificationLayout({ children }: any) {
 
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.addEventListener("firebase-messaging-sw.js", (event) => {
-                console.log({ event });
-                // showNotification(event.data);
+                alert(event);
+                showNotification('');
             });
         }
         // Calls the getMessage() function if the token is there
