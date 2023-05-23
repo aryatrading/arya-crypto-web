@@ -23,6 +23,7 @@ import "../services/api/socketConfig";
 import ResponsiveProvider from "../context/responsive.context";
 import { getUserLanguage } from "../services/controllers/utils";
 import { getNotifications } from "../services/controllers/notifications";
+import PushNotificationLayout from "../components/layout/Notifications";
 
 const poppins = Poppins({
   variable: "--poppins-font",
@@ -85,9 +86,11 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
       <ThemeProvider attribute="class">
         <AuthModalProvider>
           <ResponsiveProvider>
-            <main className={poppins.className}>
-              <Component {...props.pageProps} />
-            </main>
+            <PushNotificationLayout>
+              <main className={poppins.className}>
+                <Component {...props.pageProps} />
+              </main>
+            </PushNotificationLayout>
           </ResponsiveProvider>
         </AuthModalProvider>
         <ToastContainer />

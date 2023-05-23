@@ -9,3 +9,10 @@ export const getNotifications = async (offset: number, limit: number, order: 'as
 
     store.dispatch(setNotifications(data));
 };
+
+export const updateFCMToken = (token: string) => {
+    return axiosInstance.post('/fcm/', {
+        fcm_token: token,
+        platform_type: "WEB"
+    });
+};
