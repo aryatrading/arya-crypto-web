@@ -16,6 +16,7 @@ import { NotificationType } from "../../types/notifications";
 import LoadingSpinner from "../../components/shared/loading-spinner/loading-spinner";
 
 import { notificationIcon, titleColor } from "./utils";
+import { EmptyIcon } from "../../components/svg/emptyNotification";
 
 const NotificationPage = () => {
     const { t } = useTranslation(['notification']);
@@ -33,19 +34,20 @@ const NotificationPage = () => {
 
     return (
         <Layout>
-            <Col className="w-full gap-4 md:w-[55%] bg-black-2 p-6 min-h-[200px]">
+            <Col className="w-full gap-4 md:w-[55%] p-6 min-h-[300px] bg-black-1 lg:bg-black-2">
                 <h3 className="font-bold text-white header-label mb-4 tracking-[2px]">{t('title')}</h3>
 
                 {isLoading ?
                     <LoadingSpinner />
-                    : notifications.length < 0 ?
-                        <Col className="items-center mt-8">
-                            <p className="font-bold text-lg text-grey-7">{t('emptyList')}</p>
+                    : notifications.length <= 0 ?
+                        <Col className="items-center mt-14 gap-6">
+                            <EmptyIcon />
+                            <p className="font-bold text-lg text-grey-1">{t('emptyList')}</p>
                         </Col>
                         : notifications.map((notification: NotificationType, index: number, arr: NotificationType[]) => {
                             const isLastItem = index === arr.length - 1;
                             return (
-                                <Col key={index} >
+                                <Col key={index}>
                                     <Row className={clsx({ "bg-grey-3 rounded-md": notification?.seen === false, "bg-transparent": notification?.seen }, "gap-6 px-4 py-2")}>
                                         <Col className="mt-2">
                                             {notificationIcon(notification.notification_type || '', notification.provider_id)}
