@@ -28,6 +28,7 @@ import CutoutDoughnutChart from "../../../shared/charts/doughnut/cutout-doughnut
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
 import SmartAllocationRebalancing from "../authed-smart-allocation/SmartAllocationAutomation/SmartAllocationRebalancing/SmartAllocationRebalancing"
 import SmartAllocationExitStrategy from "../authed-smart-allocation/SmartAllocationAutomation/SmartAllocationExitStrategy/SmartAllocationExitStrategy"
+import { getCoinColor } from "../../../../utils/helpers/coinsColors"
 
 
 const EditSmartAllocation: FC = () => {
@@ -196,12 +197,14 @@ const EditSmartAllocation: FC = () => {
                 </tr>
             )
         } else {
-            return filteredSmartAllocationHoldings.map((asset) => {
+            return filteredSmartAllocationHoldings.map((asset, index) => {
 
                 const setWeight = asset.weight ?? 0;
                 const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
 
                 const assetEvaluation = smartAllocationTotalEvaluation * setWeight;
+
+                const coinColor = getCoinColor(asset.name??"", index);
 
                 if (isTabletOrMobileScreen) {
                     return (
@@ -223,7 +226,7 @@ const EditSmartAllocation: FC = () => {
                                         onValueChange={(value) => onSetWeightChange(value[0], asset)}
                                     >
                                         <Slider.Track className="flex-grow flex-1 bg-[#D9D9D9] rounded-full h-3">
-                                            <Slider.Range className="absolute h-full bg-yellow-1 rounded-full" />
+                                            <Slider.Range className="absolute h-full rounded-full" style={{backgroundColor: coinColor}}/>
                                         </Slider.Track>
                                         <Slider.Thumb className="block w-6 h-6 bg-white rounded-full shadow-lg shadow-black-1 hover:bg-yellow-400 focus:outline-none" />
                                     </Slider.Root>
@@ -285,7 +288,7 @@ const EditSmartAllocation: FC = () => {
                                         onValueChange={(value) => onSetWeightChange(value[0], asset)}
                                     >
                                         <Slider.Track className="flex-grow flex-1 bg-[#D9D9D9] rounded-full h-3">
-                                            <Slider.Range className="absolute h-full bg-yellow-1 rounded-full" />
+                                            <Slider.Range className="absolute h-full rounded-full" style={{backgroundColor: coinColor}}/>
                                         </Slider.Track>
                                         <Slider.Thumb className="block w-6 h-6 bg-white rounded-full shadow-lg shadow-black-1 hover:bg-yellow-400 focus:outline-none" />
                                     </Slider.Root>
