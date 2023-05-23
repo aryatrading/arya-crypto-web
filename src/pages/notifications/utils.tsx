@@ -18,7 +18,7 @@ export const titleColor = (type: string | undefined) => {
     }
 }
 
-export const notificationIcon = (type: string, id?: number) => {
+const notificationIcon = (type: string, id?: number) => {
     switch (type) {
         case "BUY_ORDER":
         case "SELL_ORDER":
@@ -33,5 +33,6 @@ export const notificationIcon = (type: string, id?: number) => {
         case "EXIT_STRATEGY_EXECUTED":
             return <PortfolioDefault className="stroke-white w-7 h-7" color="#0E1421" fill="white" />;
     }
-
 }
+
+export default notificationIcon;
