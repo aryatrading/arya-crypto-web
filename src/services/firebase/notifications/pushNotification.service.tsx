@@ -18,6 +18,8 @@ const firebaseCloudMessaging = {
                 // Get new token from Firebase
                 const fcm_token = await getToken(getMessaging(getApp()));
 
+                alert(fcm_token);
+
                 // Set token in our local storage
                 if (fcm_token) {
                     window.localStorage.setItem("fcm_token", fcm_token);
