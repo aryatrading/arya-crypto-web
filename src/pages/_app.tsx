@@ -22,6 +22,7 @@ import { initStoreData } from "../common/hooks/initStore";
 import "../services/api/socketConfig";
 import ResponsiveProvider from "../context/responsive.context";
 import { getUserLanguage } from "../services/controllers/utils";
+import { getNotifications } from "../services/controllers/notifications";
 
 const poppins = Poppins({
   variable: "--poppins-font",
@@ -57,6 +58,8 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
     } else {
       push({ pathname, query }, asPath, { locale: lang })
     }
+
+    getNotifications(0, 5, 'asc');
 
     // Create the inital favorites list in localstorage
     localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
