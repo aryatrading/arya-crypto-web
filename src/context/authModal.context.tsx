@@ -54,9 +54,8 @@ const AuthModalProvider: FC<any> = (props: any) => {
             <Col className="gap-4 min-h-[550px]">
               <Button
                 className="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white me-8"
-                data-modal-hide="staticModal"
                 onClick={() => modalTrigger.hide()}>
-                  <CloseIcon className='stroke-current text-[#89939F] w-3 h-3' />
+                <CloseIcon className='stroke-current text-[#89939F] w-3 h-3' />
               </Button>
               {visibleSection === "login" ? (
                 <Login changeSection={setVisibleSection} />
