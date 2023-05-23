@@ -24,11 +24,11 @@ function PushNotificationLayout({ children }: any) {
     useEffect(() => {
         setToken();
 
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.addEventListener("message", (event) => {
-                showNotification(event.data);
-            });
-        }
+        // if ("serviceWorker" in navigator) {
+        //     navigator.serviceWorker.addEventListener("message", (event) => {
+        //         showNotification(event.data);
+        //     });
+        // }
         // Calls the getMessage() function if the token is there
         async function setToken() {
             try {
