@@ -7,6 +7,7 @@ import exchange from "./exchangeSlice";
 import assetReducer from "./assetSlice";
 import swapReducer from "./swapSlice";
 import posts from "./postsSlice";
+import notifications from "./notificationsSlice";
 
 import { MODE_DEBUG } from "../../utils/constants/config";
 
@@ -17,6 +18,7 @@ const combineReducer = combineReducers({
   asset: assetReducer,
   swap: swapReducer,
   posts,
+  notifications
 });
 
 export const reducer = (state: any, action: any) => {
