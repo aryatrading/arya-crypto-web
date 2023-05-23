@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from "react"
 import { Col, Row } from "../../../shared/layout/flex"
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher"
 import Button from "../../../shared/buttons/button"
-import { SaveSmartAllocationAssetType, SmartAllocationAssetType } from "../../../../types/smart-allocation.types"
+import { SaveSmartAllocationAssetType, SmartAllocationAssetType, SmartAllocationExitStrategyType, SmartAllocationSaveRequestType } from "../../../../types/smart-allocation.types"
 import { useSelector } from "react-redux"
 import { selectSelectedExchange } from "../../../../services/redux/exchangeSlice"
 import { MODE_DEBUG } from "../../../../utils/constants/config"
@@ -21,22 +21,27 @@ import AssetSelector from "../../../shared/AssetSelector/AssetSelector"
 import { getPredefinedPortfolioHoldings, getSmartAllocation, updateSmartAllocation } from "../../../../services/controllers/smart-allocation"
 import { toast } from "react-toastify"
 import { useRouter } from "next/router"
-import { EnumPredefinedSmartAllocationPortfolio, EnumSmartAllocationAssetStatus } from "../../../../utils/constants/smartAllocation"
+import { EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency as EnumReBalancingFrequency, EnumSmartAllocationAssetStatus } from "../../../../utils/constants/smartAllocation"
 import { useResponsive } from "../../../../context/responsive.context"
 import { AssetType } from "../../../../types/asset"
 import CutoutDoughnutChart from "../../../shared/charts/doughnut/cutout-doughnut"
-
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
+import SmartAllocationRebalancing from "../authed-smart-allocation/SmartAllocationAutomation/SmartAllocationRebalancing/SmartAllocationRebalancing"
+import SmartAllocationExitStrategy from "../authed-smart-allocation/SmartAllocationAutomation/SmartAllocationExitStrategy/SmartAllocationExitStrategy"
 
 
 const EditSmartAllocation: FC = () => {
 
-    const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(true);
+    const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
     const [isLoadingPredefinedAllocationHoldings, setIsLoadingPredefinedAllocationHoldings] = useState<boolean>(false);
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
     const [smartAllocationTotalEvaluation, setSmartAllocationTotalEvaluation] = useState<number>(0);
-    const [smartAllocationAlreadyExists, setSmartAllocationAlreadyExists] = useState<boolean>(false);
+    const [smartAllocationExists, setSmartAllocationExists] = useState<boolean>(false);
     const [isSavingSmartAllocation, setIsSavingSmartAllocation] = useState<boolean>(false);
     const [userHasSubscription, setUserHasSubscription] = useState<boolean>(true);
+    const [reBalancingFrequency, setReBalancingFrequency] = useState<EnumReBalancingFrequency | null>(null);
+    const [reBalancingDate, setReBalancingDate] = useState<Date | null>(null);
+    const [exitStrategy, setExitStrategy] = useState<SmartAllocationExitStrategyType | null>(null);
 
     const selectedExchange = useSelector(selectSelectedExchange);
 
@@ -57,12 +62,28 @@ const EditSmartAllocation: FC = () => {
         getSmartAllocation(selectedExchange?.provider_id)
             .then((res) => {
                 const data = res.data;
-                setSmartAllocationAlreadyExists(data?.exists ?? false);
+                setSmartAllocationExists(data?.exists ?? false);
                 if (data.exists) {
                     const holdings: SmartAllocationAssetType[] | undefined = data.assets;
                     if (holdings) {
                         holdings.sort((a, b) => ((b?.current_weight ?? 0) - (a?.current_weight ?? 0)));
                         setSmartAllocationHoldings(holdings.filter(asset => asset.name !== USDTSymbol));
+                    }
+                    const frequency = data.frequency;
+                    if (frequency) {
+                        setReBalancingFrequency(frequency);
+                    }
+
+                    if (data.next_run_time) {
+                        setReBalancingDate(new Date(data.next_run_time));
+                    } else {
+                        setReBalancingDate(null);
+                    }
+
+                    if (data.exit_strategy) {
+                        setExitStrategy(data.exit_strategy);
+                    } else {
+                        setExitStrategy(null);
                     }
                 } else {
                     const predefinedPortfolioId = router?.query?.portfolio;
@@ -90,6 +111,7 @@ const EditSmartAllocation: FC = () => {
 
     useEffect(() => {
         initSmartAllocationHoldings();
+
     }, [initSmartAllocationHoldings]);
 
     const distributeWeightsEqually = useCallback(() => {
@@ -328,7 +350,7 @@ const EditSmartAllocation: FC = () => {
     const assetSelector = useMemo(() => {
         return (
             <AssetSelector
-                trigger={<Button disabled={!userHasSubscription} className="flex-1 md:flex-none px-5 min-w-[5rem] bg-blue-1 h-11 rounded-md">{t('common:addAsset')}</Button>}
+                trigger={<Button disabled={!userHasSubscription} className="w-full md:w-max px-5 min-w-[5rem] bg-blue-1 h-11 rounded-md">{t('common:addAsset')}</Button>}
                 onClick={onSelectAsset}
             />
         );
@@ -386,7 +408,7 @@ const EditSmartAllocation: FC = () => {
     const table = useMemo(() => {
         if (!isLoadingSmartAllocationHoldings || !isLoadingPredefinedAllocationHoldings) {
             return (
-                <Row className="col-span-full overflow-auto">
+                <Row className="w-full overflow-auto">
                     <table className={styles.table}>
                         {tableHeader}
                         <tbody>
@@ -416,10 +438,16 @@ const EditSmartAllocation: FC = () => {
                         })
                 });
 
+                const requestData: SmartAllocationSaveRequestType = {
+                    assets,
+                    exit_strategy: exitStrategy,
+                    frequency: reBalancingFrequency
+                };
+
                 updateSmartAllocation({
                     providerId: selectedExchange?.provider_id,
-                    data: assets,
-                    smartAllocationAlreadyExists
+                    data: requestData,
+                    smartAllocationAlreadyExists: smartAllocationExists
                 })
                     .then((res) => {
                         toast.success(t("smartAllocationWasSavedSuccessfully"));
@@ -429,7 +457,7 @@ const EditSmartAllocation: FC = () => {
                         if (MODE_DEBUG) {
                             console.error("Error while saving smart allocation (saveSmartAllocation)", error)
                         }
-                        toast.error(t("somethingWentWrong"))
+                        toast.error(t("common:somethingWentWrong"))
                     })
                     .finally(() => {
                         setIsSavingSmartAllocation(false);
@@ -438,16 +466,60 @@ const EditSmartAllocation: FC = () => {
                 toast.error(t('makeSureToAllocate100%OfYourPortfolio'));
             }
         }
-    }, [router, selectedExchange?.provider_id, smartAllocationAlreadyExists, smartAllocationHoldings, t])
+    }, [exitStrategy, reBalancingFrequency, router, selectedExchange?.provider_id, smartAllocationExists, smartAllocationHoldings, t])
+
+
+    const smartAllocationRebalancing = useMemo(() => (
+        <SmartAllocationRebalancing
+            reBalancingFrequency={reBalancingFrequency}
+            setReBalancingFrequency={setReBalancingFrequency}
+            reBalancingDate={reBalancingDate}
+        />
+    ), [reBalancingDate, reBalancingFrequency]);
+
+
+    const smartAllocationExitStrategy = useMemo(() => (
+        <SmartAllocationExitStrategy exitStrategy={exitStrategy} onChange={(newExitStrategy) => {
+            setExitStrategy(newExitStrategy);
+        }} />
+    ), [exitStrategy]);
+
+
+    const smartAllocationAutomation = useMemo(() => {
+
+        if (isTabletOrMobileScreen) {
+            return (
+                <Tabs className="w-full font-light" selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
+                    <TabList className="flex overflow-auto w-full border-b-[1px] border-grey-3 mb-6">
+                        <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">Rebalancing</Tab>
+                        <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">Exit strategy</Tab>
+                    </TabList>
+                    <TabPanel>
+                        {smartAllocationRebalancing}
+                    </TabPanel>
+                    <TabPanel>
+                        {smartAllocationExitStrategy}
+                    </TabPanel>
+                </Tabs>
+            )
+        } else {
+            return (
+                <Col className='gap-5 border-t-grey-5 border-t pt-8 md:flex-row'>
+                    {smartAllocationRebalancing}
+                    {smartAllocationExitStrategy}
+                </Col>
+            )
+        }
+    }, [isTabletOrMobileScreen, smartAllocationExitStrategy, smartAllocationRebalancing]);
 
     if (isLoadingSmartAllocationHoldings || isLoadingPredefinedAllocationHoldings) {
         return <PageLoader />
     } else {
         return (
-            <Col className="grid grid-cols-12 gap-10 lg:gap-16 pb-20 items-start justify-start">
-                <Col className="w-full md:flex-row justify-between col-span-full gap-5">
+            <Col className="w-full gap-10 lg:gap-16 pb-20 items-start justify-start">
+                <Col className="w-full md:flex-row justify-between gap-5">
                     <Col className="gap-10 flex-1">
-                        <Row className="col-span-full gap-1 shrink-0 overflow-auto">
+                        <Row className="w-full gap-1 shrink-0 overflow-auto">
                             <Link className="shrink-0" href="/smart-allocation">{t('common:smartAllocation')}</Link>
                             <p>&gt;</p>
                             <p className="shrink-0 text-blue-1 font-bold">{t('editYourSmartAllocation')}</p>
@@ -471,6 +543,8 @@ const EditSmartAllocation: FC = () => {
                     </Row>
                 </Col>
                 {table}
+                {isTabletOrMobileScreen && assetSelector}
+                {smartAllocationAutomation}
             </Col>
         )
     }

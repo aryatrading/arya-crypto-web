@@ -1,4 +1,4 @@
-import { SaveSmartAllocationAssetType, SmartAllocationAssetDetails, SmartAllocationResponseType } from "../../types/smart-allocation.types";
+import { SaveSmartAllocationAssetType, SmartAllocationAssetDetails, SmartAllocationResponseType, SmartAllocationSaveRequestType } from "../../types/smart-allocation.types";
 import { EnumExitStrategyTrigger, EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from "../../utils/constants/smartAllocation";
 import { axiosInstance } from "../api/axiosConfig";
 
@@ -10,18 +10,18 @@ export const getSmartAllocation = async (providerId?: number) => {
     );
 };
 
-export function updateSmartAllocation({ providerId, data, smartAllocationAlreadyExists }: { providerId?: number, data: SaveSmartAllocationAssetType[], smartAllocationAlreadyExists: boolean }) {
+export function updateSmartAllocation({ providerId, data, smartAllocationAlreadyExists }: { providerId?: number, data: SmartAllocationSaveRequestType, smartAllocationAlreadyExists: boolean }) {
     console.log({ providerId, data, smartAllocationAlreadyExists });
     if (smartAllocationAlreadyExists) {
         return axiosInstance.put(
-            `/trade-engine/smart-allocation/assets`,
+            `/trade-engine/smart-allocation`,
             data,
             { params: { provider: providerId } }
         );
     } else {
         return axiosInstance.post(
             `/trade-engine/smart-allocation`,
-            { assets: data },
+            data,
             { params: { provider: providerId } }
         );
     }

@@ -14,7 +14,8 @@ export type SmartAllocationResponseType = {
     modified_at?: string,
     next_run_time?: string,
     assets?: SmartAllocationAssetType[],
-    total_asset_value?: number
+    total_asset_value?: number,
+    exit_strategy: SmartAllocationExitStrategyType
 }
 
 export type SmartAllocationAssetType = {
@@ -47,6 +48,12 @@ export type SmartAllocationAssetDetails = {
 }
 
 
+export type SmartAllocationSaveRequestType = {
+    assets: SaveSmartAllocationAssetType[],
+    frequency: EnumRebalancingFrequency | null,
+    exit_strategy: SmartAllocationExitStrategyType | null
+}
+
 export type SaveSmartAllocationAssetType = {
     name?: string,
     weight?: number,
@@ -55,18 +62,18 @@ export type SaveSmartAllocationAssetType = {
 }
 
 export type SmartAllocationExitStrategyType = {
-    id: number;
-    exit_type: EnumExitStrategyTrigger;
-    status: string;
-    provider: number;
-    exit_value: number;
-    created_time: string;
-    exit_percentage: number;
-    executed_asset_data: string;
-    executed_asset_total_evaluation: number;
-    completed_at: Date | null;
-    executed_at: Date | null;
-    provider_name: string;
+    id?: number;
+    exit_type?: EnumExitStrategyTrigger;
+    status?: EnumSmartAllocationAssetStatus;
+    provider?: number;
+    exit_value?: number;
+    created_time?: string;
+    exit_percentage?: number;
+    executed_asset_data?: string;
+    executed_asset_total_evaluation?: number;
+    completed_at?: Date | null;
+    executed_at?: Date | null;
+    provider_name?: string;
 }
 
 export interface ISmartAllocationContext {

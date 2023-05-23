@@ -22,7 +22,6 @@ import { Top10Icon, Top15Icon, Top5Icon } from "../../../svg/smart-allocation/to
 import { SelectSmartAllocationPortfolioIcon } from "../../../svg/smart-allocation/customize-portfolio-icon";
 import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/no-exchange-connected-page";
 import { EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
-import SmartAllocationAutomation from "./SmartAllocationAutomation/SmartAllocationAutomation";
 import SmartAllocationTradeLog from "./smart-allocation-tabs/SmartAllocationTradeLog/SmartAllocationTradeLog";
 import PortfolioComposition from "../../../shared/portfolio-composition/portfolio-composition";
 import { useResponsive } from "../../../../context/responsive.context";
@@ -220,14 +219,10 @@ const AuthedSmartAllocation: FC = () => {
             <Tabs className="w-full font-light" selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
                 <TabList className="flex overflow-auto w-full border-b-[1px] border-grey-3 mb-6">
                     <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">{t('yourHoldings')}</Tab>
-                    <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">{t('automation')}</Tab>
                     <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">{t('portfolioTradeHistory')}</Tab>
                 </TabList>
                 <TabPanel>
                     <SmartAllocationHoldingsTab smartAllocationHoldings={smartAllocationHoldings} smartAllocationTotalEvaluation={smartAllocationTotalEvaluation} />
-                </TabPanel>
-                <TabPanel>
-                    <SmartAllocationAutomation />
                 </TabPanel>
                 <TabPanel>
                     <SmartAllocationTradeLog />
