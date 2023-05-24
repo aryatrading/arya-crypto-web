@@ -58,7 +58,7 @@ const Nav = () => {
     () => {
       if (!!id) {
         return <div className="grid-flow-col gap-4 md:gap-6 items-center hidden md:flex">
-          <DropdownMenu.Root onOpenChange={(isOpened) => {
+          <DropdownMenu.Root modal={false} onOpenChange={(isOpened) => {
             if (isOpened) {
               setIsUserDropdownActive(true);
             } else {
@@ -189,7 +189,7 @@ const Nav = () => {
             <BellIcon className={clsx({ "fill-blue-1 stroke-blue-1": isNotificationActive, "fill-current stroke-current": !isNotificationActive }, "w-6 h-6")} />
           </button>
           :
-          <DropdownMenu.Root onOpenChange={(isOpened) => {
+          <DropdownMenu.Root modal={false} onOpenChange={(isOpened) => {
             if (isOpened) {
               setIsNotificationsActive(true);
               dispatch(updateNotificationBadge(false));
