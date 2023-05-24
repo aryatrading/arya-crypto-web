@@ -11,7 +11,7 @@ export const getNotifications = async (offset: number, limit: number, order: 'as
 };
 
 export const updateFCMToken = (token: string) => {
-    return axiosInstance.post('/fcm/', {
+    return axiosInstance.put('/fcm/', {
         fcm_token: token,
         platform_type: "WEB"
     });

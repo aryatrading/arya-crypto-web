@@ -27,6 +27,7 @@ import { useResponsive } from "../../../context/responsive.context";
 import { saveUserLanguage } from "../../../services/controllers/utils";
 import { NotificationType } from "../../../types/notifications";
 import { notificationIcon, titleColor } from "../../../utils/notifications";
+import { updateFCMToken } from "../../../services/controllers/notifications";
 
 import NavLink from "./NavLink/NavLink";
 
@@ -43,7 +44,9 @@ const Nav = () => {
 
   const onLogout = useCallback(() => {
     getAuth(getApp()).signOut().then(() => {
+      updateFCMToken('');
       localStorage.removeItem('idToken');
+      localStorage.removeItem('fcm_token');
       push('/home');
       setCollapse(false);
     });
@@ -201,7 +204,7 @@ const Nav = () => {
                 {
                   notifications.map((notification: NotificationType) => {
                     return (
-                      <>
+                      <Col key={notification.id}>
                         <DropdownMenu.Item className="mb-4 focus:outline-none focus:ring-0 focus:border-0" disabled>
                           <Row className="gap-4 items-center">
                             {notificationIcon(notification.notification_type || '', notification.provider_id)}
@@ -215,7 +218,7 @@ const Nav = () => {
                           </Row>
                         </DropdownMenu.Item>
                         <DropdownMenu.Separator className="w-full h-[1px] bg-grey-3 my-4" />
-                      </>
+                      </Col>
                     );
                   })
                 }

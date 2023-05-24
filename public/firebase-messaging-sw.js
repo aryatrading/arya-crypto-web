@@ -12,3 +12,15 @@ const defaultConfig = {
 
 firebase.initializeApp(self.firebaseConfigUrl || defaultConfig);
 
+const messaging = firebase.messaging();
+messaging.setBackgroundMessageHandler(function (payload) {
+    return self.registration.showNotification(payload.data.title, {
+        body: payload.data.body,
+        icon: payload.data.icon,
+    });
+});
+
+self.addEventListener('notificationclick', function (event) {
+    event.notification.close();
+    event.waitUntil(self.clients.openWindow('/'));
+});
