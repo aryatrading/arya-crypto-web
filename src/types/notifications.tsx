@@ -6,5 +6,5 @@ export interface NotificationType {
     created_time?: string,
     provider_id?: number,
     provider_name?: string,
-    seen?: boolean,
+    is_seen?: string | boolean,
 }

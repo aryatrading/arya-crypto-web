@@ -7,11 +7,14 @@ export const titleColor = (type: string | undefined) => {
         case "BUY_ORDER":
             return 'text-green-1';
         case "KEYS_EXPIRATION_SOON":
+        case "SELL_ORDER":
         case "KEYS_EXPIRED":
         case "STOP_LOSS_EXECUTED":
             return 'text-red-1';
         case "TAKE_PROFIT_EXECUTED":
         case "SMART_ALLOCATION_REBALANCED":
+        case "EXIT_STRATEGY_EXECUTED":
+        case "TRAILIING_EXECUTED":
             return 'text-blue-1';
         default:
             return 'text-white';

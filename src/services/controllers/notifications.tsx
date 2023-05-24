@@ -16,3 +16,7 @@ export const updateFCMToken = (token: string) => {
         platform_type: "WEB"
     });
 };
+
+export const updateUnseenNotifications = (ids: number[]) => {
+    return axiosInstance.put('/notifications/update-is-seen', ids);
+}

@@ -4,11 +4,13 @@
 
 
 @layer base {
+
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
+
   body {
     @apply bg-black-1;
   }
@@ -51,18 +53,17 @@ body {
 }
 
 .dialog-content {
-  @apply fixed top-[50%] left-[50%] max-h-[600px] w-[90vw] max-w-[466px] translate-x-[-50%] translate-y-[-50%] rounded-lg bg-grey-2 p-7 focus:outline-none font-sans flex flex-col items-center z-10 gap-6
+  @apply fixed top-[50%] left-[50%] max-h-[600px] w-[90vw] max-w-[466px] translate-x-[-50%] translate-y-[-50%] rounded-lg bg-grey-2 p-7 font-sans flex flex-col items-center z-10 gap-6
 }
 
-.dialog-overlay{
+.dialog-overlay {
   @apply bg-slate-950 fixed inset-0 z-10 opacity-30
 }
-.alert-dialog-cancel-btn {
-  @apply  text-white hover:underline
-}
-.dialog-title{
+
+.dialog-title {
   @apply text-2xl font-semibold text-white
 }
-.dialog-description{
+
+.dialog-description {
   @apply text-base text-white font-medium text-justify
 }

@@ -4,11 +4,15 @@ import { getMessaging, onMessage } from "firebase/messaging";
 
 import { firebaseCloudMessaging } from "../../../services/firebase/notifications/pushNotification.service";
 import { getApp } from "firebase/app";
+import { Col, Row } from "../../shared/layout/flex";
+import ExchangeImage from "../../shared/exchange-image/exchange-image";
+import { store } from "../../../services/redux/store";
+import { setNotifications, updateNotificationBadge } from "../../../services/redux/notificationsSlice";
+import { NotificationType } from "../../../types/notifications";
 
 function PushNotificationLayout({ children }: any) {
     useEffect(() => {
         setToken();
-        // Calls the getMessage() function if the token is there
         async function setToken() {
             try {
                 await firebaseCloudMessaging.init();
@@ -20,13 +24,27 @@ function PushNotificationLayout({ children }: any) {
     });
 
     const onMessaging = () => {
-        onMessage(getMessaging(getApp()), (data) => {
-            toast(<div>
-                <h5>{data?.notification?.title}</h5>
-                <h6>{data?.notification?.body}</h6>
-            </div>,
+        onMessage(getMessaging(getApp()), async ({ data }: any) => {
+            const currentNotifications: NotificationType[] = [...await store.getState().notifications.notifications];
+            currentNotifications.unshift(data);
+            store.dispatch(setNotifications(currentNotifications));
+            store.dispatch(updateNotificationBadge(true));
+            toast(<Row className="gap-4">
+                {data?.provider_id && <ExchangeImage providerId={parseInt(data?.provider_id)} width={24} height={24} />}
+                <Col className="gap-2">
+                    <h2 className="text-white font-bold text-base">{data?.title}</h2>
+                    <h4 className="text-white font-medium text-sm">{data?.body}</h4>
+                </Col>
+            </Row>,
                 {
                     closeOnClick: false,
+                    autoClose: 20000,
+                    className: "bg-blue-3",
+                    theme: 'dark',
+                    toastId: data?.id || '_' + new Date().getTime() + '_',
+                    progressStyle: {
+                        background: '#558AF2',
+                    }
                 })
         })
     }

@@ -4,13 +4,12 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { ArrowLeftOnRectangleIcon, UserIcon, BellIcon, Cog6ToothIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useAuthUser, withAuthUser } from "next-firebase-auth";
 import { useRouter } from "next/router";
 import { getAuth } from "firebase/auth";
 import { getApp } from "firebase/app";
 import clsx from "clsx";
-import moment from "moment";
 
 import Button from "../../shared/buttons/button";
 import { Col, Row } from "../../shared/layout/flex";
@@ -26,18 +25,21 @@ import { SearchAssetInput } from "../../shared/assetSearchInputWithDropdown";
 import { useResponsive } from "../../../context/responsive.context";
 import { saveUserLanguage } from "../../../services/controllers/utils";
 import { NotificationType } from "../../../types/notifications";
-import { notificationIcon, titleColor } from "../../../utils/notifications";
-import { updateFCMToken } from "../../../services/controllers/notifications";
+import { getNotifications, updateFCMToken, updateUnseenNotifications } from "../../../services/controllers/notifications";
+import { setNotifications, updateNotificationBadge } from "../../../services/redux/notificationsSlice";
 
 import NavLink from "./NavLink/NavLink";
+import { EmptyIcon } from "../../svg/emptyNotification";
+import NotificationCard from "../Notifications/NotificationCard";
 
 const Nav = () => {
+  const dispatch = useDispatch();
   const { id } = useAuthUser();
   const [collapse, setCollapse] = useState(false)
   const [isUserDropdownActive, setIsUserDropdownActive] = useState(false)
   const [isNotificationsActive, setIsNotificationsActive] = useState(false)
   const { modalTrigger, setVisibleSection } = useAuthModal();
-  const { notifications } = useSelector(({ notifications }: any) => notifications);
+  const { notifications, hasNewNotifications } = useSelector(({ notifications }: any) => notifications);
   const { t } = useTranslation(['nav', 'coin', 'asset', 'common', 'auth', 'notification']);
   const { pathname, push, locale, asPath, query } = useRouter()
   const { isTabletOrMobileScreen } = useResponsive();
@@ -142,6 +144,8 @@ const Nav = () => {
     push({ pathname, query }, asPath, { locale: lang })
     saveUserLanguage(lang);
     window.localStorage.setItem('language', lang);
+
+    getNotifications(0, 100, 'asc');
   }, [asPath, pathname, push, query])
 
   const changeLanguageView = useCallback((hide: boolean) => {
@@ -174,51 +178,48 @@ const Nav = () => {
   const isNotificationActive = useMemo(() => typeof window !== 'undefined' ? window.location.pathname === '/notifications' : false, []);
 
   const notificationDropdown = useCallback((hide: boolean) => {
-    if (locale == null || hide) {
+    if (locale == null || hide || id == null) {
       return;
     }
     return (
       <Col className="grid grid-flow-col gap-4 md:gap-6 items-center">
         {isTabletOrMobileScreen ?
-          <button className="focus:outline-none focus:border-0 focus:ring-0" aria-label="Customise options" onClick={() => push('/notifications')}>
+          <button className="focus:outline-none focus:border-0 focus:ring-0 relative" aria-label="Customise options" onClick={() => push('/notifications')}>
+            {hasNewNotifications && <Col className="w-3 h-3 rounded-lg bg-red-1 absolute z-10 right-0" />}
             <BellIcon className={clsx({ "fill-blue-1 stroke-blue-1": isNotificationActive, "fill-current stroke-current": !isNotificationActive }, "w-6 h-6")} />
           </button>
           :
           <DropdownMenu.Root onOpenChange={(isOpened) => {
             if (isOpened) {
               setIsNotificationsActive(true);
+              dispatch(updateNotificationBadge(false));
             } else {
+              const updatedArr = [...notifications.map((notification: NotificationType) => notification.is_seen === 'false' ? ({ ...notification, is_seen: 'true' }) : notification)];
+              dispatch(setNotifications(updatedArr));
               setIsNotificationsActive(false);
+              updateUnseenNotifications(notifications.map((e: NotificationType) => !e.is_seen ? e.id : null).filter((x: number) => x != null));
             }
           }}>
             <DropdownMenu.Trigger asChild>
-              <button className="focus:outline-none focus:border-0 focus:ring-0" aria-label="Customise options">
+              <button className="focus:outline-none focus:border-0 focus:ring-0 relative" aria-label="Customise options">
+                {hasNewNotifications && <Col className="w-3 h-3 rounded-lg bg-red-1 absolute z-10 right-0" />}
                 <BellIcon className={clsx({ "fill-blue-1 stroke-blue-1": isNotificationsActive, "fill-current stroke-current": !isNotificationsActive }, "w-6 h-6")} />
               </button>
             </DropdownMenu.Trigger>
 
             <DropdownMenu.Portal>
-              <DropdownMenu.Content className="w-full bg-black-2 rounded-md p-6 md:w-[420px] shadow-md shadow-black-1" sideOffset={25}>
+              <DropdownMenu.Content className="w-full bg-black-2 rounded-md p-6 md:w-[420px] shadow-md shadow-black-1 z-50" sideOffset={25}>
                 <h3 className="font-bold text-white header-label mb-4">{t('notification:title')}</h3>
 
-                {
+                {notifications.length <= 0 ?
+                  <Col className="items-center mt-14 gap-6">
+                    <EmptyIcon />
+                    <p className="font-bold text-lg text-grey-1">{t('notification:emptyList')}</p>
+                  </Col>
+                  :
                   notifications.map((notification: NotificationType) => {
                     return (
-                      <Col key={notification.id}>
-                        <DropdownMenu.Item className="mb-4 focus:outline-none focus:ring-0 focus:border-0" disabled>
-                          <Row className="gap-4 items-center">
-                            {notificationIcon(notification.notification_type || '', notification.provider_id)}
-                            <Col className="gap-2 w-full overflow-hidden">
-                              <Row className="justify-between">
-                                <p className={clsx(titleColor(notification.notification_type), "text-sm font-medium")}>{notification.title}</p>
-                                <p className="text-sm text-grey-1 font-medium">{moment(new Date(notification.created_time || '')).fromNow()}</p>
-                              </Row>
-                              <p className="text-sm text-white font-medium whitespace-nowrap max-w-full">{notification.body}</p>
-                            </Col>
-                          </Row>
-                        </DropdownMenu.Item>
-                        <DropdownMenu.Separator className="w-full h-[1px] bg-grey-3 my-4" />
-                      </Col>
+                      <NotificationCard notification={notification} type="dropdown" />
                     );
                   })
                 }
@@ -232,7 +233,7 @@ const Nav = () => {
         }
       </Col>
     );
-  }, [isNotificationActive, isNotificationsActive, isTabletOrMobileScreen, locale, notifications, push, t]);
+  }, [dispatch, hasNewNotifications, id, isNotificationActive, isNotificationsActive, isTabletOrMobileScreen, locale, notifications, push, t]);
 
   return (
     <Col className="w-full bg-black-2 border-b border-gray-800 shadow-md  fixed lg:relative z-20">
