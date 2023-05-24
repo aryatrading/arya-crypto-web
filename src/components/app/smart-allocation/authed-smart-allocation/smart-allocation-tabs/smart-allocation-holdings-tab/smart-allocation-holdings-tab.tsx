@@ -56,8 +56,8 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                         <th>{t("common:currentPrice")}</th>
                         <th>{t('holdingQuantity')}</th>
                         <th>{t('holdingValue')}</th>
-                        <th>{t('setWeight')}</th>
                         <th>{t('currentWeight')}</th>
+                        <th>{t('setWeight')}</th>
                     </tr>
                 </thead>
             );
@@ -117,6 +117,9 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                             <td>{formatNumber(asset?.ask_price ?? 0, true)}</td>
                             <td>{formatNumber(asset?.available ?? 0)}</td>
                             <td>{formatNumber(asset?.current_value ?? 0, true)}</td>
+                            <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
+                                {percentageFormat((asset.current_weight ?? 0) * 100)}%
+                            </td>
                             <td className="">
                                 <Row className="gap-2 items-center">
                                     <p>
@@ -132,9 +135,6 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                         />
                                     </Row>
                                 </Row>
-                            </td>
-                            <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
-                                {percentageFormat((asset.current_weight ?? 0) * 100)}%
                             </td>
                         </tr>
                     );
@@ -159,24 +159,6 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
         )
     }, [tableBody, tableHeader])
 
-    const reBalanceNow = useMemo(() => {
-        return (
-            <Col className="flex-1 gap-5">
-                <Row className="w-full gap-4 text-center">
-                    {isTabletOrMobileScreen && <Link href="smart-allocation/edit" className="flex-1 bg-blue-1 py-4 px-5 rounded-md text-sm font-bold">{t('editPortfolio')}</Link>}
-                    <Button className="flex-1 bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold">{t('RebalanceNow')}</Button>
-                </Row>
-                <Col className="gap-4">
-                    <p className="font-bold text-grey-1">{t('automation')}</p>
-                    <p className="text-sm font-bold">{t('automaticRebalancingScheduled')} <span className="text-blue-1">{t('common:monthly')}</span></p>
-                    <p className="text-sm font-bold">{t('nextRebalancingSchedule')} : <span className="text-blue-1">01/12/2023</span></p>
-                    <p className="font-bold text-grey-1">{t('common:exitStrategy')}</p>
-                    <p className="text-sm font-bold">{t('WhenCoinDropsByXAmountSellYAmountOfYourPortfolioForUSDT', { coinName: "Bitcoin", dropPercent: "5%", sellPercent: "50%", USDTSymbol })}</p>
-                </Col>
-            </Col>
-        )
-    }, [isTabletOrMobileScreen, t])
-
     if (smartAllocationHoldings?.length) {
         return (
             <Col className="gap-10">
@@ -189,7 +171,6 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                 </Row>}
                 <div className="flex flex-col-reverse w-full gap-5 md:flex-row">
                     {table}
-                    {reBalanceNow}
                 </div>
             </Col>
         )
