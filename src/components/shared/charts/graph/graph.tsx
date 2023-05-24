@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from "react";
+import { FC, useEffect, useMemo, useRef } from "react";
 import {
   createChart,
   CrosshairMode,
@@ -19,6 +19,7 @@ const LineChart: FC<GraphChartType> = ({
   secondaryLineData: secondaryData,
   className,
   fixed = true,
+  isLoading = false,
 }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
 
@@ -104,10 +105,24 @@ const LineChart: FC<GraphChartType> = ({
     };
   }, [fixed, primaryLineData, secondaryData]);
 
+
+
+  const loadingOverlay = useMemo(() => {
+    if (isLoading) {
+      return (
+        <Col className="items-center justify-center bg-[#00000080] absolute w-full h-full z-10">
+          <p className="text-2xl font-bold">Calculating...</p>
+        </Col>
+      )
+    }
+  }, [isLoading]);
+
   return (
     <>
       {primaryLineData ? (
-        <Col reference={chartContainerRef} className={clsx(className)} />
+        <Col reference={chartContainerRef} className={clsx('relative', className)} >
+          {loadingOverlay}
+        </Col>
       ) : (
         <></>
       )}

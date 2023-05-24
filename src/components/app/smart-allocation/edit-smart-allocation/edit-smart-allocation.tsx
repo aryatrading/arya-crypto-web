@@ -147,7 +147,7 @@ const EditSmartAllocation: FC = () => {
 
     const onRemoveAsset = useCallback((asset: SmartAllocationAssetType) => {
         setSmartAllocationHoldings((oldState) => {
-            return oldState.map((holding) => holding.name === asset.name ? { ...holding, removed: true, weight: 0 } : holding);
+            return oldState.map((holding) => holding.name === asset.name ? { ...holding, removed: (!asset.current_weight), weight: 0 } : holding);
         })
     }, [])
 
@@ -426,17 +426,18 @@ const EditSmartAllocation: FC = () => {
 
     const onSaveSmartAllocation = useCallback(() => {
 
-        if (smartAllocationHoldings.length) {
-            const totalPercentage = smartAllocationHoldings?.map(asset => asset.weight)?.reduce((prev, next) => ((prev ?? 0) + (next ?? 0))) ?? 0;
+        const filteredSmartAllocationHoldings = smartAllocationHoldings?.filter((a) => !a.removed);
+        if (filteredSmartAllocationHoldings.length) {
+            const totalPercentage = filteredSmartAllocationHoldings?.map(asset => asset.weight)?.reduce((prev, next) => ((prev ?? 0) + (next ?? 0))) ?? 0;
             if (totalPercentage >= .999) {
 
                 setIsSavingSmartAllocation(true);
-                const assets: SaveSmartAllocationAssetType[] = smartAllocationHoldings.map((holding) => {
+                const assets: SaveSmartAllocationAssetType[] = filteredSmartAllocationHoldings.map((holding) => {
                     return (
                         {
                             name: holding.name,
                             weight: holding.weight,
-                            status: ((holding.weight ?? 0) > 0) ? EnumSmartAllocationAssetStatus.ACTIVE : EnumSmartAllocationAssetStatus.DELETED,
+                            status: EnumSmartAllocationAssetStatus.ACTIVE,
                             id: holding.id,
                         })
                 });

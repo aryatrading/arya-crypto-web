@@ -5,6 +5,7 @@ export interface GraphChartType {
   secondaryLineData?: chartDataType[];
   className?: string;
   fixed?: boolean;
+  isLoading?: boolean;
 }
 
 export interface chartDataType {

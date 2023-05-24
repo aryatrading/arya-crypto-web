@@ -1,3 +1,4 @@
+import axios from "axios";
 import { chartDataType } from "../../components/shared/charts/graph/graph.type";
 import { AssetType } from "../../types/asset";
 import { CapitalizeString } from "../../utils/format_string";
@@ -109,3 +110,57 @@ export const getFree = async (symbol: string, provider: number) => {
 
   return data[provider];
 };
+
+
+type assetsHistoricalDataResponseType = {
+  [k: string]: {
+    meta: {
+      symbol: string,
+      interval: string,
+      currency: string,
+      exchange_timezone: string,
+      exchange: string,
+      mic_code: string,
+      type: string
+    },
+    values: [
+      {
+        datetime: string,
+        open: string,
+        high: string,
+        low: string,
+        close: string,
+        volume: string
+      },
+    ],
+    status: "ok"
+  }
+}
+
+
+export const periodToIntervalsAndOutputSize = {
+  "1w": {
+    interval: "30min",
+    outputsize: 2 * 24 * 7,
+  },
+  "1m": {
+    interval: "2h",
+    outputsize: 12 * 30,
+  },
+  "1y": {
+    interval: "1day",
+    outputsize: 365,
+  }
+}
+
+export async function getAssetsHistoricalData(symbols: string[], period: "1w" | "1m" | "1y") {
+  return axios.get<assetsHistoricalDataResponseType>(
+    process.env.NEXT_PUBLIC_TWELEVE_API_URL ?? "", {
+    params: {
+      symbol:symbols.join(","),
+      interval: periodToIntervalsAndOutputSize[period].interval,
+      outputsize: periodToIntervalsAndOutputSize[period].outputsize,
+      apikey: process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY
+    }
+  });
+}

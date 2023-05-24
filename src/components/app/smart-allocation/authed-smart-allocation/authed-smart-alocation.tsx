@@ -25,6 +25,7 @@ import { EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from
 import SmartAllocationTradeLog from "./smart-allocation-tabs/SmartAllocationTradeLog/SmartAllocationTradeLog";
 import PortfolioComposition from "../../../shared/portfolio-composition/portfolio-composition";
 import { useResponsive } from "../../../../context/responsive.context";
+import SmartAllocationSimulation from "./smart-allocation-simulation/smart-allocation-simulation";
 
 
 
@@ -237,11 +238,11 @@ const AuthedSmartAllocation: FC = () => {
                 <Row className="w-full justify-between items-end">
                     <ExchangeSwitcher canSelectOverall={false} />
                 </Row>
-                {smartAllocationGraph}
+                <SmartAllocationSimulation smartAllocationHoldings={smartAllocationHoldings}/>
                 {tabs}
             </Col>
         )
-    }, [smartAllocationGraph, tabs]);
+    }, [smartAllocationHoldings, tabs]);
 
     if (isLoadingSmartAllocationHoldings || isLoadingPortfolioHoldings) {
         return <PageLoader />;
@@ -250,7 +251,7 @@ const AuthedSmartAllocation: FC = () => {
         if (connectedExchangesWithProviders?.length) {
             return (
                 <SmartAllocationContext.Provider value={{ rebalancingDate, rebalancingFrequency, isLoadingSmartAllocationData: isLoadingSmartAllocationHoldings, getSmartAllocationData: initSmartAllocationHoldings }}>
-                    <Col className="w-full grid grid-cols-12 md:gap-10 lg:gap-16 pb-20 items-start justify-start">
+                    <Col className="w-full md:gap-10 lg:gap-16 pb-20 items-start justify-start">
                         {(isLoadingSmartAllocationHoldings || isLoadingPortfolioHoldings) && <PageLoader />}
                         {smartAllocationExists ? withAllocation : noAllocation}
                     </Col>
