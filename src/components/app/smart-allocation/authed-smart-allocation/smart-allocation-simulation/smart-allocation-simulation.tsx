@@ -11,11 +11,13 @@ import Button from "../../../../shared/buttons/button";
 import CutoutDoughnutChart from "../../../../shared/charts/doughnut/cutout-doughnut";
 import { useTranslation } from "react-i18next";
 import { USDTSymbol } from "../../../../../utils/constants/market";
+import { doughnutChartDataType } from "../../../../shared/charts/doughnut/doughnut";
+import { formatNumber } from "../../../../../utils/helpers/prices";
 
 
 const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationAssetType[] }> = ({ smartAllocationHoldings }) => {
 
-    const [simulationPeriod, setSimulationPeriod] = useState<"1y" | "1w" | "1m">("1y");
+    const [simulationPeriod, setSimulationPeriod] = useState<"1y" | "1w" | "1m">("1w");
     const [initialValue, setInitialValue] = useState<number>(10_000);
     const [rebalancingFrequency, setReBalancingFrequency] = useState<EnumRebalancingFrequency | null>(null);
     const [currentWeightsData, setCurrentWeightsData] = useState<chartDataType[]>([]);
@@ -136,7 +138,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
         calculateLineChartsData();
     }, [calculateLineChartsData]);
 
-    const chart = useCallback(({ chartTitle, chartData, drawdown, maxProfit, riskReturnRatio }: { chartTitle: string, chartData: any[], drawdown: number, maxProfit: number, riskReturnRatio: string }) => {
+    const chart = useCallback(({ chartTitle, chartData, drawdown, maxProfit, riskReturnRatio }: { chartTitle: string, chartData: doughnutChartDataType[], drawdown: number, maxProfit: number, riskReturnRatio: string }) => {
         return (
             <Col className="md:flex-row flex-1 gap-10 h-full">
                 <CutoutDoughnutChart
@@ -146,17 +148,17 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 <Col className="flex-1 justify-center gap-10">
                     <Row className="justify-between gap-5">
                         <Col>
-                            <p>Drawdown</p>
-                            <p>{drawdown}</p>
+                            <p className="text-sm font-bold">Drawdown</p>
+                            <p className="text-sm font-bold text-green-1">{formatNumber(drawdown, true)}</p>
                         </Col>
                         <Col>
-                            <p>max profit</p>
-                            <p>{maxProfit}</p>
+                            <p className="text-sm font-bold">max profit</p>
+                            <p className="text-sm font-bold text-green-1">{formatNumber(maxProfit, true)}</p>
                         </Col>
                     </Row>
                     <Col>
-                        <p>Risk-Return ratio</p>
-                        <p>{riskReturnRatio}</p>
+                        <p className="text-sm font-bold">Risk-Return ratio</p>
+                        <p className="text-4xl font-bold text-green-1">{riskReturnRatio}</p>
                     </Col>
                 </Col>
             </Col>
@@ -165,7 +167,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
     const charts = useMemo(() => {
         return (
-            <Row className="flex-[2] items-center justify-evenly h-44 md:h-[250px] gap-10">
+            <Row className="flex-[2] items-center justify-evenly h-44 md:h-[250px] gap-20">
                 {chart({
                     chartTitle: "Current weight",
                     chartData: smartAllocationHoldings?.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
@@ -219,12 +221,13 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
     return (
         <Col className="w-full gap-10">
             <Row className="items-center gap-5">
-                <p className="font-bold text-xl">Simulate portfolio over</p>
+                <p className="font-bold text-xl">Simulate portfolio over the past</p>
                 <select className="w-36 h-12 bg-grey-3 border-none rounded-md px-5" value={simulationPeriod} onChange={(event) => { setSimulationPeriod(event.target.value as any) }}>
                     <option value="1w">1 Week</option>
                     <option value="1m">1 Month</option>
                     <option value="1y">1 Year</option>
                 </select>
+                <p className="font-bold text-xl">starting with</p>
                 <input
                     value={initialValue}
                     type="number"
@@ -237,12 +240,13 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     }}
                     className="w-36 h-12 bg-grey-3 border-none rounded-md px-5"
                 />
+                <p className="font-bold text-xl">$</p>
             </Row>
             <Col className="w-full gap-5">
                 <LineChart primaryLineData={currentWeightsData} secondaryLineData={setWeightsData} className={"w-full h-[200px] md:h-[400px]"} isLoading={isLoading} />
                 {graphLegend}
             </Col>
-            <Row className="gap-10">
+            <Row className="gap-20">
                 {charts}
                 {reBalanceNow}
             </Row>
