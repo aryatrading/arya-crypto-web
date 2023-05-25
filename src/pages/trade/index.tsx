@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addTradables,
   clearTrade,
+  setOpenOrders,
   setOrderType,
   setPairs,
   setTrade,
@@ -17,6 +18,7 @@ import {
   getAssetValidation,
   getAssetAvailable,
   getAvailablePairs,
+  getAssetOpenOrders,
 } from "../../services/controllers/trade";
 import { selectSelectedExchange } from "../../services/redux/exchangeSlice";
 import { TradeValidations } from "../../types/trade";
@@ -51,6 +53,13 @@ const TradePage = () => {
         selectedExchange?.provider_id ?? 1
       );
 
+      let _openOrders = await getAssetOpenOrders(
+        `${symbol ?? "btc"}USDT`,
+        selectedExchange?.provider_id ?? 1
+      );
+
+      dispatch(setOpenOrders({ orders: _openOrders }));
+
       dispatch(addTradables({ assets: _pairs._tradables }));
       dispatch(setPairs({ pairs: _pairs._pairs }));
 
@@ -79,6 +88,7 @@ export const getStaticProps: GetStaticProps<any> = async ({ locale }) => ({
       "nav",
       "asset",
       "coin",
+      "trade",
     ])),
   },
 });

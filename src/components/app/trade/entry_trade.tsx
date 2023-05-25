@@ -15,18 +15,20 @@ import TradeInput from "../../shared/inputs/tradeInput";
 import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
 import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries";
 import { percentTabs } from "../../../utils/constants/profitsPercentage";
+import { useTranslation } from "next-i18next";
 
 export const EntryTrade: FC = () => {
   const dispatch = useDispatch();
   const _assetprice = useSelector(selectAssetLivePrice);
   const [percent, setPercent] = useState("5");
+  const { t } = useTranslation(["trade"]);
   const trade = useSelector(getTrade);
 
   return (
     <>
       <Row className="w-full justify-evenly gap-2">
         <ShadowButton
-          title="Buy"
+          title={t("buy")}
           bgColor={
             trade?.entry_order?.type === "BUY" ? "bg-green-1" : "bg-green-2"
           }
@@ -35,7 +37,7 @@ export const EntryTrade: FC = () => {
           border="rounded-md w-full text-center"
         />
         <ShadowButton
-          title="Sell"
+          title={t("sell")}
           bgColor={
             trade?.entry_order?.type === "SELL" ? "bg-red-1" : "bg-red-2"
           }
@@ -52,7 +54,7 @@ export const EntryTrade: FC = () => {
                 className="font-semibold text-sm outline-none cursor-pointer w-full text-center"
                 onClick={() => dispatch(setOrderType({ orderType: "MARKET" }))}
               >
-                Market
+                {t("market")}
               </Tab>
               <Tab
                 className="font-semibold text-sm outline-none cursor-pointer w-full text-center"
@@ -60,17 +62,18 @@ export const EntryTrade: FC = () => {
                   dispatch(setOrderType({ orderType: "CONDITIONAL" }))
                 }
               >
-                Conditional
+                {t("conditional")}
               </Tab>
             </Row>
           </TabList>
         </Tabs>
       </div>
       <p className="font-bold text-sm">
-        Available: {formatNumber(trade.available_quantity)} {trade.base_name}
+        {t("available")}: {formatNumber(trade.available_quantity)}{" "}
+        {trade.base_name}
       </p>
       <TradeInput
-        title="Price"
+        title={t("price")}
         value={trade.base_name}
         disabled={
           trade?.entry_order && trade?.entry_order?.order_type === "MARKET"
@@ -87,7 +90,7 @@ export const EntryTrade: FC = () => {
         }
       />
       <TradeInput
-        title="Units"
+        title={t("units")}
         value={trade.asset_name}
         amount={trade?.entry_order?.quantity}
         onchange={(e: string) =>
@@ -107,7 +110,7 @@ export const EntryTrade: FC = () => {
         />
       </div>
       <TradeInput
-        title="Total"
+        title={t("total")}
         value={trade.base_name}
         amount={trade?.entry_order?.price ?? 10}
         onchange={(e: string) => console.log(e)}

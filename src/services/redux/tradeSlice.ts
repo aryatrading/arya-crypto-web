@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ProfitsType, TradeType, TradeValidations } from "../../types/trade";
+import {
+  ProfitsType,
+  TradeOrder,
+  TradeType,
+  TradeValidations,
+} from "../../types/trade";
 import { AppState } from "./store";
 
 interface initialStateType {
@@ -8,6 +13,7 @@ interface initialStateType {
   pairs?: string[];
   tradeableAsset?: string[];
   tradeFilter: string;
+  openOrders?: TradeOrder[];
 }
 
 const initialState: initialStateType = {
@@ -22,6 +28,7 @@ const initialState: initialStateType = {
   pairs: [],
   tradeableAsset: [],
   tradeFilter: "USDT",
+  openOrders: [],
 };
 
 export const tradeSlice = createSlice({
@@ -40,22 +47,26 @@ export const tradeSlice = createSlice({
     },
     setSide: (state, action: { payload: { side: string } }) => {
       state.trade.entry_order = {
+        ...state.trade.entry_order,
         type: action.payload.side,
       };
     },
     setOrderType: (state, action: { payload: { orderType: string } }) => {
       state.trade.entry_order = {
+        ...state.trade.entry_order,
         order_type: action.payload.orderType,
         trigger_price: 0,
       };
     },
     setTriggerPrice: (state, action: { payload: { price: any } }) => {
       state.trade.entry_order = {
+        ...state.trade.entry_order,
         trigger_price: action.payload.price,
       };
     },
     setQuantity: (state, action: { payload: { quantity: any } }) => {
       state.trade.entry_order = {
+        ...state.trade.entry_order,
         quantity: action.payload.quantity,
       };
     },
@@ -92,11 +103,16 @@ export const tradeSlice = createSlice({
     addTradables: (state, action: { payload: { assets: string[] } }) => {
       state.tradeableAsset = action.payload.assets;
     },
+    setOpenOrders: (state, action: { payload: { orders: TradeOrder[] } }) => {
+      state.openOrders = action.payload.orders;
+    },
     clearTrade: (state) => {
       state.trade.symbol_name = "BTCUSDT";
       state.trade.asset_name = "BTC";
       state.trade.base_name = "USDT";
       state.trade.available_quantity = 0;
+      state.openOrders = [];
+      state.validations = {};
     },
   },
 });
@@ -116,6 +132,7 @@ export const {
   setFilter,
   setTriggerPrice,
   setQuantity,
+  setOpenOrders,
 } = tradeSlice.actions;
 
 export const getTrade = (state: AppState) => state.trade.trade;
@@ -124,5 +141,6 @@ export const getValidations = (state: AppState) => state.trade.validations;
 export const getPairs = (state: AppState) => state.trade.pairs;
 export const getFilter = (state: AppState) => state.trade.tradeFilter;
 export const getTradedAssets = (state: AppState) => state.trade.tradeableAsset;
+export const getOpenOrders = (state: AppState) => state.trade.openOrders;
 
 export default tradeSlice.reducer;

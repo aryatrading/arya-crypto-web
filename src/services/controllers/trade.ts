@@ -1,4 +1,5 @@
 import { SwapTradeType } from "../../types/trade";
+import { dummyOpenOrders } from "../../utils/constants/dummyData";
 import { axiosInstance } from "../api/axiosConfig";
 
 export const createSwapTrade = async (
@@ -46,4 +47,14 @@ export const getAvailablePairs = async (symbol: any, provider: number) => {
   }
 
   return { _tradables, _pairs };
+};
+
+export const getAssetOpenOrders = async (symbol: string, provider: number) => {
+  const { data } = await axiosInstance.get(
+    `trade-engine/orders/open/?provider=${provider}&symbol=${symbol}`
+  );
+
+  console.log("open order data >>> ", data);
+
+  return dummyOpenOrders; // TODO: replace payload with api response once done in backend
 };

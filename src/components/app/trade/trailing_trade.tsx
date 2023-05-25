@@ -6,8 +6,10 @@ import TradeInput from "../../shared/inputs/tradeInput";
 import { Button } from "../../shared/buttons/button";
 import { ProfitSet } from "../../shared/containers/trade/profit_set";
 import { PremiumBanner } from "../../shared/containers/premiumBanner";
+import { useTranslation } from "next-i18next";
 
 export const TrailingTrade: FC = () => {
+  const { t } = useTranslation(["trade"]);
   const trade = useSelector(getTrade);
   const [values, setValues] = useState({
     type: "Select Trailing type",
@@ -17,27 +19,27 @@ export const TrailingTrade: FC = () => {
   return (
     <>
       <PremiumBanner />
-      <p className="font-bold text-base">Add Trailing</p>
+      <p className="font-bold text-base">{t("addtrailing")}</p>
       <TrailingPicker
         type={values.type}
         onSelect={(e: any) => setValues({ ...values, type: e })}
       />
       <TradeInput
-        title="Price"
+        title={t("price")}
         value="USDT"
         amount={values.price}
         onchange={(e: any) => setValues({ ...values, price: e })}
       />
       {values.type === "Breakeven" ? (
         <TradeInput
-          title="SL price"
+          title={t("slprice")}
           value=""
           amount={values.price}
           onchange={(e: any) => setValues({ ...values, price: e })}
         />
       ) : values.type === "Percentage" ? (
         <TradeInput
-          title="Percentage"
+          title={t("percentage")}
           value=""
           amount={values.price}
           onchange={(e: any) => setValues({ ...values, price: e })}
@@ -47,9 +49,9 @@ export const TrailingTrade: FC = () => {
         className="bg-blue-3 rounded-md py-3"
         onClick={() => console.log(".")}
       >
-        <p>Add Trailing</p>
+        <p>{t("addtrailing")}</p>
       </Button>
-      <p className="font-bold text-base">Current Trailing</p>
+      <p className="font-bold text-base">{t("currenttrailing")}</p>
       <ProfitSet
         content={`Fixed at {{v}} with {{t}} {{tl}}`}
         profit={{ value: 3 }}

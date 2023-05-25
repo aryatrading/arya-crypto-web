@@ -46,3 +46,12 @@ export interface TradeValidations {
   min_qty?: number;
   max_qty?: number;
 }
+
+export interface TradeOrder {
+  status?: string;
+  type?: string;
+  amount?: number;
+  price?: number;
+  createdAt?: string;
+  exchange?: string;
+}

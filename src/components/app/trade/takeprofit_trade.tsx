@@ -13,9 +13,11 @@ import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
 import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries";
 import { percentTabs } from "../../../utils/constants/profitsPercentage";
 import { PremiumBanner } from "../../shared/containers/premiumBanner";
+import { useTranslation } from "next-i18next";
 
 export const TakeprofitTrade: FC = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation(["trade"]);
   const trade = useSelector(getTrade);
   const selectedExchange = useSelector(selectSelectedExchange);
   const [values, setValues] = useState({
@@ -43,15 +45,15 @@ export const TakeprofitTrade: FC = () => {
   return (
     <>
       <PremiumBanner />
-      <p className="font-bold text-base">Add take profit</p>
+      <p className="font-bold text-base">{t("addtakeprofit")}</p>
       <TradeInput
-        title="Price"
-        value={trade.base_name ?? "USDT"}
+        title={t("price")}
+        value={"USDT"}
         amount={values?.value}
         onchange={(e: any) => setValues({ ...values, value: e })}
       />
       <TradeInput
-        title="Quantity"
+        title={t("quantity")}
         value={trade.asset_name ?? "BTC"}
         amount={values.quantity}
         onchange={(e: any) => setValues({ ...values, quantity: e })}
@@ -71,10 +73,10 @@ export const TakeprofitTrade: FC = () => {
         />
       </div>
       <Button className="bg-blue-3 rounded-md py-3" onClick={() => onAddTp()}>
-        <p>Add Take profit</p>
+        <p>{t("addtakeprofit")}</p>
       </Button>
       {trade && trade?.take_profit?.length ? (
-        <p className="font-bold text-base">Take profits</p>
+        <p className="font-bold text-base">{t("takeprofit")}</p>
       ) : null}
 
       {trade &&

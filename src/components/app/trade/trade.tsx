@@ -12,9 +12,12 @@ import { TrailingTrade } from "./trailing_trade";
 import { useSelector } from "react-redux";
 import { getTrade, getValidations } from "../../../services/redux/tradeSlice";
 import { AssetTradeDropdown } from "../../shared/assetDropdown/assetTradeDropdown";
-import { Placeholder } from "../../shared/containers/placeholders";
+import { OpenOrders } from "../../shared/tables/openOrderTable";
+import { OrderHistory } from "../../shared/tables/orderHistoryTable";
+import { useTranslation } from "next-i18next";
 
 const Trade: FC = () => {
+  const { t } = useTranslation(["trade"]);
   const [activeTab, setActiveTab] = useState("entry");
   const trade = useSelector(getTrade);
   const validations = useSelector(getValidations);
@@ -22,22 +25,22 @@ const Trade: FC = () => {
   const tradetabs = useMemo(() => {
     return [
       {
-        title: "Entry",
+        title: t("entry"),
         value: "entry",
         key: "entry",
       },
       {
-        title: "Stop loss",
+        title: t("stoploss"),
         value: "stoploss",
         key: "stoploss",
       },
       {
-        title: "Take profit",
+        title: t("takeprofit"),
         value: "takeprofit",
         key: "takeprofit",
       },
       {
-        title: "Trailing",
+        title: t("trailing"),
         value: "trailing",
         key: "trailing",
       },
@@ -81,7 +84,7 @@ const Trade: FC = () => {
               onCreateTrade();
             }}
           >
-            <p>Place order</p>
+            <p>{t("placeorder")}</p>
           </Button>
         </div>
       </div>
@@ -89,18 +92,18 @@ const Trade: FC = () => {
         <TabList className="border-b-[1px] border-grey-3 mb-2">
           <Row className="gap-6">
             <Tab className="font-semibold text-sm outline-none cursor-pointer w-full text-center">
-              Open Orders
+              {t("openorders")}
             </Tab>
             <Tab className="font-semibold text-sm outline-none cursor-pointer w-full text-center">
-              Order History
+              {t("orderhistory")}
             </Tab>
           </Row>
         </TabList>
         <TabPanel>
-          <Placeholder content="You don't have any open orders" />
+          <OpenOrders />
         </TabPanel>
         <TabPanel>
-          <Placeholder content="You don't have any order history" />
+          <OrderHistory />
         </TabPanel>
       </Tabs>
     </Col>
