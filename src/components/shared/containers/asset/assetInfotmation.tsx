@@ -5,7 +5,9 @@ import { useSelector } from "react-redux";
 import { selectAssetLivePrice } from "../../../../services/redux/marketSlice";
 import { useTranslation } from "next-i18next";
 import { formatNumber } from "../../../../utils/helpers/prices";
+import styles from './assetInformation.module.scss'
 import parse from "html-react-parser";
+import { twMerge } from "tailwind-merge";
 
 type AssetInformationProps = {
   asset: AssetType;
@@ -42,7 +44,7 @@ export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
         <p className="font-medium text-base md:text-xl">
           {t("whatis")} {asset.name}
         </p>
-        <p className="font-semibold text-xs md:text-sm">{ parse(asset?.description ?? "")}</p>
+        <p className={twMerge("font-semibold text-xs md:text-sm",styles.description)}>{ parse(asset?.description ?? "")}</p>
       </Col>
     </Col>
   );

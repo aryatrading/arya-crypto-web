@@ -130,7 +130,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
         <AssetInformation asset={asset} />
         <AssetVote className="md:hidden" />
         <Col className="gap-4">
-          <h3 className="asset-header"> Crypto Profit Calculator</h3>
+          <h3 className="asset-header">{t('cryptoProfitCalculator')}</h3>
           <CoinProfitCalculator />
         </Col>
         {asset?.id && <CoinConverter preDefined staticCoin={asset} />}
