@@ -4,7 +4,6 @@ import Image from "next/image";
 import clsx from "clsx";
 import Link from "next/link";
 import { Col, Row } from "../../../../../shared/layout/flex";
-import Button from "../../../../../shared/buttons/button";
 import styles from "./smart-allocation-holdings-tab.module.scss";
 import { percentageFormat, formatNumber } from "../../../../../../utils/helpers/prices";
 import { CustomizeAllocationIcon } from "../../../../../svg/smart-allocation/customize-portfolio-icon";

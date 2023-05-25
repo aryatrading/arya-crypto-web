@@ -22,6 +22,22 @@ import CustomScroll from '../../../../../../shared/CustomScroll/CustomScroll'
     
     const selectedExchange = useSelector(selectSelectedExchange);
 
+    const maxMovement =Math.max(
+        ...holdingData.map((asset) => {
+            const {expected_value, current_value} = asset;
+            let movement = 0;
+            if(current_value && expected_value){
+                if(current_value<expected_value){
+                     movement = expected_value - current_value
+                }
+                else{
+                    movement = current_value - expected_value   
+                }
+            }
+            return movement
+        })
+    )
+
     const rebalanceNow  = useCallback(
       () => {
         if(!selectedExchange?.provider_id){
@@ -66,13 +82,11 @@ import CustomScroll from '../../../../../../shared/CustomScroll/CustomScroll'
                             if(current_value<expected_value){
                                 buy = true
                                 let buyAmount = expected_value - current_value
-                                percentage = Math.abs(Math.round((buyAmount / expected_value) * 100))
-                                console.log(percentage)
+                                percentage = Math.abs(Math.round((buyAmount / maxMovement) * 100))
                             }
                             else{
                                 let sellAmount = current_value - expected_value
-                                percentage = Math.abs(Math.round((sellAmount / current_value) * 100))
-                                console.log(percentage)
+                                percentage = Math.abs(Math.round((sellAmount / maxMovement) * 100))
                             }
                         }
                         return <div className='grid grid-cols-5 rounded-lg items-stretch justify-between text-center font-medium md:font-semibold'>
@@ -108,8 +122,11 @@ import CustomScroll from '../../../../../../shared/CustomScroll/CustomScroll'
                 }
             </CustomScroll>
         </Col>
-    },[holdingData, t])
+    },[holdingData, maxMovement, t])
 
+    useEffect(() => {
+        console.log('maxMovement', maxMovement)
+    }, [maxMovement])
     
   return (
     <AlertDialog.Root>
