@@ -1,1 +1,25 @@
-{}
+{
+    "entry": "Entrée",
+    "stoploss": "Stop loss",
+    "takeprofit": "Prendre des bénéfices",
+    "trailing": "Traînante",
+    "placeorder": "Passer commande",
+    "openorders": "Commandes en cours",
+    "orderhistory": "Historique des commandes",
+    "buy": "Acheter",
+    "sell": "Vendre",
+    "market": "Marché",
+    "conditional": "Conditionnel",
+    "available": "Disponible",
+    "price": "Prix",
+    "units": "Unités",
+    "total": "Total",
+    "addstoploss": "Ajouter un stop loss",
+    "addtakeprofit": "Ajouter un take profit",
+    "quantity": "Quantité",
+    "selecttrailing": "Sélectionner le type de suivi",
+    "addtrailing": "Ajouter une queue",
+    "slprice": "Prix Sl",
+    "percentage": "Pourcentage",
+    "currenttrailing": "Courant Suivi"
+}
