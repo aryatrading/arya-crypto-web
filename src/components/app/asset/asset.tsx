@@ -52,9 +52,9 @@ const Asset: FC = () => {
       </Row>
       <Row className="justify-between">
         <AssetHeader asset={asset} />
-        <AssetVote />
+        <AssetVote className="hidden md:flex"/>
       </Row>
-      <Row className="mt-7 flex flex-wrap xl:justify-between">
+      <Row className="mt-7 flex-wrap gap-5 xl:gap-16 xl:justify-start hidden md:flex">
         {stats.map((elm, index) => {
           return (
             <AssetStatistics key={index} title={elm.title} value={elm.value} />
@@ -75,7 +75,7 @@ const Asset: FC = () => {
           </Row>
         </TabList>
         <TabPanel>
-          <AssetInformationTab />
+          <AssetInformationTab stats={stats} />
         </TabPanel>
         <TabPanel>
           <AssetHoldingTab />

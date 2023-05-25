@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { selectAssetLivePrice } from "../../../../services/redux/marketSlice";
 import { useTranslation } from "next-i18next";
 import { formatNumber } from "../../../../utils/helpers/prices";
+import parse from "html-react-parser";
 
 type AssetInformationProps = {
   asset: AssetType;
@@ -13,12 +14,11 @@ type AssetInformationProps = {
 export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
   const { t } = useTranslation(["asset"]);
   const _assetprice = useSelector(selectAssetLivePrice);
-  const name = asset.name;
   return (
     <Col className="gap-11">
       <Col className="gap-4">
-        <h2 className="font-medium text-xl">{t("pricelivedata", { asset })}</h2>
-        <p className="font-medium text-sm">
+        <h2 className="font-medium text-sm md:text-xl">{t("pricelivedata", { asset })}</h2>
+        <p className="font-medium text-xs md:text-sm">
           <strong>
             {t("pricetday", { asset })}
             {formatNumber(
@@ -39,10 +39,10 @@ export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
         </p>
       </Col>
       <Col className="gap-4">
-        <p className="font-medium text-xl">
+        <p className="font-medium text-sm md:text-xl">
           {t("whatis")} {asset.name}
         </p>
-        <p className="font-semibold text-sm">{asset?.description ?? ""}</p>
+        <p className="font-semibold text-xs md:text-sm">{ parse(asset?.description ?? "")}</p>
       </Col>
     </Col>
   );
