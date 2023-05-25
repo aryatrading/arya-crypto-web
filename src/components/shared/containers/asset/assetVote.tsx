@@ -55,7 +55,7 @@ const AssetVote: FC<{className?:string}> = ({className}) => {
 
   return (
     <Col className={twMerge('gap-3 w-full md:w-auto',className)}>
-      <span className="font-medium text-sm md:text-sm">{t("assetvoting")}</span>
+      <span className="asset-header">{t("assetvoting")}</span>
       {hasVoted === false ? (
         <>
           <Row className="gap-2">

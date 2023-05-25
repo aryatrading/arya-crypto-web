@@ -19,7 +19,7 @@ export const TimeseriesPicker: FC<TimeseriesProps> = ({
       {series.map((elm, index) => {
         return (
           <ShadowButton
-            className={twMerge('px-4 py-2 gap-0',elm.title==='3M'?'hidden md:flex':'')}
+            className={twMerge('px-3 py-2 gap-0',elm.title==='3M'?'hidden md:flex':'')}
             key={index}
             title={elm.title}
             onClick={() => onclick(elm)}
@@ -37,7 +37,7 @@ export const TimeseriesPicker: FC<TimeseriesProps> = ({
             }
             bgColor={active === elm.key ? "bg-blue-3" : "bg-grey-2"}
             textColor={active === elm.key ? "text-blue-2" : "text-grey-1"}
-            textSize={`font-medium ${elm.icon&&`hidden md:block`}`}
+            textSize={`font-medium text-xs ${elm.icon&&`hidden md:block`}`}
           />
         );
       })}

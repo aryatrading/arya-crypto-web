@@ -32,13 +32,13 @@ type seriesInterface = {
 type stats = {
   title: string;
   value: string;
-}
+};
 
 interface IAssetInformationTab {
-  stats: stats[]
+  stats: stats[];
 }
 
-const AssetInformationTab: FC<IAssetInformationTab> = ({stats}) => {
+const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
   const { t } = useTranslation(["asset"]);
   const asset = useSelector(getAsset);
   const timeseries = useSelector(getAssetTimeseries);
@@ -52,13 +52,13 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({stats}) => {
         title: t("pricegraph"),
         value: "price",
         key: "price",
-        icon:LineGraphIcon
+        icon: LineGraphIcon,
       },
       {
         title: t("tradinggraph"),
         value: "tradingview",
         key: "tradingview",
-        icon: CandleStickGraphFilled
+        icon: CandleStickGraphFilled,
       },
     ];
   }, [t]);
@@ -69,12 +69,13 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({stats}) => {
   };
 
   return (
-    <Col className="lg:flex-row w-full lg:gap-5">
+    <Col className="lg:flex-row w-full gap-8 lg:gap-5">
       <Col className="lg:w-8/12 gap-10">
-        <Col>
+        <Col className="gap-2">
           <Row className="justify-between items-center gap-4">
-            <h2 className="font-medium text-base xl:text-xl">
-              <span className="uppercase">{asset.symbol}</span> {t("price_chart")}
+            <h2 className="asset-header">
+              <span className="uppercase">{asset.symbol}</span>{" "}
+              {t("price_chart")}
             </h2>
             <Row className="gap-3 hidden md:flex">
               {view === "price" ? (
@@ -103,7 +104,6 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({stats}) => {
               series={assetGraphToggles}
               active={view}
               onclick={(e: seriesInterface) => setView(e.key)}
-              
             />
             {view === "price" ? (
               <TimeseriesPicker
@@ -118,21 +118,25 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({stats}) => {
         <Row className="grid grid-cols-3 gap-5 justify-start md:hidden">
           {stats.map((elm, index) => {
             return (
-              <AssetStatistics key={index} title={elm.title} value={elm.value} />
+              <AssetStatistics
+                key={index}
+                title={elm.title}
+                value={elm.value}
+              />
             );
           })}
         </Row>
 
         <AssetInformation asset={asset} />
-
-        <AssetVote className="md:hidden"/>
-
-
-        <Col className="gap-14">
+        <AssetVote className="md:hidden" />
+        <Col className="gap-4">
+          <h3 className="asset-header"> Crypto Profit Calculator</h3>
           <CoinProfitCalculator />
-          {asset?.id && <CoinConverter preDefined staticCoin={asset} />}
         </Col>
+        {asset?.id && <CoinConverter preDefined staticCoin={asset} />}
+
       </Col>
+
       <Col className="lg:w-4/12 gap-10">
         <Col className="hidden xl:flex gap-5">
           <p className="text-xl font-medium">
@@ -140,27 +144,27 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({stats}) => {
           </p>
           <AssetTrade />
         </Col>
-          <Col className="gap-5">
-            <h3 className="font-medium text-white text-base xl:text-xl">
-              {t("communityTitle", { coin: asset.name })}
-            </h3>
-            {posts.length > 0 && (
-              <Col className="w-full min-h-[300px] bg-grey-6 rounded-md px-6 py-3">
-                {posts?.slice(0, 2)?.map((post: PostTypes) => {
-                  return <Post post={post} />;
-                })}
+        <Col className="gap-5">
+          <h3 className="asset-header">
+            {t("communityTitle", { coin: asset.name })}
+          </h3>
+          {posts.length > 0 && (
+            <Col className="w-full min-h-[300px] bg-grey-6 rounded-md px-6 py-3">
+              {posts?.slice(0, 2)?.map((post: PostTypes) => {
+                return <Post post={post} />;
+              })}
 
-                <a
-                  href={`https://arya-web-app.vercel.app/asset/?s=${asset.symbol}&m=crypto&t=USD&n=${asset.name}/US%20Dollar`}
-                  className="text-white text-base font-bold underline text-center"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {t('seeMore')} +
-                </a>
-              </Col>
-            )}
-          </Col>
+              <a
+                href={`https://arya-web-app.vercel.app/asset/?s=${asset.symbol}&m=crypto&t=USD&n=${asset.name}/US%20Dollar`}
+                className="text-white text-base font-bold underline text-center"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t("seeMore")} +
+              </a>
+            </Col>
+          )}
+        </Col>
       </Col>
     </Col>
   );

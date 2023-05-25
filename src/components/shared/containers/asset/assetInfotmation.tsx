@@ -17,7 +17,7 @@ export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
   return (
     <Col className="gap-11">
       <Col className="gap-4">
-        <h2 className="font-medium text-sm md:text-xl">{t("pricelivedata", { asset })}</h2>
+        <h2 className="asset-header">{t("pricelivedata", { asset })}</h2>
         <p className="font-medium text-xs md:text-sm">
           <strong>
             {t("pricetday", { asset })}
@@ -39,7 +39,7 @@ export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
         </p>
       </Col>
       <Col className="gap-4">
-        <p className="font-medium text-sm md:text-xl">
+        <p className="font-medium text-base md:text-xl">
           {t("whatis")} {asset.name}
         </p>
         <p className="font-semibold text-xs md:text-sm">{ parse(asset?.description ?? "")}</p>
