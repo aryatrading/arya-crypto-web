@@ -123,10 +123,6 @@ import CustomScroll from '../../../../../../shared/CustomScroll/CustomScroll'
             </CustomScroll>
         </Col>
     },[holdingData, maxMovement, t])
-
-    useEffect(() => {
-        console.log('maxMovement', maxMovement)
-    }, [maxMovement])
     
   return (
     <AlertDialog.Root>
