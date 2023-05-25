@@ -109,7 +109,6 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
             <Col className="flex-1 gap-5">
                 <Row className="w-full gap-4 text-center">
                     {isTabletOrMobileScreen && <Link href="smart-allocation/edit" className="flex-1 bg-blue-1 py-4 px-5 rounded-md text-sm font-bold">{t('editPortfolio')}</Link>}
-                    <Button className="flex-1 bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold">{t('RebalanceNow')}</Button>
                 </Row>
                 <Col className="gap-4">
                     <RebalancePreviewDialog holdingData = {smartAllocationHoldings.filter((asset)=>asset.name !== USDTSymbol)}/>
