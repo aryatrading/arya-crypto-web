@@ -10,11 +10,12 @@ import { DisccounetAlertIcon } from '../../../svg/discconetAlert';
 import { ConnectedAlertIcon } from '../../../svg/connectedAlert';
 import AddExchange from '../../exchangeTab/AddExchange';
 import { useTranslation } from 'next-i18next';
+import { getRemoteConfigValue } from '../../../../services/firebase/remoteConfig';
 
-const ModalContainer = ({ closeModal, children, type }: { closeModal: () => void, children?: any, type?: string }) => {
+const ModalContainer = ({ closeModal, children, type, padding }: { closeModal: () => void, children?: any, type?: string, padding?: string, }) => {
     return (
-        <Col className={clsx({ "items-center": type !== 'edit' }, 'min-w-full min-h-[200px] bg-black-1 rounded-md p-8 gap-4 relative')}>
-            <Button className='absolute top-6 right-6' onClick={closeModal}>
+        <Col className={clsx({ "items-center": type !== 'edit', "p-8": !padding }, 'min-w-full min-h-[200px] rounded-md gap-4 relative', padding)}>
+            <Button className='absolute top-6 right-6 z-10' onClick={closeModal}>
                 <CloseIcon className='stroke-current text-[#89939F] w-3 h-3' />
             </Button>
             {children}
@@ -25,6 +26,7 @@ const ModalContainer = ({ closeModal, children, type }: { closeModal: () => void
 interface ExchangeModalsTypes { id?: string, name?: string, setExchanges?: any, showModal: { type: string, bool: boolean }, closeModal: () => void }
 
 const ExchangeModals = ({ id, name, setExchanges, showModal, closeModal }: ExchangeModalsTypes) => {
+    const videoURL = getRemoteConfigValue('exchanges')?.[id || '']?.videoURL;
     const { t } = useTranslation(['settings'])
     const editNameRef = useRef<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -80,7 +82,18 @@ const ExchangeModals = ({ id, name, setExchanges, showModal, closeModal }: Excha
                 </Row>
             </ModalContainer>
         );
-    }, [closeModal, t, name, isLoading, id, setExchanges]);
+    }, [closeModal, t, name, isLoading, id]);
+
+    const videoPreviewer = useMemo(() => {
+        return (
+            <ModalContainer closeModal={closeModal} padding="pt-0">
+                {videoURL != null && videoURL !== '' && <video width="100%" controls>
+                    <source src={videoURL} type="video/mp4" />
+                    Your browser does not support HTML video.
+                </video>}
+            </ModalContainer>
+        );
+    }, [closeModal, videoURL]);
 
     const connectedDialog = useMemo(() => {
         return (
@@ -114,6 +127,7 @@ const ExchangeModals = ({ id, name, setExchanges, showModal, closeModal }: Excha
             {showModal.type === 'edit' && editNameDialog}
             {showModal.type === 'connect' && connectedDialog}
             {showModal.type === 'add' && addExchange}
+            {showModal.type === 'video' && videoPreviewer}
         </Row>
     );
 }

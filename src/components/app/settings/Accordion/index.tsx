@@ -193,7 +193,7 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges }: any) => {
     ));
 
 
-    const AccordionItems = useMemo(() => (
+    const AccordionItem = useMemo(() => (
         <Accordion.Item className="w-full bg-grey-2 mb-6" value={cardId}>
             <AccordionTrigger>
                 <Row className='gap-4'>
@@ -213,14 +213,17 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges }: any) => {
                                 <p className='text-white font-bold text-xl'>{t('exchangeAccQ', { name: exchange.provider_name })}</p>
                                 <p className='text-white font-bold text-base'>{exchangeDetails.signupDescription?.[i18n?.language] || ''}</p>
                             </Col>
-                            <Button className={'text-white font-medium rounded-md text-base focus:outline-none w-[300px] px-4 bg-grey-2 hover:divide-opacity-95 h-[56px] self-center me-0 mb-4 md:mb-0 md:me-6'}>
+                            <Button className={'text-white font-medium rounded-md text-base focus:outline-none w-[300px] px-4 bg-grey-2 hover:divide-opacity-95 h-[56px] self-center me-0 mb-4 md:mb-0 md:me-6'} onClick={() => window.open(
+                                exchangeDetails.exchangeURL,
+                                '_blank'
+                            )}>
                                 <h5>{t('createAccount')}</h5>
                             </Button>
                         </Row>
 
                         <Row className='justify-between items-center bg-blue-3 rounded-md h-[65px] px-6'>
                             <p className='text-white font-bold text-lg'>{t('howToConnect')}</p>
-                            <h5 className='text-blue-1 font-bold'>{t('vidTutorial')}</h5>
+                            <h5 className='text-blue-1 font-bold cursor-pointer' onClick={() => openModal('video')}>{t('vidTutorial')}</h5>
                         </Row>
 
                         <Col className='gap-2'>
@@ -234,13 +237,13 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges }: any) => {
                 </Row>
             </AccordionContent>
         </Accordion.Item>
-    ), [AccordionContent, AccordionTrigger, cardId, display, exchange.create, exchange?.provider_id, exchange.provider_name, exchangeDetails.signupDescription, exchangeDetails?.steps, form, i18n?.language, name, t]);
+    ), [AccordionContent, AccordionTrigger, cardId, display, exchange.create, exchange?.provider_id, exchange.provider_name, exchangeDetails.exchangeURL, exchangeDetails.signupDescription, exchangeDetails?.steps, form, i18n?.language, name, openModal, t]);
 
 
     return (
         <Row className='gap-10 w-full overflow-hidden'>
-            {AccordionItems}
-            <Modal isVisible={showModal.bool} size='lg'>
+            {AccordionItem}
+            <Modal isVisible={showModal.bool} size={showModal.type === 'video' ? '4xl' : 'lg'}>
                 <ExchangeModals closeModal={closeModal} showModal={showModal} id={exchange.provider_id} name={name} />
             </Modal>
         </Row>
