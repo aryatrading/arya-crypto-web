@@ -77,7 +77,7 @@ export const getAddableProviders = async () => {
   axiosInstance.get(`/general/providers`).then(response => {
     if (response.data.length) {
       const arr: any[] = [];
-      const connectedExchanges = store.getState().exchange.data.connectedExchanges;
+      const connectedExchanges = store?.getState()?.exchange?.data?.connectedExchanges;
       response.data.map((e: any) => {
         return arr.push({
           ...e,
