@@ -5,7 +5,8 @@ import { appWithTranslation } from "next-i18next";
 import { ReactNode, ReactElement, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "next-themes";
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApp } from "firebase/app";
+import { getRemoteConfig, fetchAndActivate } from "firebase/remote-config";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import "react-toastify/dist/ReactToastify.css";
@@ -39,9 +40,15 @@ initAuth();
 
 try {
   initializeApp(firebaseConfig);
+  const remoteConfig = getRemoteConfig(getApp());
+  remoteConfig.settings.minimumFetchIntervalMillis = 1000;
+  fetchAndActivate(remoteConfig);
+
 } catch (err) {
+  console.log({ err });
   console.error(err);
 }
+
 
 function App({ Component, ...rest }: AppPropsWithLayout) {
   useEffect(() => {
