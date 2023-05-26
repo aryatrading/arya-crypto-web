@@ -22,7 +22,7 @@ export const addExchange = async (id?: string | number, fullExchange?: ExchangeT
     });
     const connectedProvider = store.getState().exchange.data.connectedExchanges;
     delete fullExchange?.create;
-    store.dispatch(setConnectedExchanges([fullExchange, ...connectedProvider]));
+    store.dispatch(setConnectedExchanges([...connectedProvider, fullExchange]));
 };
 
 export const changeExchangeName = async (id?: string | number, name?: string) => {

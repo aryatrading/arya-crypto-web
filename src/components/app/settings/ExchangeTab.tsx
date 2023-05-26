@@ -23,7 +23,6 @@ const ExchangeTab = () => {
     const [exchanges, setExchanges] = useState<any>([]);
     const [showModal, setShowModal] = useState({ bool: false, type: '' });
 
-
     useEffect(() => {
         const connectedExchangesExceptOverall = connectedExchanges?.filter(e => e.provider_id != null);
         if (connectedExchanges?.filter(e => e.provider_id)?.length) {
@@ -43,15 +42,15 @@ const ExchangeTab = () => {
                     }} />
                     :
                     <>
-                        <Accordion.Root className="w-full rounded-lg" type="single" defaultValue="item-1" collapsible>
-                            {exchanges.map((exchange: ExchangeType, index: number) => {
+                        <Accordion.Root className="w-full rounded-lg" type="single" collapsible>
+                            {exchanges.map((exchange: ExchangeType, index: number, arr: ExchangeType[]) => {
                                 return (
-                                    <ExchangeAccordionCard key={index} t={t} exchange={exchange} cardId={"item-" + (index + 1)} setExchanges={setExchanges} />
+                                    <ExchangeAccordionCard key={index} t={t} exchanges={arr} exchange={exchange} cardId={"item-" + (index + 1)} setExchanges={setExchanges} />
                                 );
                             })}
                         </Accordion.Root>
 
-                        <Button className={clsx({ "cursor-not-allowed": exchanges[0]?.create }, 'w-full h-[80px] bg-grey-2 rounded-md hover:bg-grey-3 px-5')} onClick={openModal} disabled={exchanges[0]?.create}>
+                        <Button className={clsx({ "cursor-not-allowed hover:bg-grey-2 opacity-75": exchanges[exchanges.length - 1]?.create }, 'w-full h-[80px] bg-grey-2 rounded-md hover:bg-grey-3 px-5')} onClick={openModal} disabled={exchanges[exchanges.length - 1]?.create}>
                             <Row className='gap-4'>
                                 <PlusIcon stroke="currentColor" className="w-6 h-6 stroke-blue-1" />
 

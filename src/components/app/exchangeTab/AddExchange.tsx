@@ -34,7 +34,7 @@ const AddExchange = (props: AddExchangeTypes) => {
                 {
                     allProviders?.map(provider => {
                         return (
-                            <Button className={clsx({ "hover:bg-grey-4": !provider?.isConnected, "cursor-not-allowed": provider?.isConnected }, 'w-[214px] h-[48px] bg-grey-3 rounded-md')} onClick={() => props.onPressExchange((st: any) => [{ provider_id: provider.id, name: provider.name, create: true }, ...st,])} disabled={provider?.isConnected}>
+                            <Button className={clsx({ "hover:bg-grey-4": !provider?.isConnected, "cursor-not-allowed": provider?.isConnected }, 'w-[214px] h-[48px] bg-grey-3 rounded-md')} onClick={() => props.onPressExchange((st: any) => [...st, { provider_id: provider.id, name: provider.name, create: true }])} disabled={provider?.isConnected}>
                                 <Row className='px-4 justify-between items-center'>
                                     <Row className='justify-center items-center gap-2'>
                                         <ExchangeImage providerId={provider.id} />

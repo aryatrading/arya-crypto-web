@@ -14,7 +14,7 @@ import { getRemoteConfigValue } from '../../../../services/firebase/remoteConfig
 
 const ModalContainer = ({ closeModal, children, type, padding }: { closeModal: () => void, children?: any, type?: string, padding?: string, }) => {
     return (
-        <Col className={clsx({ "items-center": type !== 'edit', "p-8": !padding }, 'min-w-full min-h-[200px] rounded-md gap-4 relative', padding)}>
+        <Col className={clsx({ "items-center": type !== 'edit', "p-8": !padding }, 'min-w-full bg-black-1 min-h-[200px] rounded-md gap-4 relative', padding)}>
             <Button className='absolute top-6 right-6 z-10' onClick={closeModal}>
                 <CloseIcon className='stroke-current text-[#89939F] w-3 h-3' />
             </Button>

@@ -22,9 +22,9 @@ import ExchangeModals from '../Modal';
 import styles from './index.module.scss';
 
 const labelClasses = "text-base text-white font-semibold";
-const displayClasses = "text-base rounded-lg block w-full overflow-auto p-2.5 bg-grey-3 placeholder-grey-1 h-[48px] justify-center text-white";
+const displayClasses = "text-base rounded-md block w-full overflow-auto p-2.5 bg-grey-3 placeholder-grey-1 h-[48px] justify-center text-white";
 
-const ExchangeAccordionCard = ({ cardId, exchange, setExchanges }: any) => {
+const ExchangeAccordionCard = ({ cardId, exchange, setExchanges, exchanges }: any) => {
     const { t, i18n } = useTranslation(['settings']);
     const [showModal, setShowModal] = useState({ bool: false, type: '' });
     const name = useMemo(() => exchange?.create ? exchange?.name?.charAt(0)?.toUpperCase() + exchange?.name?.slice(1) : exchange.name, [exchange?.create, exchange.name])
@@ -49,7 +49,7 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges }: any) => {
 
                 <p>{t('whiteListText')}</p>
             </Col>
-            <Button className='text-white bg-grey-3 hover:bg-grey-4 px-4 font-medium rounded-lg text-base min-h-[44px] mt-6' type="button" onClick={() => {
+            <Button className='text-white bg-grey-3 hover:bg-grey-4 px-4 font-medium rounded-md text-base min-h-[44px] mt-6' type="button" onClick={() => {
                 navigator.clipboard.writeText(IPs).then(() => {
                     toast.success(t('common:copied'));
                 });
@@ -110,11 +110,11 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges }: any) => {
                         {copyWhiteListIPs}
 
                         <Row className='gap-4'>
-                            <Button className={'text-white mt-14 lg:mt-0 font-medium rounded-lg text-base min-h-[44px] focus:outline-none self-start px-10 bg-blue-1 hover:bg-blue-2'} type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
+                            <Button className={'text-white mt-14 lg:mt-0 font-medium rounded-md text-base min-h-[44px] focus:outline-none self-start px-10 bg-blue-1 hover:bg-blue-2'} type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
                                 {t('submit', { name: exchange?.create ? exchange?.name?.charAt(0)?.toUpperCase() + exchange?.name?.slice(1) : exchange.name })}
                             </Button>
 
-                            <Button className={'text-white mt-14 lg:mt-0 font-medium rounded-lg text-base min-h-[44px] focus:outline-none self-start px-10 bg-transparent'} type="button" disabled={isSubmitting} onClick={() => {
+                            <Button className={'text-white mt-14 lg:mt-0 font-medium rounded-md text-base min-h-[44px] focus:outline-none self-start px-10 bg-transparent'} type="button" disabled={isSubmitting} onClick={() => {
                                 setExchanges((st: ExchangeType[]) => st.filter(e => !e?.create))
                             }}>
                                 {t('cancel')}
@@ -135,7 +135,7 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges }: any) => {
                     <Col className='flex-1 gap-4'>
                         <label className={labelClasses}>{t('portfolioname')}</label>
                         <Col className='relative w-full overflow-hidden'>
-                            <Button className='text-base rounded-lg text-start block w-full overflow-auto lg:w-full p-2.5 bg-grey-3 placeholder-grey-1 h-[48px] justify-center text-white pr-4' onClick={edit}>{exchange?.name || ''}</Button>
+                            <Button className='text-base rounded-md text-start block w-full overflow-auto lg:w-full p-2.5 bg-grey-3 placeholder-grey-1 h-[48px] justify-center text-white pr-4' onClick={edit}>{exchange?.name || ''}</Button>
                             <Col className='absolute right-3 top-[15px]'>
                                 <EditIcon />
                             </Col>
@@ -168,8 +168,9 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges }: any) => {
     const AccordionTrigger = forwardRef(({ children, className, ...props }: any, forwardedRef) => (
         <Accordion.Header>
             <Accordion.Trigger
-                className={clsx('flex-row w-full focus:outline-none focus:ring-0 focus:border-0', className, styles.AccordionTrigger)}
+                className={clsx({ "opacity-50 cursor-not-allowed": exchanges.filter((e: ExchangeType) => e?.create).length > 0 && !exchange.create }, 'flex-row w-full focus:outline-none focus:ring-0 focus:border-0', className, styles.AccordionTrigger)}
                 {...props}
+                disabled={exchanges.filter((e: ExchangeType) => e?.create).length > 0}
                 ref={forwardedRef}
             >
                 <Row className='w-full items-center justify-between px-6 h-[80px]'>
@@ -187,6 +188,7 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges }: any) => {
             className={clsx('border-t-[2px] border-t-grey-3', className, styles.AccordionContent)}
             {...props}
             ref={forwardedRef}
+            forceMount={!!exchange?.create}
         >
             {children}
         </Accordion.Content>
@@ -194,9 +196,9 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges }: any) => {
 
 
     const AccordionItem = useMemo(() => (
-        <Accordion.Item className="w-full bg-grey-2 mb-6" value={cardId}>
+        <Accordion.Item className={"w-full bg-grey-2 mb-6 rounded-md"} value={cardId}>
             <AccordionTrigger>
-                <Row className='gap-4'>
+                <Row className='gap-4 items-center'>
                     <ExchangeImage providerId={exchange?.provider_id} width={20} height={20} />
                     <h3 className='text-white font-bold text-xl'>{name}</h3>
                 </Row>
