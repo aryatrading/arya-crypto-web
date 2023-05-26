@@ -20,10 +20,10 @@ interface InputTypes {
 
 const Input = ({ label, value }: InputTypes) => {
     return (
-        <Col className='gap-2'>
-            <label className="block text-sm font-medium text-white">{label}</label>
+        <Col className='gap-4'>
+            <label className="block text-base font-medium text-white">{label}</label>
             <input
-                className='bg-grey-2 text-white text-sm rounded-lg block w-[370px] p-2.5 opacity-60'
+                className='text-base rounded-lg block w-[300px] md:w-[370px] overflow-auto p-2.5 bg-grey-3 placeholder-grey-1 h-[48px] justify-center text-white'
                 disabled
                 defaultValue={value} />
         </Col>
@@ -57,7 +57,7 @@ const AccountTab = () => {
         <>
             <Col className='gap-4'>
                 <Col className='gap-6'>
-                    <Row className='gap-6 flex-wrap'>
+                    <Row className='gap-6 flex-wrap justify-center md:justify-start'>
                         <Col className='gap-2'>
                             <Input label={t('common:name')} value={displayName?.replace('+', ' ') || ''} />
                         </Col>
@@ -65,10 +65,10 @@ const AccountTab = () => {
                             <Input label={t('common:email')} value={email || ''} />
                         </Col>
                     </Row>
-                    <Col className='gap-2'>
-                        <label className="block text-sm font-medium text-white">{t('common:password')}</label>
+                    <Col className='gap-4 items-center md:items-start'>
+                        <label className="text-base font-medium text-white hidden md:block">{t('common:password')}</label>
                         <Button
-                            className="text-white font-medium rounded-lg text-sm px-5 bg-grey-2 w-[300px] py-2.5"
+                            className="text-white font-medium rounded-lg text-base px-5 bg-grey-2 w-[300px] h-[48px]"
                             onClick={showCPModal}>
                             {t('changePassword')}
                         </Button>
@@ -76,8 +76,8 @@ const AccountTab = () => {
                 </Col>
             </Col>
 
-            <Modal isVisible={showChangePasswordModal} size='md'>
-                <Col className='min-h-[200px] p-5 bg-black-2'>
+            <Modal isVisible={showChangePasswordModal} size='lg'>
+                <Col className='min-h-[200px] p-6 bg-black-2 rounded-lg'>
                     <Button className='self-end' onClick={hideCPModal}>
                         <CloseIcon className='stroke-current text-[#89939F] w-3 h-3' />
                     </Button>
@@ -117,20 +117,20 @@ const AccountTab = () => {
                         {({ isSubmitting }: any) => (
                             <Form className="flex flex-col w-full gap-4">
                                 <Col>
-                                    <TextInput type="password" name="currentPassword" label={t('currentpassword')} />
+                                    <TextInput type="password" name="currentPassword" label={t('currentpassword')} labelClassName='block text-base text-white font-semibold' />
                                     <ErrorMessage name="currentPassword" component="p" className="text-red-400" />
                                 </Col>
                                 <Col>
-                                    <TextInput type="password" name="newPassword" label={t('newPassword')} />
+                                    <TextInput type="password" name="newPassword" label={t('newPassword')} labelClassName='block text-base text-white font-semibold' />
                                     <ErrorMessage name="newPassword" component="p" className="text-red-400" />
                                 </Col>
                                 <Col>
-                                    <TextInput type="password" name="confirmNewPassowrd" label={t('confirmNewPassword')} />
+                                    <TextInput type="password" name="confirmNewPassowrd" label={t('confirmNewPassword')} labelClassName='block text-base text-white font-semibold' />
                                     <ErrorMessage name="confirmNewPassowrd" component="p" className="text-red-400" />
                                 </Col>
                                 <Col className="items-center gap-4 mt-6 mb-4">
                                     {errorForm && <span className='text-red-600'>{(errorForm || 'Invalid email or password!')}</span>}
-                                    <Button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 focus:outline-none w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
+                                    <Button className='text-white bg-blue-1 hover:bg-blue-2 focus:ring-4 focus:ring-blue-2 rounded-md text-base h-[48px] font-bold focus:outline-none w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
                                         <h5>{t('changePassword')}</h5>
                                     </Button>
                                 </Col>
