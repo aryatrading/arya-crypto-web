@@ -233,31 +233,35 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
     const reBalanceNow = useMemo(() => {
         return (
-            <Col className="flex-1 gap-5">
+            <Col className="w-full md:max-w-[300px] flex-1 gap-5 justify-center">
                 <Row className="w-full gap-4 text-center">
-                    {isTabletOrMobileScreen && <Link href="smart-allocation/edit" className="flex-1 bg-blue-1 py-4 px-5 rounded-md text-sm font-bold">{t('editPortfolio')}</Link>}
+                    <Link href="smart-allocation/edit" className="flex-1 flex items-center justify-center bg-blue-1 h-12 px-5 rounded-md text-sm font-bold">{t('editPortfolio')}</Link>
                 </Row>
                 <Col className="gap-4">
                     <RebalancePreviewDialog holdingData={smartAllocationHoldings?.filter((asset) => asset.name !== USDTSymbol) ?? []} />
-                    <p className="font-bold text-grey-1">{t('automation')}</p>
-                    <p className="text-sm font-bold">{t('automaticRebalancingScheduled')} : <span className="text-blue-1">{t(`common:${rebalancingFrequency}`)}</span></p>
-                    <p className="text-sm font-bold">{t('nextRebalancingSchedule')} : <span className="text-blue-1">{moment(rebalancingDate).format('DD/MM/YY')}</span></p>
-                    <p className="font-bold text-grey-1">{t('common:exitStrategy')}</p>
-                    {exitStrategyData && <span className="text-sm font-medium">
-                        <Trans i18nKey={'smart-allocation:haveExitStrategy'}
+                    {rebalancingFrequency && <>
+                        <p className="font-bold text-grey-1">{t('automation')}</p>
+                        <p className="text-sm font-bold">{t('automaticRebalancingScheduled')} : <span className="text-blue-1">{t(`common:${rebalancingFrequency}`)}</span></p>
+                        <p className="text-sm font-bold">{t('nextRebalancingSchedule')} : <span className="text-blue-1">{moment(rebalancingDate).format('DD/MM/YY')}</span></p>
+                    </>}
+                    {exitStrategyData && <>
+                        <p className="font-bold text-grey-1">{t('common:exitStrategy')}</p>
+                        <span className="text-sm font-medium">
+                            <Trans i18nKey={'smart-allocation:haveExitStrategy'}
 
-                            components={{ blueText: <span /> }}
-                            values={{
-                                assetChangeType: t(exitStrategyData.exit_type as string),
-                                assetChangeValue: `${exitStrategyData.exit_type === EnumExitStrategyTrigger.RisesBy ? `${(exitStrategyData.exit_value ?? 0) * 100}%` : `${exitStrategyData.exit_value}$`}`,
-                                assetSellPercentage: `${(exitStrategyData.exit_percentage ?? 0) * 100}%`
-                            }}
-                        />
-                    </span>}
+                                components={{ blueText: <span /> }}
+                                values={{
+                                    assetChangeType: t(exitStrategyData.exit_type as string),
+                                    assetChangeValue: `${exitStrategyData.exit_type === EnumExitStrategyTrigger.RisesBy ? `${(exitStrategyData.exit_value ?? 0) * 100}%` : `${exitStrategyData.exit_value}$`}`,
+                                    assetSellPercentage: `${(exitStrategyData.exit_percentage ?? 0) * 100}%`
+                                }}
+                            />
+                        </span>
+                    </>}
                 </Col>
             </Col>
         )
-    }, [exitStrategyData, isTabletOrMobileScreen, rebalancingDate, rebalancingFrequency, smartAllocationHoldings, t])
+    }, [exitStrategyData, rebalancingDate, rebalancingFrequency, smartAllocationHoldings, t])
 
     const graphLegend = useMemo(() => {
         return (

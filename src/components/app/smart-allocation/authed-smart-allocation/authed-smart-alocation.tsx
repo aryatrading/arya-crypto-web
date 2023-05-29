@@ -13,7 +13,6 @@ import { getExitStrategy, getSmartAllocation } from "../../../../services/contro
 import SmartAllocationSimulation from "./smart-allocation-simulation/smart-allocation-simulation";
 import { EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher";
-import { PortfolioSnapshotType } from "../../../../types/exchange.types";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { MODE_DEBUG } from "../../../../utils/constants/config";
 import PageLoader from "../../../shared/pageLoader/pageLoader";

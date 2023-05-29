@@ -56,7 +56,7 @@ const SmartAllocationExitStrategy: FC<SmartAllocationExitStrategyPropsType> = ({
         const exit_value = assetChangeType === EnumExitStrategyTrigger.RisesBy ? portfolioChange / 100 : portfolioChange;
         const exit_percentage = sellPortion / 100;
         const exit_type = assetChangeType;
-        if (exitStrategy) {
+        if (exitStrategy?.status === EnumSmartAllocationAssetStatus.ACTIVE) {
             onChange({ ...exitStrategy, exit_value, exit_percentage, exit_type });
         } else {
             onChange({ exit_value, exit_percentage, exit_type, status: EnumSmartAllocationAssetStatus.ACTIVE });
@@ -126,7 +126,7 @@ const SmartAllocationExitStrategy: FC<SmartAllocationExitStrategyPropsType> = ({
                         if (exitStrategy) {
                             onChange(null)
                         } else {
-                            onChange({ exit_type: EnumExitStrategyTrigger.RisesBy, exit_value: 0, exit_percentage: 0 })
+                            onChange({ exit_type: EnumExitStrategyTrigger.RisesBy, exit_value: 0, exit_percentage: 0, status: EnumSmartAllocationAssetStatus.ACTIVE })
                         }
                     }} />
                 </Row>
