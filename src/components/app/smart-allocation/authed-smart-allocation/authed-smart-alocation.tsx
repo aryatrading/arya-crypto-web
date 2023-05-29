@@ -1,23 +1,22 @@
 import { FC, createContext, useCallback, useEffect, useMemo, useState } from "react"
-import { useSelector } from "react-redux";
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { useTranslation } from "next-i18next";
-
-import { Col, Row } from "../../../shared/layout/flex";
-import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher";
-import { selectConnectedExchanges, selectSelectedExchange } from "../../../../services/redux/exchangeSlice";
-import { MODE_DEBUG } from "../../../../utils/constants/config";
-import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
-import { ISmartAllocationContext, SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
-import PageLoader from "../../../shared/pageLoader/pageLoader";
-import { getSmartAllocation } from "../../../../services/controllers/smart-allocation";
-import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/no-exchange-connected-page";
-import { EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
-import SmartAllocationTradeLog from "./smart-allocation-tabs/SmartAllocationTradeLog/SmartAllocationTradeLog";
-import { useResponsive } from "../../../../context/responsive.context";
-import SmartAllocationSimulation from "./smart-allocation-simulation/smart-allocation-simulation";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+
+import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
+import SmartAllocationTradeLog from "./smart-allocation-tabs/SmartAllocationTradeLog/SmartAllocationTradeLog";
+import { ISmartAllocationContext, SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
+import { selectConnectedExchanges, selectSelectedExchange } from "../../../../services/redux/exchangeSlice";
+import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/no-exchange-connected-page";
+import SmartAllocationSimulation from "./smart-allocation-simulation/smart-allocation-simulation";
+import { getSmartAllocation } from "../../../../services/controllers/smart-allocation";
+import { EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
+import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { MODE_DEBUG } from "../../../../utils/constants/config";
+import PageLoader from "../../../shared/pageLoader/pageLoader";
+import { Col, Row } from "../../../shared/layout/flex";
 
 
 
@@ -46,8 +45,6 @@ const AuthedSmartAllocation: FC = () => {
 
     const selectedExchange = useSelector(selectSelectedExchange);
     const connectedExchanges = useSelector(selectConnectedExchanges);
-
-    const { isTabletOrMobileScreen } = useResponsive();
 
     const initSmartAllocationHoldings = useCallback(() => {
         if (!selectedExchange?.provider_id) {

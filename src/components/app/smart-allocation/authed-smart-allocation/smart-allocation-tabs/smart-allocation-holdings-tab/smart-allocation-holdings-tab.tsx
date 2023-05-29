@@ -10,7 +10,6 @@ import styles from "./smart-allocation-holdings-tab.module.scss";
 import { percentageFormat, formatNumber } from "../../../../../../utils/helpers/prices";
 import { CustomizeAllocationIcon } from "../../../../../svg/smart-allocation/customize-portfolio-icon";
 import { SmartAllocationAssetType } from "../../../../../../types/smart-allocation.types";
-import PortfolioComposition from "../../../../../shared/portfolio-composition/portfolio-composition";
 import { USDTSymbol } from "../../../../../../utils/constants/market";
 import AssetPnl from "../../../../../shared/containers/asset/assetPnl";
 import { useResponsive } from "../../../../../../context/responsive.context";
@@ -22,18 +21,6 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
     const { t } = useTranslation(['smart-allocation']);
 
     const { isTabletOrMobileScreen } = useResponsive();
-
-    const portfolioComposition = useMemo(() => {
-        return (
-            <PortfolioComposition portfolioAssets={smartAllocationHoldings.map(asset => {
-                return {
-                    symbol: asset.name ?? '',
-                    name: (asset.name ?? ''),
-                    weight: (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1)
-                };
-            })} />
-        )
-    }, [smartAllocationHoldings, smartAllocationTotalEvaluation])
 
     const tableHeader = useMemo(() => {
         if (isTabletOrMobileScreen) {
@@ -165,7 +152,6 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                 {!isTabletOrMobileScreen && <Row className="w-full gap-5 items-center">
                     <Col className="gap-5 flex-1 max-w-full md:gap-10 md:flex-[3] md:flex-row">
                         <Link href="smart-allocation/edit" className="w-max bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold shrink-0">{t('editPortfolio')}</Link>
-                        {portfolioComposition}
                     </Col>
                     <Row className="hidden md:flex md:flex-1"></Row>
                 </Row>}
