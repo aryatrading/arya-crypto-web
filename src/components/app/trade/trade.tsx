@@ -45,7 +45,7 @@ const Trade: FC = () => {
         key: "trailing",
       },
     ];
-  }, []);
+  }, [t]);
 
   const renderTradeContent = () => {
     if (activeTab === "entry") return <EntryTrade />;

@@ -36,7 +36,7 @@ export const TakeprofitTrade: FC = () => {
 
       setAvailable(_res);
     })();
-  }, [trade.symbol_name]);
+  }, [selectedExchange?.provider_id, trade.symbol_name]);
 
   const onAddTp = () => {
     dispatch(addTakeProfit(values));

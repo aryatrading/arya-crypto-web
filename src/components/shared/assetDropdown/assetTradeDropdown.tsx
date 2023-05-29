@@ -34,7 +34,7 @@ export const AssetTradeDropdown: FC = () => {
     }
 
     return tradedAssets.filter((elm: string) => elm.endsWith(filter));
-  }, [filter, searchFilter]);
+  }, [filter, searchFilter, selectedExchange]);
 
   const assetSelect = async (asset: string) => {
     setSearchFilter("");
@@ -76,7 +76,7 @@ export const AssetTradeDropdown: FC = () => {
           )}
           align="start"
         >
-          <Row className="bg-transparent h-[40px] px-0 items-center md:bg-grey-3 px-4 rounded-md overflow-hidden">
+          <Row className="bg-transparent h-[40px] items-center md:bg-grey-3 px-4 rounded-md overflow-hidden">
             <MagnifyingGlassIcon width="20px" color="#6B7280" />
             <input
               className={clsx(
