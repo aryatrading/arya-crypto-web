@@ -11,7 +11,7 @@ export const SearchInput: FC<SearchInputProps> = ({
   placeholder,
 }) => {
   return (
-    <form className="flex items-center w-1/3">
+    <form className="flex items-center ">
       <label className="sr-only">Search</label>
       <div className="relative w-full ">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

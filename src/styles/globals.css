@@ -67,3 +67,7 @@ body {
 .dialog-description {
   @apply text-base text-white font-medium text-justify
 }
+
+.asset-header {
+  @apply text-base md:text-xl font-medium text-white
+}

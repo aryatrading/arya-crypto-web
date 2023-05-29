@@ -11,9 +11,10 @@ import { formatNumber } from "../../../utils/helpers/prices";
 import AssetInformationTab from "./assetInformation";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import AssetHoldingTab from "./assetHolding";
+import AssetExitStrategy from "./AssetExitStrategy";
 
 const Asset: FC = () => {
-  const { t } = useTranslation(["asset"]);
+  const { t } = useTranslation(["asset","common"]);
   const asset = useSelector(getAsset);
 
   const stats = useMemo(() => {
@@ -52,9 +53,9 @@ const Asset: FC = () => {
       </Row>
       <Row className="justify-between">
         <AssetHeader asset={asset} />
-        <AssetVote />
+        <AssetVote className="hidden md:flex"/>
       </Row>
-      <Row className="mt-7 flex flex-wrap xl:justify-between">
+      <Row className="mt-7 flex-wrap gap-5 xl:gap-16 xl:justify-start hidden md:flex">
         {stats.map((elm, index) => {
           return (
             <AssetStatistics key={index} title={elm.title} value={elm.value} />
@@ -67,18 +68,29 @@ const Asset: FC = () => {
             <Tab className="font-semibold text-sm outline-none cursor-pointer">
               {t("assetinfotab")}
             </Tab>
-            {asset?.isHoldingAsset ? (
-              <Tab className="font-bold text-sm outline-none cursor-pointer">
+            {!!asset?.isHoldingAsset && (
+              <Tab className="font-semibold text-sm outline-none cursor-pointer">
                 {t("holdingsinfo")}
               </Tab>
-            ) : null}
+            )}
+            <Tab className='font font-semibold text-sm outline-none cursor-pointer lg:hidden'>
+              {
+                t("trade_title")
+              }
+            </Tab>
           </Row>
         </TabList>
         <TabPanel>
-          <AssetInformationTab />
+          <AssetInformationTab stats={stats} />
         </TabPanel>
+        {
+          !!asset?.isHoldingAsset && 
+          <TabPanel>
+            <AssetHoldingTab />
+          </TabPanel>
+        }
         <TabPanel>
-          <AssetHoldingTab />
+          <AssetExitStrategy/>
         </TabPanel>
       </Tabs>
     </Col>

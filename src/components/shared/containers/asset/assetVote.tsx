@@ -14,8 +14,9 @@ import {
 } from "../../../../services/controllers/asset";
 import { VotingComposition } from "../../asset-voting/voting-composition";
 import { toast } from "react-toastify";
+import { twMerge } from "tailwind-merge";
 
-const AssetVote: FC = ({}) => {
+const AssetVote: FC<{className?:string}> = ({className}) => {
   const asset = useSelector(getAsset);
   const { t } = useTranslation(["asset"]);
   const [hasVoted, setHasVoted] = useState(false);
@@ -36,7 +37,7 @@ const AssetVote: FC = ({}) => {
         });
       }
     })();
-  }, [asset.id, hasVoted]);
+  }, [asset.id, hasVoted, votingValues]);
 
   const onVotePress = async (vote: string) => {
     try {
@@ -53,8 +54,12 @@ const AssetVote: FC = ({}) => {
   };
 
   return (
-    <Col className="gap-3">
-      <p className="font-medium text-sm">{t("assetvoting")}</p>
+    <Col className={twMerge('gap-3 w-full md:w-auto',className)}>
+      <p className="font-medium text-sm">
+        {hasVoted
+          ? `${asset?.symbol.toUpperCase()} ${t("assetvoted")}`
+          : t("assetvoting")}
+      </p>
       {hasVoted === false ? (
         <>
           <Row className="gap-2">
@@ -64,6 +69,7 @@ const AssetVote: FC = ({}) => {
               onClick={() => onVotePress("bullish")}
               textColor="text-green-1"
               border="rounded-md"
+              className="w-full md:w-auto"
               iconSvg={
                 <ArrowTrendingUpIcon className="h-6 w-6 stroke-green-1" />
               }
@@ -74,6 +80,7 @@ const AssetVote: FC = ({}) => {
               onClick={() => onVotePress("bearish")}
               textColor="text-red-1"
               border="rounded-md"
+              className="w-full md:w-auto"
               iconSvg={
                 <ArrowTrendingDownIcon className="h-6 w-6 stroke-red-1" />
               }
