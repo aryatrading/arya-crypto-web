@@ -6,6 +6,7 @@ export interface GraphChartType {
   className?: string;
   fixed?: boolean;
   isLoading?: boolean;
+  responsive?: boolean;
 }
 
 export interface chartDataType {

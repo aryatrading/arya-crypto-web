@@ -21,6 +21,7 @@ export const TimeseriesPicker: FC<TimeseriesProps> = ({
             key={index}
             title={elm.title}
             onClick={() => onclick(elm)}
+            showBadge={index % 2 === 0}
             border={
               index === 0
                 ? "rounded-l-md"
@@ -30,7 +31,7 @@ export const TimeseriesPicker: FC<TimeseriesProps> = ({
             }
             bgColor={active === elm.key ? "bg-blue-3" : "bg-grey-2"}
             textColor={active === elm.key ? "text-blue-2" : ""}
-            textSize="text-xs"
+            textSize="text-xs text-center"
           />
         );
       })}

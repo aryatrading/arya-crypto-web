@@ -16,7 +16,7 @@ import { CommentsIcon } from '../../svg/commentsIcon';
 import { ShareIcon } from '../../svg/shareIcon';
 import { AwardIcon } from '../../svg/awardIcon';
 
-import AudioDisplay from './AudioPlayer/AudioPlayer';
+import AudioDisplay from './AudioDisplay/AudioDisplay';
 import { awardsImages } from './awards';
 import styles from './index.module.scss';
 
