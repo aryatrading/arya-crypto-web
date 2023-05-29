@@ -30,7 +30,6 @@ const TradeInput: FC<InputProps> = ({
           <input
             disabled={disabled}
             className="bg-transparent text-right font-bold focus:border-black-1 focus:outline-none focus:border-transparent focus:ring-0 border-transparent"
-            maxLength={10}
             value={amount ?? ""}
             onChange={(e) => onchange(e.target.value ?? 0)}
           />

@@ -10,17 +10,24 @@ import { StoplossTrade } from "./stoploss_trade";
 import { TakeprofitTrade } from "./takeprofit_trade";
 import { TrailingTrade } from "./trailing_trade";
 import { useSelector } from "react-redux";
-import { getTrade, getValidations } from "../../../services/redux/tradeSlice";
+import { getTrade } from "../../../services/redux/tradeSlice";
 import { AssetTradeDropdown } from "../../shared/assetDropdown/assetTradeDropdown";
 import { OpenOrders } from "../../shared/tables/openOrderTable";
 import { OrderHistory } from "../../shared/tables/orderHistoryTable";
 import { useTranslation } from "next-i18next";
+import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
+import {
+  createTrade,
+  initiateTrade,
+} from "../../../services/controllers/trade";
+import { toast } from "react-toastify";
 
 const Trade: FC = () => {
   const { t } = useTranslation(["trade"]);
   const [activeTab, setActiveTab] = useState("entry");
   const trade = useSelector(getTrade);
-  const validations = useSelector(getValidations);
+  const [laoding, setLoading] = useState(false);
+  const selectedExchange = useSelector(selectSelectedExchange);
 
   const tradetabs = useMemo(() => {
     return [
@@ -54,9 +61,23 @@ const Trade: FC = () => {
     if (activeTab === "trailing") return <TrailingTrade />;
   };
 
-  const onCreateTrade = () => {
-    // console.log(validations);
-    console.log(trade);
+  const onCreateTrade = async () => {
+    setLoading(true);
+
+    try {
+      await createTrade(trade, selectedExchange?.provider_id ?? 1);
+      toast.success(`${trade.symbol_name} trade created`);
+
+      await initiateTrade(
+        trade.asset_name,
+        selectedExchange?.provider_id ?? 1,
+        trade.base_name
+      );
+    } catch (error) {
+      toast.error(`Error creating ${trade.symbol_name}: ${error}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -80,6 +101,7 @@ const Trade: FC = () => {
           </Col>
           <Button
             className="bg-green-1 rounded-md py-3 mt-4  w-full"
+            isLoading={laoding}
             onClick={() => {
               onCreateTrade();
             }}

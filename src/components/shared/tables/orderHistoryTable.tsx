@@ -3,13 +3,13 @@ import { useMediaQuery } from "react-responsive";
 import { Col, Row } from "../layout/flex";
 import styles from "./assetsTable.module.scss";
 import { useSelector } from "react-redux";
-import { getOpenOrders, getTrade } from "../../../services/redux/tradeSlice";
+import { getHistoryOrders, getTrade } from "../../../services/redux/tradeSlice";
 import { ThemedContainer } from "../containers/themedContainer";
 import { formatNumber } from "../../../utils/helpers/prices";
-import { XMarkIcon, TrashIcon } from "@heroicons/react/24/outline";
+import moment from "moment";
 
 export const OrderHistory: FC = () => {
-  const openOrders = useSelector(getOpenOrders);
+  const history = useSelector(getHistoryOrders);
   const trade = useSelector(getTrade);
 
   const isTabletOrMobileScreen = useMediaQuery({
@@ -51,8 +51,8 @@ export const OrderHistory: FC = () => {
         </thead>
 
         <tbody>
-          {openOrders &&
-            openOrders.map((elm: any, index: number) => {
+          {history &&
+            history.map((elm: any, index: number) => {
               return (
                 <tr
                   key={index}
@@ -62,18 +62,18 @@ export const OrderHistory: FC = () => {
                     scope="row"
                     className="px-6 py-4 font-bold leading-6 text-white text-left"
                   >
-                    <Col>{elm.createdAt}</Col>
+                    <Col>{moment(elm.createdAt).format("DD/MM/YY")}</Col>
                   </th>
 
                   <ThemedContainer
                     content={elm.type}
                     colorClass={
-                      elm.type.toLowerCase() === "sell"
+                      elm.type?.toLowerCase() === "sell"
                         ? "bg-red-2"
                         : "bg-green-2"
                     }
                     textColor={
-                      elm.type.toLowerCase() === "sell"
+                      elm.type?.toLowerCase() === "sell"
                         ? "text-red-1"
                         : "text-green-1"
                     }

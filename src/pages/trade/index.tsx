@@ -5,71 +5,35 @@ import Layout from "../../components/layout/layout";
 import Trade from "../../components/app/trade/trade";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { clearTrade, getTrade } from "../../services/redux/tradeSlice";
 import {
-  addTradables,
-  clearTrade,
-  setOpenOrders,
-  setOrderType,
-  setPairs,
-  setTrade,
-  setValidations,
-} from "../../services/redux/tradeSlice";
-import {
-  getAssetValidation,
-  getAssetAvailable,
-  getAvailablePairs,
-  getAssetOpenOrders,
+  getHistoryOrders,
+  initiateTrade,
 } from "../../services/controllers/trade";
 import { selectSelectedExchange } from "../../services/redux/exchangeSlice";
-import { TradeValidations } from "../../types/trade";
 
 const TradePage = () => {
   const dispatch = useDispatch();
   const selectedExchange = useSelector(selectSelectedExchange);
+  const trade = useSelector(getTrade);
 
   const router = useRouter();
   const { symbol } = router.query;
 
   useEffect(() => {
-    (async () => {
-      dispatch(
-        setTrade({
-          asset_name: symbol ?? "btc",
-          base_name: "usdt",
-          available_quantity: await getAssetAvailable(
-            "USDT",
-            selectedExchange?.provider_id ?? 1
-          ),
-        })
-      );
+    initiateTrade(
+      (symbol as string) ?? "BTC",
+      selectedExchange?.provider_id ?? 1
+    );
 
-      let _validations: TradeValidations = await getAssetValidation(
-        `${symbol ?? "btc"}USDT`,
-        selectedExchange?.provider_id ?? 1
-      );
-
-      let _pairs = await getAvailablePairs(
-        symbol ?? "btc",
-        selectedExchange?.provider_id ?? 1
-      );
-
-      let _openOrders = await getAssetOpenOrders(
-        `${symbol ?? "btc"}USDT`,
-        selectedExchange?.provider_id ?? 1
-      );
-
-      dispatch(setOpenOrders({ orders: _openOrders }));
-
-      dispatch(addTradables({ assets: _pairs._tradables }));
-      dispatch(setPairs({ pairs: _pairs._pairs }));
-
-      dispatch(setValidations(_validations));
-      dispatch(setOrderType({ orderType: "MARKET" }));
-    })();
     return () => {
       dispatch(clearTrade());
     };
   }, [symbol, selectedExchange]);
+
+  useEffect(() => {
+    getHistoryOrders(trade.asset_name, selectedExchange?.provider_id ?? 1);
+  }, [trade.symbol_name]);
 
   return (
     <Layout>
