@@ -16,7 +16,6 @@ export const notificationsSlice = createSlice({
     initialState,
     reducers: {
         setNotifications: (state, action: { payload: NotificationType[] }) => {
-            console.log({ xxx: action.payload });
             state.notifications = action.payload;
         },
         updateNotificationBadge: (state, action: { payload: boolean }) => {
