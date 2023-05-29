@@ -160,7 +160,7 @@ getMostCommonColor("https://assets.coingecko.com/coins/images/325/large/Tether.p
             onclick={onSeriesClick}
           />
         </Row>}
-        <LineChart primaryLineData={chartData} secondaryLineData={!isTabletOrMobileScreen?smartAllocationData:undefined} className={"h-[200px] md:h-[400px]"} />
+        <LineChart primaryLineData={chartData} className={"h-[200px] md:h-[400px]"} />
       </Col>
     )
 
