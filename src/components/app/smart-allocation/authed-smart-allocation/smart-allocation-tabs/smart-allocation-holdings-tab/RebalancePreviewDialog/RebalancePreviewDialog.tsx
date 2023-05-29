@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
@@ -49,17 +49,17 @@ import CustomScroll from '../../../../../../shared/CustomScroll/CustomScroll'
         performRebalance(selectedExchange?.provider_id).then((res) => {
             const {response} = res.data;
             if(response){
-                toast.success('Rebalancing portfolio')
+                toast.success(t('rebalancingPortfolio'))
             }
         } 
         ).catch((error) => {    
             if(MODE_DEBUG){
                 console.log(error)
             }    
-            toast.error('Error rebalancing portfolio') 
+            toast.error(t('errorRebalancing')) 
         })
       },
-      [selectedExchange?.provider_id],
+      [selectedExchange?.provider_id, t],
     )
     
     const tradePreview = useCallback(() => {

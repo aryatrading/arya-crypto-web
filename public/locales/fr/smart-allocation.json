@@ -61,5 +61,7 @@
     "setExitStrategy" : "Définir une stratégie de sortie", 
     "createExitStrategyTitle" : "Créer une stratégie de sortie",
     "createExitStrategyDescription" : "Êtes-vous sûr de vouloir créer cette stratégie de sortie ?",
-    "noTradeData" : "Vous n'avez pas effectué de transactions"
+    "noTradeData" : "Vous n'avez pas effectué de transactions",
+    "rebalancingPortfolio":"Rééquilibrage du portefeuille",
+    "errorRebalancing":"Erreur de rééquilibrage du portefeuille"
 }

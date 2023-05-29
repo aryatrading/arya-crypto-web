@@ -62,5 +62,7 @@
     "setExitStrategy": "Set Exit Strategy",
     "createExitStrategyTitle": "Create Exit Strategy?",
     "createExitStrategyDescription": "Are you sure you want to create this exit strategy?",
-    "noTradeData": "You have not made any trades"
+    "noTradeData": "You have not made any trades",
+    "rebalancingPortfolio":"Rebalancing portfolio",
+    "errorRebalancing":"Error Rebalancing Portfolio"
 }
