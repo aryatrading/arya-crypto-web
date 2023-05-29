@@ -1,10 +1,12 @@
 
 import Head from 'next/head'
 
-export default function SEO({ description, title, siteTitle }: { description: string, title: string, siteTitle: string }) {
+export default function SEO({ description, title }: { description: string, title: string }) {
+
+    const siteTitle = 'ARYA Crypto'
     return (
         <Head>
-            <title>{`${title} | ${siteTitle}`}</title>
+            <title>{title ? `${title} |` : ''} {siteTitle}</title>
             <meta name="description" content={description} />
             <meta property="og:type" content="website" />
             <meta property="og:title" content={title} />
