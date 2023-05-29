@@ -136,6 +136,15 @@ export const deleteExitStrategy = async (providerId: number) => {
     );
 }
 
+export const performRebalance = async (providerId: number) => {
+    const rebalanceNowParams = {
+        provider: providerId
+    }
+    return await axiosInstance.get(
+        `/trade-engine/smart-allocation/balance`,
+        {params:rebalanceNowParams}
+    );
+}
 export function getSmartAllocationTradeLogs(providerId : number ) {
     return axiosInstance.get('/trade-engine/smart-allocation/orders-logs', {
         params: { provider: providerId }

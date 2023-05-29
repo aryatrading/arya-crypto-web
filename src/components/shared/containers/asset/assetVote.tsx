@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Col, Row } from "../../layout/flex";
 import { ShadowButton } from "../../buttons/shadow_button";
 import {
@@ -14,8 +14,9 @@ import {
 } from "../../../../services/controllers/asset";
 import { VotingComposition } from "../../asset-voting/voting-composition";
 import { toast } from "react-toastify";
+import { twMerge } from "tailwind-merge";
 
-const AssetVote: FC = ({}) => {
+const AssetVote: FC<{ className?: string }> = ({ className }) => {
   const asset = useSelector(getAsset);
   const { t } = useTranslation(["asset"]);
   const [hasVoted, setHasVoted] = useState(false);
@@ -24,19 +25,22 @@ const AssetVote: FC = ({}) => {
     bearish: 0,
   });
 
-  useEffect(() => {
-    (async () => {
-      if (asset?.id) {
-        let response = await getAssetVotes(asset.id);
+
+  const initBearishAndBullishVoting = useCallback(() => {
+    if (asset?.id) {
+      getAssetVotes(asset.id).then((response) => {
         setHasVoted(response.user_voted_last_24h ?? false);
         setVotingValues({
-          ...votingValues,
           bullish: response.bullish_percentage,
           bearish: response.bearish_percentage,
         });
-      }
-    })();
-  }, [asset.id, hasVoted]);
+      });
+    }
+  }, [asset.id]);
+
+  useEffect(() => {
+    initBearishAndBullishVoting()
+  }, [initBearishAndBullishVoting]);
 
   const onVotePress = async (vote: string) => {
     try {
@@ -53,7 +57,7 @@ const AssetVote: FC = ({}) => {
   };
 
   return (
-    <Col className="gap-3 w-1/4">
+    <Col className={twMerge('gap-3 w-full md:w-auto', className)}>
       <p className="font-medium text-sm">
         {hasVoted
           ? `${asset?.symbol.toUpperCase()} ${t("assetvoted")}`
@@ -68,6 +72,7 @@ const AssetVote: FC = ({}) => {
               onClick={() => onVotePress("bullish")}
               textColor="text-green-1"
               border="rounded-md"
+              className="w-full md:w-auto"
               iconSvg={
                 <ArrowTrendingUpIcon className="h-6 w-6 stroke-green-1" />
               }
@@ -78,6 +83,7 @@ const AssetVote: FC = ({}) => {
               onClick={() => onVotePress("bearish")}
               textColor="text-red-1"
               border="rounded-md"
+              className="w-full md:w-auto"
               iconSvg={
                 <ArrowTrendingDownIcon className="h-6 w-6 stroke-red-1" />
               }

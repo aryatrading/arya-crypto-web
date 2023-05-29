@@ -4,15 +4,16 @@ import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
+import { ISmartAllocationContext, SmartAllocationAssetType, SmartAllocationExitStrategyType } from "../../../../types/smart-allocation.types";
 import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
 import SmartAllocationTradeLog from "./smart-allocation-tabs/SmartAllocationTradeLog/SmartAllocationTradeLog";
-import { ISmartAllocationContext, SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
-import { selectConnectedExchanges, selectSelectedExchange } from "../../../../services/redux/exchangeSlice";
 import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/no-exchange-connected-page";
+import { selectConnectedExchanges, selectSelectedExchange } from "../../../../services/redux/exchangeSlice";
+import { getExitStrategy, getSmartAllocation } from "../../../../services/controllers/smart-allocation";
 import SmartAllocationSimulation from "./smart-allocation-simulation/smart-allocation-simulation";
-import { getSmartAllocation } from "../../../../services/controllers/smart-allocation";
 import { EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher";
+import { PortfolioSnapshotType } from "../../../../types/exchange.types";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { MODE_DEBUG } from "../../../../utils/constants/config";
 import PageLoader from "../../../shared/pageLoader/pageLoader";
@@ -25,7 +26,10 @@ export const SmartAllocationContext = createContext<ISmartAllocationContext>({
     rebalancingDate: null,
     rebalancingFrequency: null,
     isLoadingSmartAllocationData: false,
-    getSmartAllocationData: () => null,
+    exitStrategyData: null,
+    isLoadingExitStrategy: false,
+    fetchSmartAllocationData: () => null,
+    fetchExitStrategy: () => null,
 })
 
 const AuthedSmartAllocation: FC = () => {
@@ -34,15 +38,16 @@ const AuthedSmartAllocation: FC = () => {
 
     const router = useRouter()
 
-    const [isLoadingPortfolioHoldings, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
+    const [isLoadingExitStrategy, setIsLoadingExitStrategy] = useState<boolean>(false);
     const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
     const [smartAllocationExists, setSmartAllocationExists] = useState<boolean>();
     const [smartAllocationTotalEvaluation, setSmartAllocationTotalEvaluation] = useState<number>(0);
-    const [rebalancingDate, setRebalancingDate] = useState<Date | null>(null);
-    const [rebalancingFrequency, setRebalancingFrequency] = useState<EnumRebalancingFrequency | null>(null);
     const [fetchingHoldingsError, setFetchingHoldingsError] = useState<string>();
 
+    const [rebalancingDate, setRebalancingDate] = useState<Date | null>(null);
+    const [rebalancingFrequency, setRebalancingFrequency] = useState<EnumRebalancingFrequency | null>(null);
+    const [exitStrategy, setExitStrategy] = useState<null | SmartAllocationExitStrategyType>(null);
     const selectedExchange = useSelector(selectSelectedExchange);
     const connectedExchanges = useSelector(selectConnectedExchanges);
 
@@ -89,6 +94,32 @@ const AuthedSmartAllocation: FC = () => {
             })
     }, [selectedExchange?.provider_id]);
 
+    const fetchExitStrategy = useCallback(() => {
+        if (!selectedExchange?.provider_id) {
+            if (MODE_DEBUG) {
+                console.log(`fetchExitStrategy: missing provider_id:${selectedExchange?.provider_id}`)
+            }
+            return
+        }
+        setIsLoadingExitStrategy(true)
+        getExitStrategy(selectedExchange?.provider_id).then((res) => {
+            const { data } = res
+            if (MODE_DEBUG) {
+                console.log(data)
+            }
+            if (data) {
+
+                setExitStrategy(data)
+            }
+        }).catch((error) => {
+            if (MODE_DEBUG) {
+                console.log(error)
+            }
+        }).finally(() => {
+            setIsLoadingExitStrategy(false)
+        })
+    }, [selectedExchange?.provider_id])
+
 
     useEffect(() => {
         if (selectedExchange?.provider_id) {
@@ -96,6 +127,9 @@ const AuthedSmartAllocation: FC = () => {
         }
     }, [initSmartAllocationHoldings, selectedExchange?.provider_id]);
 
+    useEffect(() => {
+        fetchExitStrategy()
+    }, [fetchExitStrategy])
 
     const noAllocation = useMemo(() => {
         if (smartAllocationExists === false) {
@@ -147,15 +181,23 @@ const AuthedSmartAllocation: FC = () => {
         )
     }, [smartAllocationHoldings, tabs]);
 
-    if (isLoadingSmartAllocationHoldings || isLoadingPortfolioHoldings) {
+    if (isLoadingSmartAllocationHoldings) {
         return <PageLoader />;
     } else {
         const connectedExchangesWithProviders = connectedExchanges?.filter(exchange => exchange.provider_id);
         if (connectedExchangesWithProviders?.length) {
             return (
-                <SmartAllocationContext.Provider value={{ rebalancingDate, rebalancingFrequency, isLoadingSmartAllocationData: isLoadingSmartAllocationHoldings, getSmartAllocationData: initSmartAllocationHoldings }}>
+                <SmartAllocationContext.Provider value={{
+                    rebalancingDate,
+                    rebalancingFrequency,
+                    isLoadingSmartAllocationData: isLoadingSmartAllocationHoldings,
+                    fetchSmartAllocationData: initSmartAllocationHoldings,
+                    exitStrategyData: exitStrategy,
+                    isLoadingExitStrategy,
+                    fetchExitStrategy
+                }}>
                     <Col className="w-full md:gap-10 lg:gap-16 md:items-center pb-20 items-start justify-start">
-                        {(isLoadingSmartAllocationHoldings || isLoadingPortfolioHoldings) && <PageLoader />}
+                        {isLoadingSmartAllocationHoldings && <PageLoader />}
                         {smartAllocationExists ? withAllocation : noAllocation}
                     </Col>
                 </SmartAllocationContext.Provider>

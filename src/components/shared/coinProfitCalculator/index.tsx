@@ -1,11 +1,7 @@
 import { useTranslation } from "next-i18next";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import clsx from "clsx";
 import { CurrencyDollarIcon, MagnifyingGlassIcon, ArrowDownCircleIcon, ArrowUpCircleIcon } from '@heroicons/react/24/outline';
-
 import { Col, Row } from "../layout/flex";
-import { ChevronUp } from "../../svg/chevron-up";
-import { ChevronDown } from "../../svg/chevron-down";
 import Button from "../buttons/button";
 import CloseIcon from "../../svg/Shared/CloseIcon";
 import { SearchAssetInput } from "../assetSearchInputWithDropdown";

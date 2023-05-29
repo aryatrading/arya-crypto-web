@@ -23,7 +23,7 @@
     "whitelistIPs": "Whitelist IPs",
     "APIKey": "API Key",
     "APISecret": "API Secret",
-    "submit": "Submit",
+    "submit": "Connect {{name}}",
     "disconnect": "Disconnect {{name}}",
     "changeName": "Change portfolio name",
     "cancel": "Cancel",
@@ -38,5 +38,13 @@
     "updateNameSuccess": "Name updated successfully!",
     "addExchange": "Add Exchange",
     "discconectedSuccess": "Discconected successfully",
-    "copied": "Copied!"
+    "copied": "Copied!",
+    "copy": "Copy whitelist APIs",
+    "settings": "Settings",
+    "whiteListText": "Copy your Whitelist API’s and paste in on your exchange",
+    "exchangeAccQ": "Don’t have a {{name}} account?",
+    "exchangeAccMsg": "Create your {{name}} account via the button bellow and get {{discount}}% discount on your {{name}} fees.",
+    "createAccount": "Create account",
+    "howToConnect": "How do I connect my {{name}} account?",
+    "vidTutorial": "Video tutorial"
 }

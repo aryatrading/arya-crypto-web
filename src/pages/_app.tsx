@@ -5,7 +5,9 @@ import { appWithTranslation } from "next-i18next";
 import { ReactNode, ReactElement, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "next-themes";
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApp } from "firebase/app";
+import { getRemoteConfig, fetchAndActivate } from "firebase/remote-config";
+import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,6 +22,9 @@ import { FAVORITES_LIST } from "../utils/constants/config";
 import { initStoreData } from "../common/hooks/initStore";
 import "../services/api/socketConfig";
 import ResponsiveProvider from "../context/responsive.context";
+import { getUserLanguage } from "../services/controllers/utils";
+import { getNotifications } from "../services/controllers/notifications";
+import PushNotificationLayout from "../components/layout/Notifications";
 
 const poppins = Poppins({
   variable: "--poppins-font",
@@ -39,13 +44,30 @@ initAuth();
 
 try {
   initializeApp(firebaseConfig);
+  const remoteConfig = getRemoteConfig(getApp());
+  remoteConfig.settings.minimumFetchIntervalMillis = 1000;
+  fetchAndActivate(remoteConfig);
+
 } catch (err) {
+  console.log({ err });
   console.error(err);
 }
 
+
 function App({ Component, ...rest }: AppPropsWithLayout) {
+  const { pathname, push, asPath, query } = useRouter();
   useEffect(() => {
     const localStorageToken = localStorage?.getItem("idToken");
+    const lang = window.localStorage.getItem('language');
+    if (lang == null) {
+      getUserLanguage().then(({ data }) => {
+        push({ pathname, query }, asPath, { locale: data.language })
+      });
+    } else {
+      push({ pathname, query }, asPath, { locale: lang })
+    }
+
+    getNotifications(0, 100, 'asc');
 
     // Create the inital favorites list in localstorage
     localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
@@ -71,9 +93,11 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
       <ThemeProvider attribute="class">
         <AuthModalProvider>
           <ResponsiveProvider>
-            <main className={poppins.className}>
-              <Component {...props.pageProps} />
-            </main>
+            <PushNotificationLayout>
+              <main className={poppins.className}>
+                <Component {...props.pageProps} />
+              </main>
+            </PushNotificationLayout>
           </ResponsiveProvider>
         </AuthModalProvider>
         <ToastContainer />

@@ -1,6 +1,6 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { getAssetsHistoricalData } from "../../../../../services/controllers/asset";
-import { EnumRebalancingFrequency } from "../../../../../utils/constants/smartAllocation";
+import { EnumExitStrategyTrigger, EnumRebalancingFrequency } from "../../../../../utils/constants/smartAllocation";
 import { SmartAllocationAssetType } from "../../../../../types/smart-allocation.types";
 import { Time } from "lightweight-charts";
 import LineChart from "../../../../shared/charts/graph/graph";
@@ -9,7 +9,7 @@ import { UTCTimestamp } from "lightweight-charts";
 import { Col, Row } from "../../../../shared/layout/flex";
 import Button from "../../../../shared/buttons/button";
 import CutoutDoughnutChart from "../../../../shared/charts/doughnut/cutout-doughnut";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "next-i18next";
 import { USDTSymbol } from "../../../../../utils/constants/market";
 import { doughnutChartDataType } from "../../../../shared/charts/doughnut/doughnut";
 import { formatNumber } from "../../../../../utils/helpers/prices";
@@ -18,13 +18,16 @@ import { useResponsive } from "../../../../../context/responsive.context";
 import { ShadowButton } from "../../../../shared/buttons/shadow_button";
 import { PieChartIcon } from "../../../../svg/pieChartIcon";
 import { LineChartIcon } from "../../../../svg/lineChartIcon";
+import Link from "next/link";
+import RebalancePreviewDialog from "../smart-allocation-tabs/smart-allocation-holdings-tab/RebalancePreviewDialog/RebalancePreviewDialog";
+import moment from "moment";
+import { SmartAllocationContext } from "../authed-smart-alocation";
 
 
 const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationAssetType[] }> = ({ smartAllocationHoldings }) => {
 
     const [simulationPeriod, setSimulationPeriod] = useState<"1y" | "1w" | "1m">("1w");
     const [initialValue, setInitialValue] = useState<number>(10_000);
-    const [rebalancingFrequency, setReBalancingFrequency] = useState<EnumRebalancingFrequency | null>(null);
     const [currentWeightsData, setCurrentWeightsData] = useState<chartDataType[]>([]);
     const [setWeightsData, setSetWeightsData] = useState<chartDataType[]>([]);
     const [currentWeightsDrawdown, setCurrentWeightsDrawdown] = useState<number>();
@@ -36,6 +39,8 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
     const { t } = useTranslation(["smart-allocation"]);
 
     const { isTabletOrMobileScreen } = useResponsive();
+
+    const { rebalancingDate, rebalancingFrequency, exitStrategyData } = useContext(SmartAllocationContext)
 
 
     const getAssetSymbol = useCallback((holding: SmartAllocationAssetType) => {
@@ -228,20 +233,31 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
     const reBalanceNow = useMemo(() => {
         return (
-            <Col className="md:max-w-[300px] flex-1 gap-5">
+            <Col className="flex-1 gap-5">
                 <Row className="w-full gap-4 text-center">
-                    <Button className="flex-1 bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold">{t('RebalanceNow')}</Button>
+                    {isTabletOrMobileScreen && <Link href="smart-allocation/edit" className="flex-1 bg-blue-1 py-4 px-5 rounded-md text-sm font-bold">{t('editPortfolio')}</Link>}
                 </Row>
                 <Col className="gap-4">
+                    <RebalancePreviewDialog holdingData={smartAllocationHoldings?.filter((asset) => asset.name !== USDTSymbol) ?? []} />
                     <p className="font-bold text-grey-1">{t('automation')}</p>
-                    <p className="text-sm font-bold">{t('automaticRebalancingScheduled')} <span className="text-blue-1">{t('common:monthly')}</span></p>
-                    <p className="text-sm font-bold">{t('nextRebalancingSchedule')} : <span className="text-blue-1">01/12/2023</span></p>
+                    <p className="text-sm font-bold">{t('automaticRebalancingScheduled')} : <span className="text-blue-1">{t(`common:${rebalancingFrequency}`)}</span></p>
+                    <p className="text-sm font-bold">{t('nextRebalancingSchedule')} : <span className="text-blue-1">{moment(rebalancingDate).format('DD/MM/YY')}</span></p>
                     <p className="font-bold text-grey-1">{t('common:exitStrategy')}</p>
-                    <p className="text-sm font-bold max-w-full">{t('WhenCoinDropsByXAmountSellYAmountOfYourPortfolioForUSDT', { coinName: "Bitcoin", dropPercent: "5%", sellPercent: "50%", USDTSymbol })}</p>
+                    {exitStrategyData && <span className="text-sm font-medium">
+                        <Trans i18nKey={'smart-allocation:haveExitStrategy'}
+
+                            components={{ blueText: <span /> }}
+                            values={{
+                                assetChangeType: t(exitStrategyData.exit_type as string),
+                                assetChangeValue: `${exitStrategyData.exit_type === EnumExitStrategyTrigger.RisesBy ? `${(exitStrategyData.exit_value ?? 0) * 100}%` : `${exitStrategyData.exit_value}$`}`,
+                                assetSellPercentage: `${(exitStrategyData.exit_percentage ?? 0) * 100}%`
+                            }}
+                        />
+                    </span>}
                 </Col>
             </Col>
         )
-    }, [t]);
+    }, [exitStrategyData, isTabletOrMobileScreen, rebalancingDate, rebalancingFrequency, smartAllocationHoldings, t])
 
     const graphLegend = useMemo(() => {
         return (

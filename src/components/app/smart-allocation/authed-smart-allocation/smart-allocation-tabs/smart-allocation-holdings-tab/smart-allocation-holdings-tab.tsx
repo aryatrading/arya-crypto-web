@@ -1,17 +1,19 @@
-import { FC, useMemo } from "react";
-import { useTranslation } from "next-i18next";
+import { FC, useContext, useMemo } from "react";
+import { Trans, useTranslation } from "next-i18next";
 import Image from "next/image";
 import clsx from "clsx";
 import Link from "next/link";
-
 import { Col, Row } from "../../../../../shared/layout/flex";
-import Button from "../../../../../shared/buttons/button";
 import styles from "./smart-allocation-holdings-tab.module.scss";
 import { percentageFormat, formatNumber } from "../../../../../../utils/helpers/prices";
 import { CustomizeAllocationIcon } from "../../../../../svg/smart-allocation/customize-portfolio-icon";
 import { SmartAllocationAssetType } from "../../../../../../types/smart-allocation.types";
 import { USDTSymbol } from "../../../../../../utils/constants/market";
 import AssetPnl from "../../../../../shared/containers/asset/assetPnl";
+import { SmartAllocationContext } from "../../authed-smart-alocation";
+import moment from "moment";
+import { EnumExitStrategyTrigger } from "../../../../../../utils/constants/smartAllocation";
+import RebalancePreviewDialog from "./RebalancePreviewDialog/RebalancePreviewDialog";
 import { useResponsive } from "../../../../../../context/responsive.context";
 import { getCoinColor } from "../../../../../../utils/helpers/coinsColors";
 import { chartDefaultColorsHex } from "../../../../../../utils/constants/customColors";
@@ -19,6 +21,7 @@ import { chartDefaultColorsHex } from "../../../../../../utils/constants/customC
 const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
 
     const { t } = useTranslation(['smart-allocation']);
+    const { rebalancingDate, rebalancingFrequency, exitStrategyData } = useContext(SmartAllocationContext)
 
     const { isTabletOrMobileScreen } = useResponsive();
 
@@ -56,7 +59,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
             if (asset.name !== USDTSymbol) {
                 const setWeight = asset.weight ?? 0;
                 const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
-                const coinColor = getCoinColor(asset.name??"", index);
+                const coinColor = getCoinColor(asset.name ?? "", index);
 
                 if (isTabletOrMobileScreen) {
                     return (
@@ -117,7 +120,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                             className={`rounded-full`}
                                             style={{
                                                 width: `${percentageFormat(setWeight * 100)}%`,
-                                                backgroundColor: coinColor === "#ffffffff"? chartDefaultColorsHex[0]: coinColor,
+                                                backgroundColor: coinColor === "#ffffffff" ? chartDefaultColorsHex[0] : coinColor,
                                             }}
                                         />
                                     </Row>

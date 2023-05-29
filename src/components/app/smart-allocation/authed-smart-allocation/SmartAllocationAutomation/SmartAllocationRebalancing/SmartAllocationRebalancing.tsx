@@ -46,4 +46,4 @@ const SmartAllocationRebalancing: FC<SmartAllocationRebalancingType> = ({ reBala
     )
 }
 
-export default SmartAllocationRebalancing
+export default SmartAllocationRebalancing;

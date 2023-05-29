@@ -49,21 +49,18 @@ const AuthModalProvider: FC<any> = (props: any) => {
         aria-hidden="true"
         className="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
       >
-        <Col className={clsx({ "max-w-6xl": visibleSection === 'signup', "max-w-md": visibleSection !== 'signup' }, "relative w-full max-h-full")}>
-          <Col className="relative rounded-lg shadow bg-gray-700 pt-5 pb-5">
-            <Col className="gap-4 min-h-[550px]">
-              <Button
-                className="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white me-8"
-                data-modal-hide="staticModal"
-                onClick={() => modalTrigger.hide()}>
-                  <CloseIcon className='stroke-current text-[#89939F] w-3 h-3' />
-              </Button>
-              {visibleSection === "login" ? (
-                <Login changeSection={setVisibleSection} />
-              ) : (
-                <Signup changeSection={setVisibleSection} />
-              )}
-            </Col>
+        <Col className={clsx({ "max-w-6xl": visibleSection === 'signup', "max-w-md": visibleSection !== 'signup' }, "relative bg-black-2 p-5 w-full max-h-full rounded-lg shadow")}>
+          <Col className="gap-4 min-h-[450px]">
+            <Button
+              className="bg-transparent rounded-lg p-1.5 hover:bg-grey-7 ml-auto"
+              onClick={() => modalTrigger.hide()}>
+              <CloseIcon className='stroke-current text-[#89939F] w-3 h-3' />
+            </Button>
+            {visibleSection === "login" ? (
+              <Login changeSection={setVisibleSection} isModal={true} />
+            ) : (
+              <Signup changeSection={setVisibleSection} isModal={true} />
+            )}
           </Col>
         </Col>
       </Col>
