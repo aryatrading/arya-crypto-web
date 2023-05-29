@@ -1,7 +1,7 @@
 .table {
-
+    @apply md:min-w-[1250px];
     width: 100%;
-    min-width: 1330px;
+    table-layout: fixed;
 
     thead {
         @apply text-grey-1;
@@ -14,24 +14,23 @@
                 height: 55px;
                 @apply font-bold text-sm;
                 text-align: left;
-                padding: 0 5px;
+                padding: 0 10px;
             }
 
             th:first-child {
-                @apply rounded-l-lg;
-                width: 200px;
+                @apply rounded-l-lg w-[100px] md:w-[200px];
                 padding-left: 20px;
             }
 
             th:nth-child(2) {
-                width: 100px;
+                @apply md:w-[100px];
             }
 
             th:nth-child(3),
             th:nth-child(4),
             th:nth-child(5),
             th:nth-child(6) {
-                width: 135px;
+                @apply w-[100px] md:w-[135px];
             }
 
             th:last-child {
@@ -49,16 +48,18 @@
             &:first-child {
                 td {
                     height: 80px;
-                    vertical-align: bottom;
-                    padding-bottom: 20px;
+                    vertical-align: middle;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
                 }
             }
 
             td {
                 @apply font-normal;
                 text-align: left;
-                padding: 0 5px;
+                padding: 0 10px;
                 height: 70px;
+                vertical-align: middle;
         
         
                 &:only-child {

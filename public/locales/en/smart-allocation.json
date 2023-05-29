@@ -62,6 +62,8 @@
     "setExitStrategy": "Set Exit Strategy",
     "createExitStrategyTitle": "Create Exit Strategy?",
     "createExitStrategyDescription": "Are you sure you want to create this exit strategy?",
+    "allocation": "Allocation",
+    "percent": "Percent",
     "noTradeData": "You have not made any trades",
     "rebalancingPortfolio":"Rebalancing portfolio",
     "errorRebalancing":"Error Rebalancing Portfolio"
