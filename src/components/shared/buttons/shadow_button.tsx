@@ -10,6 +10,7 @@ type ShadowButtonProps = {
   px?: string;
   py?: string;
   textSize?: string;
+  showBadge?: boolean;
 };
 
 export const ShadowButton: FC<ShadowButtonProps> = ({
@@ -22,6 +23,7 @@ export const ShadowButton: FC<ShadowButtonProps> = ({
   px = "px-5",
   py = "py-2.5",
   textSize = "text-base",
+  showBadge = false,
 }) => {
   return (
     <div
@@ -31,7 +33,12 @@ export const ShadowButton: FC<ShadowButtonProps> = ({
       onClick={() => onClick!()}
     >
       {iconSvg ?? null}
-      {title && <span className={`${textColor} ${textSize} font-semibold text-sm`}>{title}</span>}
+      <span className={`${textColor} ${textSize} font-semibold text-sm`}>
+        {title}
+      </span>
+      {/* {showBadge === true ? (
+        <div className="w-2 h-2 bg-red-1 rounded-full -mt-5" />
+      ) : null} */}
     </div>
   );
 };

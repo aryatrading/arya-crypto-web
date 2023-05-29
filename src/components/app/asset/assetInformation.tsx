@@ -79,7 +79,7 @@ const AssetInformationTab: FC = () => {
           {view === "price" ? (
             <LineChart primaryLineData={timeseries} className="w-full h-80" />
           ) : (
-            <TradingViewWidget />
+            <TradingViewWidget height={400} />
           )}
         </div>
 

@@ -53,8 +53,12 @@ const AssetVote: FC = ({}) => {
   };
 
   return (
-    <Col className="gap-3">
-      <p className="font-medium text-sm">{t("assetvoting")}</p>
+    <Col className="gap-3 w-1/4">
+      <p className="font-medium text-sm">
+        {hasVoted
+          ? `${asset?.symbol.toUpperCase()} ${t("assetvoted")}`
+          : t("assetvoting")}
+      </p>
       {hasVoted === false ? (
         <>
           <Row className="gap-2">
