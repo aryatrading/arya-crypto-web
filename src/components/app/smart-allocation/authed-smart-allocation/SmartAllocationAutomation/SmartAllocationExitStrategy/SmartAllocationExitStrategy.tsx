@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import Button from '../../../../../shared/buttons/button'
 import { Col, Row } from '../../../../../shared/layout/flex'
 import { ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'
@@ -7,63 +7,21 @@ import { EnumExitStrategyTrigger } from '../../../../../../utils/constants/smart
 import ExitStrategyInput from './ExitStrategyInput'
 import { selectSelectedExchange } from '../../../../../../services/redux/exchangeSlice'
 import { useSelector } from 'react-redux'
-import { createExitStrategy, deleteExitStrategy, getExitStrategy, updateExitStrategy } from '../../../../../../services/controllers/smart-allocation'
+import { createExitStrategy, deleteExitStrategy, updateExitStrategy } from '../../../../../../services/controllers/smart-allocation'
 import { MODE_DEBUG } from '../../../../../../utils/constants/config'
 import { toast } from 'react-toastify'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
-import { SmartAllocationExitStrategyType } from '../../../../../../types/smart-allocation.types'
 import { Trans, useTranslation } from 'next-i18next'
+import { SmartAllocationContext } from '../../authed-smart-alocation'
 
 
 const SmartAllocationExitStrategy = () => {
-
+    const {exitStrategyData,fetchExitStrategy,isLoadingExitStrategy} = useContext(SmartAllocationContext)
     const [portfolioChange,setPortfolioChange] = useState<number>(0)
     const [sellPortion,setSellPortion] = useState<number>(0)
     const [assetChangeType, setAssetChangeType] = useState<EnumExitStrategyTrigger>(EnumExitStrategyTrigger.RisesBy)
     const selectedExchange = useSelector(selectSelectedExchange);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [currentExitStrategy, setCurrentExitStrategy] = useState<null|SmartAllocationExitStrategyType>(null);
-    const [fetchError, setFetchError] = useState<boolean>(true);
     const {t} = useTranslation(['smart-allocation','common'])
-    const fetchExitStrategy = useCallback(() =>{
-        if(!selectedExchange?.provider_id){
-            if(MODE_DEBUG){
-                console.log(`fetchExitStrategy: missing provider_id:${selectedExchange?.provider_id}`)
-            }
-            return
-        }
-        setLoading(true)
-        getExitStrategy(selectedExchange?.provider_id).then((res) =>{
-            const {data} = res
-            if(data){
-                
-                setCurrentExitStrategy(data)
-                const {exit_percentage,exit_type,exit_value} = data
-                if(exit_type === EnumExitStrategyTrigger.RisesBy){
-                    setPortfolioChange(exit_value*100)
-                }
-                else{
-                    setPortfolioChange(exit_value)
-                }
-                setSellPortion(exit_percentage*100)
-                setAssetChangeType(exit_type)
-            }
-            else{
-                setCurrentExitStrategy(null)
-                setPortfolioChange(0)
-                setSellPortion(0)
-                setAssetChangeType(EnumExitStrategyTrigger.RisesBy)
-            }
-            setFetchError(false)
-        }).catch((error) =>{
-            if(MODE_DEBUG){
-                console.log(error)
-            }
-            setFetchError(true)
-        }).finally(() =>{
-            setLoading(false)
-        })
-    },[selectedExchange?.provider_id])
 
     const saveExitStrategy = useCallback(() =>{
         if(!selectedExchange?.provider_id||!assetChangeType||!portfolioChange||!sellPortion){
@@ -77,7 +35,7 @@ const SmartAllocationExitStrategy = () => {
             portflolioValue = portfolioChange/100
         }
         const sellValue = sellPortion/100
-        if(currentExitStrategy){
+        if(exitStrategyData){
             //update
             updateExitStrategy(selectedExchange?.provider_id,assetChangeType,portflolioValue,sellValue).then((res) =>{
                 if(MODE_DEBUG){
@@ -108,7 +66,7 @@ const SmartAllocationExitStrategy = () => {
             })
         }
 
-    },[assetChangeType, currentExitStrategy, fetchExitStrategy, portfolioChange, selectedExchange?.provider_id, sellPortion, t])
+    },[assetChangeType, exitStrategyData, fetchExitStrategy, portfolioChange, selectedExchange?.provider_id, sellPortion, t])
 
     const removeExitStrategy = useCallback(() =>{
         if(!selectedExchange?.provider_id){
@@ -213,8 +171,8 @@ const SmartAllocationExitStrategy = () => {
         () => {
           return <AlertDialog.Root >
                   <AlertDialog.Trigger asChild>
-                      <Button className='bg-blue-1 w-full py-3 px-6 rounded-lg font-semibold text-sm md:text-xs md:w-fit'>{
-                            currentExitStrategy?
+                      <Button className='bg-blue-1 w-full py-3 rounded-lg font-semibold text-xs md:w-56'>{
+                            exitStrategyData?
                             t('updateExitStrategy')
                             :t('setExitStrategy')
                         }</Button>
@@ -224,14 +182,14 @@ const SmartAllocationExitStrategy = () => {
                       <AlertDialog.Content className="dialog-content data-[state=open]:animate-contentShow">
                             <AlertDialog.Title className="dialog-title">
                                 {
-                                    currentExitStrategy?
+                                    exitStrategyData?
                                     t('updateExitStrategyTitle')
                                     :t('createExitStrategyTitle')
                                 }
                             </AlertDialog.Title>
                             <AlertDialog.Description className="dialog-description">
                                 {
-                                    currentExitStrategy?
+                                    exitStrategyData?
                                     t('updateExitStrategyDescription')
                                     :t('createExitStrategyDescription')
                                 }
@@ -239,7 +197,7 @@ const SmartAllocationExitStrategy = () => {
                           <div className='flex flex-col gap-6 items-center text-base font-semibold'>
                               <AlertDialog.Action asChild>
                                   <Button className=" bg-blue-1 rounded-lg py-2 px-14" onClick={()=>saveExitStrategy()}>{
-                                    currentExitStrategy?
+                                    exitStrategyData?
                                     t('updateExitStrategy')
                                     :t('setExitStrategy')
                                   }</Button>
@@ -252,31 +210,50 @@ const SmartAllocationExitStrategy = () => {
                   </AlertDialog.Portal>
               </AlertDialog.Root>
         },
-        [currentExitStrategy, saveExitStrategy, t],
+        [exitStrategyData, saveExitStrategy, t],
       )
-
-
-    useEffect(() => {
-        setPortfolioChange(0)
-    }, [assetChangeType])
     
     useEffect(()=>{
         fetchExitStrategy()
     },[fetchExitStrategy])
+
+    useEffect(() => {
+        if(exitStrategyData){
+            const {exit_percentage,exit_type,exit_value} = exitStrategyData
+            if(exit_type === EnumExitStrategyTrigger.RisesBy){
+                setPortfolioChange(exit_value*100)
+            }
+            else if(exit_type === EnumExitStrategyTrigger.Reaches){
+                setPortfolioChange(exit_value)
+            }
+            setSellPortion(exit_percentage*100)
+            setAssetChangeType(exit_type)
+        }
+        else{
+            setPortfolioChange(0)
+            setSellPortion(0)
+            setAssetChangeType(EnumExitStrategyTrigger.RisesBy)
+        }
+    }, [exitStrategyData])
+    
   return (
     <Col className='items-start gap-7'>
             <Row className='flex py-5 px-4 bg-black-2 rounded-lg w-full lg:w-1/2 justify-between items-center'>
                 <Col className='gap-2 text-sm'>
+                    {/* TODO:Fix the responsive after merge with tradeLog */}
                     <span className='font-semibold text-white'>{t('currentExitStrategy')}</span>
-                    {
-                        currentExitStrategy?
-                        <span className='text-grey-1 lg:whitespace-pre'>
+                    {   isLoadingExitStrategy?
+                            <div className='animate-pulse'>
+                                <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                            </div>
+                        :exitStrategyData?
+                        <span className='text-grey-1 whitespace-pre'>
                             <Trans i18nKey={'smart-allocation:haveExitStrategy'}  
                             
                             components={{blueText:<span className='text-blue-1'/>}}
-                            values={{assetChangeType:t(currentExitStrategy.exit_type),
-                                assetChangeValue: `${currentExitStrategy.exit_type===EnumExitStrategyTrigger.RisesBy?`${currentExitStrategy.exit_value*100}%`:`${currentExitStrategy.exit_value}$`}`,
-                                assetSellPercentage: `${currentExitStrategy.exit_percentage*100}%`
+                            values={{assetChangeType:t( exitStrategyData.exit_type),
+                                assetChangeValue: `${exitStrategyData.exit_type===EnumExitStrategyTrigger.RisesBy?`${exitStrategyData.exit_value*100}%`:`${exitStrategyData.exit_value}$`}`,
+                                assetSellPercentage: `${exitStrategyData.exit_percentage*100}%`
                             }}
                             />
                         </span>
@@ -284,7 +261,7 @@ const SmartAllocationExitStrategy = () => {
                         <span className='text-grey-1'>{t('noExitStrategySet')}</span>
                     }
                 </Col> 
-                {!!currentExitStrategy&&deleteExitStrategyBtn()}
+                {!isLoadingExitStrategy&&!!exitStrategyData&&deleteExitStrategyBtn()}
             </Row>
             <Col className='text-sm gap-3 lg:w-2/3'>
                 <span className='font-semibold text-white'>{t('smart-allocation:whatIsExitStrategy')}</span>

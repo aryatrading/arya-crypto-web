@@ -73,7 +73,11 @@ export interface ISmartAllocationContext {
     rebalancingDate: Date|null,
     rebalancingFrequency: EnumRebalancingFrequency|null,
     isLoadingSmartAllocationData: boolean,
-    getSmartAllocationData: Function,
+    exitStrategyData: SmartAllocationExitStrategyType|null,
+    isLoadingExitStrategy: boolean
+    fetchSmartAllocationData: Function,
+    fetchExitStrategy: Function,
+
 }
 
 export interface ISmartAllocationOrderLog{
