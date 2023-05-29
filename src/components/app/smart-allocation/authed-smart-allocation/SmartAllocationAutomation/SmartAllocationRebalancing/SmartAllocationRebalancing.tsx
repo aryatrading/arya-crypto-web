@@ -16,7 +16,7 @@ import { useTranslation } from 'next-i18next'
 import { setRebalancingFrequency } from '../../../../../../services/controllers/smart-allocation'
 
 const SmartAllocationRebalancing = () => {
-    const {rebalancingDate,rebalancingFrequency,getSmartAllocationData} = useContext(SmartAllocationContext)
+    const {rebalancingDate,rebalancingFrequency,fetchSmartAllocationData} = useContext(SmartAllocationContext)
     const [tempFrequency, setTempFrequency] = useState<EnumRebalancingFrequency|null>(rebalancingFrequency)
     const selectedExchange = useSelector(selectSelectedExchange);
     const [rebalanceNow, setRebalanceNow] = useState<boolean|'indeterminate'>(false)
@@ -37,7 +37,7 @@ const SmartAllocationRebalancing = () => {
                 const {response} = res.data;
                 if(response){
                     toast.success(response)
-                    getSmartAllocationData()
+                    fetchSmartAllocationData()
                 }
             }).catch((error) => {    
                 if(MODE_DEBUG){
@@ -45,7 +45,7 @@ const SmartAllocationRebalancing = () => {
                 }     
             })
         },
-      [getSmartAllocationData, rebalanceNow, selectedExchange?.provider_id, tempFrequency],
+      [fetchSmartAllocationData, rebalanceNow, selectedExchange?.provider_id, tempFrequency],
     )
     
     
