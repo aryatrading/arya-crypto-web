@@ -1,11 +1,9 @@
-import { FC, useMemo } from "react";
-import { useTranslation } from "next-i18next";
+import { FC, useContext, useMemo } from "react";
+import { Trans, useTranslation } from "next-i18next";
 import Image from "next/image";
 import clsx from "clsx";
 import Link from "next/link";
-
 import { Col, Row } from "../../../../../shared/layout/flex";
-import Button from "../../../../../shared/buttons/button";
 import styles from "./smart-allocation-holdings-tab.module.scss";
 import { percentageFormat, formatNumber } from "../../../../../../utils/helpers/prices";
 import { CustomizeAllocationIcon } from "../../../../../svg/smart-allocation/customize-portfolio-icon";
@@ -13,11 +11,16 @@ import { SmartAllocationAssetType } from "../../../../../../types/smart-allocati
 import PortfolioComposition from "../../../../../shared/portfolio-composition/portfolio-composition";
 import { USDTSymbol } from "../../../../../../utils/constants/market";
 import AssetPnl from "../../../../../shared/containers/asset/assetPnl";
+import { SmartAllocationContext } from "../../authed-smart-alocation";
+import moment from "moment";
+import { EnumExitStrategyTrigger } from "../../../../../../utils/constants/smartAllocation";
+import RebalancePreviewDialog from "./RebalancePreviewDialog/RebalancePreviewDialog";
 import { useResponsive } from "../../../../../../context/responsive.context";
 
 const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
 
     const { t } = useTranslation(['smart-allocation']);
+    const { rebalancingDate, rebalancingFrequency, exitStrategyData } = useContext(SmartAllocationContext)
 
     const { isTabletOrMobileScreen } = useResponsive();
 
@@ -159,18 +162,28 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
             <Col className="flex-1 gap-5">
                 <Row className="w-full gap-4 text-center">
                     {isTabletOrMobileScreen && <Link href="smart-allocation/edit" className="flex-1 bg-blue-1 py-4 px-5 rounded-md text-sm font-bold">{t('editPortfolio')}</Link>}
-                    <Button className="flex-1 bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold">{t('RebalanceNow')}</Button>
                 </Row>
                 <Col className="gap-4">
+                    <RebalancePreviewDialog holdingData={smartAllocationHoldings.filter((asset) => asset.name !== USDTSymbol)} />
                     <p className="font-bold text-grey-1">{t('automation')}</p>
-                    <p className="text-sm font-bold">{t('automaticRebalancingScheduled')} <span className="text-blue-1">{t('common:monthly')}</span></p>
-                    <p className="text-sm font-bold">{t('nextRebalancingSchedule')} : <span className="text-blue-1">01/12/2023</span></p>
+                    <p className="text-sm font-bold">{t('automaticRebalancingScheduled')} : <span className="text-blue-1">{t(`common:${rebalancingFrequency}`)}</span></p>
+                    <p className="text-sm font-bold">{t('nextRebalancingSchedule')} : <span className="text-blue-1">{moment(rebalancingDate).format('DD/MM/YY')}</span></p>
                     <p className="font-bold text-grey-1">{t('common:exitStrategy')}</p>
-                    <p className="text-sm font-bold">{t('WhenCoinDropsByXAmountSellYAmountOfYourPortfolioForUSDT', { coinName: "Bitcoin", dropPercent: "5%", sellPercent: "50%", USDTSymbol })}</p>
+                    {exitStrategyData && <span className="text-sm font-medium">
+                        <Trans i18nKey={'smart-allocation:haveExitStrategy'}
+
+                            components={{ blueText: <span /> }}
+                            values={{
+                                assetChangeType: t(exitStrategyData.exit_type),
+                                assetChangeValue: `${exitStrategyData.exit_type === EnumExitStrategyTrigger.RisesBy ? `${exitStrategyData.exit_value * 100}%` : `${exitStrategyData.exit_value}$`}`,
+                                assetSellPercentage: `${exitStrategyData.exit_percentage * 100}%`
+                            }}
+                        />
+                    </span>}
                 </Col>
             </Col>
         )
-    }, [isTabletOrMobileScreen, t])
+    }, [exitStrategyData, isTabletOrMobileScreen, rebalancingDate, rebalancingFrequency, smartAllocationHoldings, t])
 
     if (smartAllocationHoldings?.length) {
         return (

@@ -10,7 +10,7 @@ export const DisccounetAlertIcon = () => (
       d="M25 48C37.7026 48 48 37.7026 48 25C48 12.2975 37.7026 2 25 2C12.2975 2 2 12.2975 2 25C2 37.7026 12.2975 48 25 48Z"
       stroke="#F2323F"
       strokeWidth="4"
-      stroke-miterlimit="10"
+      strokeMiterlimit="10"
       strokeLinecap="round"
       strokeLinejoin="round"
     />

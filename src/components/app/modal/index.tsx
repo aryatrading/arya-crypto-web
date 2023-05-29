@@ -10,7 +10,7 @@ interface ModalTypes extends ModalProps {
 
 export const Modal = ({ isVisible, position, children, size, ...props }: ModalTypes) => {
     return (
-        <ModalComponent show={isVisible} position={position || 'center'} size={size || 'lg'} {...props} color='red'>
+        <ModalComponent show={isVisible} position={position || 'center'} size={size || 'lg'} {...props} className='bg-[#fff3] h-[100%]'>
             {children}
         </ModalComponent>
     );

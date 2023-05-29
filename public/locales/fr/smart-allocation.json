@@ -13,6 +13,7 @@
     "setWeight": "Définir le poids",
     "currentWeight": "Poids actuel",
     "rebalanceNow": "Rééquilibrer maintenant",
+    "rebalanceNowDescription": "Les opérations suivantes seront exécutées si vous choisissez de rééquilibrer maintenant.",
     "automaticRebalancingScheduled": "Rééquilibrage automatique programmé",
     "nextRebalancingSchedule": "Prochain calendrier de rééquilibrage",
     "WhenCoinDropsByXAmountSellYAmountOfYourPortfolioForUSDT": "Lorsque {{coinName}} baisse de {{dropPercent}}, vendez {{sellPercent}} de votre portefeuille pour {{USDTSymbol}}.",
@@ -62,5 +63,7 @@
     "createExitStrategyDescription" : "Êtes-vous sûr de vouloir créer cette stratégie de sortie ?",
     "allocation": "Allocation",
     "percent": "Pourcentage",
-    "noTradeData" : "Vous n'avez pas effectué de transactions"
+    "noTradeData" : "Vous n'avez pas effectué de transactions",
+    "rebalancingPortfolio":"Rééquilibrage du portefeuille",
+    "errorRebalancing":"Erreur de rééquilibrage du portefeuille"
 }

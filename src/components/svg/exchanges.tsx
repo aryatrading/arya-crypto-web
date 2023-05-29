@@ -10,7 +10,7 @@ export const ExchangesIcon = () => (
       d="M25 47.6236C37.7026 47.6236 48 37.4104 48 24.8118C48 12.2132 37.7026 2 25 2C12.2975 2 2 12.2132 2 24.8118C2 37.4104 12.2975 47.6236 25 47.6236Z"
       stroke="#558AF2"
       strokeWidth="4"
-      stroke-miterlimit="10"
+      strokeMiterlimit="10"
       strokeLinecap="round"
       strokeLinejoin="round"
     />

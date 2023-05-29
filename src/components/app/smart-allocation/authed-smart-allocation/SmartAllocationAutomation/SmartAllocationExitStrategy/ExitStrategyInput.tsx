@@ -28,9 +28,11 @@ export default function ExitStrategyInput({ isPercentage,value,setValue }:IExitS
   };
 
   const handleIncrement = () => {
-    if(value<100){
+    if(isPercentage && value<100){
       setValue(value + 1);
+      return;
     }
+    setValue(value + 1);
   };
 
   const handleDecrement = () => {

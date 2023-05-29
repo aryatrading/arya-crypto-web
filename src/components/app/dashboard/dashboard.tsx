@@ -44,7 +44,6 @@ const Dashboard: FC = () => {
   const connectedExchanges = useSelector(selectConnectedExchanges);
 
   const { isTabletOrMobileScreen } = useResponsive();
-
   const { t } = useTranslation(["dashboard", "common"]);
 
 
@@ -158,7 +157,7 @@ const Dashboard: FC = () => {
             onclick={onSeriesClick}
           />
         </Row>}
-        <LineChart primaryLineData={chartData} secondaryLineData={smartAllocationData} className={"h-[400px]"} />
+        <LineChart primaryLineData={chartData} secondaryLineData={!isTabletOrMobileScreen?smartAllocationData:undefined} className={"h-[200px] md:h-[400px]"} />
       </Col>
     )
 

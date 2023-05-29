@@ -12,7 +12,6 @@ import {
 import { getApp } from 'firebase/app';
 
 import { MODE_DEBUG } from "../../../utils/constants/config";
-import { i18n } from "next-i18next";
 
 const googleProvider = new GoogleAuthProvider();
 const appleProvider = new OAuthProvider('apple.com');

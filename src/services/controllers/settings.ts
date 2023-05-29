@@ -13,7 +13,7 @@ export const deleteExchange = async (id?: string | number, closeModal?: any) => 
     closeModal();
 };
 
-export const addExchange = async (id?: string | number, fullExchange?: ExchangeType, setSelected?: any) => {
+export const addExchange = async (id?: string | number, fullExchange?: ExchangeType) => {
     await axiosInstance.post(`/exchange/keys?provider=${id}`, {
         name: fullExchange?.name,
         public_key: fullExchange?.public_key,
@@ -22,11 +22,10 @@ export const addExchange = async (id?: string | number, fullExchange?: ExchangeT
     });
     const connectedProvider = store.getState().exchange.data.connectedExchanges;
     delete fullExchange?.create;
-    setSelected(fullExchange);
-    store.dispatch(setConnectedExchanges([fullExchange, ...connectedProvider]));
+    store.dispatch(setConnectedExchanges([...connectedProvider, fullExchange]));
 };
 
-export const changeExchangeName = async (id?: string | number, name?: string, setSelected?: any) => {
+export const changeExchangeName = async (id?: string | number, name?: string) => {
     await axiosInstance.post(`/exchange/keys?provider=${id}`, {
         name: name,
     });
@@ -36,5 +35,4 @@ export const changeExchangeName = async (id?: string | number, name?: string, se
 
     store.dispatch(setConnectedExchanges(arr.map((e: any) => e.provider_id === exchangeToBeUpdated[0].provider_id ? { ...exchangeToBeUpdated[0], name } : e)));
     store.dispatch(setSelectedExchange({ ...exchangeToBeUpdated[0], name }));
-    setSelected({ ...exchangeToBeUpdated[0], name });
 };

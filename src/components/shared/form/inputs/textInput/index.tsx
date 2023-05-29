@@ -5,10 +5,10 @@ import { Col } from "../../../layout/flex";
 
 import "./input.module.scss";
 
-export const TextInput: FC<{ label: string, type: string, name: string, placeholder?: string, disabled?: boolean }> = ({ label, ...props }) => (
-    <Col className="gap-2">
-        {label && <label className="block text-sm text-white font-semibold">{label}</label>}
-        <Field max={new Date().toISOString().split('T')[0]} className="text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" {...props} />
+export const TextInput: FC<{ label: string, type: string, name: string, placeholder?: string | null, disabled?: boolean, labelClassName?: string, className?: string }> = ({ label, labelClassName, ...props }) => (
+    <Col className="gap-4">
+        {label && <label className={labelClassName ? labelClassName : "block text-sm text-white font-semibold"}>{label}</label>}
+        <Field max={new Date().toISOString().split('T')[0]} className={props.className ? props.className : "text-base rounded-lg text-start block w-full overflow-auto lg:w-full p-2.5 bg-grey-3 placeholder-grey-1 h-[48px] justify-center text-white border-none"} {...props} />
     </Col>
 );
 
