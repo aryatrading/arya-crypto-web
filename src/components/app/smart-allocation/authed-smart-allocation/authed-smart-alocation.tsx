@@ -26,6 +26,8 @@ import SmartAllocationTradeLog from "./smart-allocation-tabs/SmartAllocationTrad
 import PortfolioComposition from "../../../shared/portfolio-composition/portfolio-composition";
 import { useResponsive } from "../../../../context/responsive.context";
 import SmartAllocationSimulation from "./smart-allocation-simulation/smart-allocation-simulation";
+import { useRouter } from "next/router";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 
 
@@ -41,14 +43,17 @@ const AuthedSmartAllocation: FC = () => {
 
     const { t } = useTranslation(['smart-allocation']);
 
+    const router = useRouter()
+
     const [isLoadingPortfolioHoldings, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
     const [portfolioSnapshots, setPortfolioSnapshots] = useState<PortfolioSnapshotType[]>([]);
     const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
-    const [smartAllocationExists, setSmartAllocationExists] = useState<boolean>(false);
+    const [smartAllocationExists, setSmartAllocationExists] = useState<boolean>();
     const [smartAllocationTotalEvaluation, setSmartAllocationTotalEvaluation] = useState<number>(0);
     const [rebalancingDate, setRebalancingDate] = useState<Date | null>(null);
     const [rebalancingFrequency, setRebalancingFrequency] = useState<EnumRebalancingFrequency | null>(null);
+    const [fetchingHoldingsError, setFetchingHoldingsError] = useState<string>();
 
     const selectedExchange = useSelector(selectSelectedExchange);
     const connectedExchanges = useSelector(selectConnectedExchanges);
@@ -111,6 +116,7 @@ const AuthedSmartAllocation: FC = () => {
                 }
             })
             .catch((error) => {
+                setFetchingHoldingsError(error.message);
                 if (MODE_DEBUG)
                     console.error("Error while initSmartAllocationHoldings (initSmartAllocationHoldings)", error)
             })
@@ -128,57 +134,26 @@ const AuthedSmartAllocation: FC = () => {
     }, [initPortfolioSnapshots, initSmartAllocationHoldings, selectedExchange?.provider_id]);
 
 
-    const getPredefinedAllocationsButtons = useCallback(({ label, icon, href, isCustom }: { label: string, icon: any, href: string, isCustom: boolean }) => {
-        return (
-            <Link href={href} className={clsx("flex flex-col w-52 md:w-64 aspect-[180/118] rounded-md items-center justify-center gap-2", { "bg-blue-1": isCustom, "bg-blue-3": !isCustom, })}>
-                <Row className="w-1/4 items-center justify-center aspect-square rounded-full bg-blue-3">{icon}</Row>
-                <p className="text-white font-bold">{label}</p>
-            </Link>
-        )
-    }, []);
-
     const noAllocation = useMemo(() => {
-        return (
-            <Col className="md:items-center justify-center col-span-full gap-10">
+        if (smartAllocationExists === false) {
+            router.push("/smart-allocation/edit");
+        } else {
+            return (
+                <Col className="w-full md:items-center justify-center col-span-full gap-10">
                 <ExchangeSwitcher canSelectOverall={false} />
-                <Row className="justify-center">
-                    <Col className="items-center gap-5">
-                        <Col className="items-center gap-5 md:flex-row">
-                            <SelectSmartAllocationPortfolioIcon />
-                            <p className="text-2xl max-w-xs md:max-w-none font-semibold text-center md:text-start">{t('selectAPresetOrCustomizeYourPortfolio')}</p>
+                    <Row className="justify-center  mt-40">
+                        <Col className="items-center gap-5">
+                            <Col className="items-center gap-5">
+                                <ExclamationTriangleIcon color="yellow" width={50}/>
+                                <p className="text-2xl max-w-xs md:max-w-none font-semibold text-center md:text-start">{"Something went wrong while fetching your smart allocation"}</p>
+                            </Col>
+                            <p className="text-grey-1 text-center md:text-start">{fetchingHoldingsError}</p>
                         </Col>
-                        <p className="text-grey-1 text-center md:text-start">{t('selectAPresetBelowOrCustomYourPortfolio')}</p>
-                    </Col>
-                </Row>
-                <Row className="items-center justify-center gap-5 flex-wrap">
-                    {getPredefinedAllocationsButtons({
-                        label: t('customizePortfolio'),
-                        icon: <AdjustmentsHorizontalIcon width={35} height={35} />,
-                        href: "smart-allocation/edit",
-                        isCustom: true,
-                    })}
-                    {getPredefinedAllocationsButtons({
-                        label: t('currentTop5Coins'),
-                        icon: <Top5Icon />,
-                        href: `smart-allocation/edit?portfolio=${EnumPredefinedSmartAllocationPortfolio.top5}`,
-                        isCustom: false,
-                    })}
-                    {getPredefinedAllocationsButtons({
-                        label: t('currentTop10Coins'),
-                        icon: <Top10Icon />,
-                        href: `smart-allocation/edit?portfolio=${EnumPredefinedSmartAllocationPortfolio.top10}`,
-                        isCustom: false,
-                    })}
-                    {getPredefinedAllocationsButtons({
-                        label: t('currentTop15Coins'),
-                        icon: <Top15Icon />,
-                        href: `smart-allocation/edit?portfolio=${EnumPredefinedSmartAllocationPortfolio.top15}`,
-                        isCustom: false,
-                    })}
-                </Row>
-            </Col>
-        )
-    }, [getPredefinedAllocationsButtons, t]);
+                    </Row>
+                </Col>
+            )
+        }
+    }, [fetchingHoldingsError, router, smartAllocationExists]);
 
 
     const portfolioComposition = useMemo(() => {
@@ -238,7 +213,7 @@ const AuthedSmartAllocation: FC = () => {
                 <Row className="w-full justify-between items-end">
                     <ExchangeSwitcher canSelectOverall={false} />
                 </Row>
-                <SmartAllocationSimulation smartAllocationHoldings={smartAllocationHoldings}/>
+                <SmartAllocationSimulation smartAllocationHoldings={smartAllocationHoldings} />
                 {tabs}
             </Col>
         )
@@ -251,7 +226,7 @@ const AuthedSmartAllocation: FC = () => {
         if (connectedExchangesWithProviders?.length) {
             return (
                 <SmartAllocationContext.Provider value={{ rebalancingDate, rebalancingFrequency, isLoadingSmartAllocationData: isLoadingSmartAllocationHoldings, getSmartAllocationData: initSmartAllocationHoldings }}>
-                    <Col className="w-full md:gap-10 lg:gap-16 pb-20 items-start justify-start">
+                    <Col className="w-full md:gap-10 lg:gap-16 md:items-center pb-20 items-start justify-start">
                         {(isLoadingSmartAllocationHoldings || isLoadingPortfolioHoldings) && <PageLoader />}
                         {smartAllocationExists ? withAllocation : noAllocation}
                     </Col>
