@@ -5,7 +5,8 @@ import { useTranslation } from "next-i18next";
 
 let tvScriptLoadingPromise;
 
-export default function TradingViewWidget() {
+export default function TradingViewWidget(height) {
+
   const onLoadScriptRef = useRef();
   const { i18n } = useTranslation();
 
@@ -37,7 +38,7 @@ export default function TradingViewWidget() {
       ) {
         new window.TradingView.widget({
           width: '100%',
-          height: 400,
+          height: height.height,
           interval: "D",
           timezone: "Etc/UTC",
           theme: "dark",

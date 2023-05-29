@@ -13,7 +13,7 @@ export const PortfolioComposition: FC<{ portfolioAssets?: PortfolioCompositionAs
 
     const assetLine = useCallback((asset: PortfolioCompositionAssetType, index: number) => {
         return (
-            <Row className={`h-full ${backgroundColorClass[index % (backgroundColorClass.length)]}`} style={{ width: `${asset.weight * 100}%` }} >
+            <Row key={index} className={`h-full ${backgroundColorClass[index % (backgroundColorClass.length)]}`} style={{ width: `${asset.weight * 100}%` }} >
                 <Tooltip.Provider delayDuration={0}>
                     <Tooltip.Root>
                         <Tooltip.Trigger className="w-full h-full">
