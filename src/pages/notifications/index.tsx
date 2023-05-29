@@ -7,7 +7,7 @@ import { GetStaticProps } from "next";
 import Layout from "../../components/layout/layout";
 import PageLoader from "../../components/shared/pageLoader/pageLoader";
 import { Col } from "../../components/shared/layout/flex";
-import { getNotifications } from "../../services/controllers/notifications";
+import { getNotifications, updateUnseenNotifications } from "../../services/controllers/notifications";
 import { useSelector } from "react-redux";
 import { NotificationType } from "../../types/notifications";
 import LoadingSpinner from "../../components/shared/loading-spinner/loading-spinner";
@@ -21,12 +21,15 @@ const NotificationPage = () => {
     const { notifications } = useSelector(({ notifications }: any) => notifications);
 
     useEffect(() => {
+
         // setIsLoading(true);
         // getNotifications(0, 100, 'asc').then(() => {
         //     setIsLoading(false);
         // }).catch(() => {
         //     setIsLoading(false);
         // });
+        return () => { updateUnseenNotifications(notifications.map((e: NotificationType) => !e.is_seen ? e.id : null).filter((x: number) => x != null)) };
+
     }, []);
 
     return (
