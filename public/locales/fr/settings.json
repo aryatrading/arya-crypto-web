@@ -45,6 +45,6 @@
     "exchangeAccQ": "Ne pas avoir de {{name}} compte?",
     "exchangeAccMsg": "Crée ton {{name}} compte via le bouton ci-dessous et obtenez {{discount}}% de réduction sur votre {{name}} frais.",
     "createAccount": "Créer un compte",
-    "howToConnect": "Comment connecter mon compte Binance ?",
+    "howToConnect": "Comment connecter mon compte {{name}} ?",
     "vidTutorial": "Didacticiel vidéo"
 }

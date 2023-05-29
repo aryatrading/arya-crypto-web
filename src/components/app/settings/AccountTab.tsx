@@ -23,7 +23,7 @@ const Input = ({ label, value }: InputTypes) => {
         <Col className='gap-4'>
             <label className="block text-base font-medium text-white">{label}</label>
             <input
-                className='text-base rounded-lg block w-[300px] md:w-[370px] overflow-auto p-2.5 bg-grey-3 placeholder-grey-1 h-[48px] justify-center text-white'
+                className='text-base rounded-lg block w-[90vw] md:w-[370px] overflow-auto p-2.5 bg-grey-3 placeholder-grey-1 h-[48px] justify-center text-white'
                 disabled
                 defaultValue={value} />
         </Col>
@@ -68,7 +68,7 @@ const AccountTab = () => {
                     <Col className='gap-4 items-center md:items-start'>
                         <label className="text-base font-medium text-white hidden md:block">{t('common:password')}</label>
                         <Button
-                            className="text-white font-medium rounded-lg text-base px-5 bg-grey-2 w-[300px] h-[48px]"
+                            className="text-white font-medium rounded-lg text-base px-5 bg-grey-2 w-[90vw] md:w-[300px] h-[48px]"
                             onClick={showCPModal}>
                             {t('changePassword')}
                         </Button>

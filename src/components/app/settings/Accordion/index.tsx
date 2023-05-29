@@ -20,6 +20,7 @@ import { Modal } from '../../modal';
 import ExchangeModals from '../Modal';
 
 import styles from './index.module.scss';
+import { CopyIcon } from '../../../svg/copyIcon';
 
 const labelClasses = "text-base text-white font-semibold";
 const displayClasses = "text-base rounded-md block w-full overflow-auto p-2.5 bg-grey-3 placeholder-grey-1 h-[48px] justify-center text-white";
@@ -55,10 +56,7 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges, exchanges }: an
                 });
             }}>
                 <Row className='gap-4'>
-                    <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M14.9731 5.75V3.5C14.9731 2.25736 13.8635 1.25 12.4947 1.25H3.40714C2.03834 1.25 0.928711 2.25736 0.928711 3.5V11.75C0.928711 12.9926 2.03834 14 3.40714 14H5.88556M14.9731 5.75H16.6254C17.9942 5.75 19.1038 6.75736 19.1038 8V15.5C19.1038 16.7426 17.9942 17.75 16.6254 17.75H8.36399C6.99519 17.75 5.88556 16.7426 5.88556 15.5V14M14.9731 5.75H8.36399C6.99519 5.75 5.88556 6.75736 5.88556 8V14" stroke="#F9FAFB" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
-                    </svg>
-
+                    <CopyIcon />
                     <h5>{t('copy')}</h5>
                 </Row>
             </Button>
@@ -213,10 +211,10 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges, exchanges }: an
                         <Row className='justify-center items-center bg-yellow-1 rounded-md flex-col md:flex-row'>
                             <Col className='p-4 gap-3'>
                                 <p className='text-white font-bold text-xl'>{t('exchangeAccQ', { name: exchange.provider_name })}</p>
-                                <p className='text-white font-bold text-base'>{exchangeDetails.signupDescription?.[i18n?.language] || ''}</p>
+                                <p className='text-white font-bold text-base'>{exchangeDetails?.signupDescription?.[i18n?.language] || ''}</p>
                             </Col>
                             <Button className={'text-white font-medium rounded-md text-base focus:outline-none w-[300px] px-4 bg-grey-2 hover:divide-opacity-95 h-[56px] self-center me-0 mb-4 md:mb-0 md:me-6'} onClick={() => window.open(
-                                exchangeDetails.exchangeURL,
+                                exchangeDetails?.exchangeURL,
                                 '_blank'
                             )}>
                                 <h5>{t('createAccount')}</h5>
@@ -224,14 +222,14 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges, exchanges }: an
                         </Row>
 
                         <Row className='justify-between items-center bg-blue-3 rounded-md h-[65px] px-6'>
-                            <p className='text-white font-bold text-lg'>{t('howToConnect')}</p>
+                            <p className='text-white font-bold text-lg'>{t('howToConnect', { name: name })}</p>
                             <h5 className='text-blue-1 font-bold cursor-pointer' onClick={() => openModal('video')}>{t('vidTutorial')}</h5>
                         </Row>
 
                         <Col className='gap-2'>
-                            {exchangeDetails?.steps?.map((info: string) => {
+                            {exchangeDetails?.steps?.map((info: string, index: number) => {
                                 return (
-                                    <p className='text-sm text-white font-medium'>{info}</p>
+                                    <p key={index} className='text-sm text-white font-medium'>{info}</p>
                                 );
                             })}
                         </Col>
@@ -239,7 +237,7 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges, exchanges }: an
                 </Row>
             </AccordionContent>
         </Accordion.Item>
-    ), [AccordionContent, AccordionTrigger, cardId, display, exchange.create, exchange?.provider_id, exchange.provider_name, exchangeDetails.exchangeURL, exchangeDetails.signupDescription, exchangeDetails?.steps, form, i18n?.language, name, openModal, t]);
+    ), [AccordionContent, AccordionTrigger, cardId, display, exchange.create, exchange?.provider_id, exchange.provider_name, exchangeDetails, form, i18n?.language, name, openModal, t]);
 
 
     return (
