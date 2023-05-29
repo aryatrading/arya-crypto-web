@@ -25,7 +25,7 @@ export const initiateTrade = async (
 
   let _pairs = await getAvailablePairs(symbol ?? "btc", provider);
 
-  await getAssetOpenOrders(symbol ?? "BTC", provider);
+  // await getAssetOpenOrders(symbol ?? "BTC", provider);
   await getHistoryOrders(symbol ?? "BTC", provider);
 
   store.dispatch(addTradables({ assets: _pairs._tradables }));
@@ -95,8 +95,6 @@ export const getAssetOpenOrders = async (symbol: string, provider: number) => {
     `trade-engine/orders?provider=${provider}&symbol=${symbol}&skip=0&limit=100&order_origin=manual_order`
   );
 
-  console.log("orders", data);
-  // console.log("open orders: ", data);
   // return data;
   // store.dispatch(setOpenOrders({ orders: _openOrders }));
 };
