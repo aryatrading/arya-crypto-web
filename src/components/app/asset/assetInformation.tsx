@@ -138,7 +138,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
       </Col>
 
       <Col className="lg:w-4/12 gap-10">
-        <Col className="hidden xl:flex gap-5">
+        <Col className="hidden lg:flex gap-5">
           <p className="text-xl font-medium">
             {t("trade_title")} {asset?.name ?? ""}
           </p>

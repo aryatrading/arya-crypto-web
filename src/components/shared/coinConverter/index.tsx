@@ -85,7 +85,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
             }
         }
         return (
-            <Button key={e.symbol} className="bg-blue-3 rounded-md hover:bg-grey-4 w-full px-5 py-2.5 lg:py-0 lg:px-0 h-full xl:font-sm font-xs font-semibold" onClick={onClick}>
+            <Button key={e.symbol} className="bg-blue-3 rounded-md hover:bg-grey-4 w-full px-5 py-2.5 lg:py-0 lg:px-0 h-full xl:font-sm font-xs font-medium" onClick={onClick}>
                 {props.preDefined ? firstCoin?.symbol?.toUpperCase() + ' > ' + e?.symbol.toUpperCase() : e?.symbol.toUpperCase() + ' > ' + usdt?.symbol.toUpperCase()}
             </Button>
         );
@@ -97,7 +97,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
             {assetLivePrice?.[usdt.symbol] != null ?
                 <>
                     <Row className="flex-col gap-5 bg-transparent rounded-md lg:flex-row items-start justify-start w-full">
-                        <Col className="justify-center gap-4 w-full lg:w-2/5">
+                        <Col className="justify-center gap-4 w-full lg:w-3/5">
                             <Row className="gap-4 items-center bg-blue-3 px-4 rounded-md">
                                 <AssetDropdown
                                     onClick={(data: any) => {
@@ -124,7 +124,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
                                 {numericInput(secondCoinAmount, onChnageSecondCoinAmount, !secondCoin?.name || !secondCoin?.name)}
                             </Row>
                         </Col>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full justify-items-start xl:2/5 lg:w-3/5 h-full">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full justify-items-start lg:w-2/5 h-full">
                             {defaultList}
                         </div>
                     </Row>
