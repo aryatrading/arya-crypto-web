@@ -1,29 +1,19 @@
 import { FC, createContext, useCallback, useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux";
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
-import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
-import clsx from "clsx";
 import { useTranslation } from "next-i18next";
 
 import { Col, Row } from "../../../shared/layout/flex";
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher";
-import { PortfolioSnapshotType } from "../../../../types/exchange.types";
-import { getPortfolioSnapshots } from "../../../../services/controllers/market";
 import { selectConnectedExchanges, selectSelectedExchange } from "../../../../services/redux/exchangeSlice";
 import { MODE_DEBUG } from "../../../../utils/constants/config";
-import { chartDataType } from "../../../shared/charts/graph/graph.type";
-import LineChart from "../../../shared/charts/graph/graph";
 import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
 import { ISmartAllocationContext, SmartAllocationAssetType } from "../../../../types/smart-allocation.types";
 import PageLoader from "../../../shared/pageLoader/pageLoader";
 import { getSmartAllocation } from "../../../../services/controllers/smart-allocation";
-import { Top10Icon, Top15Icon, Top5Icon } from "../../../svg/smart-allocation/top-coins-icons";
-import { SelectSmartAllocationPortfolioIcon } from "../../../svg/smart-allocation/customize-portfolio-icon";
 import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/no-exchange-connected-page";
-import { EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
+import { EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
 import SmartAllocationTradeLog from "./smart-allocation-tabs/SmartAllocationTradeLog/SmartAllocationTradeLog";
-import PortfolioComposition from "../../../shared/portfolio-composition/portfolio-composition";
 import { useResponsive } from "../../../../context/responsive.context";
 import SmartAllocationSimulation from "./smart-allocation-simulation/smart-allocation-simulation";
 import { useRouter } from "next/router";
@@ -46,7 +36,6 @@ const AuthedSmartAllocation: FC = () => {
     const router = useRouter()
 
     const [isLoadingPortfolioHoldings, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
-    const [portfolioSnapshots, setPortfolioSnapshots] = useState<PortfolioSnapshotType[]>([]);
     const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
     const [smartAllocationExists, setSmartAllocationExists] = useState<boolean>();
@@ -59,28 +48,6 @@ const AuthedSmartAllocation: FC = () => {
     const connectedExchanges = useSelector(selectConnectedExchanges);
 
     const { isTabletOrMobileScreen } = useResponsive();
-
-
-    const initPortfolioSnapshots = useCallback(() => {
-        setIsLoadingPortfolioSnapshots(true);
-        getPortfolioSnapshots(selectedExchange?.provider_id)
-            .then((res) => {
-                const data: any = res.data;
-                const exchangeSnapshotsData: PortfolioSnapshotType[] = data.data;
-
-                if (exchangeSnapshotsData) {
-                    exchangeSnapshotsData.sort((a, b) => ((new Date(a.created_at).getTime()) - new Date(b.created_at).getTime()));
-                    setPortfolioSnapshots(exchangeSnapshotsData);
-                }
-            })
-            .catch((error) => {
-                if (MODE_DEBUG)
-                    console.error("Error while getting portfolio Snapshots (getPortfolioSnapshots)", error)
-            })
-            .finally(() => {
-                setIsLoadingPortfolioSnapshots(false);
-            })
-    }, [selectedExchange?.provider_id]);
 
     const initSmartAllocationHoldings = useCallback(() => {
         if (!selectedExchange?.provider_id) {
@@ -128,10 +95,9 @@ const AuthedSmartAllocation: FC = () => {
 
     useEffect(() => {
         if (selectedExchange?.provider_id) {
-            initPortfolioSnapshots();
             initSmartAllocationHoldings();
         }
-    }, [initPortfolioSnapshots, initSmartAllocationHoldings, selectedExchange?.provider_id]);
+    }, [initSmartAllocationHoldings, selectedExchange?.provider_id]);
 
 
     const noAllocation = useMemo(() => {
@@ -140,11 +106,11 @@ const AuthedSmartAllocation: FC = () => {
         } else {
             return (
                 <Col className="w-full md:items-center justify-center col-span-full gap-10">
-                <ExchangeSwitcher canSelectOverall={false} />
+                    <ExchangeSwitcher canSelectOverall={false} />
                     <Row className="justify-center  mt-40">
                         <Col className="items-center gap-5">
                             <Col className="items-center gap-5">
-                                <ExclamationTriangleIcon color="yellow" width={50}/>
+                                <ExclamationTriangleIcon color="yellow" width={50} />
                                 <p className="text-2xl max-w-xs md:max-w-none font-semibold text-center md:text-start">{"Something went wrong while fetching your smart allocation"}</p>
                             </Col>
                             <p className="text-grey-1 text-center md:text-start">{fetchingHoldingsError}</p>
@@ -154,41 +120,6 @@ const AuthedSmartAllocation: FC = () => {
             )
         }
     }, [fetchingHoldingsError, router, smartAllocationExists]);
-
-
-    const portfolioComposition = useMemo(() => {
-        return (
-            <PortfolioComposition portfolioAssets={smartAllocationHoldings.map(asset => {
-                return {
-                    symbol: asset.name ?? '',
-                    name: (asset.name ?? ''),
-                    weight: (asset.current_value ?? 0) / (smartAllocationTotalEvaluation ?? 1)
-                };
-            })} />
-        )
-    }, [smartAllocationHoldings, smartAllocationTotalEvaluation]);
-
-    const smartAllocationGraph = useMemo(() => {
-
-        if (portfolioSnapshots.length) {
-            const smartAllocationData: chartDataType[] = portfolioSnapshots?.map((snapshot) => {
-
-                const time = new Date(snapshot.created_at).getTime();
-                return {
-                    time: Math.floor((time / 1000)) as chartDataType["time"],
-                    value: snapshot.smart_allocation_total_evaluation ?? 0,
-                }
-            });
-
-            return (
-                <Col className="w-full gap-5">
-                    {isTabletOrMobileScreen && portfolioComposition}
-                    <LineChart primaryLineData={smartAllocationData} className={"w-full h-[200px] md:h-[400px]"} />
-                </Col>
-            )
-
-        }
-    }, [isTabletOrMobileScreen, portfolioComposition, portfolioSnapshots]);
 
     const tabs = useMemo(() => {
         return (

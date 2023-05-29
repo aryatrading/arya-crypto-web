@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { getAssetsHistoricalData, periodToIntervalsAndOutputSize } from "../../../../../services/controllers/asset";
+import { getAssetsHistoricalData } from "../../../../../services/controllers/asset";
 import { EnumRebalancingFrequency } from "../../../../../utils/constants/smartAllocation";
 import { SmartAllocationAssetType } from "../../../../../types/smart-allocation.types";
 import { Time } from "lightweight-charts";
@@ -14,6 +14,10 @@ import { USDTSymbol } from "../../../../../utils/constants/market";
 import { doughnutChartDataType } from "../../../../shared/charts/doughnut/doughnut";
 import { formatNumber } from "../../../../../utils/helpers/prices";
 import clsx from "clsx";
+import { useResponsive } from "../../../../../context/responsive.context";
+import { ShadowButton } from "../../../../shared/buttons/shadow_button";
+import { PieChartIcon } from "../../../../svg/pieChartIcon";
+import { LineChartIcon } from "../../../../svg/lineChartIcon";
 
 
 const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationAssetType[] }> = ({ smartAllocationHoldings }) => {
@@ -27,8 +31,11 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
     const [setWeightsDrawdown, setSetWeightsDrawdown] = useState<number>();
     const [assetsHistoricalData, setAssetsHistoricalData] = useState<{ [k: string]: chartDataType[] }>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [selectedChart, setSelectedChart] = useState<"doughnut" | "graph">("graph");
 
     const { t } = useTranslation(["smart-allocation"]);
+
+    const { isTabletOrMobileScreen } = useResponsive();
 
 
     const getAssetSymbol = useCallback((holding: SmartAllocationAssetType) => {
@@ -158,7 +165,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
         calculateLineChartsData();
     }, [calculateLineChartsData]);
 
-    const chart = useCallback(({ chartTitle, chartData, drawdown, maxProfit }: { chartTitle: string, chartData: doughnutChartDataType[], drawdown: number, maxProfit: number }) => {
+    const weightsDoughnutCharts = useCallback(({ chartTitle, chartData, drawdown, maxProfit }: { chartTitle: string, chartData: doughnutChartDataType[], drawdown: number, maxProfit: number }) => {
         const riskValue = initialValue - drawdown;
         const returnValue = maxProfit - initialValue;
         const returnRiskRatio = returnValue / riskValue;
@@ -175,19 +182,19 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
         // formattedReturnValue *= (returnValue < 0 ? -1 : 1);
 
         return (
-            <Col className="md:flex-row flex-1 gap-10 md:h-full">
+            <Col className="items-center w-[165px] md:flex-row md:flex-1 gap-5 md:h-full">
                 <CutoutDoughnutChart
                     title={chartTitle}
                     chartData={chartData}
                 />
-                <Col className="flex-1 justify-center gap-10">
-                    <Row className="justify-between gap-5">
+                <Col className="justify-center gap-5 px-2">
+                    <Row className="gap-5 flex-wrap">
                         <Col>
                             <p className="text-sm font-bold">Drawdown</p>
                             <p className={clsx("text-sm font-bold", { "text-green-1": drawdown >= initialValue, "text-red-1": drawdown < initialValue })}>{formatNumber(drawdown, true)}</p>
                         </Col>
                         <Col>
-                            <p className="text-sm font-bold">Final amount</p>
+                            <p className="text-sm font-bold">Profit</p>
                             <p className={clsx("text-sm font-bold", { "text-green-1": maxProfit >= initialValue, "text-red-1": maxProfit < initialValue })}>{formatNumber(maxProfit, true)}</p>
                         </Col>
                     </Row>
@@ -200,16 +207,16 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
         )
     }, [initialValue]);
 
-    const charts = useMemo(() => {
+    const doughnutCharts = useMemo(() => {
         return (
-            <Row className="md:flex-[2] items-center justify-evenly md:h-[250px] gap-20 w-full]">
-                {chart({
+            <Row className="md:flex-[2] justify-between md:justify-evenly md:h-[250px] gap-2.5 md:gap-20 w-full">
+                {weightsDoughnutCharts({
                     chartTitle: "Current weight",
                     chartData: smartAllocationHoldings?.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
                     drawdown: currentWeightsDrawdown ?? initialValue,
                     maxProfit: currentWeightsData[currentWeightsData.length - 1]?.value ?? 0,
                 })}
-                {chart({
+                {weightsDoughnutCharts({
                     chartTitle: "Set weight",
                     chartData: smartAllocationHoldings?.map(asset => ({ label: asset?.name ?? "", value: asset.weight ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
                     drawdown: setWeightsDrawdown ?? initialValue,
@@ -217,11 +224,11 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 })}
             </Row>
         )
-    }, [chart, currentWeightsData, currentWeightsDrawdown, initialValue, setWeightsData, setWeightsDrawdown, smartAllocationHoldings]);
+    }, [weightsDoughnutCharts, currentWeightsData, currentWeightsDrawdown, initialValue, setWeightsData, setWeightsDrawdown, smartAllocationHoldings]);
 
     const reBalanceNow = useMemo(() => {
         return (
-            <Col className="max-w-[300px] flex-1 gap-5">
+            <Col className="md:max-w-[300px] flex-1 gap-5">
                 <Row className="w-full gap-4 text-center">
                     <Button className="flex-1 bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold">{t('RebalanceNow')}</Button>
                 </Row>
@@ -251,42 +258,92 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
         )
     }, [])
 
+    const graphChart = useMemo(() => {
+        return (
+
+            <Col className="w-full gap-5">
+                <LineChart primaryLineData={currentWeightsData} secondaryLineData={setWeightsData} className={"w-full h-[200px] md:h-[400px]"} isLoading={isLoading} />
+                {graphLegend}
+            </Col>
+        )
+    }, [currentWeightsData, graphLegend, isLoading, setWeightsData])
+
+
+    const charts = useMemo(() => {
+        if (isTabletOrMobileScreen) {
+            return (
+                <Col className="w-full items-center justify-center gap-5">
+                    {selectedChart === "doughnut" ? doughnutCharts : graphChart}
+                    <Row className="w-full h-10 justify-between gap-2 overflow-auto">
+                        <Row className="gap-1">
+                            <ShadowButton
+                                onClick={() => { setSelectedChart('doughnut') }}
+                                iconSvg={
+                                    <PieChartIcon stroke={selectedChart === "doughnut" ? "#558AF2" : "#6B7280"} />
+                                }
+                                border="rounded-l-md"
+                                bgColor={selectedChart === "doughnut" ? "bg-blue-3" : "bg-grey-2"}
+                                textColor={selectedChart === "doughnut" ? "text-blue-2" : ""}
+                            />
+                            <ShadowButton
+                                iconSvg={
+                                    <LineChartIcon pathFill={selectedChart !== "doughnut" ? "#558AF2" : "#6B7280"} />
+                                }
+                                onClick={() => { setSelectedChart('graph') }}
+                                border="rounded-r-md"
+                                bgColor={selectedChart !== "doughnut" ? "bg-blue-3" : "bg-grey-2"}
+                                textColor={selectedChart !== "doughnut" ? "text-blue-2" : ""}
+                            />
+                        </Row>
+                    </Row>
+                    {reBalanceNow}
+                </Col>
+            )
+        } else {
+
+            return (
+                <Col className="w-full gap-10">
+                    {graphChart}
+                    <Col className="gap-20 md:flex-row">
+                        {doughnutCharts}
+                        {reBalanceNow}
+                    </Col>
+                </Col>
+            )
+        }
+    }, [doughnutCharts, graphChart, isTabletOrMobileScreen, reBalanceNow, selectedChart])
+
     return (
         <Col className="w-full gap-10">
             <Col className="md:items-center md:flex-row gap-5">
-                <Row className="items-center gap-5">
+                <Row className="items-center gap-5 justify-between">
                     <p className="font-bold text-xl">Simulate portfolio over the past</p>
-                    <select className="w-36 h-12 bg-grey-3 border-none rounded-md px-5" value={simulationPeriod} onChange={(event) => { setSimulationPeriod(event.target.value as any) }}>
+                    <select className="h-12 bg-grey-3 border-none rounded-md px-5 w-40 shrink-0  md:w-auto md:shrink" value={simulationPeriod} onChange={(event) => { setSimulationPeriod(event.target.value as any) }}>
                         <option value="1w">1 Week</option>
                         <option value="1m">1 Month</option>
                         <option value="1y">1 Year</option>
                     </select>
                 </Row>
-                <Row className="items-center gap-5">
+                <Row className="items-center gap-5 justify-between">
                     <p className="font-bold text-xl">starting with</p>
-                    <input
-                        value={initialValue}
-                        type="number"
-                        onChange={(event) => {
-                            const value = event.target.value;
-                            if (value)
-                                setInitialValue(parseFloat(value))
-                            else
-                                setInitialValue(0)
-                        }}
-                        className="w-36 h-12 bg-grey-3 border-none rounded-md px-5"
-                    />
-                    <p className="font-bold text-xl">$</p>
+                    <Row className="items-center gap-2 md:gap-5 w-40 md:w-auto">
+                        <input
+                            value={initialValue}
+                            type="number"
+                            onChange={(event) => {
+                                const value = event.target.value;
+                                if (value)
+                                    setInitialValue(parseFloat(value))
+                                else
+                                    setInitialValue(0)
+                            }}
+                            className="w-36 h-12 bg-grey-3 border-none rounded-md px-5"
+                        />
+                        <p className="font-bold text-xl">$</p>
+                    </Row>
                 </Row>
             </Col>
-            <Col className="w-full gap-5">
-                <LineChart primaryLineData={currentWeightsData} secondaryLineData={setWeightsData} className={"w-full h-[200px] md:h-[400px]"} isLoading={isLoading} />
-                {graphLegend}
-            </Col>
-            <Col className="gap-20 md:flex-row">
-                {charts}
-                {reBalanceNow}
-            </Col>
+            {charts}
         </Col>
     )
 }
