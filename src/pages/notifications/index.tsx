@@ -44,7 +44,7 @@ const NotificationPage = () => {
                         : notifications.map((notification: NotificationType, index: number, arr: NotificationType[]) => {
                             const isLastItem = index === arr.length - 1;
                             return (
-                                <NotificationCard notification={notification} type="fullscreen" isLastItem={isLastItem} />
+                                <NotificationCard key={index} notification={notification} type="fullscreen" isLastItem={isLastItem} />
                             );
                         })}
             </Col>

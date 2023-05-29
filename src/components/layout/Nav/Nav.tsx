@@ -219,7 +219,7 @@ const Nav = () => {
                   :
                   notifications.map((notification: NotificationType) => {
                     return (
-                      <NotificationCard notification={notification} type="dropdown" />
+                      <NotificationCard key={notification.id} notification={notification} type="dropdown" />
                     );
                   })
                 }

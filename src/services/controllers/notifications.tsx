@@ -7,7 +7,7 @@ export const getNotifications = async (offset: number, limit: number, order: 'as
         `/notifications/?limit=${limit}&skip=${offset}&order_by=${order}`
     );
 
-    store.dispatch(setNotifications(data));
+    store?.dispatch(setNotifications(data));
 };
 
 export const updateFCMToken = (token: string) => {

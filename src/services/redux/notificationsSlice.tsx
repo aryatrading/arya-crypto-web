@@ -5,7 +5,6 @@ interface initialStateType {
     notifications: NotificationType[];
     hasNewNotifications: boolean;
 }
-// TODO: remove this dummy data.
 const initialState: initialStateType = {
     notifications: [],
     hasNewNotifications: false,
