@@ -1,3 +1,5 @@
+import { TradeOrder } from "../../types/trade";
+
 export const dummyMarket = [
   {
     rank: 1,
@@ -291,3 +293,30 @@ export const asset = {
   iconUrl:
     "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
 };
+
+export const dummyOpenOrders = [
+  {
+    status: "Placed",
+    type: "Buy",
+    amount: 0.031321,
+    price: 247733,
+    createdAt: "today",
+    exchange: "Binance",
+  },
+  {
+    status: "Placed",
+    type: "Sell",
+    amount: 0.12312415,
+    price: 23451,
+    createdAt: "today",
+    exchange: "Binance",
+  },
+  {
+    status: "Placed",
+    type: "Buy",
+    amount: 0.12312415,
+    price: 34242,
+    createdAt: "today",
+    exchange: "Binance",
+  },
+];

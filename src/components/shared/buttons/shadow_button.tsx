@@ -12,6 +12,7 @@ type ShadowButtonProps = {
   py?: string;
   textSize?: string;
   className?:string
+  showBadge?: boolean;
 };
 
 export const ShadowButton: FC<ShadowButtonProps> = ({
@@ -24,7 +25,8 @@ export const ShadowButton: FC<ShadowButtonProps> = ({
   px = "px-5",
   py = "py-2.5",
   textSize = "text-base",
-  className
+  className,
+  showBadge = false,
 }) => {
   return (
     <div

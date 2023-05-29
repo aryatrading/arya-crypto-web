@@ -23,6 +23,10 @@ export const VotingComposition: FC<VotingCompositionProps> = ({ votes }) => {
       <Row className="h-3 w-full bg-blue-1 rounded-full overflow-hidden">
         {votes?.map((weight, index) => assetLine(weight, index))}
       </Row>
+      <Row className="justify-between">
+        <p className="text-grey-1 font-semibold">{votes[0]}%</p>
+        <p className="text-grey-1 font-semibold">{votes[1]}%</p>
+      </Row>
     </Col>
   );
 };
