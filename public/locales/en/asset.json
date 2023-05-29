@@ -63,5 +63,6 @@
     "swap_success": "Swap trade created",
     "select_provider": "Please select a provider to trade",
     "select_base": "Please select a base asset",
-    "trade_error": "Error creating trade"
+    "trade_error": "Error creating trade",
+    "cryptoProfitCalculator":"Crypto Profit Calculator"
 }

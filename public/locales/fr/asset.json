@@ -62,5 +62,6 @@
     "swap_success": "Échange créé",
     "select_provider": "Veuillez sélectionner un fournisseur à échanger",
     "select_base": "Veuillez sélectionner un actif de base",
-    "trade_error": "Erreur lors de la création d'un commerce"
+    "trade_error": "Erreur lors de la création d'un commerce",
+    "cryptoProfitCalculator":"Calculateur de profit cryptographique"
 }
