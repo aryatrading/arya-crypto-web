@@ -89,7 +89,6 @@ const ExchangeSwitcher: FC<{
           className={clsx(
             {
               "bg-grey-4": isSelected,
-              "bg-grey-2": !isSelected,
               "cursor-pointer": !isNotSelectable,
             },
             "h-20 py-3 px-9 rounded-md"
@@ -98,7 +97,7 @@ const ExchangeSwitcher: FC<{
             if (!isNotSelectable) selectExchange(exchange);
           }}
         >
-          <Row className="items-center  gap-5 h-full">
+          <Row className="items-center gap-5 h-full">
             <ExchangeImage
               providerId={exchange?.provider_id}
               width={37}
@@ -143,8 +142,9 @@ const ExchangeSwitcher: FC<{
 
         <DropdownMenu.Portal>
           <DropdownMenu.Content
-            className="min-w-[420px] bg-grey-3 rounded-md overflow-hidden z-10"
             sideOffset={15}
+            align="start"
+            className="w-[400px] max-w-[calc(100%_-_28px)] bg-grey-3 rounded-md overflow-hidden z-10"
           >
             {connectedExchanges?.map((exchange) => dropdownItem(exchange))}
 
@@ -165,7 +165,13 @@ const ExchangeSwitcher: FC<{
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
     );
-  }, [connectedExchanges, dropdownItem, t]);
+  }, [
+    connectedExchanges,
+    dropdownItem,
+    selectedExchange?.name,
+    selectedExchange?.provider_id,
+    t,
+  ]);
 
   return (
     <AsyncStatusWrapper

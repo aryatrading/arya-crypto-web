@@ -44,6 +44,12 @@ const EditSmartAllocation: FC = () => {
 
 
     const initSmartAllocationHoldings = useCallback(() => {
+        if(!selectedExchange?.provider_id) {
+            if(MODE_DEBUG){
+                console.log('initSmartAllocationHolding: selectedExchange?.provider_id is false', selectedExchange?.provider_id)
+            }
+            return
+        };
         setIsLoadingSmartAllocationHoldings(true);
         getSmartAllocation(selectedExchange?.provider_id)
             .then((res) => {
@@ -179,7 +185,7 @@ const EditSmartAllocation: FC = () => {
                 </tr>
             </tfoot>
         )
-    }, [smartAllocationHoldings, smartAllocationTotalEvaluation, userHasSubscription])
+    }, [smartAllocationHoldings, smartAllocationTotalEvaluation, t, userHasSubscription])
 
     const table = useMemo(() => {
         if (!isLoadingSmartAllocationHoldings || !isLoadingPredefinedAllocationHoldings) {

@@ -87,7 +87,7 @@ const SmartAllocationRebalancing = () => {
       () => {
         return <AlertDialog.Root open={rebalanceModalOpen} onOpenChange={setRebalanceModalOpen} >
                 <AlertDialog.Trigger asChild>
-                    <Button className='bg-blue-1 py-3 rounded-lg font-semibold text-xs w-full md:w-56'>{t('setRebalancingFrequency')}</Button>
+                    <Button className='bg-blue-1 py-3 px-6 rounded-lg font-semibold text-sm md:text-xs w-full md:w-fit'>{t('setRebalancingFrequency')}</Button>
                 </AlertDialog.Trigger>
                 <AlertDialog.Portal>
                     <AlertDialog.Overlay className="dialog-overlay data-[state=open]:animate-overlayShow" />
@@ -152,13 +152,13 @@ const SmartAllocationRebalancing = () => {
             </Col>
             <Col className='gap-5 w-full'>
                 <span className='font-semibold'>{t('chooseFrequency')}</span>
-                <div className='flex gap-3'>
-                    <Button className= {twMerge('rounded-lg bg-black-2 py-4 w-full lg:w-56 text-xs font-semibold text-grey-1',(tempFrequency===null)?'bg-blue-3 text-blue-1':'')} onClick={() => setTempFrequency(null)}>
+                <div className='grid grid-cols-2 md:flex gap-3'>
+                    <Button className= {twMerge('rounded-lg bg-black-2 py-4 lg:w-56 text-xs font-semibold text-grey-1 w-full',(tempFrequency===null)?'bg-blue-3 text-blue-1':'')} onClick={() => setTempFrequency(null)}>
                         {t('common:none')}
                     </Button>
                     {Object.values(EnumRebalancingFrequency).map((frequency) => {
                         return (
-                            <Button className= {twMerge('rounded-lg bg-black-2 py-4 w-full lg:w-56 text-xs font-semibold text-grey-1',(tempFrequency===frequency)?'bg-blue-3 text-blue-1':'')} onClick={() => setTempFrequency(frequency)}>
+                            <Button className= {twMerge('rounded-lg bg-black-2 py-4 lg:w-56 text-xs font-semibold text-grey-1 w-full',(tempFrequency===frequency)?'bg-blue-3 text-blue-1':'')} onClick={() => setTempFrequency(frequency)}>
                                 {t(`common:${frequency}`)}
                             </Button>
                         )

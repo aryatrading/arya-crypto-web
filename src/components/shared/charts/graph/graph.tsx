@@ -13,14 +13,17 @@ import { Col } from "../../layout/flex";
 import { GraphChartType } from "./graph.type";
 import clsx from "clsx";
 import { shortNumberFormat } from "../../../../utils/helpers/prices";
+import { useResponsive } from "../../../../context/responsive.context";
 
 const LineChart: FC<GraphChartType> = ({
   primaryLineData,
   secondaryLineData: secondaryData,
   className,
-  fixed = true,
+  fixed = true
 }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
+
+  const {isTabletOrMobileScreen} = useResponsive();
 
   useEffect(() => {
     if (!chartContainerRef?.current || !primaryLineData) {
@@ -44,6 +47,7 @@ const LineChart: FC<GraphChartType> = ({
           visible: false,
         },
         horzLines: {
+          visible: !isTabletOrMobileScreen,
           color: "#1F2A41",
         },
       },
@@ -53,7 +57,7 @@ const LineChart: FC<GraphChartType> = ({
       leftPriceScale: {
         borderVisible: false,
         autoScale: true,
-        visible: true,
+        visible: !isTabletOrMobileScreen,
         mode: PriceScaleMode.Normal,
       },
       rightPriceScale: {
@@ -61,7 +65,7 @@ const LineChart: FC<GraphChartType> = ({
       },
       timeScale: {
         borderColor: "#1F2A41",
-        visible: true,
+        visible: !isTabletOrMobileScreen,
         timeVisible: true,
         secondsVisible: false,
       },
@@ -102,7 +106,7 @@ const LineChart: FC<GraphChartType> = ({
       window.removeEventListener("resize", handleResize);
       chart.remove();
     };
-  }, [fixed, primaryLineData, secondaryData]);
+  }, [fixed, isTabletOrMobileScreen, primaryLineData, secondaryData]);
 
   return (
     <>

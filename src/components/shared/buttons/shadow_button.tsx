@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 type ShadowButtonProps = {
-  title: string;
+  title?: string | null;
   iconSvg?: any;
   border?: string;
   bgColor?: string;
