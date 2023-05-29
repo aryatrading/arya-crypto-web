@@ -1,5 +1,5 @@
 export const ENIcon = () => (
-    <svg width="24" height="24" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+    <svg width="18" height="18" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
         <circle cx="13" cy="13" r="13" fill="url(#pattern1)" />
         <defs>
             <pattern id="pattern1" patternContentUnits="objectBoundingBox" width="1" height="1">

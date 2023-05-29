@@ -31,7 +31,6 @@
     "noAssetFound": "No Assets Found...",
     "searchAsset": "Search Asset",
     "none": "None",
-    "MONTHLY": "Monthly",
     "QUARTERLY": "Quarterly",
     "YEARLY": "Yearly",
     "exitStrategy": "Exit Strategy",
@@ -52,10 +51,10 @@
     "amount": "Amount",
     "price": "Price",
     "date": "Date",
-    "PENDING_ENTRY":"Pending Entry",
-    "ACTIVE":"Active",
-    "CANCELLED":"Cancelled",
-    "FULFILLED":"Fulfilled",
-    "BROKER_ERROR":"Broker Error",
-    "DATA_ERROR":"Data Error"
+    "PENDING_ENTRY": "Pending Entry",
+    "ACTIVE": "Active",
+    "CANCELLED": "Cancelled",
+    "FULFILLED": "Fulfilled",
+    "BROKER_ERROR": "Broker Error",
+    "DATA_ERROR": "Data Error"
 }
