@@ -67,23 +67,23 @@ export const AssetOrdersTable: FC = () => {
                       ? "text-red-1"
                       : "text-green-1"
                   }
-                  content={elm.order_data?.side.toUpperCase()}
+                  content={elm.order_data?.side?.toUpperCase()}
                 />
                 <td className="font-medium leading-6 text-white pl-5">
                   {renderOrderColumn(elm.order_status)}
                 </td>
 
                 <td className="font-medium leading-6 text-white pl-5">
-                  {formatNumber(elm.quantity)} {asset.symbol.toUpperCase()}
+                  {formatNumber(elm?.quantity)} {asset?.symbol?.toUpperCase()}
                 </td>
                 <td className="font-medium leading-6 text-white pl-5">
-                  {formatNumber(elm.value, true)}
+                  {formatNumber(elm?.value, true)}
                 </td>
                 <td className="font-medium leading-6 text-white pl-5">
-                  {moment(elm.created_at).format("DD/MM/YY")}
+                  {moment(elm?.created_at).format("DD/MM/YY")}
                 </td>
                 <td className="font-medium leading-6 text-white pl-5">
-                  {CapitalizeString(elm.provider_name.toLowerCase())}
+                  {CapitalizeString(elm?.provider_name?.toLowerCase())}
                 </td>
               </tr>
             );

@@ -39,7 +39,6 @@ export const AssetTradeDropdown: FC = () => {
   const assetSelect = async (asset: string) => {
     setSearchFilter("");
     const _symbol = asset.split(filter);
-    // window.history.replaceState(null, `?symbol=${_symbol}`);
 
     dispatch(
       setTrade({
@@ -54,7 +53,7 @@ export const AssetTradeDropdown: FC = () => {
   };
 
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
         <button
           className="bg-grey-3 md:w-40 py-2 rounded-full"

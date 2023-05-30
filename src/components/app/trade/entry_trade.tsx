@@ -3,11 +3,13 @@ import { ShadowButton } from "../../shared/buttons/shadow_button";
 import { Row } from "../../shared/layout/flex";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  getAssetPrice,
   getTrade,
   setOrderType,
   setPrice,
   setQuantity,
   setSide,
+  setTrade,
   setTriggerPrice,
 } from "../../../services/redux/tradeSlice";
 import { Tab, TabList, Tabs } from "react-tabs";
@@ -17,13 +19,45 @@ import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
 import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries";
 import { percentTabs } from "../../../utils/constants/profitsPercentage";
 import { useTranslation } from "next-i18next";
+import { getAssetAvailable } from "../../../services/controllers/trade";
+import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
 
 export const EntryTrade: FC = () => {
   const dispatch = useDispatch();
   const _assetprice = useSelector(selectAssetLivePrice);
+  const _price = useSelector(getAssetPrice);
   const [percent, setPercent] = useState("5");
   const { t } = useTranslation(["trade"]);
   const trade = useSelector(getTrade);
+  const selectedExchange = useSelector(selectSelectedExchange);
+
+  const onBuySelect = async () => {
+    dispatch(
+      setTrade({
+        asset_name: trade.asset_name ?? "btc",
+        base_name: trade.base_name ?? "usdt",
+        available_quantity: await getAssetAvailable(
+          trade.base_name,
+          selectedExchange?.provider_id ?? 1
+        ),
+      })
+    );
+    dispatch(setSide({ side: "BUY" }));
+  };
+
+  const onSellSelect = async () => {
+    dispatch(
+      setTrade({
+        asset_name: trade.asset_name ?? "btc",
+        base_name: trade.base_name ?? "usdt",
+        available_quantity: await getAssetAvailable(
+          trade.asset_name,
+          selectedExchange?.provider_id ?? 1
+        ),
+      })
+    );
+    dispatch(setSide({ side: "SELL" }));
+  };
 
   return (
     <>
@@ -33,7 +67,7 @@ export const EntryTrade: FC = () => {
           bgColor={
             trade?.entry_order?.type === "BUY" ? "bg-green-1" : "bg-green-2"
           }
-          onClick={() => dispatch(setSide({ side: "BUY" }))}
+          onClick={() => onBuySelect()}
           textColor="text-white"
           border="rounded-md w-full text-center"
         />
@@ -42,7 +76,7 @@ export const EntryTrade: FC = () => {
           bgColor={
             trade?.entry_order?.type === "SELL" ? "bg-red-1" : "bg-red-2"
           }
-          onClick={() => dispatch(setSide({ side: "SELL" }))}
+          onClick={() => onSellSelect()}
           textColor="text-white"
           border="rounded-md w-full text-center"
         />
@@ -53,7 +87,17 @@ export const EntryTrade: FC = () => {
             <Row className="gap-6">
               <Tab
                 className="font-semibold text-sm outline-none cursor-pointer w-full text-center"
-                onClick={() => dispatch(setOrderType({ orderType: "MARKET" }))}
+                onClick={() => {
+                  dispatch(
+                    setTriggerPrice({
+                      price:
+                        _assetprice[
+                          trade?.asset_name?.toLowerCase() ?? "btc"
+                        ] ?? _price,
+                    })
+                  );
+                  dispatch(setOrderType({ orderType: "MARKET" }));
+                }}
               >
                 {t("market")}
               </Tab>
@@ -71,7 +115,9 @@ export const EntryTrade: FC = () => {
       </div>
       <p className="font-bold text-sm">
         {t("available")}: {formatNumber(trade.available_quantity)}{" "}
-        {trade.base_name}
+        {trade?.entry_order?.type === "SELL"
+          ? trade.asset_name
+          : trade.base_name}
       </p>
       <TradeInput
         title={t("price")}
@@ -82,13 +128,11 @@ export const EntryTrade: FC = () => {
             : false
         }
         amount={
-          trade?.entry_order && trade.entry_order.order_type === "MARKET"
-            ? _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ?? 0
-            : trade?.entry_order?.trigger_price
+          trade?.entry_order?.trigger_price
+            ? trade?.entry_order?.trigger_price
+            : _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ?? _price
         }
-        onchange={(e: string) =>
-          dispatch(setTriggerPrice({ price: parseInt(e) }))
-        }
+        onchange={(e: string) => dispatch(setTriggerPrice({ price: e }))}
       />
       <TradeInput
         title={t("units")}
@@ -97,13 +141,14 @@ export const EntryTrade: FC = () => {
         onchange={(e: any) => {
           dispatch(
             setPrice({
-              price: parseInt(e),
+              price:
+                _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ??
+                _price * e,
             })
           );
           dispatch(
             setQuantity({
-              quantity:
-                _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ?? 0 * e,
+              quantity: e,
             })
           );
         }}
@@ -112,21 +157,33 @@ export const EntryTrade: FC = () => {
         <TimeseriesPicker
           series={percentTabs}
           active={percent}
-          onclick={(e: any) => {
+          onclick={async (e: any) => {
             setPercent(e.key);
+
             dispatch(
-              setPrice({
-                price: parseInt(
-                  formatNumber(
-                    _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] /
-                      e.key
-                  )
-                ),
+              setQuantity({
+                quantity:
+                  (trade.available_quantity * (e.key / 100)) /
+                    _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ??
+                  _price,
               })
             );
-            dispatch(
-              setQuantity({ quantity: trade.available_quantity / e.key })
-            );
+            if (trade?.entry_order?.type === "SELL") {
+              dispatch(
+                setPrice({
+                  price:
+                    (await getAssetAvailable(
+                      trade.base_name,
+                      selectedExchange?.provider_id ?? 1
+                    )) *
+                    (e.key / 100),
+                })
+              );
+            } else {
+              dispatch(
+                setPrice({ price: trade.available_quantity * (e.key / 100) })
+              );
+            }
           }}
         />
       </div>
@@ -135,11 +192,12 @@ export const EntryTrade: FC = () => {
         value={trade.base_name}
         amount={trade?.entry_order?.price ?? 10}
         onchange={(e: any) => {
-          dispatch(setPrice({ price: parseInt(e) }));
+          dispatch(setPrice({ price: e }));
           dispatch(
             setQuantity({
               quantity:
-                e / _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ?? 0,
+                e / _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ??
+                _price,
             })
           );
         }}

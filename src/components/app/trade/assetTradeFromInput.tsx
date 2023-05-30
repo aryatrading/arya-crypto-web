@@ -14,6 +14,7 @@ import { getFree } from "../../../services/controllers/asset";
 import LoadingSpinner from "../../shared/loading-spinner/loading-spinner";
 import clsx from "clsx";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const inputClasses =
   "font-medium text-white bg-transparent flex-1 h-5 w-5 border-transparent";
@@ -53,6 +54,9 @@ const AssetTradeFromInput: FC = () => {
   };
 
   const onMaxPress = () => {
+    if (!provider) {
+      return toast.info("Please select a provider");
+    }
     dispatch(setFrom({ ...asset, quantity: asset.availableBalance }));
   };
 
@@ -70,7 +74,6 @@ const AssetTradeFromInput: FC = () => {
         <input
           className={clsx(inputClasses)}
           value={asset.quantity ?? 0}
-          maxLength={8}
           placeholder={asset.quantity}
           onChange={(e) =>
             dispatch(setFrom({ ...asset, quantity: e.target.value }))
@@ -98,7 +101,12 @@ const AssetTradeFromInput: FC = () => {
             <p>{asset.symbol}</p>
           ) : (
             <AssetDropdown
-              onClick={(data: any) => onFromSelect(data)}
+              onClick={(data: any) => {
+                if (!provider) {
+                  return toast.info("Please select a provider");
+                }
+                onFromSelect(data);
+              }}
               align="end"
               t={t}
               disabled={false}

@@ -2,8 +2,9 @@ import { FC, useEffect, useState } from "react";
 import TradeInput from "../../shared/inputs/tradeInput";
 import {
   addTakeProfit,
+  getAssetPrice,
   getTrade,
-  removeTakeProfit,
+  setTakeProfit,
 } from "../../../services/redux/tradeSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../shared/buttons/button";
@@ -15,14 +16,17 @@ import { percentTabs } from "../../../utils/constants/profitsPercentage";
 import { PremiumBanner } from "../../shared/containers/premiumBanner";
 import { useTranslation } from "next-i18next";
 import { toast } from "react-toastify";
+import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
 
 export const TakeprofitTrade: FC = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation(["trade"]);
   const trade = useSelector(getTrade);
+  const _price = useSelector(getAssetPrice);
+  const _assetprice = useSelector(selectAssetLivePrice);
   const selectedExchange = useSelector(selectSelectedExchange);
   const [values, setValues] = useState({
-    value: null,
+    value: _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ?? _price,
     quantity: 0,
   });
   const [available, setAvailable] = useState("");
@@ -41,9 +45,23 @@ export const TakeprofitTrade: FC = () => {
 
   const onAddTp = () => {
     if (trade?.take_profit?.length >= 3) {
-      return toast.info("You can only add 3 TP's per asset");
+      return toast.info("You can only have 3 TP's per asset");
     }
+
+    if (values.quantity <= 0) {
+      return toast.info("Please add quantity amount");
+    }
+
+    if (values.value <= 0) {
+      return toast.info("Please add USDT amount");
+    }
+
     dispatch(addTakeProfit(values));
+  };
+
+  const onremoveProfit = (index: number) => {
+    let _new = trade.take_profit;
+    _new = _new.slice(index, 1);
   };
 
   return (
@@ -93,7 +111,7 @@ export const TakeprofitTrade: FC = () => {
               symbol={trade.asset_name}
               quantity="3"
               base="USD"
-              action={() => dispatch(removeTakeProfit({ index: index + 1 }))}
+              action={() => onremoveProfit(index)}
             />
           );
         })}
