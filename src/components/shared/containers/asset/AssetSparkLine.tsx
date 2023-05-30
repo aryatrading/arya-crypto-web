@@ -23,7 +23,7 @@ ChartJS.register(
   export const options = {
     events: [],
       borderColor: '#22C55E',
-      borderWidth: .5,
+      borderWidth: 1,
       responsive: true,
       pointStyle:false,
       tooltips: {
