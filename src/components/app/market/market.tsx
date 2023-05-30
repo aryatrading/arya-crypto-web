@@ -59,12 +59,10 @@ const Market: FC = () => {
               />
             </div>
           ) : null}
-          <div className="w-full mt-7 lg:px-[500px] justify-center">
-            <SearchInput
-              onchange={(e: string) => setSearch(e)}
-              placeholder={t("search")}
-            />
-          </div>
+          <SearchInput
+            onchange={(e: string) => setSearch(e)}
+            placeholder={t("search")}
+          />
         </Col>
         <Row className="gap-0.5 justify-end pb-2 w-full">
           <ShadowButton
