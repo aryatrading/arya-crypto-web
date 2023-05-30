@@ -3,6 +3,7 @@ import { axiosInstance } from "../api/axiosConfig";
 import { store } from "../redux/store";
 import {
   addTradables,
+  setAssetPrice,
   setHistoryOrders,
   setOpenOrders,
   setOrderType,
@@ -27,6 +28,7 @@ export const initiateTrade = async (
 
   // await getAssetOpenOrders(symbol ?? "BTC", provider);
   await getHistoryOrders(symbol ?? "BTC", provider);
+  await getAssetCurrentPrice(symbol ?? "BTC");
 
   store.dispatch(addTradables({ assets: _pairs._tradables }));
   store.dispatch(setPairs({ pairs: _pairs._pairs }));
@@ -61,6 +63,14 @@ export const getAssetAvailable = async (base: string, provider: number) => {
   );
 
   return data[provider].data.free;
+};
+
+export const getAssetCurrentPrice = async (asset_name: string) => {
+  const { data } = await axiosInstance.get(
+    `utils/asset-details?asset_name=${asset_name}`
+  );
+
+  store.dispatch(setAssetPrice({ price: data.asset_data?.current_price }));
 };
 
 export const getAssetValidation = async (symbol: string, provider: number) => {

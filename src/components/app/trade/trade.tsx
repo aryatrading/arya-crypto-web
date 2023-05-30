@@ -86,17 +86,19 @@ const Trade: FC = () => {
       <AssetTradeDropdown />
 
       <div className="flex flex-col lg:flex-row gap-4">
-        <div className="lg:w-2/3">
+        <div className="lg:w-2/3 flex-none">
           <TradingViewWidget height={500} />
         </div>
 
-        <div>
-          <Col className="bg-black-2  py-5 rounded-md gap-5 px-3 ">
-            <TimeseriesPicker
-              series={tradetabs}
-              active={activeTab}
-              onclick={(e: any) => setActiveTab(e.key)}
-            />
+        <div className="w-full">
+          <Col className=" bg-black-2 rounded-md gap-5 px-5 py-5">
+            <div className="w-full flex justify-center">
+              <TimeseriesPicker
+                series={tradetabs}
+                active={activeTab}
+                onclick={(e: any) => setActiveTab(e.key)}
+              />
+            </div>
             {renderTradeContent()}
           </Col>
           <Button

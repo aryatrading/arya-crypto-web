@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
@@ -13,18 +13,29 @@ import {
 import { clearAsset } from "../../services/redux/assetSlice";
 import { clearSwap } from "../../services/redux/swapSlice";
 import { getPosts } from "../../services/firebase/community/posts";
+import PageLoader from "../../components/shared/pageLoader/pageLoader";
+import { toast } from "react-toastify";
 
 const AssetPage = () => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const { symbol } = router.query;
 
   useEffect(() => {
-    getAssetDetails(symbol ?? "btc");
-    getAssetTimeseriesPrice(symbol ?? "btc", "5min", 288);
-    if (symbol) {
-      getPosts({ searchTerm: symbol?.toString() || "" });
-    }
+    (async () => {
+      setLoading(true);
+      try {
+        await getAssetDetails(symbol ?? "btc");
+        await getAssetTimeseriesPrice(symbol ?? "btc", "5min", 288);
+        await getPosts({ searchTerm: symbol?.toString() ?? "btc" });
+      } catch (error) {
+        toast.warn("Something went wrong, try again!");
+      } finally {
+        setLoading(false);
+      }
+    })();
 
     return () => {
       dispatch(clearAsset());
@@ -32,11 +43,7 @@ const AssetPage = () => {
     };
   }, [symbol]);
 
-  return (
-    <Layout>
-      <Asset />
-    </Layout>
-  );
+  return <Layout>{loading ? <PageLoader /> : <Asset />}</Layout>;
 };
 
 export default AssetPage;

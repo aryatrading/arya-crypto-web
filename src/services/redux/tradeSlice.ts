@@ -15,6 +15,7 @@ interface initialStateType {
   tradeFilter: string;
   openOrders?: TradeOrder[];
   historyOrders?: TradeOrder[];
+  assetPrice?: number;
 }
 
 const initialState: initialStateType = {
@@ -31,6 +32,7 @@ const initialState: initialStateType = {
   tradeFilter: "USDT",
   openOrders: [],
   historyOrders: [],
+  assetPrice: 0,
 };
 
 export const tradeSlice = createSlice({
@@ -57,7 +59,6 @@ export const tradeSlice = createSlice({
       state.trade.entry_order = {
         ...state.trade.entry_order,
         order_type: action.payload.orderType,
-        trigger_price: 0,
       };
     },
     setTriggerPrice: (state, action: { payload: { price: any } }) => {
@@ -99,11 +100,8 @@ export const tradeSlice = createSlice({
         action.payload,
       ];
     },
-    removeTakeProfit: (state, action: { payload: { index: number } }) => {
-      state.trade.take_profit = state.trade.take_profit?.slice(
-        action.payload.index,
-        1
-      );
+    setTakeProfit: (state, action: { payload: any }) => {
+      state.trade.take_profit = action.payload;
     },
     setPairs: (state, action: { payload: { pairs: string[] } }) => {
       state.pairs = action.payload.pairs;
@@ -120,6 +118,9 @@ export const tradeSlice = createSlice({
       action: { payload: { orders: TradeOrder[] } }
     ) => {
       state.historyOrders = action.payload.orders;
+    },
+    setAssetPrice: (state, action: { payload: { price: number } }) => {
+      state.assetPrice = action.payload.price;
     },
     clearTrade: (state) => {
       state.trade.symbol_name = "BTCUSDT";
@@ -142,7 +143,7 @@ export const {
   addStoploss,
   removeStoploss,
   addTakeProfit,
-  removeTakeProfit,
+  setTakeProfit,
   setPairs,
   addTradables,
   setFilter,
@@ -151,6 +152,7 @@ export const {
   setOpenOrders,
   setPrice,
   setHistoryOrders,
+  setAssetPrice,
 } = tradeSlice.actions;
 
 export const getTrade = (state: AppState) => state.trade.trade;
@@ -161,5 +163,6 @@ export const getFilter = (state: AppState) => state.trade.tradeFilter;
 export const getTradedAssets = (state: AppState) => state.trade.tradeableAsset;
 export const getOpenOrders = (state: AppState) => state.trade.openOrders;
 export const getHistoryOrders = (state: AppState) => state.trade.historyOrders;
+export const getAssetPrice = (state: AppState) => state.trade.assetPrice;
 
 export default tradeSlice.reducer;
