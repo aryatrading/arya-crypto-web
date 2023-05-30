@@ -142,7 +142,7 @@ const SmartAllocationExitStrategy: FC<SmartAllocationExitStrategyPropsType> = ({
                         />
                     </span>}
                 <p className="text-grey-1">
-                    Set a contingency plan to sell a portion or all of your portfolio value when it hits a certain threshold for USDT.
+                    {t("setAContingencyPlanToSell")}
                 </p>
             </Col>
             {exitStrategy && <Col className='gap-5 font-semibold w-full'>

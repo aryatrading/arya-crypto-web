@@ -64,7 +64,6 @@ const EditSmartAllocation: FC = () => {
             .then((res) => {
                 const data = res.data;
                 setSmartAllocationExists(data?.exists ?? false);
-                // if (data.exists) {
                 const holdings: SmartAllocationAssetType[] | undefined = data.assets;
                 if (holdings) {
                     holdings.sort((a, b) => ((b?.current_weight ?? 0) - (a?.current_weight ?? 0)));
@@ -483,8 +482,8 @@ const EditSmartAllocation: FC = () => {
             return (
                 <Tabs className="w-full font-light" selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
                     <TabList className="flex overflow-auto w-full border-b-[1px] border-grey-3 mb-6">
-                        <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">Rebalancing</Tab>
-                        <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">Exit strategy</Tab>
+                        <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">{t("rebalancing")}</Tab>
+                        <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">{t("exitStrategy")}</Tab>
                     </TabList>
                     <TabPanel>
                         {smartAllocationRebalancing}
@@ -502,7 +501,7 @@ const EditSmartAllocation: FC = () => {
                 </Col>
             )
         }
-    }, [isTabletOrMobileScreen, smartAllocationExitStrategy, smartAllocationRebalancing]);
+    }, [isTabletOrMobileScreen, smartAllocationExitStrategy, smartAllocationRebalancing, t]);
 
     if (isLoadingSmartAllocationHoldings) {
         return <PageLoader />
@@ -525,11 +524,11 @@ const EditSmartAllocation: FC = () => {
                     </Col>
                     <Row className="flex-[2] justify-evenly h-44 md:h-[300px] gap-5">
                         <CutoutDoughnutChart
-                            title="Current weight"
+                            title={t("currentWeight")}
                             chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" }))}
                         />
                         <CutoutDoughnutChart
-                            title="Set weight"
+                            title={t("setWeight")}
                             chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: asset.weight ?? 0, coinSymbol: asset.name ?? "" }))}
                         />
                     </Row>

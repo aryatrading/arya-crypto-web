@@ -103,9 +103,6 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
             const currentWeightsPoints: chartDataType[] = [];
             const setWeightsPoints: chartDataType[] = [];
 
-            let currentWeightsPreviousPointValue = initialValue;
-            let setWeightsPreviousPointValue = initialValue;
-
             let currentWeightsDrawdown = initialValue;
             let setWeightsDrawdown = initialValue;
 
@@ -183,17 +180,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
         const returnRiskRatio = returnValue / riskValue;
         const riskPercentage = riskValue / initialValue;
         const returnPercentage = returnValue / initialValue;
-
-        // let formattedRiskValue = Math.abs(riskValue / returnValue);
-        // let formattedReturnValue = 1;
-        let isLowRisk = returnRiskRatio > 0;
-
-        // if (formattedRiskValue < 1) {
-        //     formattedRiskValue = 1;
-        //     formattedReturnValue = 1 / formattedReturnValue;
-        // }
-
-        // formattedReturnValue *= (returnValue < 0 ? -1 : 1);
+        const isLowRisk = returnRiskRatio > 0;
 
         return (
             <Col className="items-center w-[165px] md:flex-row md:flex-1 gap-5 md:h-full">
@@ -201,53 +188,53 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     title={chartTitle}
                     chartData={chartData}
                 />
-                <Col className="justify-center gap-5 px-2">
+                {(!!riskValue) && <Col className="justify-center gap-5 px-2">
                     <Row className="gap-5 flex-wrap">
                         <Col>
-                            <p className="text-sm font-bold">Drawdown</p>
+                            <p className="text-sm font-bold">{t("drawdown")}</p>
                             <p className={clsx("text-sm font-bold", { "text-green-1": drawdown >= initialValue, "text-red-1": drawdown < initialValue })}>{percentageFormat(riskPercentage * 100)}%</p>
                         </Col>
                         <Col>
-                            <p className="text-sm font-bold">Profit</p>
+                            <p className="text-sm font-bold">{t("profit")}</p>
                             <p className={clsx("text-sm font-bold", { "text-green-1": maxProfit >= initialValue, "text-red-1": maxProfit < initialValue })}>{percentageFormat(returnPercentage * 100)}%</p>
                         </Col>
                     </Row>
                     <Col>
-                        <p className="text-sm font-bold">Return / Risk</p>
+                        <p className="text-sm font-bold">{t("returnRisk")}</p>
                         <p className={clsx("text-4xl font-bold", { "text-green-1": isLowRisk, "text-red-1": !isLowRisk })}>{formatNumber(returnRiskRatio)}</p>
                     </Col>
-                </Col>
+                </Col>}
             </Col>
         )
-    }, [initialValue]);
+    }, [initialValue, t]);
 
     const doughnutCharts = useMemo(() => {
         return (
             <Row className="md:flex-[2] justify-between md:justify-evenly md:h-[250px] gap-2.5 md:gap-20 w-full">
                 {weightsDoughnutCharts({
-                    chartTitle: "Current weight",
+                    chartTitle: t("currentWeight"),
                     chartData: smartAllocationHoldings?.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
                     drawdown: currentWeightsDrawdown ?? initialValue,
                     maxProfit: currentWeightsData[currentWeightsData.length - 1]?.value ?? 0,
                 })}
                 {weightsDoughnutCharts({
-                    chartTitle: "Set weight",
+                    chartTitle: t("setWeight"),
                     chartData: smartAllocationHoldings?.map(asset => ({ label: asset?.name ?? "", value: asset.weight ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
                     drawdown: setWeightsDrawdown ?? initialValue,
                     maxProfit: setWeightsData[setWeightsData.length - 1]?.value ?? 0,
                 })}
             </Row>
         )
-    }, [weightsDoughnutCharts, currentWeightsData, currentWeightsDrawdown, initialValue, setWeightsData, setWeightsDrawdown, smartAllocationHoldings]);
+    }, [weightsDoughnutCharts, smartAllocationHoldings, currentWeightsDrawdown, initialValue, currentWeightsData, t, setWeightsDrawdown, setWeightsData]);
 
     const reBalanceNow = useMemo(() => {
         return (
             <Col className="w-full md:max-w-[300px] flex-1 gap-5 justify-center">
-                <Row className="w-full gap-4 text-center">
-                    <Link href="smart-allocation/edit" className="flex-1 flex items-center justify-center bg-blue-1 h-12 px-5 rounded-md text-sm font-bold">{t('editPortfolio')}</Link>
+                <Row className="md:flex-col w-full gap-4 text-center">
+                    <Link href="smart-allocation/edit" className="w-full flex items-center justify-center bg-blue-1 h-12 px-5 rounded-md text-sm font-bold">{t('editPortfolio')}</Link>
+                    <RebalancePreviewDialog holdingData={smartAllocationHoldings?.filter((asset) => asset.name !== USDTSymbol) ?? []} />
                 </Row>
                 <Col className="gap-4">
-                    <RebalancePreviewDialog holdingData={smartAllocationHoldings?.filter((asset) => asset.name !== USDTSymbol) ?? []} />
                     {rebalancingFrequency && <>
                         <p className="font-bold text-grey-1">{t('automation')}</p>
                         <p className="text-sm font-bold">{t('automaticRebalancingScheduled')} : <span className="text-blue-1">{t(`common:${rebalancingFrequency}`)}</span></p>
@@ -277,15 +264,15 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
             <Row className="w-full items-center justify-center gap-5">
                 <Row className="items-center justify-center gap-2">
                     <Col className="h-5 w-5 bg-blue-1 rounded-full" />
-                    <p>Current weight</p>
+                    <p>{t("currentWeight")}</p>
                 </Row>
                 <Row className="items-center justify-center gap-2">
                     <Col className="h-5 w-5 bg-yellow-1  rounded-full" />
-                    <p>Set weight</p>
+                    <p>{t("setWeight")}</p>
                 </Row>
             </Row>
         )
-    }, [])
+    }, [t])
 
     const graphChart = useMemo(() => {
         return (
@@ -351,18 +338,18 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
         <Col className="w-full gap-10">
             <Col className="md:items-center md:flex-row gap-5">
                 <Row className="items-center gap-5 justify-between">
-                    <p className="font-bold text-xl">Simulate portfolio over the past</p>
+                    <p className="font-bold text-xl">{t("simulatePortfolioOverThePast")}</p>
                     <select className="h-12 bg-grey-3 border-none rounded-md px-5 w-40 shrink-0  md:w-auto md:shrink" value={simulationPeriod} onChange={(event) => { setSimulationPeriod(event.target.value as any) }}>
-                        <option value={EnumSmartAllocationSimulationPeriod["1w"]}>1 Week</option>
-                        <option value={EnumSmartAllocationSimulationPeriod["1m"]}>1 Month</option>
-                        <option value={EnumSmartAllocationSimulationPeriod["1y"]}>1 Year</option>
-                        <option value={EnumSmartAllocationSimulationPeriod["5y"]}>5 Years</option>
-                        <option value={EnumSmartAllocationSimulationPeriod["custom"]}>Custom</option>
+                        <option value={EnumSmartAllocationSimulationPeriod["1w"]}>{t("1Week")}</option>
+                        <option value={EnumSmartAllocationSimulationPeriod["1m"]}>{t("1Month")}</option>
+                        <option value={EnumSmartAllocationSimulationPeriod["1y"]}>{t("1Year")}</option>
+                        <option value={EnumSmartAllocationSimulationPeriod["5y"]}>{t("5Years")}</option>
+                        <option value={EnumSmartAllocationSimulationPeriod["custom"]}>{t("custom")}</option>
                     </select>
                 </Row>
                 {simulationPeriod === EnumSmartAllocationSimulationPeriod.custom && <>
                     <Row className="items-center gap-5 justify-between">
-                        <p className="font-bold text-xl">from</p>
+                        <p className="font-bold text-xl">{t("from")}</p>
                         <Input
                             value={moment(new Date(customPeriodStartDate)).format('YYYY-MM-DD')}
                             type="date"
@@ -376,7 +363,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                         />
                     </Row>
                     <Row className="items-center gap-5 justify-between">
-                        <p className="font-bold text-xl">to</p>
+                        <p className="font-bold text-xl">{t("to")}</p>
                         <Input
                             value={moment(new Date(customPeriodEndDate)).format('YYYY-MM-DD')}
                             type="date"
@@ -391,7 +378,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     </Row>
                 </>}
                 <Row className="items-center gap-5 justify-between">
-                    <p className="font-bold text-xl">starting with</p>
+                    <p className="font-bold text-xl">{t("startingWith")}</p>
                     <Row className="items-center justify-between gap-2 md:gap-5 w-40 md:w-auto h-12 bg-grey-3 border-none rounded-md px-5">
                         <Input
                             value={initialValue}

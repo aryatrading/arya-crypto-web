@@ -106,7 +106,6 @@ const Dashboard: FC = () => {
     initPortfolioSnapshots();
     initPortfolioHoldings();
   }, [initPortfolioSnapshots, initPortfolioHoldings]);
-getMostCommonColor("https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663", "usdt")
 
   const portfolioDoughnutChart = useMemo(() => {
 

@@ -53,16 +53,13 @@ const AuthedSmartAllocation: FC = () => {
     const initSmartAllocationHoldings = useCallback(() => {
         if (!selectedExchange?.provider_id) {
             if (MODE_DEBUG) {
-                console.log('initSmartAllocationHolding: selectedExchange?.provider_id is false', selectedExchange?.provider_id)
+                console.error('initSmartAllocationHolding: selectedExchange?.provider_id is false', selectedExchange?.provider_id)
             }
             return
         };
         setIsLoadingSmartAllocationHoldings(true);
         getSmartAllocation(selectedExchange?.provider_id)
             .then((res) => {
-                if (MODE_DEBUG) {
-                    console.log(res.data)
-                }
                 const data: any = res.data;
                 const holdings: SmartAllocationAssetType[] = data.assets;
                 setSmartAllocationTotalEvaluation(data.total_asset_value);
@@ -96,23 +93,19 @@ const AuthedSmartAllocation: FC = () => {
     const fetchExitStrategy = useCallback(() => {
         if (!selectedExchange?.provider_id) {
             if (MODE_DEBUG) {
-                console.log(`fetchExitStrategy: missing provider_id:${selectedExchange?.provider_id}`)
+                console.error(`fetchExitStrategy: missing provider_id:${selectedExchange?.provider_id}`)
             }
             return
         }
         setIsLoadingExitStrategy(true)
         getExitStrategy(selectedExchange?.provider_id).then((res) => {
             const { data } = res
-            if (MODE_DEBUG) {
-                console.log(data)
-            }
             if (data) {
-
                 setExitStrategy(data)
             }
         }).catch((error) => {
             if (MODE_DEBUG) {
-                console.log(error)
+                console.error(error)
             }
         }).finally(() => {
             setIsLoadingExitStrategy(false)
@@ -141,7 +134,7 @@ const AuthedSmartAllocation: FC = () => {
                         <Col className="items-center gap-5">
                             <Col className="items-center gap-5">
                                 <ExclamationTriangleIcon color="yellow" width={50} />
-                                <p className="text-2xl max-w-xs md:max-w-none font-semibold text-center md:text-start">{"Something went wrong while fetching your smart allocation"}</p>
+                                <p className="text-2xl max-w-xs md:max-w-none font-semibold text-center md:text-start">{t("somethingWentWrongWhileFetchingYourSmartAllocation")}</p>
                             </Col>
                             <p className="text-grey-1 text-center md:text-start">{fetchingHoldingsError}</p>
                         </Col>
@@ -149,7 +142,7 @@ const AuthedSmartAllocation: FC = () => {
                 </Col>
             )
         }
-    }, [fetchingHoldingsError, router, smartAllocationExists]);
+    }, [fetchingHoldingsError, router, smartAllocationExists, t]);
 
     const tabs = useMemo(() => {
         return (

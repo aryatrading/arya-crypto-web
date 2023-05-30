@@ -20,7 +20,7 @@ const SmartAllocationRebalancing: FC<SmartAllocationRebalancingType> = ({ reBala
         <Col className='w-full items-start gap-7'>
             <Col className="w-full gap-10">
                 <Row className="items-center gap-5">
-                    <p className="font-bold">Rebalancing Frequency?</p>
+                    <p className="font-bold">{t("rebalancingFrequency")}</p>
                     <SwitchInput checked={!!rebalancingFrequency} onClick={() => {
                         if (rebalancingFrequency) {
                             setReBalancingFrequency(null)
@@ -29,17 +29,17 @@ const SmartAllocationRebalancing: FC<SmartAllocationRebalancingType> = ({ reBala
                         }
                     }} />
                 </Row>
-                <p className="text-grey-1">Rebalancing a crypto portfolio means redistributing asset allocation to maintain the original or desired allocation or risk.</p>
+                <p className="text-grey-1">{t("rebalancingACryptoPortfolioMeaning")}</p>
             </Col>
             <Col className="gap-5 w-full">
-                <p className="font-semibold">Choose a time frequency </p>
+                <p className="font-semibold">{t("chooseFrequency")} </p>
                 <Row className="gap-5">
-                    <BlackGreyButton isActive={!rebalancingFrequency} onClick={() => setReBalancingFrequency(null)}> None </BlackGreyButton>
-                    <BlackGreyButton isActive={rebalancingFrequency === EnumReBalancingFrequency.Monthly} onClick={() => setReBalancingFrequency(EnumReBalancingFrequency.Monthly)}> {EnumReBalancingFrequency.Monthly} </BlackGreyButton>
+                    <BlackGreyButton isActive={!rebalancingFrequency} onClick={() => setReBalancingFrequency(null)}> {t("common:none")} </BlackGreyButton>
+                    <BlackGreyButton isActive={rebalancingFrequency === EnumReBalancingFrequency.Monthly} onClick={() => setReBalancingFrequency(EnumReBalancingFrequency.Monthly)}> {t(EnumReBalancingFrequency.Monthly)} </BlackGreyButton>
                 </Row>
                 <Row className="gap-5">
-                    <BlackGreyButton isActive={rebalancingFrequency === EnumReBalancingFrequency.Quarterly} onClick={() => setReBalancingFrequency(EnumReBalancingFrequency.Quarterly)}> {EnumReBalancingFrequency.Quarterly} </BlackGreyButton>
-                    <BlackGreyButton isActive={rebalancingFrequency === EnumReBalancingFrequency.Yearly} onClick={() => setReBalancingFrequency(EnumReBalancingFrequency.Yearly)}> {EnumReBalancingFrequency.Yearly} </BlackGreyButton>
+                    <BlackGreyButton isActive={rebalancingFrequency === EnumReBalancingFrequency.Quarterly} onClick={() => setReBalancingFrequency(EnumReBalancingFrequency.Quarterly)}> {t(EnumReBalancingFrequency.Quarterly)} </BlackGreyButton>
+                    <BlackGreyButton isActive={rebalancingFrequency === EnumReBalancingFrequency.Yearly} onClick={() => setReBalancingFrequency(EnumReBalancingFrequency.Yearly)}> {t(EnumReBalancingFrequency.Yearly)} </BlackGreyButton>
                 </Row>
             </Col>
         </Col>
