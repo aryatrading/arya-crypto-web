@@ -6,7 +6,7 @@ const auth = getAuth(getApp())
 
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  timeout: 10000,
+  timeout: 20000,
   headers: {
     "Access-Control-Allow-Origin": "*",
     "X-AryaCrypto-Version": "1.0.0 web",

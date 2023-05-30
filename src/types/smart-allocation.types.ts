@@ -1,4 +1,4 @@
-import { EnumExitStrategyTrigger, EnumRebalancingFrequency, EnumSmartAllocationAssetStatus } from "../utils/constants/smartAllocation"
+import { EnumExitStrategyTrigger, EnumReBalancingFrequency, EnumSmartAllocationAssetStatus } from "../utils/constants/smartAllocation"
 import { PortfolioAssetDetailsType } from "./exchange.types"
 
 export type SmartAllocationResponseType = {
@@ -7,7 +7,7 @@ export type SmartAllocationResponseType = {
     user_id?: number,
     provider?: number,
     provider_name?: string,
-    frequency?: EnumRebalancingFrequency,
+    frequency?: EnumReBalancingFrequency,
     status?:EnumSmartAllocationAssetStatus,
     base_asset_value?: number,
     created_at?: string,
@@ -50,7 +50,7 @@ export type SmartAllocationAssetDetails = {
 
 export type SmartAllocationSaveRequestType = {
     assets: SaveSmartAllocationAssetType[],
-    frequency: EnumRebalancingFrequency | null,
+    frequency: EnumReBalancingFrequency | null,
     exit_strategy: SmartAllocationExitStrategyType | null
 }
 
@@ -78,7 +78,7 @@ export type SmartAllocationExitStrategyType = {
 
 export interface ISmartAllocationContext {
     rebalancingDate: Date|null,
-    rebalancingFrequency: EnumRebalancingFrequency|null,
+    rebalancingFrequency: EnumReBalancingFrequency|null,
     isLoadingSmartAllocationData: boolean,
     exitStrategyData: SmartAllocationExitStrategyType|null,
     isLoadingExitStrategy: boolean

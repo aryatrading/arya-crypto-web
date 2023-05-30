@@ -1,32 +1,35 @@
 import { FC, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { getAssetsHistoricalData } from "../../../../../services/controllers/asset";
-import { EnumExitStrategyTrigger, EnumRebalancingFrequency } from "../../../../../utils/constants/smartAllocation";
-import { SmartAllocationAssetType } from "../../../../../types/smart-allocation.types";
-import { Time } from "lightweight-charts";
-import LineChart from "../../../../shared/charts/graph/graph";
-import { chartDataType } from "../../../../shared/charts/graph/graph.type";
-import { UTCTimestamp } from "lightweight-charts";
-import { Col, Row } from "../../../../shared/layout/flex";
-import Button from "../../../../shared/buttons/button";
-import CutoutDoughnutChart from "../../../../shared/charts/doughnut/cutout-doughnut";
-import { Trans, useTranslation } from "next-i18next";
-import { USDTSymbol } from "../../../../../utils/constants/market";
-import { doughnutChartDataType } from "../../../../shared/charts/doughnut/doughnut";
-import { formatNumber } from "../../../../../utils/helpers/prices";
+import { Time, UTCTimestamp } from "lightweight-charts";
+import Link from "next/link";
+import moment from "moment";
 import clsx from "clsx";
+
+import RebalancePreviewDialog from "../smart-allocation-tabs/smart-allocation-holdings-tab/RebalancePreviewDialog/RebalancePreviewDialog";
+import { EnumExitStrategyTrigger, EnumSmartAllocationSimulationPeriod } from "../../../../../utils/constants/smartAllocation";
+import { SmartAllocationAssetType } from "../../../../../types/smart-allocation.types";
+import CutoutDoughnutChart from "../../../../shared/charts/doughnut/cutout-doughnut";
+import { formatNumber, percentageFormat } from "../../../../../utils/helpers/prices";
+import { getAssetsHistoricalData } from "../../../../../services/controllers/asset";
+import { doughnutChartDataType } from "../../../../shared/charts/doughnut/doughnut";
+import { chartDataType } from "../../../../shared/charts/graph/graph.type";
 import { useResponsive } from "../../../../../context/responsive.context";
 import { ShadowButton } from "../../../../shared/buttons/shadow_button";
-import { PieChartIcon } from "../../../../svg/pieChartIcon";
-import { LineChartIcon } from "../../../../svg/lineChartIcon";
-import Link from "next/link";
-import RebalancePreviewDialog from "../smart-allocation-tabs/smart-allocation-holdings-tab/RebalancePreviewDialog/RebalancePreviewDialog";
-import moment from "moment";
+import { USDTSymbol } from "../../../../../utils/constants/market";
 import { SmartAllocationContext } from "../authed-smart-alocation";
+import LineChart from "../../../../shared/charts/graph/graph";
+import { LineChartIcon } from "../../../../svg/lineChartIcon";
+import { PieChartIcon } from "../../../../svg/pieChartIcon";
+import { Col, Row } from "../../../../shared/layout/flex";
+import { Trans, useTranslation } from "next-i18next";
+import Input from "../../../../shared/inputs/Input";
 
+function getShiftedDayDate(prevDay: Date, shiftInDays: number) {
+    return new Date(prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate() + shiftInDays);
+}
 
 const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationAssetType[] }> = ({ smartAllocationHoldings }) => {
 
-    const [simulationPeriod, setSimulationPeriod] = useState<"1y" | "1w" | "1m">("1w");
+    const [simulationPeriod, setSimulationPeriod] = useState<EnumSmartAllocationSimulationPeriod>(EnumSmartAllocationSimulationPeriod["5y"]);
     const [initialValue, setInitialValue] = useState<number>(10_000);
     const [currentWeightsData, setCurrentWeightsData] = useState<chartDataType[]>([]);
     const [setWeightsData, setSetWeightsData] = useState<chartDataType[]>([]);
@@ -35,6 +38,9 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
     const [assetsHistoricalData, setAssetsHistoricalData] = useState<{ [k: string]: chartDataType[] }>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [selectedChart, setSelectedChart] = useState<"doughnut" | "graph">("graph");
+    const [customPeriodStartDate, setCustomPeriodStartDate] = useState<Date>(getShiftedDayDate(new Date(), -1));
+    const [customPeriodEndDate, setCustomPeriodEndDate] = useState<Date>(new Date());
+
 
     const { t } = useTranslation(["smart-allocation"]);
 
@@ -57,7 +63,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
             const symbols = smartAllocationHoldings.map(getAssetSymbol);
             setIsLoading(true);
-            getAssetsHistoricalData(symbols, simulationPeriod).then((res) => {
+            getAssetsHistoricalData(symbols, simulationPeriod, customPeriodStartDate, customPeriodEndDate).then((res) => {
                 const data = res.data;
                 if (data) {
                     const assetsHistoricalData: { [k: string]: chartDataType[] } = {};
@@ -84,7 +90,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 setIsLoading(false);
             });
         }
-    }, [getAssetSymbol, simulationPeriod, smartAllocationHoldings]);
+    }, [customPeriodEndDate, customPeriodStartDate, getAssetSymbol, simulationPeriod, smartAllocationHoldings]);
 
 
     useEffect(() => {
@@ -140,9 +146,10 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     const currentWeightQuantity = quantities[assetSymbol].currentWeightQuantity;
                     const setWeightQuantity = quantities[assetSymbol].setWeightQuantity;
 
-                    currentWeightValue += (assetsHistoricalData[assetSymbol][pointIndex].value ?? 0) * currentWeightQuantity;
-                    setWeightValue += (assetsHistoricalData[assetSymbol][pointIndex].value ?? 0) * setWeightQuantity;
-                    time = assetsHistoricalData[assetSymbol][pointIndex].time;
+                    currentWeightValue += (assetsHistoricalData[assetSymbol][pointIndex]?.value ?? 0) * currentWeightQuantity;
+                    setWeightValue += (assetsHistoricalData[assetSymbol][pointIndex]?.value ?? 0) * setWeightQuantity;
+                    if (assetsHistoricalData[assetSymbol][pointIndex]?.time)
+                        time = assetsHistoricalData[assetSymbol][pointIndex]?.time;
                 });
 
                 if (currentWeightValue < currentWeightsDrawdown) {
@@ -174,6 +181,8 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
         const riskValue = initialValue - drawdown;
         const returnValue = maxProfit - initialValue;
         const returnRiskRatio = returnValue / riskValue;
+        const riskPercentage = riskValue / initialValue;
+        const returnPercentage = returnValue / initialValue;
 
         // let formattedRiskValue = Math.abs(riskValue / returnValue);
         // let formattedReturnValue = 1;
@@ -196,11 +205,11 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     <Row className="gap-5 flex-wrap">
                         <Col>
                             <p className="text-sm font-bold">Drawdown</p>
-                            <p className={clsx("text-sm font-bold", { "text-green-1": drawdown >= initialValue, "text-red-1": drawdown < initialValue })}>{formatNumber(drawdown, true)}</p>
+                            <p className={clsx("text-sm font-bold", { "text-green-1": drawdown >= initialValue, "text-red-1": drawdown < initialValue })}>{percentageFormat(riskPercentage * 100)}%</p>
                         </Col>
                         <Col>
                             <p className="text-sm font-bold">Profit</p>
-                            <p className={clsx("text-sm font-bold", { "text-green-1": maxProfit >= initialValue, "text-red-1": maxProfit < initialValue })}>{formatNumber(maxProfit, true)}</p>
+                            <p className={clsx("text-sm font-bold", { "text-green-1": maxProfit >= initialValue, "text-red-1": maxProfit < initialValue })}>{percentageFormat(returnPercentage * 100)}%</p>
                         </Col>
                     </Row>
                     <Col>
@@ -282,7 +291,12 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
         return (
 
             <Col className="w-full gap-5">
-                <LineChart primaryLineData={currentWeightsData} secondaryLineData={setWeightsData} className={"w-full h-[200px] md:h-[400px]"} isLoading={isLoading} />
+                <LineChart
+                    primaryLineData={currentWeightsData}
+                    secondaryLineData={setWeightsData}
+                    className={"w-full h-[200px] md:h-[400px]"}
+                    isLoading={isLoading}
+                />
                 {graphLegend}
             </Col>
         )
@@ -339,15 +353,47 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 <Row className="items-center gap-5 justify-between">
                     <p className="font-bold text-xl">Simulate portfolio over the past</p>
                     <select className="h-12 bg-grey-3 border-none rounded-md px-5 w-40 shrink-0  md:w-auto md:shrink" value={simulationPeriod} onChange={(event) => { setSimulationPeriod(event.target.value as any) }}>
-                        <option value="1w">1 Week</option>
-                        <option value="1m">1 Month</option>
-                        <option value="1y">1 Year</option>
+                        <option value={EnumSmartAllocationSimulationPeriod["1w"]}>1 Week</option>
+                        <option value={EnumSmartAllocationSimulationPeriod["1m"]}>1 Month</option>
+                        <option value={EnumSmartAllocationSimulationPeriod["1y"]}>1 Year</option>
+                        <option value={EnumSmartAllocationSimulationPeriod["5y"]}>5 Years</option>
+                        <option value={EnumSmartAllocationSimulationPeriod["custom"]}>Custom</option>
                     </select>
                 </Row>
+                {simulationPeriod === EnumSmartAllocationSimulationPeriod.custom && <>
+                    <Row className="items-center gap-5 justify-between">
+                        <p className="font-bold text-xl">from</p>
+                        <Input
+                            value={moment(new Date(customPeriodStartDate)).format('YYYY-MM-DD')}
+                            type="date"
+                            onChange={(event) => {
+                                const value = event.target.value;
+                                setCustomPeriodStartDate(new Date(value))
+                            }}
+                            className="w-40 md:w-auto h-12 bg-grey-3 border-none rounded-md px-5"
+                            min="2009-01-03"
+                            max={moment(getShiftedDayDate(new Date(), -1)).format('YYYY-MM-DD')}
+                        />
+                    </Row>
+                    <Row className="items-center gap-5 justify-between">
+                        <p className="font-bold text-xl">to</p>
+                        <Input
+                            value={moment(new Date(customPeriodEndDate)).format('YYYY-MM-DD')}
+                            type="date"
+                            onChange={(event) => {
+                                const value = event.target.value;
+                                setCustomPeriodEndDate(new Date(value))
+                            }}
+                            className="w-40 md:w-auto h-12 bg-grey-3 border-none rounded-md px-5"
+                            min={moment(getShiftedDayDate(customPeriodStartDate, 1)).format('YYYY-MM-DD')}
+                            max={moment(new Date()).format('YYYY-MM-DD')}
+                        />
+                    </Row>
+                </>}
                 <Row className="items-center gap-5 justify-between">
                     <p className="font-bold text-xl">starting with</p>
-                    <Row className="items-center gap-2 md:gap-5 w-40 md:w-auto">
-                        <input
+                    <Row className="items-center justify-between gap-2 md:gap-5 w-40 md:w-auto h-12 bg-grey-3 border-none rounded-md px-5">
+                        <Input
                             value={initialValue}
                             type="number"
                             onChange={(event) => {
@@ -357,7 +403,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                                 else
                                     setInitialValue(0)
                             }}
-                            className="w-36 h-12 bg-grey-3 border-none rounded-md px-5"
+                            className="w-24"
                         />
                         <p className="font-bold text-xl">$</p>
                     </Row>

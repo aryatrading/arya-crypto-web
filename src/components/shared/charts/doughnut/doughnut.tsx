@@ -3,6 +3,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, ChartOptions, ChartData } from '
 import { Doughnut } from 'react-chartjs-2';
 import { Col, Row } from "../../layout/flex";
 import { getCoinColor } from "../../../../utils/helpers/coinsColors";
+import { shortNumberFormat } from "../../../../utils/helpers/prices";
 
 export type doughnutChartDataType = {
     coinSymbol: string,
@@ -42,7 +43,14 @@ const DoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[], max
             const graphOptions: ChartOptions<"doughnut"> = {
                 plugins: {
                     tooltip: {
-                        padding: 10
+                        padding: 10,
+                        callbacks: {
+                            label: (label) => {
+                                return `${label.label} ${shortNumberFormat(label.raw as number)}$`;
+                            }
+                        },
+                        boxPadding: 5,
+                        position: "nearest",
                     },
                     legend: {
                         display: false,

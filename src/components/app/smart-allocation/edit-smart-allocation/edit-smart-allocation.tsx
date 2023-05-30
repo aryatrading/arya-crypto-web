@@ -1,40 +1,40 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react"
-import { Col, Row } from "../../../shared/layout/flex"
-import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher"
-import Button from "../../../shared/buttons/button"
-import { SaveSmartAllocationAssetType, SmartAllocationAssetType, SmartAllocationExitStrategyType, SmartAllocationSaveRequestType } from "../../../../types/smart-allocation.types"
-import { useSelector } from "react-redux"
-import { selectSelectedExchange } from "../../../../services/redux/exchangeSlice"
-import { MODE_DEBUG } from "../../../../utils/constants/config"
 import { useTranslation } from "next-i18next"
-import { percentageFormat, formatNumber } from "../../../../utils/helpers/prices"
-import Image from "next/image"
-import clsx from "clsx"
-import styles from "./edit-smart-allocation.module.scss";
-import { XMarkIcon } from "@heroicons/react/24/solid"
-import { USDTSymbol } from "../../../../utils/constants/market"
-import * as Slider from '@radix-ui/react-slider';
-import PageLoader from "../../../shared/pageLoader/pageLoader"
-import Link from "next/link"
-import AssetPnl from "../../../shared/containers/asset/assetPnl"
-import AssetSelector from "../../../shared/AssetSelector/AssetSelector"
-import { getPredefinedPortfolioHoldings, getSmartAllocation, updateSmartAllocation } from "../../../../services/controllers/smart-allocation"
-import { toast } from "react-toastify"
+import { useSelector } from "react-redux"
 import { useRouter } from "next/router"
-import { EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency as EnumReBalancingFrequency, EnumSmartAllocationAssetStatus } from "../../../../utils/constants/smartAllocation"
-import { useResponsive } from "../../../../context/responsive.context"
-import { AssetType } from "../../../../types/asset"
-import CutoutDoughnutChart from "../../../shared/charts/doughnut/cutout-doughnut"
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
-import SmartAllocationRebalancing from "../authed-smart-allocation/SmartAllocationAutomation/SmartAllocationRebalancing/SmartAllocationRebalancing"
+import { toast } from "react-toastify"
+import Image from "next/image"
+import Link from "next/link"
+import clsx from "clsx"
+
+import { SaveSmartAllocationAssetType, SmartAllocationAssetType, SmartAllocationExitStrategyType, SmartAllocationSaveRequestType } from "../../../../types/smart-allocation.types"
 import SmartAllocationExitStrategy from "../authed-smart-allocation/SmartAllocationAutomation/SmartAllocationExitStrategy/SmartAllocationExitStrategy"
+import SmartAllocationRebalancing from "../authed-smart-allocation/SmartAllocationAutomation/SmartAllocationRebalancing/SmartAllocationRebalancing"
+import { EnumReBalancingFrequency, EnumSmartAllocationAssetStatus } from "../../../../utils/constants/smartAllocation"
+import { getSmartAllocation, updateSmartAllocation } from "../../../../services/controllers/smart-allocation"
+import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher"
+import { selectSelectedExchange } from "../../../../services/redux/exchangeSlice"
+import { percentageFormat, formatNumber } from "../../../../utils/helpers/prices"
+import CutoutDoughnutChart from "../../../shared/charts/doughnut/cutout-doughnut"
+import AssetSelector from "../../../shared/AssetSelector/AssetSelector"
+import { useResponsive } from "../../../../context/responsive.context"
 import { getCoinColor } from "../../../../utils/helpers/coinsColors"
+import AssetPnl from "../../../shared/containers/asset/assetPnl"
+import { MODE_DEBUG } from "../../../../utils/constants/config"
+import { USDTSymbol } from "../../../../utils/constants/market"
+import PageLoader from "../../../shared/pageLoader/pageLoader"
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
+import styles from "./edit-smart-allocation.module.scss"
+import { Col, Row } from "../../../shared/layout/flex"
+import { XMarkIcon } from "@heroicons/react/24/solid"
+import Button from "../../../shared/buttons/button"
+import { AssetType } from "../../../../types/asset"
+import * as Slider from '@radix-ui/react-slider'
 
 
 const EditSmartAllocation: FC = () => {
 
     const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
-    const [isLoadingPredefinedAllocationHoldings, setIsLoadingPredefinedAllocationHoldings] = useState<boolean>(false);
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
     const [smartAllocationTotalEvaluation, setSmartAllocationTotalEvaluation] = useState<number>(0);
     const [smartAllocationExists, setSmartAllocationExists] = useState<boolean>(false);
@@ -64,38 +64,27 @@ const EditSmartAllocation: FC = () => {
             .then((res) => {
                 const data = res.data;
                 setSmartAllocationExists(data?.exists ?? false);
-                if (data.exists) {
-                    const holdings: SmartAllocationAssetType[] | undefined = data.assets;
-                    if (holdings) {
-                        holdings.sort((a, b) => ((b?.current_weight ?? 0) - (a?.current_weight ?? 0)));
-                        setSmartAllocationHoldings(holdings.filter(asset => asset.name !== USDTSymbol));
-                    }
-                    const frequency = data.frequency;
-                    if (frequency) {
-                        setReBalancingFrequency(frequency);
-                    }
+                // if (data.exists) {
+                const holdings: SmartAllocationAssetType[] | undefined = data.assets;
+                if (holdings) {
+                    holdings.sort((a, b) => ((b?.current_weight ?? 0) - (a?.current_weight ?? 0)));
+                    setSmartAllocationHoldings(holdings.filter(asset => asset.name !== USDTSymbol));
+                }
+                const frequency = data.frequency;
+                if (frequency) {
+                    setReBalancingFrequency(frequency);
+                }
 
-                    if (data.next_run_time) {
-                        setReBalancingDate(new Date(data.next_run_time));
-                    } else {
-                        setReBalancingDate(null);
-                    }
-
-                    if (data.exit_strategy) {
-                        setExitStrategy(data.exit_strategy);
-                    } else {
-                        setExitStrategy(null);
-                    }
+                if (data.next_run_time) {
+                    setReBalancingDate(new Date(data.next_run_time));
                 } else {
-                    const predefinedPortfolioId = router?.query?.portfolio;
-                    if (predefinedPortfolioId) {
-                        setIsLoadingPredefinedAllocationHoldings(true);
-                        getPredefinedPortfolioHoldings(predefinedPortfolioId as EnumPredefinedSmartAllocationPortfolio)?.then((res) => {
-                            setSmartAllocationHoldings(res);
-                        }).finally(() => {
-                            setIsLoadingPredefinedAllocationHoldings(false);
-                        })
-                    }
+                    setReBalancingDate(null);
+                }
+
+                if (data.exit_strategy) {
+                    setExitStrategy(data.exit_strategy);
+                } else {
+                    setExitStrategy(null);
                 }
                 setSmartAllocationTotalEvaluation(data.total_asset_value ?? 0);
             })
@@ -104,10 +93,9 @@ const EditSmartAllocation: FC = () => {
                     console.error("Error while initSmartAllocationHoldings (initSmartAllocationHoldings)", error)
             })
             .finally(() => {
-                setIsLoadingPredefinedAllocationHoldings(false);
                 setIsLoadingSmartAllocationHoldings(false);
             })
-    }, [router?.query?.portfolio, selectedExchange?.provider_id]);
+    }, [selectedExchange?.provider_id]);
 
 
     useEffect(() => {
@@ -147,7 +135,7 @@ const EditSmartAllocation: FC = () => {
 
     const onRemoveAsset = useCallback((asset: SmartAllocationAssetType) => {
         setSmartAllocationHoldings((oldState) => {
-            return oldState.map((holding) => holding.name === asset.name ? { ...holding, removed: (!asset.current_weight), weight: 0 } : holding);
+            return oldState.map((holding) => holding.name === asset.name ? { ...holding, removed: (!asset.id), weight: 0 } : holding);
         })
     }, [])
 
@@ -204,7 +192,7 @@ const EditSmartAllocation: FC = () => {
 
                 const assetEvaluation = smartAllocationTotalEvaluation * setWeight;
 
-                const coinColor = getCoinColor(asset.name??"", index);
+                const coinColor = getCoinColor(asset.name ?? "", index);
 
                 if (isTabletOrMobileScreen) {
                     return (
@@ -226,7 +214,7 @@ const EditSmartAllocation: FC = () => {
                                         onValueChange={(value) => onSetWeightChange(value[0], asset)}
                                     >
                                         <Slider.Track className="flex-grow flex-1 bg-[#D9D9D9] rounded-full h-3">
-                                            <Slider.Range className="absolute h-full rounded-full" style={{backgroundColor: coinColor}}/>
+                                            <Slider.Range className="absolute h-full rounded-full" style={{ backgroundColor: coinColor }} />
                                         </Slider.Track>
                                         <Slider.Thumb className="block w-6 h-6 bg-white rounded-full shadow-lg shadow-black-1 hover:bg-yellow-400 focus:outline-none" />
                                     </Slider.Root>
@@ -288,7 +276,7 @@ const EditSmartAllocation: FC = () => {
                                         onValueChange={(value) => onSetWeightChange(value[0], asset)}
                                     >
                                         <Slider.Track className="flex-grow flex-1 bg-[#D9D9D9] rounded-full h-3">
-                                            <Slider.Range className="absolute h-full rounded-full" style={{backgroundColor: coinColor}}/>
+                                            <Slider.Range className="absolute h-full rounded-full" style={{ backgroundColor: coinColor }} />
                                         </Slider.Track>
                                         <Slider.Thumb className="block w-6 h-6 bg-white rounded-full shadow-lg shadow-black-1 hover:bg-yellow-400 focus:outline-none" />
                                     </Slider.Root>
@@ -409,7 +397,7 @@ const EditSmartAllocation: FC = () => {
     }, [assetSelector, isTabletOrMobileScreen, smartAllocationHoldings, smartAllocationTotalEvaluation, t]);
 
     const table = useMemo(() => {
-        if (!isLoadingSmartAllocationHoldings || !isLoadingPredefinedAllocationHoldings) {
+        if (!isLoadingSmartAllocationHoldings) {
             return (
                 <Row className="w-full overflow-auto">
                     <table className={styles.table}>
@@ -422,7 +410,7 @@ const EditSmartAllocation: FC = () => {
                 </Row>
             )
         }
-    }, [isLoadingPredefinedAllocationHoldings, isLoadingSmartAllocationHoldings, tableBody, tableFooter, tableHeader])
+    }, [isLoadingSmartAllocationHoldings, tableBody, tableFooter, tableHeader])
 
     const onSaveSmartAllocation = useCallback(() => {
 
@@ -516,7 +504,7 @@ const EditSmartAllocation: FC = () => {
         }
     }, [isTabletOrMobileScreen, smartAllocationExitStrategy, smartAllocationRebalancing]);
 
-    if (isLoadingSmartAllocationHoldings || isLoadingPredefinedAllocationHoldings) {
+    if (isLoadingSmartAllocationHoldings) {
         return <PageLoader />
     } else {
         return (

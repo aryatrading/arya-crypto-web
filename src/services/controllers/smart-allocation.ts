@@ -1,5 +1,5 @@
 import { SaveSmartAllocationAssetType, SmartAllocationAssetDetails, SmartAllocationResponseType, SmartAllocationSaveRequestType } from "../../types/smart-allocation.types";
-import { EnumExitStrategyTrigger, EnumPredefinedSmartAllocationPortfolio, EnumRebalancingFrequency } from "../../utils/constants/smartAllocation";
+import { EnumExitStrategyTrigger, EnumPredefinedSmartAllocationPortfolio, EnumReBalancingFrequency } from "../../utils/constants/smartAllocation";
 import { axiosInstance } from "../api/axiosConfig";
 
 export const getSmartAllocation = async (providerId?: number) => {
@@ -70,7 +70,7 @@ export function getPredefinedPortfolioHoldings(predefinedPortfolioId: EnumPredef
     }
 }
 
-export const setRebalancingFrequency = async (providerId: number, frequency: EnumRebalancingFrequency|null,rebalanceNow:boolean) => {
+export const setRebalancingFrequency = async (providerId: number, frequency: EnumReBalancingFrequency|null,rebalanceNow:boolean) => {
     const frequencyParams = {
       provider: providerId, 
       frequency: frequency,

@@ -11,7 +11,7 @@ import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/
 import { selectConnectedExchanges, selectSelectedExchange } from "../../../../services/redux/exchangeSlice";
 import { getExitStrategy, getSmartAllocation } from "../../../../services/controllers/smart-allocation";
 import SmartAllocationSimulation from "./smart-allocation-simulation/smart-allocation-simulation";
-import { EnumRebalancingFrequency } from "../../../../utils/constants/smartAllocation";
+import { EnumReBalancingFrequency } from "../../../../utils/constants/smartAllocation";
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { MODE_DEBUG } from "../../../../utils/constants/config";
@@ -45,7 +45,7 @@ const AuthedSmartAllocation: FC = () => {
     const [fetchingHoldingsError, setFetchingHoldingsError] = useState<string>();
 
     const [rebalancingDate, setRebalancingDate] = useState<Date | null>(null);
-    const [rebalancingFrequency, setRebalancingFrequency] = useState<EnumRebalancingFrequency | null>(null);
+    const [rebalancingFrequency, setRebalancingFrequency] = useState<EnumReBalancingFrequency | null>(null);
     const [exitStrategy, setExitStrategy] = useState<null | SmartAllocationExitStrategyType>(null);
     const selectedExchange = useSelector(selectSelectedExchange);
     const connectedExchanges = useSelector(selectConnectedExchanges);
