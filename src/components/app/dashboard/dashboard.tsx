@@ -30,7 +30,6 @@ import { PieChartIcon } from "../../svg/pieChartIcon";
 import { LineChartIcon } from "../../svg/lineChartIcon";
 import { useResponsive } from "../../../context/responsive.context";
 import { getCoinColor } from "../../../utils/helpers/coinsColors"
-import getMostCommonColor from "../../../common/hooks/useImageColor"
 
 
 const Dashboard: FC = () => {
