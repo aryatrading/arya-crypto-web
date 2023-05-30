@@ -67,7 +67,7 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
       push({ pathname, query }, asPath, { locale: lang })
     }
 
-    getNotifications(0, 100, 'asc');
+    getNotifications(0, 100, 'desc');
 
     // Create the inital favorites list in localstorage
     localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));

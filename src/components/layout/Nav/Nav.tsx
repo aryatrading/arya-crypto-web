@@ -145,7 +145,7 @@ const Nav = () => {
     saveUserLanguage(lang);
     window.localStorage.setItem('language', lang);
 
-    getNotifications(0, 100, 'asc');
+    getNotifications(0, 100, 'desc');
   }, [asPath, pathname, push, query])
 
   const changeLanguageView = useCallback((hide: boolean) => {
@@ -217,7 +217,7 @@ const Nav = () => {
                     <p className="font-bold text-lg text-grey-1">{t('notification:emptyList')}</p>
                   </Col>
                   :
-                  notifications.map((notification: NotificationType) => {
+                  notifications.slice(0, 5).map((notification: NotificationType) => {
                     return (
                       <NotificationCard key={notification.id} notification={notification} type="dropdown" />
                     );
