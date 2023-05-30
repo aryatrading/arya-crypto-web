@@ -1,3 +1,4 @@
+import axios from "axios";
 import { chartDataType } from "../../components/shared/charts/graph/graph.type";
 import { AssetType } from "../../types/asset";
 import { CapitalizeString } from "../../utils/format_string";
@@ -86,6 +87,10 @@ export const getAssetTimeseriesPrice = async (
     )
   );
 };
+
+export const getAssetSparkLineData = async (symbol:string)=>{
+  return await axios.get(`${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=1day&outputsize=7&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}`)
+}
 
 export const getAssetVotes = async (assetId: number) => {
   const { data } = await axiosInstance.get(

@@ -9,6 +9,7 @@ import { selectAssetLivePrice } from "../../../../services/redux/marketSlice";
 import AssetPnl from "./assetPnl";
 import { useTranslation } from "next-i18next";
 import { formatNumber } from "../../../../utils/helpers/prices";
+import { twMerge } from "tailwind-merge";
 
 type AssetHeaderProps = {
   asset: AssetType;
@@ -44,11 +45,11 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
         symbol={asset.symbol?.toUpperCase()}
       />
       <Col>
-        <h2 className="text-grey-1 text-xs">
+        {/* <h2 className="text-grey-1 text-xs">
           {t("assetprice", { name })} ({asset.symbol?.toUpperCase()})
-        </h2>
+        </h2> */}
         <Row className="gap-2 items-center">
-          <p className="font-medium text-4xl">
+          <p className="font-medium text-2xl md:text-4xl">
             {formatNumber(
               _assetprice[asset.symbol?.toLowerCase() ?? "btc"] ??
                 asset.currentPrice,
@@ -63,7 +64,7 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
           />
           <AssetPnl
             value={asset.priceChange!}
-            className={asset.priceChange! <= 0 ? "text-red-1" : "text-green-1"}
+            className={twMerge(asset.priceChange! <= 0 ? "text-red-1" : "text-green-1",'hidden md:flex')}
             transform={formatNumber}
           />
         </Row>

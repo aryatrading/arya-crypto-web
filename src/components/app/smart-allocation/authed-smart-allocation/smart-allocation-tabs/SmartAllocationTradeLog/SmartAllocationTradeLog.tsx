@@ -61,7 +61,6 @@ const SmartAllocationTradeLog = () => {
       fetchSmartAllocationTradeLog()
       getOrderStatus()
     }, [fetchSmartAllocationTradeLog, getOrderStatus])
-    
   return (
     <div className='w-full overflow-x-auto'>
       <table className="table-auto lg:table-fixed w-full border-collapse">
@@ -81,8 +80,8 @@ const SmartAllocationTradeLog = () => {
           {!tradeLog.length &&<span className='absolute top-1/2 left-0 right-0 text-center mx-auto font-medium'>{t("noTradeData")}</span>}
           {
             !!tradeLog.length?
-            tradeLog.map((trade,index) => {
-              const tradeDate = moment(trade.settled_at).format('DD/MM/YY')
+            tradeLog.map((trade) => {
+              const tradeDate = trade.settled_at?moment(trade.settled_at).format('DD/MM/YY'):'Not Executed'
               return (
                 <tr key={trade.order_id} className='border-b border-grey-5'>
                   <td className='h-14 px-5 font-medium text-sm'>{
