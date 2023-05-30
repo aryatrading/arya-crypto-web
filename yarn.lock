@@ -6037,14 +6037,6 @@
   dependencies:
     "domelementtype" "^2.2.0"
 
-"dominant-color@^0.0.1":
-  "integrity" "sha512-gk3Ft6Ry6A2J7iK5QeAexu+iY8wKqlP++Qehec732ErIoV0P07LJtmDczo2Qx/utN+BwhHl6viSW06HtcYA03w=="
-  "resolved" "https://registry.npmjs.org/dominant-color/-/dominant-color-0.0.1.tgz"
-  "version" "0.0.1"
-  dependencies:
-    "imagemagick" "^0.1.3"
-    "rgb-hex" "^1.0.0"
-
 "domutils@^1.7.0":
   "integrity" "sha512-Lgd2XcJ/NjEw+7tFvfKxOzCYKZsdct5lczQ2ZaQY8Djz7pfAD3Gbp8ySJWtreII/vDlMVmxwa6pHmdxIYgttDg=="
   "resolved" "https://registry.npmjs.org/domutils/-/domutils-1.7.0.tgz"
@@ -7828,11 +7820,6 @@
   "integrity" "sha512-47xSUiQioGaB96nqtp5/q55m0aBQSQdyIloMOc/x+QVTDZLNmXE892IIDrJ0hM1A5vcNUDD5tDffkSP5lCaIIA=="
   "resolved" "https://registry.npmjs.org/image-size/-/image-size-0.6.3.tgz"
   "version" "0.6.3"
-
-"imagemagick@^0.1.3":
-  "integrity" "sha512-HIwwW10UdwsWcHETt5BPrnEkaJSFLiW1dYDlPYV0EXyj2zJY28iXimPWlZDsOpxVghmF5EuUjYOvJZhZS4Y10g=="
-  "resolved" "https://registry.npmjs.org/imagemagick/-/imagemagick-0.1.3.tgz"
-  "version" "0.1.3"
 
 "immer@^9.0.16", "immer@^9.0.7":
   "integrity" "sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA=="
@@ -11536,11 +11523,6 @@
   dependencies:
     "side-channel" "^1.0.4"
 
-"quantize@^1.0.2":
-  "integrity" "sha512-25P7wI2UoDbIQsQp50ARkt+5pwPsOq7G/BqvT5xAbapnRoNWMN8/p55H9TXd5MuENiJnm5XICB2H2aDZGwts7w=="
-  "resolved" "https://registry.npmjs.org/quantize/-/quantize-1.0.2.tgz"
-  "version" "1.0.2"
-
 "querystringify@^2.1.1":
   "integrity" "sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ=="
   "resolved" "https://registry.npmjs.org/querystringify/-/querystringify-2.2.0.tgz"
@@ -12272,11 +12254,6 @@
   "integrity" "sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw=="
   "resolved" "https://registry.npmjs.org/reusify/-/reusify-1.0.4.tgz"
   "version" "1.0.4"
-
-"rgb-hex@^1.0.0":
-  "integrity" "sha512-wKTWuX7IF4CeR5QMmrJIKuV6E9P4bpiJWKEQot3xbfMp8GJYDL7pm5dWAQ88F0DnSGcjQqX+YdvxChd30NE7PA=="
-  "resolved" "https://registry.npmjs.org/rgb-hex/-/rgb-hex-1.0.0.tgz"
-  "version" "1.0.0"
 
 "rimraf@^2.6.3":
   "integrity" "sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w=="
