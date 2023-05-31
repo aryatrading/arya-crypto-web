@@ -21,10 +21,10 @@ const SettingsScreen = () => {
 
                 <Tabs selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
                     <TabList className="border-b-[1px] border-grey-3 mb-6">
-                        <Row className='gap-4'>
-                            <Tab className="font-bold text-lg outline-none cursor-pointer">{t('account')}</Tab>
-                            <Tab className="font-bold text-lg outline-none cursor-pointer">{t('exchange')}</Tab>
-                            <Tab className="font-bold text-lg outline-none cursor-pointer">{t('subscription')}</Tab>
+                        <Row>
+                            <Tab className="font-bold text-lg outline-none cursor-pointer flex-1 text-center md:flex-none px-10">{t('account')}</Tab>
+                            <Tab className="font-bold text-lg outline-none cursor-pointer flex-1 text-center md:flex-none px-10">{t('exchange')}</Tab>
+                            <Tab className="font-bold text-lg outline-none cursor-pointer flex-1 text-center md:flex-none px-10">{t('subscription')}</Tab>
                         </Row>
                     </TabList>
                     <TabPanel>

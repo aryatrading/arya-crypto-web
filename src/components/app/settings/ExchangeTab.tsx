@@ -50,7 +50,7 @@ const ExchangeTab = () => {
                             })}
                         </Accordion.Root>
 
-                        <Button className={clsx({ "cursor-not-allowed hover:bg-grey-2 opacity-75": exchanges[exchanges.length - 1]?.create }, 'w-full h-[80px] bg-grey-2 rounded-md hover:bg-grey-3 px-5')} onClick={openModal} disabled={exchanges[exchanges.length - 1]?.create}>
+                        <Button className={clsx({ "cursor-not-allowed hover:bg-grey-2 opacity-75": exchanges[exchanges.length - 1]?.create }, 'w-full h-[80px] bg-grey-2 rounded-lg hover:bg-grey-3 px-5')} onClick={openModal} disabled={exchanges[exchanges.length - 1]?.create}>
                             <Row className='gap-4'>
                                 <PlusIcon stroke="currentColor" className="w-6 h-6 stroke-blue-1" />
 

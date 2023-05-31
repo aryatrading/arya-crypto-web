@@ -202,7 +202,7 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges, exchanges }: an
                 </Row>
             </AccordionTrigger>
             <AccordionContent>
-                <Row className='flex-col gap-10 lg:flex-row lg:gap-5 p-6'>
+                <Row className='flex-col-reverse gap-10 lg:flex-row lg:gap-5 p-6'>
                     <Col className='flex-1'>
                         {exchange.create ? form : display}
                     </Col>
@@ -211,9 +211,9 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges, exchanges }: an
                         <Row className='justify-center items-center bg-yellow-1 rounded-md flex-col md:flex-row'>
                             <Col className='p-4 gap-3'>
                                 <p className='text-white font-bold text-xl'>{t('exchangeAccQ', { name: exchange.provider_name })}</p>
-                                <p className='text-white font-bold text-base'>{exchangeDetails?.signupDescription?.[i18n?.language] || ''}</p>
+                                <p className='text-white font-bold text-sm'>{exchangeDetails?.signupDescription?.[i18n?.language] || ''}</p>
                             </Col>
-                            <Button className={'text-white font-medium rounded-md text-base focus:outline-none w-[300px] px-4 bg-grey-2 hover:divide-opacity-95 h-[56px] self-center me-0 mb-4 md:mb-0 md:me-6'} onClick={() => window.open(
+                            <Button className={clsx({ "w-auto": i18n.language === 'en', "w-[300px]": i18n.language === 'fr' }, 'text-white font-medium min-w-[150px] rounded-md text-base focus:outline-none bg-grey-2 hover:divide-opacity-95 h-[44px] self-center me-0 mb-4 md:mb-0 md:me-6')} onClick={() => window.open(
                                 exchangeDetails?.exchangeURL,
                                 '_blank'
                             )}>
@@ -227,7 +227,7 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges, exchanges }: an
                         </Row>
 
                         <Col className='gap-2'>
-                            {exchangeDetails?.steps?.map((info: string, index: number) => {
+                            {exchangeDetails?.steps?.[i18n?.language]?.map((info: string, index: number) => {
                                 return (
                                     <p key={index} className='text-sm text-white font-medium'>{info}</p>
                                 );
