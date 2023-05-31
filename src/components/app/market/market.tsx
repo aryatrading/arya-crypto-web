@@ -24,27 +24,18 @@ const Market: FC = () => {
   const [marketCapDetails, setMarketCapDetails] = useState<any>({});
 
   useEffect(() => {
-    getMarketCap().then(({ data: { data: { quote: { USD } } } }) => {
+    getMarketCap().then(({ data: { data } }) => {
+      const USD = data.quote.USD;
       setMarketCapDetails({
         vol24: USD.total_volume_24h,
         vol24Percentage: USD.total_volume_24h_yesterday_percentage_change,
         marketCap: USD.total_market_cap,
         marketCapPercentage: USD.total_market_cap_yesterday_percentage_change,
-        marketCapYesterday: USD.total_market_cap_yesterday
+        BTCDominance: data.btc_dominance,
+        BTCDominancePercentage: data.btc_dominance_24h_percentage_change,
       })
     })
   }, []);
-
-  const BTCDominance = useMemo(() => {
-    const btcMC = _assets.filter((asset: any) => asset.symbol === 'btc')[0]?.mrkCap;
-    return btcMC != null && marketCapDetails?.marketCap != null ? (btcMC / marketCapDetails.marketCap) * 100 : 0;
-  }, [_assets, marketCapDetails]);
-
-  const BTCDominanceYesterday = useMemo(() => {
-    const btcMC = _assets.filter((asset: any) => asset.symbol === 'btc')[0]?.mrkCapYesterday;
-    return btcMC != null && marketCapDetails?.marketCapYesterday != null ? (btcMC / marketCapDetails.marketCapYesterday) * 100 : 0;
-  }, [_assets, marketCapDetails]);
-
   useDebounce(
     () => {
       fetchAssets(search);
@@ -74,22 +65,21 @@ const Market: FC = () => {
             <div className="w-full items-center justify-center gap-4 flex flex-col lg:flex-row">
               <MarketStats
                 bgColor={clsx({ "bg-green-2": marketCapDetails?.marketCapPercentage > 0, "bg-red-2": marketCapDetails?.marketCapPercentage < 0, "bg-grey-2": marketCapDetails?.marketCapPercentage === 0 }, "w-full lg:w-64")}
-                value={marketCapDetails?.marketCapPercentage || '0'}
+                percent={marketCapDetails?.marketCapPercentage || '0'}
                 amount={marketCapDetails?.marketCap || '0'}
                 title={t("marketcap")}
               />
               <MarketStats
                 bgColor={clsx({ "bg-green-2": marketCapDetails?.vol24Percentage > 0, "bg-red-2": marketCapDetails?.vol24Percentage < 0, "bg-grey-2": marketCapDetails?.vol24Percentage === 0 }, "w-full lg:w-64")}
-                value={marketCapDetails?.vol24Percentage || '0'}
+                percent={marketCapDetails?.vol24Percentage || '0'}
                 amount={marketCapDetails?.vol24 || '0'}
                 title={t("volume")}
               />
               <MarketStats
-                bgColor={clsx({ "bg-green-2": BTCDominance > 0, "bg-red-2": BTCDominance < 0, "bg-grey-2": BTCDominance === 0 }, "w-full lg:w-64")}
-                value={BTCDominanceYesterday}
-                amount={String(BTCDominance)}
+                bgColor={clsx({ "bg-green-2": marketCapDetails.BTCDominancePercentage > 0, "bg-red-2": marketCapDetails.BTCDominancePercentage < 0, "bg-grey-2": marketCapDetails.BTCDominancePercentage === 0 }, "w-full lg:w-64")}
+                percent={marketCapDetails.BTCDominancePercentage}
+                amount={marketCapDetails.BTCDominance}
                 title={t("btcDominance")}
-                percent
               />
             </div>
           ) : null}
