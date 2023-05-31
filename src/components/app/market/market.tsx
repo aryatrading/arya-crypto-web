@@ -45,7 +45,7 @@ const Market: FC = () => {
             {tab === "all" ? t("cryptocurrencies") : t("favorites")}
           </p>
           {tab === "all" ? (
-            <div className="w-full items-center justify-center gap-4 flex flex-col lg:flex-row">
+            <Row className="w-full items-center justify-center gap-8 flex flex-col lg:flex-row">
               {/* TODO: update hardcoded color values */}
               <MarketStats
                 bgColor="bg-green-2 w-full lg:w-64"
@@ -57,14 +57,12 @@ const Market: FC = () => {
                 value={-3.75}
                 title={t("volume")}
               />
-            </div>
+            </Row>
           ) : null}
-          <div className="w-full mt-7 lg:px-[500px] justify-center">
-            <SearchInput
-              onchange={(e: string) => setSearch(e)}
-              placeholder={t("search")}
-            />
-          </div>
+          <SearchInput
+            onchange={(e: string) => setSearch(e)}
+            placeholder={t("search")}
+          />
         </Col>
         <Row className="gap-0.5 justify-end pb-2 w-full">
           <ShadowButton
