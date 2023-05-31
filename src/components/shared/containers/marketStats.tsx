@@ -22,7 +22,7 @@ export const MarketStats: FC<MarketProps> = ({
         <p className="text-[#F9FAFB] text-sm font-medium leading-5 items-center max-w-[100px]">
           {title}
         </p>
-        <AssetPnl className={(value < 0) ? 'text-red-1' : 'text-green-1'} value={value} />
+        <AssetPnl className={(percent < 0) ? 'text-red-1' : 'text-green-1'} value={percent} />
       </Row>
       <p className="text-[#F9FAFB] text-xl font-medium leading-7 pt-2">
         {percent ? '' : '$'}{formatNumber(parseFloat(amount))}{percent && '%'}
