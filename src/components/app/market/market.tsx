@@ -62,7 +62,7 @@ const Market: FC = () => {
             {tab === "all" ? t("cryptocurrencies") : t("favorites")}
           </p>
           {tab === "all" ? (
-            <div className="w-full items-center justify-center gap-4 flex flex-col lg:flex-row">
+            <Row className="w-full items-center justify-center gap-8 flex flex-col lg:flex-row">
               <MarketStats
                 bgColor={clsx({ "bg-green-2": marketCapDetails?.marketCapPercentage > 0, "bg-red-2": marketCapDetails?.marketCapPercentage < 0, "bg-grey-2": marketCapDetails?.marketCapPercentage === 0 }, "w-full lg:w-64")}
                 percent={marketCapDetails?.marketCapPercentage || '0'}
@@ -81,14 +81,12 @@ const Market: FC = () => {
                 amount={marketCapDetails.BTCDominance}
                 title={t("btcDominance")}
               />
-            </div>
+            </Row>
           ) : null}
-          <div className="w-full mt-7 lg:px-[500px] justify-center">
-            <SearchInput
-              onchange={(e: string) => setSearch(e)}
-              placeholder={t("search")}
-            />
-          </div>
+          <SearchInput
+            onchange={(e: string) => setSearch(e)}
+            placeholder={t("search")}
+          />
         </Col>
         <Row className="gap-0.5 justify-end pb-2 w-full">
           <ShadowButton
