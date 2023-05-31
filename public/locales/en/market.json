@@ -11,5 +11,6 @@
     "marketcap": "Market Cap.",
     "volume": "volume 24H",
     "no_assets": "Your watchlist is empty",
-    "no_assets_sub": "Start building your watchlist by adding assets to your favorites list"
+    "no_assets_sub": "Start building your watchlist by adding assets to your favorites list",
+    "btcDominance": "BTC Dominance"
 }

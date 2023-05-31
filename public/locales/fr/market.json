@@ -11,5 +11,6 @@
     "marketcap": "Capitalisation boursière.",
     "volume": "volume 24H",
     "no_assets": "Votre liste de surveillance est vide",
-    "no_assets_sub": "Commencez à construire votre liste de surveillance en ajoutant des actifs à votre liste de favoris."
+    "no_assets_sub": "Commencez à construire votre liste de surveillance en ajoutant des actifs à votre liste de favoris.",
+    "btcDominance": "Dominance BTC"
 }
