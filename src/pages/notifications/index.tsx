@@ -23,7 +23,7 @@ const NotificationPage = () => {
     useEffect(() => {
 
         // setIsLoading(true);
-        // getNotifications(0, 100, 'asc').then(() => {
+        // getNotifications(0, 100, 'desc').then(() => {
         //     setIsLoading(false);
         // }).catch(() => {
         //     setIsLoading(false);
@@ -34,7 +34,7 @@ const NotificationPage = () => {
 
     return (
         <Layout>
-            <Col className="w-full gap-4 md:w-[55%] p-6 min-h-[300px] bg-black-1 lg:bg-black-2">
+            <Col className="w-full gap-4 md:w-[55%] p-2 min-h-[300px] bg-black-1 lg:bg-black-2 md:p-6">
                 <h3 className="font-bold text-white header-label mb-4 tracking-[2px]">{t('title')}</h3>
 
                 {isLoading ?
