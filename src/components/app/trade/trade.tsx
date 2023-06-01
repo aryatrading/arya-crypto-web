@@ -2,7 +2,6 @@ import { FC, useMemo, useState } from "react";
 import { Col, Row } from "../../shared/layout/flex";
 import ExchangeSwitcher from "../../shared/exchange-switcher/exchange-switcher";
 import TradingViewWidget from "../../shared/charts/tradingView/tradingView";
-import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { EntryTrade } from "./entry_trade";
 import Button from "../../shared/buttons/button";
