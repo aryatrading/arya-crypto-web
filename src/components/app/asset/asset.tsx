@@ -52,8 +52,8 @@ const Asset: FC = () => {
         <span> / </span>
         <h1 className="">{t("pricelivedata", { asset })}</h1>
       </Row>
-      <Row className="justify-between">
-        <Row className="items-end gap-10 justify-between w-full md:w-auto">
+      <Row className="justify-between gap-5">
+        <Row className="items-end gap-5 justify-between w-full md:w-auto">
           <AssetHeader asset={asset} />
           <AssetSparkLine symbol={asset.symbol}/>
         </Row>

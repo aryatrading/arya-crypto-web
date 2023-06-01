@@ -20,7 +20,7 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
   const _assetprice = useSelector(selectAssetLivePrice);
 
   return (
-    <Col className="gap-3 w-full md:w-auto">
+    <Col className="gap-3 w-3/5 md:w-auto">
       <Row className="gap-2">
         <ShadowButton
           bgColor="bg-grey-5"

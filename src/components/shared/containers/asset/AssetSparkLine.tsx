@@ -58,7 +58,7 @@ const AssetSparkLine = ({symbol}:IAssetSparkLine) => {
     },[symbol])
 
     const labels = useMemo(()=>{
-        return new Array(7).fill(0)
+        return new Array(168).fill(0)
     },[])
 
     const data = useMemo(() =>
@@ -77,7 +77,7 @@ const AssetSparkLine = ({symbol}:IAssetSparkLine) => {
     
     
   return (
-    <div className='w-[125px] md:w-[172px]'>
+    <div className='w-32 md:w-2/5'>
         <Line options={options} data={data} />
     </div>
   )
