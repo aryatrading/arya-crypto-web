@@ -49,6 +49,7 @@ export const tradeSlice = createSlice({
       state.trade.entry_order = {
         trigger_price: 0,
         type: "BUY",
+        order_type: "MARKET",
       };
     },
     setFilter: (state, action: { payload: { filter: string } }) => {
