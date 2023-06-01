@@ -32,9 +32,8 @@ export interface ProfitsType {
   quantity?: number;
 }
 
-interface TrailingType {
+export interface TrailingType {
   order_id?: number;
-  quantity: number;
   stop_price?: number;
   trigger_value?: number;
   trailing_delta?: number;
