@@ -18,6 +18,7 @@ import AsyncStatusWrapper from "../async-status-wrapper/async-status-wrapper";
 import ExchangeImage from "../exchange-image/exchange-image";
 import { ExchangeType } from "../../../types/exchange.types";
 import Link from "next/link";
+import { setProvider } from "../../../services/redux/swapSlice";
 
 const ExchangeSwitcher: FC<{
   canSelectOverall?: boolean;
@@ -72,6 +73,7 @@ const ExchangeSwitcher: FC<{
 
   const selectExchange = useCallback(
     (exchange: ExchangeType) => {
+      dispatch(setProvider(exchange.provider_id ?? 0));
       dispatch(setSelectedExchange(exchange));
     },
     [dispatch]

@@ -45,7 +45,7 @@ export const TakeprofitTrade: FC = () => {
 
   const onAddTp = () => {
     if (trade?.take_profit?.length >= 3) {
-      return toast.info("You can only have 3 TP's per asset");
+      return toast.info("You can only set 3 TP's per asset");
     }
 
     if (values.quantity <= 0) {
@@ -59,9 +59,11 @@ export const TakeprofitTrade: FC = () => {
     dispatch(addTakeProfit(values));
   };
 
-  const onremoveProfit = (index: number) => {
+  const onremoveProfit = (_index: number) => {
     let _new = trade.take_profit;
-    _new = _new.slice(index, 1);
+    _new = _new.filter((elm: any, index: number) => index !== _index);
+
+    dispatch(setTakeProfit(_new));
   };
 
   return (
@@ -89,7 +91,7 @@ export const TakeprofitTrade: FC = () => {
             setPercent(e.key);
             setValues({
               ...values,
-              quantity: (parseInt(e.key) / 100) * parseInt(available),
+              quantity: (e.key / 100) * Number(available),
             });
           }}
         />
