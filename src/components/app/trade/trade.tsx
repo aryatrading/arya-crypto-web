@@ -9,8 +9,8 @@ import Button from "../../shared/buttons/button";
 import { StoplossTrade } from "./stoploss_trade";
 import { TakeprofitTrade } from "./takeprofit_trade";
 import { TrailingTrade } from "./trailing_trade";
-import { useSelector } from "react-redux";
-import { getTrade } from "../../../services/redux/tradeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { clearTrade, getTrade } from "../../../services/redux/tradeSlice";
 import { AssetTradeDropdown } from "../../shared/assetDropdown/assetTradeDropdown";
 import { OpenOrders } from "../../shared/tables/openOrderTable";
 import { OrderHistory } from "../../shared/tables/orderHistoryTable";
@@ -21,8 +21,11 @@ import {
   initiateTrade,
 } from "../../../services/controllers/trade";
 import { toast } from "react-toastify";
+import { ShadowButton } from "../../shared/buttons/shadow_button";
+import { twMerge } from "tailwind-merge";
 
 const Trade: FC = () => {
+  const dispatch = useDispatch();
   const { t } = useTranslation(["trade"]);
   const [activeTab, setActiveTab] = useState("entry");
   const trade = useSelector(getTrade);
@@ -68,6 +71,8 @@ const Trade: FC = () => {
       await createTrade(trade, selectedExchange?.provider_id ?? 1);
       toast.success(`${trade.symbol_name} trade created`);
 
+      dispatch(clearTrade());
+
       await initiateTrade(
         trade.asset_name,
         selectedExchange?.provider_id ?? 1,
@@ -78,6 +83,54 @@ const Trade: FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const tabHasData = (key: string) => {
+    if (key === "stoploss") {
+      if (trade?.stop_loss?.length) return true;
+      else return false;
+    }
+
+    if (key === "takeprofit") {
+      if (trade?.take_profit?.length) return true;
+      else return false;
+    }
+
+    if (key === "trailing") {
+      if (trade?.trailing_stop_loss?.length) return true;
+      else return false;
+    }
+    return false;
+  };
+
+  const renderTabs = () => {
+    return (
+      <Row className="gap-0.5">
+        {tradetabs.map((elm, index) => {
+          return (
+            <ShadowButton
+              className={twMerge(
+                "px-3 py-2 gap-0",
+                elm.title === "3M" ? "hidden md:flex" : ""
+              )}
+              key={index}
+              title={elm.title}
+              onClick={() => setActiveTab(elm.key)}
+              showBadge={tabHasData(elm.key)}
+              border={
+                index === 0
+                  ? "rounded-l-md"
+                  : index === tradetabs.length - 1
+                  ? "rounded-r-md"
+                  : ""
+              }
+              bgColor={activeTab === elm.key ? "bg-blue-3" : "bg-grey-2"}
+              textColor={activeTab === elm.key ? "text-blue-2" : "text-grey-1"}
+            />
+          );
+        })}
+      </Row>
+    );
   };
 
   return (
@@ -92,13 +145,7 @@ const Trade: FC = () => {
 
         <div className="w-full">
           <Col className=" bg-black-2 rounded-md gap-5 px-5 py-5">
-            <div className="w-full flex justify-center">
-              <TimeseriesPicker
-                series={tradetabs}
-                active={activeTab}
-                onclick={(e: any) => setActiveTab(e.key)}
-              />
-            </div>
+            <div className="w-full flex justify-center">{renderTabs()}</div>
             {renderTradeContent()}
           </Col>
           <Button

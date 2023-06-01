@@ -4,6 +4,7 @@ import {
   TradeOrder,
   TradeType,
   TradeValidations,
+  TrailingType,
 } from "../../types/trade";
 import { AppState } from "./store";
 
@@ -45,6 +46,10 @@ export const tradeSlice = createSlice({
       state.trade.symbol_name =
         `${action.payload.asset_name}${action.payload.base_name}`.toUpperCase();
       state.trade.available_quantity = action.payload?.available_quantity ?? 0;
+      state.trade.entry_order = {
+        trigger_price: 0,
+        type: "BUY",
+      };
     },
     setFilter: (state, action: { payload: { filter: string } }) => {
       state.tradeFilter = action.payload.filter;
@@ -91,6 +96,12 @@ export const tradeSlice = createSlice({
     addStoploss: (state, action: { payload: ProfitsType }) => {
       state.trade.stop_loss = [action.payload];
     },
+    addTrailing: (state, action: { payload: TrailingType }) => {
+      state.trade.trailing_stop_loss = [action.payload];
+    },
+    removeTrailing: (state) => {
+      state.trade.trailing_stop_loss = [];
+    },
     removeStoploss: (satte) => {
       satte.trade.stop_loss = [];
     },
@@ -130,6 +141,10 @@ export const tradeSlice = createSlice({
       state.openOrders = [];
       state.validations = {};
       state.historyOrders = [];
+      state.trade.entry_order = {};
+      state.trade.stop_loss = [];
+      state.trade.take_profit = [];
+      state.trade.trailing_stop_loss = [];
     },
   },
 });
@@ -153,6 +168,8 @@ export const {
   setPrice,
   setHistoryOrders,
   setAssetPrice,
+  addTrailing,
+  removeTrailing,
 } = tradeSlice.actions;
 
 export const getTrade = (state: AppState) => state.trade.trade;
