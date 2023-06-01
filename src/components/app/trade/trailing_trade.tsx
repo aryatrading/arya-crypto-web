@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { getTrade } from "../../../services/redux/tradeSlice";
+import { getAssetPrice, getTrade } from "../../../services/redux/tradeSlice";
 import { useSelector } from "react-redux";
 import { TrailingPicker } from "../../shared/trailingPicker";
 import TradeInput from "../../shared/inputs/tradeInput";
@@ -7,13 +7,18 @@ import { Button } from "../../shared/buttons/button";
 import { ProfitSet } from "../../shared/containers/trade/profit_set";
 import { PremiumBanner } from "../../shared/containers/premiumBanner";
 import { useTranslation } from "next-i18next";
+import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
 
 export const TrailingTrade: FC = () => {
   const { t } = useTranslation(["trade"]);
   const trade = useSelector(getTrade);
+  const _price = useSelector(getAssetPrice);
+  const _assetprice = useSelector(selectAssetLivePrice);
+
   const [values, setValues] = useState({
-    type: "Select Trailing type",
-    price: 0,
+    type: "Breakeven",
+    price: _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ?? _price,
+    value: 0,
   });
 
   return (
@@ -34,15 +39,15 @@ export const TrailingTrade: FC = () => {
         <TradeInput
           title={t("slprice")}
           value=""
-          amount={values.price}
-          onchange={(e: any) => setValues({ ...values, price: e })}
+          amount={values.value}
+          onchange={(e: any) => setValues({ ...values, value: e })}
         />
       ) : values.type === "Percentage" ? (
         <TradeInput
           title={t("percentage")}
           value=""
-          amount={values.price}
-          onchange={(e: any) => setValues({ ...values, price: e })}
+          amount={values.value}
+          onchange={(e: any) => setValues({ ...values, value: e })}
         />
       ) : null}
       <Button
