@@ -3,7 +3,7 @@ import { EnumExitStrategyTrigger, EnumPredefinedSmartAllocationPortfolio, EnumRe
 import { axiosInstance } from "../api/axiosConfig";
 
 export const getSmartAllocation = async (providerId?: number) => {
-    
+
     return await axiosInstance.get<SmartAllocationResponseType>(
         `/trade-engine/smart-allocation`,
         { params: { provider: providerId } }
@@ -70,50 +70,50 @@ export function getPredefinedPortfolioHoldings(predefinedPortfolioId: EnumPredef
     }
 }
 
-export const setRebalancingFrequency = async (providerId: number, frequency: EnumReBalancingFrequency|null,rebalanceNow:boolean) => {
+export const setRebalancingFrequency = async (providerId: number, frequency: EnumReBalancingFrequency | null, rebalanceNow: boolean) => {
     const frequencyParams = {
-      provider: providerId, 
-      frequency: frequency,
-      rebalance_portfolio:rebalanceNow
+        provider: providerId,
+        frequency: frequency,
+        rebalance_portfolio: rebalanceNow
     }
     return await axiosInstance.put(
-      `/trade-engine/smart-allocation/frequency`,
-      null,
-      {params:frequencyParams}
+        `/trade-engine/smart-allocation/frequency`,
+        null,
+        { params: frequencyParams }
     );
-  }
+}
 
-export const createExitStrategy = async (providerId: number, exitType: EnumExitStrategyTrigger, exitValue:number, exitPercentage:number) => {
+export const createExitStrategy = async (providerId: number, exitType: EnumExitStrategyTrigger, exitValue: number, exitPercentage: number) => {
     const exitStrategyParams = {
         provider: providerId
     }
     const exitStrategyBody = {
         exit_type: exitType,
-        status:'ACTIVE',
-        exit_value:exitValue,
-        exit_percentage:exitPercentage
+        status: 'ACTIVE',
+        exit_value: exitValue,
+        exit_percentage: exitPercentage
     }
     return await axiosInstance.post(
         `/trade-engine/smart-allocation/exit`,
         exitStrategyBody,
-        {params:exitStrategyParams}
-      );
+        { params: exitStrategyParams }
+    );
 }
 
-export const updateExitStrategy = async (providerId: number, exitType: EnumExitStrategyTrigger, exitValue:number, exitPercentage:number) => {
+export const updateExitStrategy = async (providerId: number, exitType: EnumExitStrategyTrigger, exitValue: number, exitPercentage: number) => {
     const exitStrategyParams = {
         provider: providerId
     }
     const exitStrategyBody = {
         exit_type: exitType,
-        exit_value:exitValue,
-        exit_percentage:exitPercentage
+        exit_value: exitValue,
+        exit_percentage: exitPercentage
     }
     return await axiosInstance.put(
         `/trade-engine/smart-allocation/exit`,
         exitStrategyBody,
-        {params:exitStrategyParams}
-      );
+        { params: exitStrategyParams }
+    );
 }
 
 export const getExitStrategy = async (providerId: number) => {
@@ -122,8 +122,8 @@ export const getExitStrategy = async (providerId: number) => {
     }
     return await axiosInstance.get(
         `/trade-engine/smart-allocation/exit`,
-        {params:exitStrategyParams}
-      );
+        { params: exitStrategyParams }
+    );
 }
 
 export const deleteExitStrategy = async (providerId: number) => {
@@ -132,7 +132,7 @@ export const deleteExitStrategy = async (providerId: number) => {
     }
     return await axiosInstance.delete(
         `/trade-engine/smart-allocation/exit`,
-        {params:exitStrategyParams}
+        { params: exitStrategyParams }
     );
 }
 
@@ -142,10 +142,10 @@ export const performRebalance = async (providerId: number) => {
     }
     return await axiosInstance.get(
         `/trade-engine/smart-allocation/balance`,
-        {params:rebalanceNowParams}
+        { params: rebalanceNowParams }
     );
 }
-export function getSmartAllocationTradeLogs(providerId : number ) {
+export function getSmartAllocationTradeLogs(providerId: number) {
     return axiosInstance.get('/trade-engine/smart-allocation/orders-logs', {
         params: { provider: providerId }
     });

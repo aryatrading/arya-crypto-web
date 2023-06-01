@@ -17,6 +17,7 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { MODE_DEBUG } from "../../../../utils/constants/config";
 import PageLoader from "../../../shared/pageLoader/pageLoader";
 import { Col, Row } from "../../../shared/layout/flex";
+import { getAssetCurrentValue, getAssetCurrentWeight } from "../../../../utils/smart-allocation";
 
 
 
@@ -50,6 +51,10 @@ const AuthedSmartAllocation: FC = () => {
     const selectedExchange = useSelector(selectSelectedExchange);
     const connectedExchanges = useSelector(selectConnectedExchanges);
 
+    const getTotalAssetsValue = useCallback((smartAllocationHoldings: SmartAllocationAssetType[]) => {
+        return smartAllocationHoldings.map(holding => getAssetCurrentValue(holding, holding.asset_details?.asset_data?.current_price ?? 0)).reduce((prev, curr) => prev + curr);
+    }, [])
+
     const initSmartAllocationHoldings = useCallback(() => {
         if (!selectedExchange?.provider_id) {
             if (MODE_DEBUG) {
@@ -62,7 +67,6 @@ const AuthedSmartAllocation: FC = () => {
             .then((res) => {
                 const data: any = res.data;
                 const holdings: SmartAllocationAssetType[] = data.assets;
-                setSmartAllocationTotalEvaluation(data.total_asset_value);
                 setSmartAllocationExists(data?.exists ?? false);
 
                 if (data.frequency) {
@@ -76,8 +80,11 @@ const AuthedSmartAllocation: FC = () => {
                     setRebalancingDate(null);
                 }
                 if (holdings && data.exists) {
-                    holdings.sort((a, b) => ((b?.current_weight ?? 0) - (a?.current_weight ?? 0)));
-                    setSmartAllocationHoldings(holdings);
+                    const totalValue = getTotalAssetsValue(holdings);
+                    holdings.sort((a, b) => ((getAssetCurrentWeight(b, b.asset_details?.asset_data?.current_price ?? 0, totalValue)) - (getAssetCurrentWeight(a, a.asset_details?.asset_data?.current_price ?? 0, totalValue))));
+                    setSmartAllocationHoldings(holdings.map((holding) => {
+                        return { ...holding, current_value: getAssetCurrentValue(holding, holding.asset_details?.asset_data?.current_price ?? 0), current_weight: getAssetCurrentWeight(holding, holding.asset_details?.asset_data?.current_price ?? 0, totalValue) };
+                    }));
                 }
             })
             .catch((error) => {
@@ -88,7 +95,7 @@ const AuthedSmartAllocation: FC = () => {
             .finally(() => {
                 setIsLoadingSmartAllocationHoldings(false);
             })
-    }, [selectedExchange?.provider_id]);
+    }, [getTotalAssetsValue, selectedExchange?.provider_id]);
 
     const fetchExitStrategy = useCallback(() => {
         if (!selectedExchange?.provider_id) {
@@ -112,6 +119,13 @@ const AuthedSmartAllocation: FC = () => {
         })
     }, [selectedExchange?.provider_id])
 
+
+    useEffect(() => {
+        if (smartAllocationHoldings.length) {
+            const totalValue = getTotalAssetsValue(smartAllocationHoldings)
+            setSmartAllocationTotalEvaluation(totalValue);
+        }
+    }, [getTotalAssetsValue, smartAllocationHoldings])
 
     useEffect(() => {
         if (selectedExchange?.provider_id) {

@@ -14,14 +14,12 @@ export type SmartAllocationResponseType = {
     modified_at?: string,
     next_run_time?: string,
     assets?: SmartAllocationAssetType[],
-    total_asset_value?: number,
     exit_strategy: SmartAllocationExitStrategyType
 }
 
 export type SmartAllocationAssetType = {
     id?: number,
     name?: string,
-    ask_price?: number,
     available?: number,
     current_weight?: number,
     current_value?: number,

@@ -12,6 +12,7 @@ import SmartAllocationExitStrategy from "../authed-smart-allocation/SmartAllocat
 import SmartAllocationRebalancing from "../authed-smart-allocation/SmartAllocationAutomation/SmartAllocationRebalancing/SmartAllocationRebalancing"
 import { EnumReBalancingFrequency, EnumSmartAllocationAssetStatus } from "../../../../utils/constants/smartAllocation"
 import { getSmartAllocation, updateSmartAllocation } from "../../../../services/controllers/smart-allocation"
+import { getAssetCurrentValue, getAssetCurrentWeight } from "../../../../utils/smart-allocation"
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher"
 import { selectSelectedExchange } from "../../../../services/redux/exchangeSlice"
 import { percentageFormat, formatNumber } from "../../../../utils/helpers/prices"
@@ -52,6 +53,11 @@ const EditSmartAllocation: FC = () => {
 
     const { isTabletOrMobileScreen } = useResponsive();
 
+
+    const getTotalAssetsValue = useCallback((smartAllocationHoldings: SmartAllocationAssetType[]) => {
+        return smartAllocationHoldings.map(holding => getAssetCurrentValue(holding, holding.asset_details?.asset_data?.current_price ?? 0)).reduce((prev, curr) => prev + curr);
+    }, [])
+
     const initSmartAllocationHoldings = useCallback(() => {
         if (!selectedExchange?.provider_id) {
             if (MODE_DEBUG) {
@@ -66,8 +72,12 @@ const EditSmartAllocation: FC = () => {
                 setSmartAllocationExists(data?.exists ?? false);
                 const holdings: SmartAllocationAssetType[] | undefined = data.assets;
                 if (holdings) {
-                    holdings.sort((a, b) => ((b?.current_weight ?? 0) - (a?.current_weight ?? 0)));
-                    setSmartAllocationHoldings(holdings.filter(asset => asset.name !== USDTSymbol));
+                    setSmartAllocationTotalEvaluation(getTotalAssetsValue(holdings));
+                    const totalValue = getTotalAssetsValue(holdings);
+                    holdings.sort((a, b) => ((getAssetCurrentWeight(b, b.asset_details?.asset_data?.current_price ?? 0, totalValue)) - (getAssetCurrentWeight(a, a.asset_details?.asset_data?.current_price ?? 0, totalValue))));
+                    setSmartAllocationHoldings(holdings.map((holding) => {
+                        return { ...holding, current_value: getAssetCurrentValue(holding, holding.asset_details?.asset_data?.current_price ?? 0), current_weight: getAssetCurrentWeight(holding, holding.asset_details?.asset_data?.current_price ?? 0, totalValue) };
+                    }));
                 }
                 const frequency = data.frequency;
                 if (frequency) {
@@ -85,7 +95,6 @@ const EditSmartAllocation: FC = () => {
                 } else {
                     setExitStrategy(null);
                 }
-                setSmartAllocationTotalEvaluation(data.total_asset_value ?? 0);
             })
             .catch((error) => {
                 if (MODE_DEBUG)
@@ -94,7 +103,7 @@ const EditSmartAllocation: FC = () => {
             .finally(() => {
                 setIsLoadingSmartAllocationHoldings(false);
             })
-    }, [selectedExchange?.provider_id]);
+    }, [getTotalAssetsValue, selectedExchange?.provider_id]);
 
 
     useEffect(() => {
@@ -175,6 +184,7 @@ const EditSmartAllocation: FC = () => {
     }, [distributeWeightsEqually, isTabletOrMobileScreen, t]);
 
     const tableBody = useMemo(() => {
+
         const filteredSmartAllocationHoldings = smartAllocationHoldings?.filter((a) => !a.removed);
 
         if (!filteredSmartAllocationHoldings.length) {
@@ -186,45 +196,103 @@ const EditSmartAllocation: FC = () => {
         } else {
             return filteredSmartAllocationHoldings.map((asset, index) => {
 
-                const setWeight = asset.weight ?? 0;
-                const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
+                if (asset.name !== USDTSymbol) {
 
-                const assetEvaluation = smartAllocationTotalEvaluation * setWeight;
+                    const setWeight = asset.weight ?? 0;
+                    const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
 
-                const coinColor = getCoinColor(asset.name ?? "", index);
+                    const assetEvaluation = smartAllocationTotalEvaluation * setWeight;
 
-                if (isTabletOrMobileScreen) {
-                    return (
-                        <tr key={asset.name}>
-                            <td>
-                                <Col className="gap-1">
-                                    <p>{asset.asset_details?.asset_data?.name}</p>
-                                    <p className="text-sm text-grey-1">{asset.name}</p>
-                                </Col>
-                            </td>
-                            <td className="text-sm">
-                                <Row className="w-full gap-4 items-center">
-                                    <Slider.Root
-                                        className="relative flex items-center select-none flex-1"
-                                        value={[setWeight * 100]}
-                                        max={100}
-                                        step={1}
-                                        aria-label="Volume"
-                                        onValueChange={(value) => onSetWeightChange(value[0], asset)}
-                                    >
-                                        <Slider.Track className="flex-grow flex-1 bg-[#D9D9D9] rounded-full h-3">
-                                            <Slider.Range className="absolute h-full rounded-full" style={{ backgroundColor: coinColor }} />
-                                        </Slider.Track>
-                                        <Slider.Thumb className="block w-6 h-6 bg-white rounded-full shadow-lg shadow-black-1 hover:bg-yellow-400 focus:outline-none" />
-                                    </Slider.Root>
+                    const coinColor = getCoinColor(asset.name ?? "", index);
 
-                                </Row>
-                            </td>
-                            <td>
-                                <Col className="gap-2">
-                                    <Row className="gap-1 items-center">
+                    if (isTabletOrMobileScreen) {
+                        return (
+                            <tr key={asset.name}>
+                                <td>
+                                    <Col className="gap-1">
+                                        <p>{asset.asset_details?.asset_data?.name}</p>
+                                        <p className="text-sm text-grey-1">{asset.name}</p>
+                                    </Col>
+                                </td>
+                                <td className="text-sm">
+                                    <Row className="w-full gap-4 items-center">
+                                        <Slider.Root
+                                            className="relative flex items-center select-none flex-1"
+                                            value={[setWeight * 100]}
+                                            max={100}
+                                            step={1}
+                                            aria-label="Volume"
+                                            onValueChange={(value) => onSetWeightChange(value[0], asset)}
+                                        >
+                                            <Slider.Track className="flex-grow flex-1 bg-[#D9D9D9] rounded-full h-3">
+                                                <Slider.Range className="absolute h-full rounded-full" style={{ backgroundColor: coinColor }} />
+                                            </Slider.Track>
+                                            <Slider.Thumb className="block w-6 h-6 bg-white rounded-full shadow-lg shadow-black-1 focus:outline-none" />
+                                        </Slider.Root>
+
+                                    </Row>
+                                </td>
+                                <td>
+                                    <Col className="gap-2">
+                                        <Row className="gap-1 items-center">
+                                            <input
+                                                className="bg-grey-3 focus-within:outline focus-within:outline-1 focus-within:outline-grey-1 w-16 h-10 text-center rounded-md text-sm p-0"
+                                                value={percentageFormat(setWeight * 100)}
+                                                type="number"
+                                                onChange={(event) => {
+                                                    onSetWeightChange(parseFloat(event.target.value), asset);
+                                                }}
+                                            />
+                                            <p className="font-bold">%</p>
+                                        </Row>
+                                        <p className="font-bold w-32">{formatNumber(assetEvaluation, true)}</p>
+                                    </Col>
+                                </td>
+                                <td>
+                                    {(userHasSubscription) && <Button onClick={() => onRemoveAsset(asset)}>
+                                        <XMarkIcon width={20} height={20} color="white" />
+                                    </Button>}
+                                </td>
+                            </tr>
+                        );
+                    } else {
+                        return (
+                            <tr key={asset.name}>
+                                <td>
+                                    <Row className="gap-3 items-center">
+                                        <Image src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
+                                        <p>{asset.asset_details?.asset_data?.name}</p>
+                                        <span className="text-sm text-grey-1">{asset.name}</span>
+                                    </Row>
+                                </td>
+                                <td>
+                                    <AssetPnl
+                                        value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
+                                    />
+                                </td>
+                                <td>{formatNumber(asset?.asset_details?.asset_data?.current_price ?? 0, true)}</td>
+                                <td>{formatNumber(asset?.available ?? 0)}</td>
+                                <td>{formatNumber(asset?.current_value ?? 0, true)}</td>
+                                <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
+                                    {percentageFormat((asset.current_weight ?? 0) * 100)}%
+                                </td>
+                                <td className="text-sm">
+                                    <Row className="w-full gap-4 items-center">
+                                        <Slider.Root
+                                            className="relative flex items-center select-none flex-1"
+                                            value={[setWeight * 100]}
+                                            max={100}
+                                            step={1}
+                                            aria-label="Volume"
+                                            onValueChange={(value) => onSetWeightChange(value[0], asset)}
+                                        >
+                                            <Slider.Track className="flex-grow flex-1 bg-[#D9D9D9] rounded-full h-3">
+                                                <Slider.Range className="absolute h-full rounded-full" style={{ backgroundColor: coinColor }} />
+                                            </Slider.Track>
+                                            <Slider.Thumb className={`block w-6 h-6 bg-white rounded-full shadow-lg shadow-black-1 hover:bg-[#D9D9D9] focus:outline-none`} />
+                                        </Slider.Root>
                                         <input
-                                            className="bg-grey-3 focus-within:outline focus-within:outline-1 focus-within:outline-grey-1 w-16 h-10 text-center rounded-md text-sm p-0"
+                                            className="bg-grey-3 focus-within:outline focus-within:outline-1 focus-within:outline-grey-1 w-12 h-8 text-center rounded-md text-sm p-0"
                                             value={percentageFormat(setWeight * 100)}
                                             type="number"
                                             onChange={(event) => {
@@ -232,72 +300,20 @@ const EditSmartAllocation: FC = () => {
                                             }}
                                         />
                                         <p className="font-bold">%</p>
+                                        <p className="font-bold w-32">USD {formatNumber(assetEvaluation, true)}</p>
                                     </Row>
-                                    <p className="font-bold w-32">{formatNumber(assetEvaluation, true)}</p>
-                                </Col>
-                            </td>
-                            <td>
-                                {(userHasSubscription) && <Button onClick={() => onRemoveAsset(asset)}>
-                                    <XMarkIcon width={20} height={20} color="white" />
-                                </Button>}
-                            </td>
-                        </tr>
-                    );
+                                </td>
+                                <td>
+                                    {(userHasSubscription) && <Button onClick={() => onRemoveAsset(asset)}>
+                                        <XMarkIcon width={20} height={20} color="white" />
+                                    </Button>}
+                                </td>
+                            </tr>
+                        );
+                    }
+
                 } else {
-                    return (
-                        <tr key={asset.name}>
-                            <td>
-                                <Row className="gap-3 items-center">
-                                    <Image src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
-                                    <p>{asset.asset_details?.asset_data?.name}</p>
-                                    <span className="text-sm text-grey-1">{asset.name}</span>
-                                </Row>
-                            </td>
-                            <td>
-                                <AssetPnl
-                                    value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
-                                />
-                            </td>
-                            <td>{formatNumber(asset?.ask_price ?? 0, true)}</td>
-                            <td>{formatNumber(asset?.available ?? 0)}</td>
-                            <td>{formatNumber(asset?.current_value ?? 0, true)}</td>
-                            <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
-                                {percentageFormat((asset.current_weight ?? 0) * 100)}%
-                            </td>
-                            <td className="text-sm">
-                                <Row className="w-full gap-4 items-center">
-                                    <Slider.Root
-                                        className="relative flex items-center select-none flex-1"
-                                        value={[setWeight * 100]}
-                                        max={100}
-                                        step={1}
-                                        aria-label="Volume"
-                                        onValueChange={(value) => onSetWeightChange(value[0], asset)}
-                                    >
-                                        <Slider.Track className="flex-grow flex-1 bg-[#D9D9D9] rounded-full h-3">
-                                            <Slider.Range className="absolute h-full rounded-full" style={{ backgroundColor: coinColor }} />
-                                        </Slider.Track>
-                                        <Slider.Thumb className="block w-6 h-6 bg-white rounded-full shadow-lg shadow-black-1 hover:bg-yellow-400 focus:outline-none" />
-                                    </Slider.Root>
-                                    <input
-                                        className="bg-grey-3 focus-within:outline focus-within:outline-1 focus-within:outline-grey-1 w-12 h-8 text-center rounded-md text-sm p-0"
-                                        value={percentageFormat(setWeight * 100)}
-                                        type="number"
-                                        onChange={(event) => {
-                                            onSetWeightChange(parseFloat(event.target.value), asset);
-                                        }}
-                                    />
-                                    <p className="font-bold">%</p>
-                                    <p className="font-bold w-32">USD {formatNumber(assetEvaluation, true)}</p>
-                                </Row>
-                            </td>
-                            <td>
-                                {(userHasSubscription) && <Button onClick={() => onRemoveAsset(asset)}>
-                                    <XMarkIcon width={20} height={20} color="white" />
-                                </Button>}
-                            </td>
-                        </tr>
-                    );
+                    return <></>
                 }
 
             })
@@ -317,7 +333,6 @@ const EditSmartAllocation: FC = () => {
                 if (selectedAsset?.symbol?.toLocaleLowerCase() !== USDTSymbol?.toLocaleLowerCase()) {
                     newState.push({
                         name: selectedAsset.symbol?.toUpperCase() ?? "",
-                        ask_price: selectedAsset.currentPrice,
                         weight: 0,
                         current_weight: 0,
                         available: 0,
@@ -327,6 +342,7 @@ const EditSmartAllocation: FC = () => {
                                 name: selectedAsset.name ?? "",
                                 image: selectedAsset.iconUrl,
                                 price_change_percentage_24h: selectedAsset.pnl,
+                                current_price: selectedAsset.currentPrice,
                             }
                         },
                         removed: false,
@@ -353,7 +369,7 @@ const EditSmartAllocation: FC = () => {
             totalPercentage = smartAllocationHoldings?.map(asset => asset.weight)?.reduce((prev, next) => ((prev ?? 0) + (next ?? 0))) ?? 0;
             totalEvaluation = smartAllocationHoldings?.map(asset => (asset.weight ?? 0) * (smartAllocationTotalEvaluation ?? 0))?.reduce((prev, next) => ((prev ?? 0) + (next ?? 0))) ?? 0;
         }
-        const is100Percent = totalPercentage === 1;
+        const is100Percent = totalPercentage >= .999;
 
         if (isTabletOrMobileScreen) {
 

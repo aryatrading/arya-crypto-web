@@ -99,7 +99,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                     value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
                                 />
                             </td>
-                            <td>{formatNumber(asset?.ask_price ?? 0, true)}</td>
+                            <td>{formatNumber(asset?.asset_details?.asset_data?.current_price ?? 0, true)}</td>
                             <td>{formatNumber(asset?.available ?? 0)}</td>
                             <td>{formatNumber(asset?.current_value ?? 0, true)}</td>
                             <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
