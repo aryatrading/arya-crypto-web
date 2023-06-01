@@ -12,6 +12,7 @@ import AssetInformationTab from "./assetInformation";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import AssetHoldingTab from "./assetHolding";
 import AssetExitStrategy from "./AssetExitStrategy";
+import AssetSparkLine from "../../shared/containers/asset/AssetSparkLine";
 
 const Asset: FC = () => {
   const { t } = useTranslation(["asset","common"]);
@@ -51,8 +52,11 @@ const Asset: FC = () => {
         <span> / </span>
         <h1 className="">{t("pricelivedata", { asset })}</h1>
       </Row>
-      <Row className="justify-between">
-        <AssetHeader asset={asset} />
+      <Row className="justify-between gap-5">
+        <Row className="items-end gap-5 justify-between w-full md:w-auto">
+          <AssetHeader asset={asset} />
+          <AssetSparkLine symbol={asset.symbol}/>
+        </Row>
         <AssetVote className="hidden md:flex"/>
       </Row>
       <Row className="mt-7 flex-wrap gap-5 xl:gap-16 xl:justify-start hidden md:flex">
