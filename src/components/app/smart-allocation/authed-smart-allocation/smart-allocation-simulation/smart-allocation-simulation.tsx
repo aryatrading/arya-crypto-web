@@ -22,6 +22,7 @@ import { PieChartIcon } from "../../../../svg/pieChartIcon";
 import { Col, Row } from "../../../../shared/layout/flex";
 import { Trans, useTranslation } from "next-i18next";
 import Input from "../../../../shared/inputs/Input";
+import { usdtFilter } from "../../../../../utils/smart-allocation";
 
 function getShiftedDayDate(prevDay: Date, shiftInDays: number) {
     return new Date(prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate() + shiftInDays);
@@ -213,26 +214,26 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
             <Row className="md:flex-[2] justify-between md:justify-evenly md:h-[250px] gap-2.5 md:gap-20 w-full">
                 {weightsDoughnutCharts({
                     chartTitle: t("currentWeight"),
-                    chartData: smartAllocationHoldings?.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
+                    chartData: smartAllocationHoldings?.filter(usdtFilter)?.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
                     drawdown: currentWeightsDrawdown ?? initialValue,
                     maxProfit: currentWeightsData[currentWeightsData.length - 1]?.value ?? 0,
                 })}
                 {weightsDoughnutCharts({
                     chartTitle: t("setWeight"),
-                    chartData: smartAllocationHoldings?.map(asset => ({ label: asset?.name ?? "", value: asset.weight ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
+                    chartData: smartAllocationHoldings?.filter(usdtFilter)?.map(asset => ({ label: asset?.name ?? "", value: (asset.current_value ?? 0)/(asset.current_weight ?? 0) * (asset.weight ?? 0), coinSymbol: asset.name ?? "" })) ?? [],
                     drawdown: setWeightsDrawdown ?? initialValue,
                     maxProfit: setWeightsData[setWeightsData.length - 1]?.value ?? 0,
                 })}
             </Row>
         )
-    }, [weightsDoughnutCharts, smartAllocationHoldings, currentWeightsDrawdown, initialValue, currentWeightsData, t, setWeightsDrawdown, setWeightsData]);
+    }, [weightsDoughnutCharts, t, smartAllocationHoldings, currentWeightsDrawdown, initialValue, currentWeightsData, setWeightsDrawdown, setWeightsData]);
 
     const reBalanceNow = useMemo(() => {
         return (
             <Col className="w-full md:max-w-[300px] flex-1 gap-5 justify-center">
                 <Row className="md:flex-col w-full gap-4 text-center">
                     <Link href="smart-allocation/edit" className="w-full flex items-center justify-center bg-blue-1 h-12 px-5 rounded-md text-sm font-bold">{t('editPortfolio')}</Link>
-                    <RebalancePreviewDialog holdingData={smartAllocationHoldings?.filter((asset) => asset.name !== USDTSymbol) ?? []} />
+                    <RebalancePreviewDialog holdingData={smartAllocationHoldings?.filter((asset) => asset.name?.toLowerCase() !== USDTSymbol.toLowerCase()) ?? []} />
                 </Row>
                 <Col className="gap-4">
                     {rebalancingFrequency && <>

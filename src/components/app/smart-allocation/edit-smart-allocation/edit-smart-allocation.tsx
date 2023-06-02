@@ -12,7 +12,7 @@ import SmartAllocationExitStrategy from "../authed-smart-allocation/SmartAllocat
 import SmartAllocationRebalancing from "../authed-smart-allocation/SmartAllocationAutomation/SmartAllocationRebalancing/SmartAllocationRebalancing"
 import { EnumReBalancingFrequency, EnumSmartAllocationAssetStatus } from "../../../../utils/constants/smartAllocation"
 import { getSmartAllocation, updateSmartAllocation } from "../../../../services/controllers/smart-allocation"
-import { getAssetCurrentValue, getAssetCurrentWeight } from "../../../../utils/smart-allocation"
+import { getAssetCurrentValue, getAssetCurrentWeight, usdtFilter } from "../../../../utils/smart-allocation"
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher"
 import { selectSelectedExchange } from "../../../../services/redux/exchangeSlice"
 import { percentageFormat, formatNumber } from "../../../../utils/helpers/prices"
@@ -113,9 +113,9 @@ const EditSmartAllocation: FC = () => {
 
     const distributeWeightsEqually = useCallback(() => {
         setSmartAllocationHoldings((oldState) => {
-            const removedItemsCount = oldState.filter(holding => holding.removed).length;
+            const removedItemsCount = oldState.filter(holding => holding.removed || holding.name?.toLowerCase() === USDTSymbol.toLowerCase()).length;
             return oldState.map((holding) => {
-                if (!holding.removed) {
+                if (!holding.removed && holding.name?.toLowerCase() !== USDTSymbol.toLowerCase()) {
                     return { ...holding, weight: 1 / (oldState.length - removedItemsCount) };
                 } else {
                     return holding;
@@ -429,7 +429,7 @@ const EditSmartAllocation: FC = () => {
 
     const onSaveSmartAllocation = useCallback(() => {
 
-        const filteredSmartAllocationHoldings = smartAllocationHoldings?.filter((a) => !a.removed);
+        const filteredSmartAllocationHoldings = smartAllocationHoldings?.filter((a) => !a.removed && a.name?.toLowerCase() !== USDTSymbol.toLowerCase());
         if (filteredSmartAllocationHoldings.length) {
             const totalPercentage = filteredSmartAllocationHoldings?.map(asset => asset.weight)?.reduce((prev, next) => ((prev ?? 0) + (next ?? 0))) ?? 0;
             if (totalPercentage >= .999) {
@@ -541,11 +541,11 @@ const EditSmartAllocation: FC = () => {
                     <Row className="flex-[2] justify-evenly h-44 md:h-[300px] gap-5">
                         <CutoutDoughnutChart
                             title={t("currentWeight")}
-                            chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" }))}
+                            chartData={smartAllocationHoldings.filter(usdtFilter).map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" }))}
                         />
                         <CutoutDoughnutChart
                             title={t("setWeight")}
-                            chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: asset.weight ?? 0, coinSymbol: asset.name ?? "" }))}
+                            chartData={smartAllocationHoldings.filter(usdtFilter).map(asset => ({ label: asset?.name ?? "", value: smartAllocationTotalEvaluation * (asset.weight ?? 0), coinSymbol: asset.name ?? "" }))}
                         />
                     </Row>
                 </Col>

@@ -226,13 +226,13 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges, exchanges }: an
                             <h5 className='text-blue-1 font-bold cursor-pointer' onClick={() => openModal('video')}>{t('vidTutorial')}</h5>
                         </Row>
 
-                        <Col className='gap-2'>
+                        {/* <Col className='gap-2'>
                             {exchangeDetails?.steps?.map((info: string, index: number) => {
                                 return (
                                     <p key={index} className='text-sm text-white font-medium'>{info}</p>
                                 );
                             })}
-                        </Col>
+                        </Col> */}
                     </Col>
                 </Row>
             </AccordionContent>
