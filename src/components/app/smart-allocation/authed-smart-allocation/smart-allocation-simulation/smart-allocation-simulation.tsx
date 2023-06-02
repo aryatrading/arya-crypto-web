@@ -283,6 +283,12 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     secondaryLineData={setWeightsData}
                     className={"w-full h-[200px] md:h-[400px]"}
                     isLoading={isLoading}
+                    fixed={true}
+                    tooltip={{
+                        show: true,
+                        title: "Profit Change %",
+                        showProfitChange: true,
+                    }}
                 />
                 {graphLegend}
             </Col>

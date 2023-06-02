@@ -7,6 +7,12 @@ export interface GraphChartType {
   fixed?: boolean;
   isLoading?: boolean;
   responsive?: boolean;
+  tooltip: {
+    show: boolean,
+    title: string,
+    showProfitChange?: boolean,
+    showValue?: boolean,
+  }
 }
 
 export interface chartDataType {

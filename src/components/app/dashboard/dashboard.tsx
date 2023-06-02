@@ -114,7 +114,7 @@ const Dashboard: FC = () => {
           <DoughnutChart
             maxWidth="min(100%, 300px)"
             chartData={portfolioHoldings.map(asset => ({
-              coinSymbol: asset.asset_details?.symbol??"",
+              coinSymbol: asset.asset_details?.symbol ?? "",
               label: asset.name ?? "",
               value: (asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0),
             }))}
@@ -140,15 +140,6 @@ const Dashboard: FC = () => {
       }
     });
 
-    const smartAllocationData: chartDataType[] = portfolioSnapshots?.map((snapshot) => {
-
-      const time = new Date(snapshot.created_at).getTime();
-      return {
-        time: Math.floor((time / 1000)) as chartDataType["time"],
-        value: snapshot.smart_allocation_total_evaluation ?? 0,
-      }
-    });
-
     return (
       <Col className="w-full gap-10">
         {!isTabletOrMobileScreen && <Row className="justify-end h-10">
@@ -158,7 +149,11 @@ const Dashboard: FC = () => {
             onclick={onSeriesClick}
           />
         </Row>}
-        <LineChart primaryLineData={chartData} className={"h-[200px] md:h-[400px]"} />
+        <LineChart primaryLineData={chartData} className={"h-[200px] md:h-[400px]"} tooltip={{
+          show: true,
+          title: "Portfolio value",
+          showValue: true,
+        }} />
       </Col>
     )
 
