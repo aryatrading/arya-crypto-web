@@ -25,7 +25,7 @@ const SmartAllocationExitStrategy: FC<SmartAllocationExitStrategyPropsType> = ({
         if (exitStrategy) {
             const { exit_type, exit_value } = exitStrategy
             if (exit_type === EnumExitStrategyTrigger.RisesBy) {
-                return (exit_value ?? 0) * 100;
+                return parseFloat(((exit_value ?? 0) * 100).toFixed(4));
             }
             else {
                 return exit_value ?? 0;
@@ -38,7 +38,7 @@ const SmartAllocationExitStrategy: FC<SmartAllocationExitStrategyPropsType> = ({
 
     const sellPortion: number = useMemo(() => {
         if (exitStrategy) {
-            return (exitStrategy?.exit_percentage ?? 0) * 100
+            return parseFloat(((exitStrategy?.exit_percentage ?? 0) * 100).toFixed(4))
         } else {
             return 0;
         }
@@ -53,9 +53,11 @@ const SmartAllocationExitStrategy: FC<SmartAllocationExitStrategyPropsType> = ({
     }, [exitStrategy])
 
     const onExitStrategyChange = useCallback((portfolioChange: number, sellPortion: number, assetChangeType: EnumExitStrategyTrigger) => {
-        const exit_value = assetChangeType === EnumExitStrategyTrigger.RisesBy ? portfolioChange / 100 : portfolioChange;
-        const exit_percentage = sellPortion / 100;
+
+        const exit_value = assetChangeType === EnumExitStrategyTrigger.RisesBy ? parseFloat((portfolioChange / 100).toFixed(4)) : portfolioChange;
+        const exit_percentage = parseFloat((sellPortion / 100).toFixed(4));
         const exit_type = assetChangeType;
+
         if (exitStrategy?.status === EnumSmartAllocationAssetStatus.ACTIVE) {
             onChange({ ...exitStrategy, exit_value, exit_percentage, exit_type });
         } else {
@@ -100,7 +102,7 @@ const SmartAllocationExitStrategy: FC<SmartAllocationExitStrategyPropsType> = ({
     const triggerPercentage = useCallback(
         () => {
             return <Row className='bg-black-2 rounded-lg py-3 px-4 text-sm text-blue-1 w-full'>
-                <ExitStrategyInput isPercentage={assetChangeType === EnumExitStrategyTrigger.RisesBy} value={portfolioChange} setValue={(value) => {
+                <ExitStrategyInput isPercentage={assetChangeType === EnumExitStrategyTrigger.RisesBy} value={portfolioChange} onChange={(value) => {
                     onExitStrategyChange(value, sellPortion, assetChangeType);
                 }} />
             </Row>
@@ -111,7 +113,7 @@ const SmartAllocationExitStrategy: FC<SmartAllocationExitStrategyPropsType> = ({
 
     const sellPercentage = useCallback(() => {
         return <Row className='bg-black-2 rounded-lg py-3 px-4 text-sm text-blue-1 w-full md:w-auto'>
-            <ExitStrategyInput isPercentage={true} value={sellPortion} setValue={(value) => {
+            <ExitStrategyInput isPercentage={true} value={sellPortion} onChange={(value) => {
                 onExitStrategyChange(portfolioChange, value, assetChangeType);
             }} />
         </Row>

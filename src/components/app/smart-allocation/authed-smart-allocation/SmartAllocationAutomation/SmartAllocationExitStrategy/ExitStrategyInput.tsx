@@ -8,38 +8,40 @@ import { twMerge } from 'tailwind-merge';
 export interface IExitStrategyInput {
   isPercentage: boolean;
   value: number;
-  setValue: (newValue: number) => void;
+  onChange: (newValue: number) => void;
 }
 
-export default function ExitStrategyInput({ isPercentage, value, setValue }: IExitStrategyInput) {
+export default function ExitStrategyInput({ isPercentage, value, onChange }: IExitStrategyInput) {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value ?? 0)
+    const value = parseFloat(e.target.value ?? 0);
     if (isPercentage) {
       if (value > 100) {
-        setValue(100);
+        onChange(100);
       } else if (value < 0) {
-        setValue(0);
+        onChange(0);
       } else {
-        setValue(value);
+        onChange(value);
       }
-      return;
+    } else {
+      onChange(value);
     }
-    setValue(value);
   };
 
   const handleIncrement = () => {
-    if(isPercentage && value<100){
-      setValue(value + 1);
-      return;
+    let newValue = value + 1;
+    if (isPercentage && (newValue > 100)) {
+      newValue = 100;
     }
-    setValue(value + 1);
+    onChange(newValue);
   };
 
   const handleDecrement = () => {
-    if (value > 0) {
-      setValue(value - 1);
+    let newValue = value - 1;
+    if (newValue < 0) {
+      newValue = 0;
     }
+    onChange(newValue);
   };
 
   const onKeyDown = (e: any) => {
