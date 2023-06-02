@@ -33,7 +33,7 @@ const AuthModalProvider: FC<any> = (props: any) => {
       placement: "center",
       backdrop: "static",
       closable: true,
-      backdropClasses: "bg-white absolute top-0 right-0 left-0 bottom-0 z-30 opacity-30"
+      backdropClasses: "bg-white absolute top-0 right-0 left-0 bottom-0 z-50 opacity-30"
     };
     const modal = new Modal($targetEl, options);
     setModalTrigger(modal);
@@ -47,7 +47,7 @@ const AuthModalProvider: FC<any> = (props: any) => {
       <Col
         id="authentication-modal"
         aria-hidden="true"
-        className="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+        className="fixed top-0 left-0 right-0 z-[100] hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
       >
         <Col className={clsx({ "max-w-6xl": visibleSection === 'signup', "max-w-md": visibleSection !== 'signup' }, "relative bg-black-2 p-5 w-full max-h-full rounded-lg shadow")}>
           <Col className="gap-4 min-h-[450px]">

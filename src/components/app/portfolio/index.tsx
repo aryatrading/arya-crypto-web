@@ -3,7 +3,7 @@ import { FC } from "react";
 import Dashboard from "../dashboard/dashboard";
 import { Col } from "../../shared/layout/flex";
 
-const Home: FC = () => {
+const Portfolio: FC = () => {
 
     const authUser = useAuthUser();
 
@@ -19,4 +19,4 @@ const Home: FC = () => {
 
 }
 
-export default Home;
+export default Portfolio;

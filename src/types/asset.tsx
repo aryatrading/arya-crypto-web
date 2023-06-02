@@ -26,6 +26,8 @@ export interface AssetType {
   isHoldingAsset?: boolean;
   description?: string;
   mrkCapYesterday?: number;
+  change24H?: number;
+  change7D?: number;
 }
 
 export interface AssetSwapType {
