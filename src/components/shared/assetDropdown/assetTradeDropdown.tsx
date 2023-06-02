@@ -45,7 +45,7 @@ export const AssetTradeDropdown: FC = () => {
 
     dispatch(
       setTrade({
-        asset_name: _symbol[0] ?? "btc",
+        asset_name: _symbol[0].replace("-", "") ?? "btc",
         base_name: filter,
         available_quantity: await getAssetAvailable(
           filter,
@@ -102,7 +102,7 @@ export const AssetTradeDropdown: FC = () => {
                   key={index}
                   className="ring-0 cursor-pointer"
                 >
-                  {elm}
+                  {elm.replace("-", "")}
                 </DropdownMenu.Item>
               );
             })}

@@ -29,14 +29,10 @@ export const initiateTrade = async (
     })
   );
 
-  let _pairs = await getAvailablePairs(symbol ?? "btc", provider);
-
+  await getAvailablePairs(symbol ?? "btc", provider);
   await getAssetOpenOrders(`${symbol ?? "BTC"}${base ?? "USDT"}`, provider);
   await getHistoryOrders(symbol ?? "BTC", provider);
   await getAssetCurrentPrice(symbol ?? "BTC");
-
-  store.dispatch(addTradables({ assets: _pairs._tradables }));
-  store.dispatch(setPairs({ pairs: _pairs._pairs }));
 
   store.dispatch(setOrderType({ orderType: "MARKET" }));
 };
@@ -64,13 +60,14 @@ export const createTrade = async (payload: TradeType, provider: number) => {
 
 export const getAssetAvailable = async (base: string, provider: number) => {
   const { data } = await axiosInstance.get(
-    `trade-engine/assets/${base}/?provider=${provider}`
+    `trade-engine/assets/${base.replace("-", "")}/?provider=${provider}`
   );
 
   return data[provider].data.free;
 };
 
 export const getAssetCurrentPrice = async (asset_name: string) => {
+  console.log("asset price >> ", asset_name);
   const { data } = await axiosInstance.get(
     `utils/asset-details?asset_name=${asset_name}`
   );
@@ -102,7 +99,8 @@ export const getAvailablePairs = async (symbol: any, provider: number) => {
     }
   }
 
-  return { _tradables, _pairs };
+  store.dispatch(addTradables({ assets: _tradables }));
+  store.dispatch(setPairs({ pairs: _pairs }));
 };
 
 export const getAssetOpenOrders = async (symbol: string, provider: number) => {
