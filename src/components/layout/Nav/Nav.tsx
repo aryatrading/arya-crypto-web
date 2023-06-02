@@ -128,7 +128,7 @@ const Nav = () => {
       {
         navLinkData.map((navLink) => <NavLink
           key={navLink.title}
-          active={pathname === navLink.route || (pathname === '/' && navLink.title.includes('portfolio'))}
+          active={pathname === navLink.route}
           href={navLink.route}
           navTitle={navLink.title}
           NavIcon={
