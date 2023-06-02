@@ -41,15 +41,22 @@ export const tradeSlice = createSlice({
   initialState,
   reducers: {
     setTrade: (state, action: { payload: any }) => {
-      state.trade.asset_name = action.payload?.asset_name.toUpperCase();
-      state.trade.base_name = action.payload.base_name.toUpperCase();
+      state.trade.asset_name = action.payload?.asset_name
+        .toUpperCase()
+        .replace("-", "");
+      state.trade.base_name = action.payload.base_name
+        .toUpperCase()
+        .replace("-", "");
       state.trade.symbol_name =
-        `${action.payload.asset_name}${action.payload.base_name}`.toUpperCase();
+        `${action.payload.asset_name}${action.payload.base_name}`
+          .toUpperCase()
+          .replace("-", "");
       state.trade.available_quantity = action.payload?.available_quantity ?? 0;
       state.trade.entry_order = {
         trigger_price: 0,
         type: "BUY",
         order_type: "MARKET",
+        price_based: true,
       };
     },
     setFilter: (state, action: { payload: { filter: string } }) => {

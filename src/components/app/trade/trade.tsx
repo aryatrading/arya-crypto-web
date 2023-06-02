@@ -64,6 +64,15 @@ const Trade: FC = () => {
   };
 
   const onCreateTrade = async () => {
+    console.log(trade);
+    if (!trade.entry_order.price || trade.entry_order.price <= 0) {
+      return toast.info("Please add entry order price");
+    }
+
+    if (!trade.entry_order?.quantity || trade.entry_order?.quantity <= 0) {
+      return toast.info("Please add entry order quantity");
+    }
+
     setLoading(true);
 
     try {
