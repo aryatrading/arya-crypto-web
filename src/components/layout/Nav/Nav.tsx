@@ -236,7 +236,7 @@ const Nav = () => {
   }, [dispatch, hasNewNotifications, id, isNotificationActive, isNotificationsActive, isTabletOrMobileScreen, locale, notifications, push, t]);
 
   return (
-    <Col className="w-full bg-black-2 border-b border-gray-800 shadow-md  fixed lg:relative z-20">
+    <Col className="w-full bg-black-2 border-b border-gray-800 shadow-md  fixed lg:relative z-40">
       <Row className="container w-full py-3 justify-between">
         <Row className="xl:gap-20 md:gap-16 items-center">
           <Link href={"/home"}>

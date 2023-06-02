@@ -52,6 +52,8 @@ export const fetchAssets = async (search?: string, limit: number = 100) => {
         mrkCapYesterday: mrkCapYesterday,
         symbol: data[i].asset_data.symbol.toLowerCase(),
         isFavorite: i % 2 === 0,
+        change24H: data[i].asset_data.price_change_percentage_24h,
+        change7D: data[i].asset_data.price_change_percentage_7d_in_currency,
       });
     }
   }

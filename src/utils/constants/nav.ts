@@ -6,9 +6,9 @@ import { TradeDefault, TradeHover } from "../../components/svg/navbar/tradeIcon"
 export const navLinkData = [
     {
         title: 'portfolio',
-        route: '/home',
+        route: '/dashboard',
         Icon: HomeDefault,
-        Hover :HomeHover
+        Hover: HomeHover
     },
     {
         title: 'smartAllocation',
