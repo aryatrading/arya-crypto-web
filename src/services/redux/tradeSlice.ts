@@ -147,6 +147,11 @@ export const tradeSlice = createSlice({
       state.trade.take_profit = [];
       state.trade.trailing_stop_loss = [];
     },
+    clearOrder: (state) => {
+      state.trade.stop_loss = [];
+      state.trade.take_profit = [];
+      state.trade.trailing_stop_loss = [];
+    },
   },
 });
 
@@ -171,6 +176,7 @@ export const {
   setAssetPrice,
   addTrailing,
   removeTrailing,
+  clearOrder,
 } = tradeSlice.actions;
 
 export const getTrade = (state: AppState) => state.trade.trade;

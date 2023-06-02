@@ -15,6 +15,11 @@ import { useTranslation } from "next-i18next";
 import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
 import { toast } from "react-toastify";
 import { TrailingType } from "../../../types/trade";
+import {
+  cancelOpenOrder,
+  getAssetOpenOrders,
+} from "../../../services/controllers/trade";
+import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
 
 export const TrailingTrade: FC = () => {
   const { t } = useTranslation(["trade"]);
@@ -22,6 +27,7 @@ export const TrailingTrade: FC = () => {
   const trade = useSelector(getTrade);
   const _price = useSelector(getAssetPrice);
   const _assetprice = useSelector(selectAssetLivePrice);
+  const selectedExchange = useSelector(selectSelectedExchange);
 
   const [values, setValues] = useState({
     type: "Breakeven",
@@ -67,6 +73,22 @@ export const TrailingTrade: FC = () => {
     }
 
     return "---";
+  };
+
+  const onremovetrailing = async (order: any) => {
+    if (order?.order_id) {
+      await cancelOpenOrder(
+        order?.order_id,
+        selectedExchange?.provider_id ?? 1
+      );
+      await getAssetOpenOrders(
+        trade.symbol_name,
+        selectedExchange?.provider_id ?? 1
+      );
+      toast.success(`Open Order Closed`);
+    }
+
+    dispatch(removeTrailing());
   };
 
   return (
@@ -116,7 +138,7 @@ export const TrailingTrade: FC = () => {
             symbol={trade.asset_name}
             quantity="3"
             base="USD"
-            action={() => dispatch(removeTrailing())}
+            action={() => onremovetrailing(elm)}
           />
         );
       })}
