@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { clearTrade, getTrade } from "../../services/redux/tradeSlice";
 import {
   getAssetCurrentPrice,
+  getAssetOpenOrders,
   getHistoryOrders,
   initiateTrade,
 } from "../../services/controllers/trade";
@@ -39,6 +40,7 @@ const TradePage = () => {
     (async () => {
       setLoading(true);
       try {
+        dispatch(clearTrade());
         await initiateTrade(
           (symbol as string) ?? "BTC",
           selectedExchange?.provider_id ?? 1
@@ -55,10 +57,10 @@ const TradePage = () => {
   }, [symbol, selectedExchange, id]);
 
   useEffect(() => {
-    if (id != null) {
-      getHistoryOrders(trade.asset_name, selectedExchange?.provider_id ?? 1);
-    }
-  }, [trade.symbol_name, id]);
+    getAssetOpenOrders(trade.symbol_name, selectedExchange?.provider_id ?? 1);
+    getHistoryOrders(trade.asset_name, selectedExchange?.provider_id ?? 1);
+    getAssetCurrentPrice(trade.asset_name ?? "btc");
+  }, [trade.symbol_name]);
 
   return <Layout>{id != null ? <Trade /> : <TradingSalesPage />}</Layout>;
 };

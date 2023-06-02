@@ -47,6 +47,8 @@ export interface TradeValidations {
 }
 
 export interface TradeOrder {
+  id?: number;
+  provider_id?: number;
   status?: string;
   type?: string;
   amount?: number;

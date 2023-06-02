@@ -9,7 +9,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../shared/buttons/button";
 import { ProfitSet } from "../../shared/containers/trade/profit_set";
-import { getAssetAvailable } from "../../../services/controllers/trade";
+import {
+  cancelOpenOrder,
+  getAssetAvailable,
+  getAssetOpenOrders,
+} from "../../../services/controllers/trade";
 import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
 import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries";
 import { percentTabs } from "../../../utils/constants/profitsPercentage";
@@ -59,9 +63,21 @@ export const TakeprofitTrade: FC = () => {
     dispatch(addTakeProfit(values));
   };
 
-  const onremoveProfit = (_index: number) => {
+  const onremoveProfit = async (_index: number) => {
     let _new = trade.take_profit;
     _new = _new.filter((elm: any, index: number) => index !== _index);
+
+    if (_new[_index]?.order_id) {
+      await cancelOpenOrder(
+        _new[_index]?.order_id,
+        selectedExchange?.provider_id ?? 1
+      );
+      await getAssetOpenOrders(
+        trade.symbol_name,
+        selectedExchange?.provider_id ?? 1
+      );
+      toast.success(`Open Order Closed`);
+    }
 
     dispatch(setTakeProfit(_new));
   };

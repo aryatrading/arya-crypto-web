@@ -8,6 +8,7 @@ import { AssetPairSelector } from "../containers/trade/assetpairSelector";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  clearTrade,
   getFilter,
   getTrade,
   getTradedAssets,
@@ -38,6 +39,8 @@ export const AssetTradeDropdown: FC = () => {
 
   const assetSelect = async (asset: string) => {
     setSearchFilter("");
+    dispatch(clearTrade());
+
     const _symbol = asset.split(filter);
 
     dispatch(
