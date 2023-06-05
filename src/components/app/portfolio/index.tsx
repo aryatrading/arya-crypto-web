@@ -4,19 +4,23 @@ import { FC } from "react";
 import Dashboard from "../dashboard/dashboard";
 
 import { PortfolioSalesPage } from "../dashboard/salesPage";
+import PageLoader from "../../shared/pageLoader/pageLoader";
 
 const Portfolio: FC = () => {
 
     const authUser = useAuthUser();
 
-    if (authUser.id) {
-        return <Dashboard />
+    if (authUser.clientInitialized) {
+        if (!authUser.id) {
+            return (
+                <PortfolioSalesPage />
+            );
+        } else {
+            return <Dashboard />
+        }
     } else {
-        return (
-            <PortfolioSalesPage />
-        );
+        return <PageLoader />
     }
-
 }
 
 export default Portfolio;
