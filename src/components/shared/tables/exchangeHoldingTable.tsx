@@ -64,10 +64,10 @@ export const ExhangeHoldingTable: FC = () => {
                 </td>
                 <td className="font-medium leading-6 text-white flex flex-row mt-5">
                   <AssetPnl
-                    value={elm.pnl_percent}
+                    value={elm?.pnl?.percentage??0}
                   />
                   <AssetPnl
-                    value={elm.pnl_value ?? 0}
+                    value={elm?.pnl?.value ?? 0}
                   />
                 </td>
               </tr>

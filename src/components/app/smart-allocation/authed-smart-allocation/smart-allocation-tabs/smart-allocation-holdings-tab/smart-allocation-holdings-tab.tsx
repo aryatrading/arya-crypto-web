@@ -96,7 +96,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                             </td>
                             <td>
                                 <AssetPnl
-                                    value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
+                                    value={asset.pnl?.percent ?? 0}
                                 />
                             </td>
                             <td>{formatNumber(asset?.asset_details?.asset_data?.current_price ?? 0, true)}</td>

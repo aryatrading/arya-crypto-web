@@ -149,7 +149,7 @@ const Dashboard: FC = () => {
             onclick={onSeriesClick}
           />
         </Row>}
-        <LineChart primaryLineData={chartData} className={"h-[200px] md:h-[400px]"} tooltip={{
+        <LineChart primaryLineData={chartData} className={"h-[400px]"} tooltip={{
           show: true,
           title: t("portfolioValue"),
           showValue: true,
@@ -260,10 +260,10 @@ const Dashboard: FC = () => {
       )
     } else {
       return portfolioHoldings.map((asset, index) => {
-        const isPriceChangePositive = (asset?.asset_details?.price_change_percentage_24h ?? 0) > 0;
+        const isPriceChangePositive = (asset?.pnl?.percentage ?? 0) > 0;
         const signal = isPriceChangePositive ? '+' : '-';
 
-        const formattedChangePercentage = `${signal}${percentageFormat(Math.abs(asset?.asset_details?.price_change_percentage_24h ?? 0))}`;
+        const formattedChangePercentage = `${signal}${percentageFormat(Math.abs(asset?.pnl?.percentage ?? 0))}`;
         const formattedChangePrice = `${signal}$${formatNumber(Math.abs(asset?.asset_details?.price_change_24h ?? 0))}`;
 
         const assetPortfolioPercentage = asset.weight;
@@ -288,10 +288,15 @@ const Dashboard: FC = () => {
               </td>
               <td className="text-right">
                 <AssetPnl
-                  value={asset?.asset_details?.price_change_percentage_24h ?? 0}
+                  value={asset?.pnl?.percentage ?? 0}
+                  className={
+                    (asset?.pnl?.percentage ?? 0) <= 0
+                      ? "bg-red-2 text-red-1"
+                      : "bg-green-2 text-green-1"
+                  }
                 />
               </td>
-              <td className="text-right text-xs font-semibold">${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
+              <td className="text-right font-semibold">${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
             </tr>
           );
         } else {
@@ -316,15 +321,19 @@ const Dashboard: FC = () => {
                 </Row>
               </td>
               <td className="text-right">{formatNumber(asset.free ?? 0)} {asset.name}</td>
-              <td className="text-right font-semibold">${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
+              <td className="text-right">${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
               <td className="text-right">${formatNumber((asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0))}</td>
               <td className="text-right">
                 <Row className="items-center justify-end ">
                   <Row className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive }, "mr-4")}>{formattedChangePrice}</Row>
-
-                  <Row className={clsx({ "bg-green-2 text-green-1": isPriceChangePositive, "bg-red-2 text-red-1": !isPriceChangePositive }, "rounded-md py-1 px-2 font-semibold text-sm")}>
-                    {formattedChangePercentage}%
-                  </Row>
+                  <AssetPnl
+                    value={asset?.pnl?.percentage ?? 0}
+                    className={
+                      (asset?.pnl?.percentage ?? 0) <= 0
+                        ? "bg-red-2 text-red-1"
+                        : "bg-green-2 text-green-1"
+                    }
+                  />
                 </Row>
 
               </td>
