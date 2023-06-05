@@ -51,19 +51,19 @@ export const TakeprofitTrade: FC = () => {
 
   const onAddTp = () => {
     if (trade?.take_profit?.length >= 3) {
-      return toast.info("You can only set 3 TP's per asset");
+      return toast.info(t("tp3"));
     }
 
     if (values.quantity <= 0) {
-      return toast.info("Please add quantity amount");
+      return toast.info(t("addentrtyqty"));
     }
 
     if (values.value <= 0) {
-      return toast.info("Please add USDT amount");
+      return toast.info(t("usdtamountreq"));
     }
 
     if (!isPremium) {
-      return toast.info("This is a premium feature");
+      return toast.info(t("premium"));
     }
 
     dispatch(addTakeProfit(values));
@@ -82,7 +82,7 @@ export const TakeprofitTrade: FC = () => {
         trade.symbol_name,
         selectedExchange?.provider_id ?? 1
       );
-      toast.success(`Open Order Closed`);
+      toast.success(t("openorderclosed"));
     }
 
     dispatch(setTakeProfit(_new));

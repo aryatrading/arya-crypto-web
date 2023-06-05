@@ -15,9 +15,11 @@ import {
 import { selectSelectedExchange } from "../../services/redux/exchangeSlice";
 import { toast } from "react-toastify";
 import PageLoader from "../../components/shared/pageLoader/pageLoader";
+import { useTranslation } from "next-i18next";
 
 const TradePage = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation(["common"]);
   const selectedExchange = useSelector(selectSelectedExchange);
   const [loading, setLoading] = useState(false);
   const trade = useSelector(getTrade);
@@ -35,7 +37,7 @@ const TradePage = () => {
           selectedExchange?.provider_id ?? 1
         );
       } catch (error) {
-        toast.warn("Something went wrong, try again!");
+        toast.warn(t("somethingWentWrong"));
       } finally {
         setLoading(false);
       }

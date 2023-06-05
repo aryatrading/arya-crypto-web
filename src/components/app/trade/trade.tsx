@@ -66,18 +66,18 @@ const Trade: FC = () => {
   const onCreateTrade = async () => {
     console.log(trade);
     if (!trade.entry_order.price || trade.entry_order.price <= 0) {
-      return toast.info("Please add entry order price");
+      return toast.info(t("addentryerror"));
     }
 
     if (!trade.entry_order?.quantity || trade.entry_order?.quantity <= 0) {
-      return toast.info("Please add entry order quantity");
+      return toast.info(t("addentrtyqty"));
     }
 
     setLoading(true);
 
     try {
       await createTrade(trade, selectedExchange?.provider_id ?? 1);
-      toast.success(`${trade.symbol_name} trade created`);
+      toast.success(`${trade.symbol_name} ${t("tradecreated")}`);
 
       dispatch(clearTrade());
 
@@ -87,7 +87,7 @@ const Trade: FC = () => {
         trade.base_name
       );
     } catch (error) {
-      toast.error(`Error creating ${trade.symbol_name}: ${error}`);
+      toast.error(`${t("errorcreating")} ${trade.symbol_name}: ${error}`);
     } finally {
       setLoading(false);
     }
