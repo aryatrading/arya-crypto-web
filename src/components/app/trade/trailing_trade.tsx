@@ -39,15 +39,15 @@ export const TrailingTrade: FC = () => {
 
   const onAddTrailing = () => {
     if (values.price <= 0) {
-      return toast.info("Please set price for this trade");
+      return toast.info(t("addentryerror"));
     }
 
     if (values.value <= 0) {
-      return toast.info("Please set value for this trade");
+      return toast.info(t("addentrtyqty"));
     }
 
     if (!isPremium) {
-      return toast.info("This is a premium feature");
+      return toast.info(t("premium"));
     }
 
     let _trailing: TrailingType = {
@@ -91,7 +91,7 @@ export const TrailingTrade: FC = () => {
         trade.symbol_name,
         selectedExchange?.provider_id ?? 1
       );
-      toast.success(`Open Order Closed`);
+      toast.success(t("openorderclosed"));
     }
 
     dispatch(removeTrailing());

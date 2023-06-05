@@ -42,7 +42,7 @@ export const StoplossTrade: FC = () => {
         trade.symbol_name,
         selectedExchange?.provider_id ?? 1
       );
-      toast.success(`Open Order Closed`);
+      toast.success(t("openorderclosed"));
     }
     dispatch(removeStoploss());
   };
@@ -52,7 +52,7 @@ export const StoplossTrade: FC = () => {
       {isPremium ? null : <PremiumBanner />}
       <p className="font-bold text-base">{t("addstoploss")}</p>
       <TradeInput
-        title="Price"
+        title={t("price")}
         value={trade.base_name ?? "USDT"}
         amount={slValue}
         onchange={(e: string) => setSlValue(e)}
@@ -62,11 +62,11 @@ export const StoplossTrade: FC = () => {
         className="bg-blue-3 rounded-md py-3"
         onClick={() => {
           if (slValue <= 0) {
-            return toast.info("Please add USDT amount");
+            return toast.info(t("usdtamountreq"));
           }
 
           if (!isPremium) {
-            return toast.info("This is a premium feature");
+            return toast.info(t("premium"));
           }
 
           dispatch(addStoploss({ value: slValue }));

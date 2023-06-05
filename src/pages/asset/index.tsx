@@ -15,8 +15,10 @@ import { clearSwap } from "../../services/redux/swapSlice";
 import { getPosts } from "../../services/firebase/community/posts";
 import PageLoader from "../../components/shared/pageLoader/pageLoader";
 import { toast } from "react-toastify";
+import { useTranslation } from "next-i18next";
 
 const AssetPage = () => {
+  const { t } = useTranslation(["common"]);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +33,7 @@ const AssetPage = () => {
         await getAssetTimeseriesPrice(symbol ?? "btc", "5min", 288);
         await getPosts({ searchTerm: symbol?.toString() ?? "btc" });
       } catch (error) {
-        toast.warn("Something went wrong, try again!");
+        toast.warn(t("somethingWentWrong"));
       } finally {
         setLoading(false);
       }
