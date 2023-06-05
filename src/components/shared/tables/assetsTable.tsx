@@ -18,6 +18,7 @@ import {
   addAssetToWatchlist,
   removeAssetFromWatchlist,
 } from "../../../services/controllers/market";
+import axios from "axios";
 
 type AssetsTableProps = {
   assets: AssetType[];
@@ -41,7 +42,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
     t("name") ?? "",
     t("pnl") ?? "",
     t("currentprice") ?? "",
-    t("priceinbtc") ?? "",
+    // t("priceinbtc") ?? "",
     t("marketcap") ?? "",
     t("volume") ?? "",
     "",
@@ -64,7 +65,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
         t("name") ?? "",
         t("pnl") ?? "",
         t("currentprice") ?? "",
-        t("priceinbtc") ?? "",
+        // t("priceinbtc") ?? "",
         t("marketcap") ?? "",
         t("volume") ?? "",
         "",
@@ -135,6 +136,9 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
         {assets.length ? (
           <tbody>
             {assets.map((elm, index) => {
+              {
+                console.log(elm);
+              }
               return (
                 <tr
                   key={index}
@@ -178,12 +182,9 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
 
                   {!isTabletOrMobileScreen ? (
                     <>
-                      <td className="font-medium leading-6 text-white text-right">
-                        {!!_assetprice &&
-                          (
-                            _assetprice[elm.symbol ?? ""] / _assetprice["btc"]
-                          ).toFixed(7)}
-                      </td>
+                      {/* <td className="font-medium leading-6 text-white text-right">
+                        {elm.currentPrice ?? 0 / _assetprice["btc"]}
+                      </td> */}
                       <td className="font-medium leading-6 text-white text-right">
                         {formatNumber(elm.mrkCap ?? 0, true)}
                       </td>

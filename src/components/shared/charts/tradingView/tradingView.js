@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 
 let tvScriptLoadingPromise;
 
-export default function TradingViewWidget(height) {
+export default function TradingViewWidget({ height, asset }) {
 
   const onLoadScriptRef = useRef();
   const { i18n } = useTranslation();

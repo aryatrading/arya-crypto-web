@@ -45,7 +45,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
   const { posts } = useSelector(({ posts }: any) => posts);
   const [activeSeries, setActiveSeries] = useState("24H");
   const [view, setView] = useState("price");
-
+  console.log(asset);
   const assetGraphToggles = useMemo(() => {
     return [
       {
@@ -96,7 +96,10 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
           {view === "price" ? (
             <LineChart primaryLineData={timeseries} className="w-full h-80" />
           ) : (
-            <TradingViewWidget />
+            <TradingViewWidget
+              asset={`${asset.symbol?.toUpperCase()}USDT`}
+              height={500}
+            />
           )}
 
           <Row className="gap-3 md:hidden justify-between ">
