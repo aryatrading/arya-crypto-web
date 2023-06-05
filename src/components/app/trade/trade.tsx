@@ -64,7 +64,6 @@ const Trade: FC = () => {
   };
 
   const onCreateTrade = async () => {
-    console.log(trade);
     if (!trade.entry_order.price || trade.entry_order.price <= 0) {
       return toast.info(t("addentryerror"));
     }
@@ -141,6 +140,15 @@ const Trade: FC = () => {
     );
   };
 
+  const renderTradingView = useMemo(() => {
+    return (
+      <TradingViewWidget
+        height={500}
+        asset={`${trade.asset_name?.toUpperCase()}USDT`}
+      />
+    );
+  }, [trade.asset_name]);
+
   return (
     <Col className="flex justify-start w-full gap-6">
       <ExchangeSwitcher hideExchangeStats={true} canSelectOverall={false} />
@@ -148,7 +156,11 @@ const Trade: FC = () => {
 
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="lg:w-2/3 flex-none">
-          <TradingViewWidget height={500} />
+          {renderTradingView}
+          {/* <TradingViewWidget
+            height={500}
+            asset={`${trade.asset_name?.toUpperCase()}USDT`}
+          /> */}
         </div>
 
         <div className="w-full">
