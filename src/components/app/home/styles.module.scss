@@ -1,0 +1,25 @@
+.content {
+    max-height: 15px;
+    transition: all 200ms;
+    padding-top: 15px;
+    overflow: hidden;
+}
+
+.contentExpanded {
+    transition: all 500ms;
+    max-height: 240px;
+    padding-bottom: 10px;
+    padding-top: 10px
+}
+
+.actionBtn {
+    background: transparent linear-gradient(90deg, #668EF1 0%, #3C5EB1 100%) 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+    height: 44px;
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+.actionBtn:hover {
+    box-shadow: 0px 0px 22px #84ADFF;
+}

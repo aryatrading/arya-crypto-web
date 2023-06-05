@@ -1,19 +1,20 @@
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { withAuthUser } from 'next-firebase-auth'
 import { GetStaticProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
+import Portrolio from '../../components/app/portfolio';
 import Layout from '../../components/layout/layout'
-import CoinConverter from '../../components/shared/coinConverter';
 
-const CoinProfitCalculator = () => {
-
+const PortrolioPage = () => {
     return (
         <Layout>
-            <CoinConverter />
+            <Portrolio />
         </Layout>
     )
 }
 
-export default CoinProfitCalculator;
+export default withAuthUser({
+})(PortrolioPage)
 
 
 export const getStaticProps: GetStaticProps<any> = async ({

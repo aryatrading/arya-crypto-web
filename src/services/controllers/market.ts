@@ -1,3 +1,4 @@
+import axios from "axios";
 import { GraphDataRange } from "../../components/shared/charts/graph/graph.type";
 import { AssetType } from "../../types/asset";
 import { axiosInstance } from "../api/axiosConfig";
@@ -36,6 +37,8 @@ export const fetchAssets = async (search?: string, limit: number = 100) => {
 
   if (data.length) {
     for (var i = 0; i < data.length; i++) {
+      const mrkCapYesterday = parseFloat(data[i].asset_data.market_cap) + parseFloat(data[i].asset_data.market_cap_change_24h);
+
       _assets.push({
         id: data[i]?.id ?? 0,
         name: data[i].asset_data.name,
@@ -46,8 +49,11 @@ export const fetchAssets = async (search?: string, limit: number = 100) => {
         volume: data[i].asset_data.total_volume,
         iconUrl: data[i].asset_data.image,
         mrkCap: data[i].asset_data.market_cap,
+        mrkCapYesterday: mrkCapYesterday,
         symbol: data[i].asset_data.symbol.toLowerCase(),
         isFavorite: i % 2 === 0,
+        change24H: data[i].asset_data.price_change_percentage_24h,
+        change7D: data[i].asset_data.price_change_percentage_7d_in_currency,
       });
     }
   }
@@ -90,3 +96,10 @@ export const getAddableProviders = async () => {
 };
 
 
+export const getMarketCap = () => {
+  return axios.get('https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest', {
+    headers: {
+      "X-CMC_PRO_API_KEY": "3db8856e-c0d6-49c2-8ca2-9b2f33a70fd1"
+    }
+  });
+};

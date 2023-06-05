@@ -56,7 +56,6 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
         t("name") ?? "",
 
         t("currentprice") ?? "",
-        "",
       ]);
     } else {
       setheader([
@@ -70,7 +69,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
         "",
       ]);
     }
-  }, [isTabletOrMobileScreen, isMobileScreen]);
+  }, [isTabletOrMobileScreen, isMobileScreen, t]);
 
   const renderFavoritesSvg = (asset: AssetType) => {
     let _list = localStorage.getItem(FAVORITES_LIST);
@@ -142,7 +141,8 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
                       icon={elm.iconUrl ?? ""}
                       name={elm.name ?? ""}
                       symbol={elm.symbol ?? ""}
-                      className="font-medium"
+                      className={`font-medium ${index === 0 ? 'pt-2' : 'pt-0'}`}
+                      showIcon
                     />
                   </td>
                   <td className="text-right">
@@ -151,20 +151,19 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
                         value={elm.pnl}
                         className={
                           elm.pnl <= 0
-                            ? "bg-red-2 text-red-1"
-                            : "bg-green-2 text-green-1"
+                            ? "bg-red-2 text-red-1 px-2"
+                            : "bg-green-2 text-green-1 px-2"
                         }
                       />
                     </Row>
                   </td>
-                  {!isTabletOrMobileScreen && !isMobileScreen ? (
-                    <td className="font-medium leading-6 text-white text-right font-semibold">
-                      {formatNumber(
-                        _assetprice[elm.symbol ?? ""] ?? elm.currentPrice,
-                        true
-                      )}
-                    </td>
-                  ) : null}
+
+                  <td className="leading-6 text-white text-right font-semibold text-xs md:text-base">
+                    {formatNumber(
+                      _assetprice[elm.symbol ?? ""] ?? elm.currentPrice,
+                      true
+                    )}
+                  </td>
 
                   {!isTabletOrMobileScreen ? (
                     <>
@@ -185,7 +184,10 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
 
                   <td
                     className="font-medium  text-white text-right"
-                    onClick={() => handleFavoritesToggle(elm)}
+                    onClick={(e) => {
+                      handleFavoritesToggle(elm);
+                      e.stopPropagation();
+                    }}
                   >
                     <Row className="justify-end">
                       <StarIcon className={renderFavoritesSvg(elm)} />

@@ -5,49 +5,48 @@ import { Row } from "../../layout/flex";
 import { twMerge } from "tailwind-merge";
 import { percentageFormat } from "../../../../utils/helpers/prices";
 
-interface  IAssetPnlProps  {
+interface IAssetPnlProps {
   value: number;
-  className?:string;
-  transform?:Function;
+  className?: string;
+  transform?: Function;
 };
 
 
-const AssetPnl: FC<IAssetPnlProps> = ({ value, className, transform}) => {
-  const [isProfit, setIsProfit] = useState<boolean|null>(false)
+const AssetPnl: FC<IAssetPnlProps> = ({ value, className, transform }) => {
+  const [isProfit, setIsProfit] = useState<boolean | null>(false)
 
   useEffect(() => {
 
-    if(value>0){
+    if (value > 0) {
       setIsProfit(true)
-    }else if(value<0){
+    } else if (value < 0) {
       setIsProfit(false)
     }
-    else{
+    else {
       setIsProfit(null)
     }
   }, [value])
 
   const handleValue = useCallback(
     () => {
-      if(value!==null&&value!==undefined){
-        return <p className={`text-sm font-semibold:''}`}>
-        {transform?transform(value??0):`${isProfit?'+':''}${percentageFormat(value)}%`}
-      </p>
+      if (value !== null && value !== undefined) {
+        return <p className={`text-xs md:text-sm font-semibold:''}`}>
+          {transform ? transform(value ?? 0) : `${isProfit ? '+' : ''}${percentageFormat(value)}%`}
+        </p>
       }
-      else{
-        return <span className="text-sm font-semibold text-grey-1">N/A</span>
+      else {
+        return <span className="text-xs md:text-sm font-semibold text-grey-1">N/A</span>
       }
     },
     [isProfit, transform, value],
   )
-  
+
   return (
-    <Row className={twMerge(`py-1 px-2 rounded-md text-sm font-semibold justify-center items-center gap-1`,className)}>
+    <Row className={twMerge(`py-1 px-2 rounded-md text-xs md:text-sm font-semibold justify-center items-center gap-1`, className)}>
       {(isProfit !== null) && (
         <PlayIcon
-          className={`w-3 h-3 ${
-            isProfit ? "fill-green-1 -rotate-90" : "fill-red-1 rotate-90"
-          } stroke-0`}
+          className={`w-3 h-3 ${isProfit ? "fill-green-1 -rotate-90" : "fill-red-1 rotate-90"
+            } stroke-0`}
         />
       )}
       {handleValue()}
