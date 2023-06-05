@@ -18,11 +18,13 @@ import {
   getAssetOpenOrders,
 } from "../../../services/controllers/trade";
 import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
+import { isPremiumUser } from "../../../services/redux/userSlice";
 
 export const StoplossTrade: FC = () => {
   const trade = useSelector(getTrade);
   const { t } = useTranslation(["trade"]);
   const _price = useSelector(getAssetPrice);
+  const isPremium = useSelector(isPremiumUser);
   const dispatch = useDispatch();
   const _assetprice = useSelector(selectAssetLivePrice);
   const selectedExchange = useSelector(selectSelectedExchange);
@@ -47,7 +49,7 @@ export const StoplossTrade: FC = () => {
 
   return (
     <>
-      <PremiumBanner />
+      {isPremium ? null : <PremiumBanner />}
       <p className="font-bold text-base">{t("addstoploss")}</p>
       <TradeInput
         title="Price"
@@ -62,6 +64,11 @@ export const StoplossTrade: FC = () => {
           if (slValue <= 0) {
             return toast.info("Please add USDT amount");
           }
+
+          if (!isPremium) {
+            return toast.info("This is a premium feature");
+          }
+
           dispatch(addStoploss({ value: slValue }));
         }}
       >

@@ -21,12 +21,14 @@ import { PremiumBanner } from "../../shared/containers/premiumBanner";
 import { useTranslation } from "next-i18next";
 import { toast } from "react-toastify";
 import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
+import { isPremiumUser } from "../../../services/redux/userSlice";
 
 export const TakeprofitTrade: FC = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation(["trade"]);
   const trade = useSelector(getTrade);
   const _price = useSelector(getAssetPrice);
+  const isPremium = useSelector(isPremiumUser);
   const _assetprice = useSelector(selectAssetLivePrice);
   const selectedExchange = useSelector(selectSelectedExchange);
   const [values, setValues] = useState({
@@ -60,6 +62,10 @@ export const TakeprofitTrade: FC = () => {
       return toast.info("Please add USDT amount");
     }
 
+    if (!isPremium) {
+      return toast.info("This is a premium feature");
+    }
+
     dispatch(addTakeProfit(values));
   };
 
@@ -84,7 +90,7 @@ export const TakeprofitTrade: FC = () => {
 
   return (
     <>
-      <PremiumBanner />
+      {isPremium ? null : <PremiumBanner />}
       <p className="font-bold text-base">{t("addtakeprofit")}</p>
       <TradeInput
         title={t("price")}

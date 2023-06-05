@@ -37,7 +37,9 @@ export const fetchAssets = async (search?: string, limit: number = 100) => {
 
   if (data.length) {
     for (var i = 0; i < data.length; i++) {
-      const mrkCapYesterday = parseFloat(data[i].asset_data.market_cap) + parseFloat(data[i].asset_data.market_cap_change_24h);
+      const mrkCapYesterday =
+        parseFloat(data[i].asset_data.market_cap) +
+        parseFloat(data[i].asset_data.market_cap_change_24h);
 
       _assets.push({
         id: data[i]?.id ?? 0,
@@ -63,7 +65,10 @@ export const fetchAssets = async (search?: string, limit: number = 100) => {
   return _assets;
 };
 
-export const getPortfolioSnapshots = async (providerId?: number | null, range?: GraphDataRange) => {
+export const getPortfolioSnapshots = async (
+  providerId?: number | null,
+  range?: GraphDataRange
+) => {
   return await axiosInstance.get(`/trade-engine/portfolio-snapshots/`, {
     params: { provider: providerId, range },
   });
@@ -80,26 +85,40 @@ export const getConnectedProviders = async () => {
 };
 
 export const getAddableProviders = async () => {
-  axiosInstance.get(`/general/providers`).then(response => {
+  axiosInstance.get(`/general/providers`).then((response) => {
     if (response.data.length) {
       const arr: any[] = [];
-      const connectedExchanges = store?.getState()?.exchange?.data?.connectedExchanges;
+      const connectedExchanges =
+        store?.getState()?.exchange?.data?.connectedExchanges;
       response.data.map((e: any) => {
         return arr.push({
           ...e,
-          isConnected: connectedExchanges.filter((exchange: any) => exchange.provider_id === e.id).length > 0,
-        })
+          isConnected:
+            connectedExchanges.filter(
+              (exchange: any) => exchange.provider_id === e.id
+            ).length > 0,
+        });
       });
       store?.dispatch(setAllProviders(arr));
     }
   });
 };
 
-
 export const getMarketCap = () => {
-  return axios.get('https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest', {
-    headers: {
-      "X-CMC_PRO_API_KEY": "3db8856e-c0d6-49c2-8ca2-9b2f33a70fd1"
+  return axios.get(
+    "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest",
+    {
+      headers: {
+        "X-CMC_PRO_API_KEY": "3db8856e-c0d6-49c2-8ca2-9b2f33a70fd1",
+      },
     }
-  });
+  );
+};
+
+export const addAssetToWatchlist = async (asset_id: number) => {
+  return await axiosInstance.post("/watchlist/assetpair/", { asset_id });
+};
+
+export const removeAssetFromWatchlist = async (asset_id: number) => {
+  return await axiosInstance.delete(`/watchlist/assetpair/${asset_id}`);
 };
