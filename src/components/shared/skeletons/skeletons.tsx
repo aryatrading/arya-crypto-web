@@ -3,12 +3,12 @@ import Skeleton from 'react-loading-skeleton';
 
 
 export const TextSkeleton: FC<{ widthClassName?: string, heightClassName?: string }> = ({ widthClassName = "w-2/3", heightClassName = "h-10" }) => {
-    return <Skeleton className={`w-full ${heightClassName}`} containerClassName={`${widthClassName} ${heightClassName}`} />
+    return <Skeleton baseColor="#111827" className={`w-full ${heightClassName}`} containerClassName={`${widthClassName} ${heightClassName}`} />
 }
 
 
 export const DoughnutSkeleton: FC<{ widthClassName?: string }> = ({ widthClassName = "w-full", }) => {
-    return <Skeleton circle={true} className={`w-full aspect-square`} containerClassName={`${widthClassName} aspect-square`} />
+    return <Skeleton baseColor="#111827" circle={true} className={`w-full aspect-square`} containerClassName={`${widthClassName} aspect-square`} />
 }
 
 
