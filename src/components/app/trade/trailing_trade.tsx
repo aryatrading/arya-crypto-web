@@ -20,10 +20,12 @@ import {
   getAssetOpenOrders,
 } from "../../../services/controllers/trade";
 import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
+import { isPremiumUser } from "../../../services/redux/userSlice";
 
 export const TrailingTrade: FC = () => {
   const { t } = useTranslation(["trade"]);
   const dispatch = useDispatch();
+  const isPremium = useSelector(isPremiumUser);
   const trade = useSelector(getTrade);
   const _price = useSelector(getAssetPrice);
   const _assetprice = useSelector(selectAssetLivePrice);
@@ -42,6 +44,10 @@ export const TrailingTrade: FC = () => {
 
     if (values.value <= 0) {
       return toast.info("Please set value for this trade");
+    }
+
+    if (!isPremium) {
+      return toast.info("This is a premium feature");
     }
 
     let _trailing: TrailingType = {
@@ -93,7 +99,7 @@ export const TrailingTrade: FC = () => {
 
   return (
     <>
-      <PremiumBanner />
+      {isPremium ? null : <PremiumBanner />}
       <p className="font-bold text-base">{t("addtrailing")}</p>
       <TrailingPicker
         type={values.type}

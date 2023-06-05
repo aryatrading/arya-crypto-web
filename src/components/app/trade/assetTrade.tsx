@@ -44,7 +44,7 @@ const AssetTrade: FC = () => {
     if (!from.symbol || !from.quantity) return toast.warn(t("select_base"));
 
     setLoading(true);
-    const paylaod: SwapTradeType = {
+    const payload: SwapTradeType = {
       symbol_name: `${to.symbol}${from.symbol}`,
       asset_name: to.symbol,
       base_name: from.symbol,
@@ -58,7 +58,13 @@ const AssetTrade: FC = () => {
       },
     };
 
-    await createSwapTrade(paylaod, provider)
+    if (payload.entry_order.type === "SELL") {
+      (payload.symbol_name = `${from.symbol}${to.symbol}`),
+        (payload.asset_name = from.symbol);
+      payload.base_name = to.symbol;
+    }
+
+    await createSwapTrade(payload, provider)
       .then(async () => {
         await getAssetDetails(symbol);
         dispatch(clearSwap());

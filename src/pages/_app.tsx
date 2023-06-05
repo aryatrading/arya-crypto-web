@@ -10,10 +10,10 @@ import { getRemoteConfig, fetchAndActivate } from "firebase/remote-config";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
-import { SkeletonTheme } from 'react-loading-skeleton';
+import { SkeletonTheme } from "react-loading-skeleton";
 
 import "react-toastify/dist/ReactToastify.css";
-import 'react-loading-skeleton/dist/skeleton.css'
+import "react-loading-skeleton/dist/skeleton.css";
 
 import AuthModalProvider from "../context/authModal.context";
 import { firebaseConfig } from "../services/firebase/auth/config";
@@ -28,6 +28,7 @@ import ResponsiveProvider from "../context/responsive.context";
 import { getUserLanguage } from "../services/controllers/utils";
 import { getNotifications } from "../services/controllers/notifications";
 import PushNotificationLayout from "../components/layout/Notifications";
+import { getUserData } from "../services/controllers/user";
 
 const poppins = Poppins({
   variable: "--poppins-font",
@@ -50,38 +51,40 @@ try {
   const remoteConfig = getRemoteConfig(getApp());
   remoteConfig.settings.minimumFetchIntervalMillis = 1000;
   fetchAndActivate(remoteConfig);
-
 } catch (err) {
   console.log({ err });
   console.error(err);
 }
 
-
 function App({ Component, ...rest }: AppPropsWithLayout) {
   const { pathname, push, asPath, query } = useRouter();
   useEffect(() => {
-    const localStorageToken = localStorage?.getItem("idToken");
-    const lang = window.localStorage.getItem('language');
-    if (lang == null) {
-      getUserLanguage().then(({ data }) => {
-        push({ pathname, query }, asPath, { locale: data.language })
-      });
-    } else {
-      push({ pathname, query }, asPath, { locale: lang })
-    }
+    (async () => {
+      const localStorageToken = localStorage?.getItem("idToken");
+      const lang = window.localStorage.getItem("language");
+      if (lang == null) {
+        getUserLanguage().then(({ data }) => {
+          push({ pathname, query }, asPath, { locale: data.language });
+        });
+      } else {
+        push({ pathname, query }, asPath, { locale: lang });
+      }
 
-    getNotifications(0, 10, 'desc');
+      getNotifications(0, 100, "desc");
 
-    // Create the inital favorites list in localstorage
-    localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
+      // Create the inital favorites list in localstorage
+      localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
 
-    // Forcing dark mode
-    localStorage?.setItem('theme', 'dark');
-    if (localStorageToken) {
-      axiosInstance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${localStorageToken}`;
-    }
+      // Forcing dark mode
+      localStorage?.setItem("theme", "dark");
+      if (localStorageToken) {
+        axiosInstance.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${localStorageToken}`;
+
+        await getUserData();
+      }
+    })();
   }, []);
 
   // Use the layout defined at the page level, if available
