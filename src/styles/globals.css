@@ -57,8 +57,7 @@ body {
 }
 
 .dialog-overlay {
-  @apply bg-slate-950 fixed inset-0 z-10 opacity-30;
-  background: #FFFFFF66;
+  @apply bg-white fixed inset-0 z-10 opacity-30;
 }
 
 .dialog-title {

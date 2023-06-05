@@ -1,4 +1,5 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react"
+import * as Slider from '@radix-ui/react-slider'
 import { useTranslation } from "next-i18next"
 import { useSelector } from "react-redux"
 import { useRouter } from "next/router"
@@ -29,7 +30,6 @@ import { Col, Row } from "../../../shared/layout/flex"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../../../shared/buttons/button"
 import { AssetType } from "../../../../types/asset"
-import * as Slider from '@radix-ui/react-slider'
 
 
 const EditSmartAllocation: FC = () => {

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   getTrade,
   setOrderType,
+  setPrice,
   setQuantity,
   setSide,
   setTriggerPrice,
@@ -93,9 +94,19 @@ export const EntryTrade: FC = () => {
         title={t("units")}
         value={trade.asset_name}
         amount={trade?.entry_order?.quantity}
-        onchange={(e: string) =>
-          dispatch(setQuantity({ quantity: parseInt(e) }))
-        }
+        onchange={(e: any) => {
+          dispatch(
+            setPrice({
+              price: parseInt(e),
+            })
+          );
+          dispatch(
+            setQuantity({
+              quantity:
+                _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ?? 0 * e,
+            })
+          );
+        }}
       />
       <div className="flex justify-center">
         <TimeseriesPicker
@@ -103,6 +114,16 @@ export const EntryTrade: FC = () => {
           active={percent}
           onclick={(e: any) => {
             setPercent(e.key);
+            dispatch(
+              setPrice({
+                price: parseInt(
+                  formatNumber(
+                    _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] /
+                      e.key
+                  )
+                ),
+              })
+            );
             dispatch(
               setQuantity({ quantity: trade.available_quantity / e.key })
             );
@@ -113,7 +134,15 @@ export const EntryTrade: FC = () => {
         title={t("total")}
         value={trade.base_name}
         amount={trade?.entry_order?.price ?? 10}
-        onchange={(e: string) => console.log(e)}
+        onchange={(e: any) => {
+          dispatch(setPrice({ price: parseInt(e) }));
+          dispatch(
+            setQuantity({
+              quantity:
+                e / _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ?? 0,
+            })
+          );
+        }}
       />
     </>
   );

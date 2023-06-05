@@ -14,6 +14,7 @@ interface initialStateType {
   tradeableAsset?: string[];
   tradeFilter: string;
   openOrders?: TradeOrder[];
+  historyOrders?: TradeOrder[];
 }
 
 const initialState: initialStateType = {
@@ -29,6 +30,7 @@ const initialState: initialStateType = {
   tradeableAsset: [],
   tradeFilter: "USDT",
   openOrders: [],
+  historyOrders: [],
 };
 
 export const tradeSlice = createSlice({
@@ -70,6 +72,13 @@ export const tradeSlice = createSlice({
         quantity: action.payload.quantity,
       };
     },
+    setPrice: (state, action: { payload: { price: number } }) => {
+      state.trade.entry_order = {
+        ...state.trade.entry_order,
+        price: action.payload.price,
+        price_based: true,
+      };
+    },
     setValidations: (state, action: { payload: TradeValidations }) => {
       state.validations = action.payload;
       state.trade.entry_order = {
@@ -106,6 +115,12 @@ export const tradeSlice = createSlice({
     setOpenOrders: (state, action: { payload: { orders: TradeOrder[] } }) => {
       state.openOrders = action.payload.orders;
     },
+    setHistoryOrders: (
+      state,
+      action: { payload: { orders: TradeOrder[] } }
+    ) => {
+      state.historyOrders = action.payload.orders;
+    },
     clearTrade: (state) => {
       state.trade.symbol_name = "BTCUSDT";
       state.trade.asset_name = "BTC";
@@ -113,6 +128,7 @@ export const tradeSlice = createSlice({
       state.trade.available_quantity = 0;
       state.openOrders = [];
       state.validations = {};
+      state.historyOrders = [];
     },
   },
 });
@@ -133,6 +149,8 @@ export const {
   setTriggerPrice,
   setQuantity,
   setOpenOrders,
+  setPrice,
+  setHistoryOrders,
 } = tradeSlice.actions;
 
 export const getTrade = (state: AppState) => state.trade.trade;
@@ -142,5 +160,6 @@ export const getPairs = (state: AppState) => state.trade.pairs;
 export const getFilter = (state: AppState) => state.trade.tradeFilter;
 export const getTradedAssets = (state: AppState) => state.trade.tradeableAsset;
 export const getOpenOrders = (state: AppState) => state.trade.openOrders;
+export const getHistoryOrders = (state: AppState) => state.trade.historyOrders;
 
 export default tradeSlice.reducer;

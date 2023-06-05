@@ -128,7 +128,7 @@ const Nav = () => {
       {
         navLinkData.map((navLink) => <NavLink
           key={navLink.title}
-          active={pathname === navLink.route || (pathname === '/' && navLink.title.includes('portfolio'))}
+          active={pathname === navLink.route}
           href={navLink.route}
           navTitle={navLink.title}
           NavIcon={
@@ -145,7 +145,7 @@ const Nav = () => {
     saveUserLanguage(lang);
     window.localStorage.setItem('language', lang);
 
-    getNotifications(0, 100, 'asc');
+    getNotifications(0, 100, 'desc');
   }, [asPath, pathname, push, query])
 
   const changeLanguageView = useCallback((hide: boolean) => {
@@ -217,7 +217,7 @@ const Nav = () => {
                     <p className="font-bold text-lg text-grey-1">{t('notification:emptyList')}</p>
                   </Col>
                   :
-                  notifications.map((notification: NotificationType) => {
+                  notifications.slice(0, 5).map((notification: NotificationType) => {
                     return (
                       <NotificationCard key={notification.id} notification={notification} type="dropdown" />
                     );
@@ -236,7 +236,7 @@ const Nav = () => {
   }, [dispatch, hasNewNotifications, id, isNotificationActive, isNotificationsActive, isTabletOrMobileScreen, locale, notifications, push, t]);
 
   return (
-    <Col className="w-full bg-black-2 border-b border-gray-800 shadow-md  fixed lg:relative z-20">
+    <Col className="w-full bg-black-2 border-b border-gray-800 shadow-md  fixed lg:relative z-40">
       <Row className="container w-full py-3 justify-between">
         <Row className="xl:gap-20 md:gap-16 items-center">
           <Link href={"/home"}>
