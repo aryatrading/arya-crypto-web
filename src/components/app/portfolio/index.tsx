@@ -96,7 +96,7 @@ const Portfolio: FC = () => {
                     <p className="font-medium text-white text-center max-w-[50%]">ARYA Crypto is equipped with top-quality infrastructure designed to ensure maximum protection of assets at all times. Since we ask for read-only access only, your holdings are perfectly safe under all conditions.</p>
 
                     <div className="items-center justify-center gap-8 flex mt-10 flex-col md:flex-row">
-                        <Col className="p-8 items-center justify-center border border-blue-1 rounded-lg gap-4 flex-1 hover:bg-gradient-to-bl hover:from-blue-1">
+                        <Col className="p-8 items-center justify-center border border-blue-1 rounded-lg gap-4 flex-1 hover:bg-gradient-to-bl hover:from-blue-1 text-center">
                             <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/4.png')} className="w-14 h-14" />
                             <h3 className="font-extrabold text-xl text-white">Military-grade Encryption</h3>
                             <h3 className="text-sm text-white">We use the most advanced military-grade encryption to securely transfer and store data.</h3>
