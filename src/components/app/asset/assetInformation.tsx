@@ -151,7 +151,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
           {posts.length > 0 && (
             <Col className="w-full min-h-[300px] bg-grey-6 rounded-md px-6 py-3">
               {posts?.slice(0, 2)?.map((post: PostTypes) => {
-                return <Post post={post} />;
+                return <Post post={post} key={post._id} />;
               })}
 
               <a

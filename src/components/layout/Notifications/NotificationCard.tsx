@@ -35,10 +35,10 @@ function NotificationCard({ notification, type, isLastItem }: any) {
                     {notificationIcon(notification.notification_type || '', notification.provider_id)}
                 </Col>
                 <Button className="mb-2 focus:outline-none focus:ring-0 focus:border-0 w-full" disabled>
-                    <Col className="gap-1">
-                        <Row className="justify-between items-center">
-                            <p className={clsx(titleColor(notification.notification_type), "text-base font-medium")}>{notification.title}</p>
-                            <p className="text-sm text-grey-1 font-medium">{moment(new Date(notification.created_time || '')).fromNow()}</p>
+                    <Col className="gap-2 md:gap-1">
+                        <Row className="justify-between">
+                            <p className={clsx(titleColor(notification.notification_type), "text-base font-medium text-left")}>{notification.title}</p>
+                            <p className="text-sm text-grey-1 font-medium min-w-[80px]">{moment(new Date(notification.created_time || '')).fromNow()}</p>
                         </Row>
                         <p className="text-sm text-white font-medium text-start">{notification.body}</p>
                     </Col>

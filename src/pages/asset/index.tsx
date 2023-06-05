@@ -43,12 +43,6 @@ export default AssetPage;
 
 export const getStaticProps: GetStaticProps<any> = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? "en", [
-      "common",
-      "auth",
-      "nav",
-      "asset",
-      "coin",
-    ])),
+    ...(await serverSideTranslations(locale ?? "en")),
   },
 });

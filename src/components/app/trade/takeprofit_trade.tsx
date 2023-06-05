@@ -14,6 +14,7 @@ import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries"
 import { percentTabs } from "../../../utils/constants/profitsPercentage";
 import { PremiumBanner } from "../../shared/containers/premiumBanner";
 import { useTranslation } from "next-i18next";
+import { toast } from "react-toastify";
 
 export const TakeprofitTrade: FC = () => {
   const dispatch = useDispatch();
@@ -39,6 +40,9 @@ export const TakeprofitTrade: FC = () => {
   }, [selectedExchange?.provider_id, trade.symbol_name]);
 
   const onAddTp = () => {
+    if (trade?.take_profit?.length >= 3) {
+      return toast.info("You can only add 3 TP's per asset");
+    }
     dispatch(addTakeProfit(values));
   };
 

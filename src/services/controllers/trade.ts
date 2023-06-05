@@ -1,11 +1,52 @@
-import { SwapTradeType } from "../../types/trade";
-import { dummyOpenOrders } from "../../utils/constants/dummyData";
+import { SwapTradeType, TradeOrder, TradeType } from "../../types/trade";
 import { axiosInstance } from "../api/axiosConfig";
+import { store } from "../redux/store";
+import {
+  addTradables,
+  setHistoryOrders,
+  setOpenOrders,
+  setOrderType,
+  setPairs,
+  setTrade,
+} from "../redux/tradeSlice";
+
+export const initiateTrade = async (
+  symbol: string,
+  provider: number,
+  base?: string
+) => {
+  store.dispatch(
+    setTrade({
+      asset_name: symbol ?? "btc",
+      base_name: base ?? "usdt",
+      available_quantity: await getAssetAvailable("USDT", provider),
+    })
+  );
+
+  let _pairs = await getAvailablePairs(symbol ?? "btc", provider);
+
+  // await getAssetOpenOrders(symbol ?? "BTC", provider);
+  await getHistoryOrders(symbol ?? "BTC", provider);
+
+  store.dispatch(addTradables({ assets: _pairs._tradables }));
+  store.dispatch(setPairs({ pairs: _pairs._pairs }));
+
+  store.dispatch(setOrderType({ orderType: "MARKET" }));
+};
 
 export const createSwapTrade = async (
   payload: SwapTradeType,
   provider: number
 ) => {
+  const { data } = await axiosInstance.post(
+    `trade-engine/order?provider=${provider}`,
+    payload
+  );
+
+  return data;
+};
+
+export const createTrade = async (payload: TradeType, provider: number) => {
   const { data } = await axiosInstance.post(
     `trade-engine/order?provider=${provider}`,
     payload
@@ -51,10 +92,31 @@ export const getAvailablePairs = async (symbol: any, provider: number) => {
 
 export const getAssetOpenOrders = async (symbol: string, provider: number) => {
   const { data } = await axiosInstance.get(
-    `trade-engine/orders/open/?provider=${provider}&symbol=${symbol}`
+    `trade-engine/orders?provider=${provider}&symbol=${symbol}&skip=0&limit=100&order_origin=manual_order`
   );
 
-  console.log("open order data >>> ", data);
+  // return data;
+  // store.dispatch(setOpenOrders({ orders: _openOrders }));
+};
 
-  return dummyOpenOrders; // TODO: replace payload with api response once done in backend
+export const getHistoryOrders = async (symbol: string, provider: number) => {
+  const { data } = await axiosInstance.get(
+    `trade-engine/orders?provider=${provider}&symbol=${symbol}usdt&skip=0&limit=100&order_status=200&order_status=-100&order_status=-200&order_status=-300&order_origin=manual_order`
+  );
+
+  let _history: TradeOrder[] = [];
+
+  for (var i = 0; i < data.length; i++) {
+    let _order: TradeOrder = {
+      status: data[i].order_status,
+      exchange: "Binance",
+      amount: data[i].order_value,
+      price: data[i].executed_amount,
+      createdAt: data[i].created_at,
+      type: data[i]?.order_data?.side ?? "BUY",
+    };
+    _history.push(_order);
+  }
+
+  store.dispatch(setHistoryOrders({ orders: _history }));
 };

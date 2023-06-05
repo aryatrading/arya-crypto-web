@@ -1,9 +1,11 @@
 import { useAuthUser } from "next-firebase-auth";
 import { FC } from "react";
-import Dashboard from "../dashboard/dashboard";
-import { Col } from "../../shared/layout/flex";
 
-const Home: FC = () => {
+import Dashboard from "../dashboard/dashboard";
+
+import { PortfolioSalesPage } from "../dashboard/salesPage";
+
+const Portfolio: FC = () => {
 
     const authUser = useAuthUser();
 
@@ -11,12 +13,10 @@ const Home: FC = () => {
         return <Dashboard />
     } else {
         return (
-            <Col className="h-40 aspect-video bg-grey-1 items-center justify-center rounded-md">
-                <p>Marketing page</p>
-            </Col>
+            <PortfolioSalesPage />
         );
     }
 
 }
 
-export default Home;
+export default Portfolio;

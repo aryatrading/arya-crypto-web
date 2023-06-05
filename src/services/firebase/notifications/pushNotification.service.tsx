@@ -5,13 +5,6 @@ import { getApp } from 'firebase/app';
 const firebaseCloudMessaging = {
     init: async () => {
         try {
-            const tokenInLocalstorage = window.localStorage.getItem("fcm_token");
-
-            // Return the token if it is alredy in our local storage
-            if (tokenInLocalstorage !== null) {
-                return tokenInLocalstorage;
-            }
-
             // Request the push notification permission from browser
             const status = await Notification.requestPermission();
             if (status && status === "granted") {

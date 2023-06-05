@@ -25,12 +25,7 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
 
     return (
         <Col className={clsx({ "hidden": !trigger }, "relative md:flex")}>
-            <Button onClick={() => {
-                if (window?.innerWidth < 768) {
-                    const input = document.getElementById('searchInput');
-                    input?.focus();
-                }
-            }}>
+            <Col>
                 {trigger ? trigger({ searchTerm, debouncedSearch, setSearchTerm, setFocused }) :
                     <Row className="bg-transparent h-[40px] px-0 items-center md:bg-grey-3 md:px-4 rounded-md overflow-hidden">
                         <MagnifyingGlassIcon width="20px" color="#6B7280" />
@@ -57,7 +52,7 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
                         </Button>}
                     </Row>
                 }
-            </Button>
+            </Col>
             {focused && <Col className={clsx({ "w-full": trigger, "w-[400px]": !trigger }, "max-h-[300px] bg-grey-2 top-16 right-0 absolute items-center rounded-md overflow-auto p-4 z-50", trigger ? null : styles.list)}>
                 {isSearching ? <LoadingSpinner /> :
                     filteredAssets?.length === 0 ?
