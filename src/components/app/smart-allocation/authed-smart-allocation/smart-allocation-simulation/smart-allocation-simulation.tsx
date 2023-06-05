@@ -22,7 +22,7 @@ import { PieChartIcon } from "../../../../svg/pieChartIcon";
 import { Col, Row } from "../../../../shared/layout/flex";
 import { Trans, useTranslation } from "next-i18next";
 import Input from "../../../../shared/inputs/Input";
-import { usdtFilter } from "../../../../../utils/smart-allocation";
+import { stableCoinsFilter } from "../../../../../utils/smart-allocation";
 
 function getShiftedDayDate(prevDay: Date, shiftInDays: number) {
     return new Date(prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate() + shiftInDays);
@@ -215,13 +215,13 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
             <Row className="md:flex-[2] justify-between md:justify-evenly md:h-[250px] gap-2.5 md:gap-20 w-full">
                 {weightsDoughnutCharts({
                     chartTitle: t("currentWeight"),
-                    chartData: smartAllocationHoldings?.filter(usdtFilter)?.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
+                    chartData: smartAllocationHoldings?.filter(stableCoinsFilter)?.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
                     drawdown: currentWeightsDrawdown ?? initialValue,
                     maxProfit: currentWeightsData[currentWeightsData.length - 1]?.value ?? 0,
                 })}
                 {weightsDoughnutCharts({
                     chartTitle: t("setWeight"),
-                    chartData: smartAllocationHoldings?.filter(usdtFilter)?.map(asset => ({ label: asset?.name ?? "", value: (asset.current_value ?? 0)/(asset.current_weight ?? 0) * (asset.weight ?? 0), coinSymbol: asset.name ?? "" })) ?? [],
+                    chartData: smartAllocationHoldings?.filter(stableCoinsFilter)?.map(asset => ({ label: asset?.name ?? "", value: (asset.current_value ?? 0)/(asset.current_weight ?? 0) * (asset.weight ?? 0), coinSymbol: asset.name ?? "" })) ?? [],
                     drawdown: setWeightsDrawdown ?? initialValue,
                     maxProfit: setWeightsData[setWeightsData.length - 1]?.value ?? 0,
                 })}
