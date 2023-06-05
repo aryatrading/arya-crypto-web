@@ -11,6 +11,8 @@ import {
 } from "../redux/assetSlice";
 import { store } from "../redux/store";
 import { setTo } from "../redux/swapSlice";
+import { EnumSmartAllocationSimulationPeriod } from "../../utils/constants/smartAllocation";
+import moment from "moment";
 
 export const getAssetDetails = async (symbol?: any) => {
   let { data } = await axiosInstance.get(
@@ -114,3 +116,104 @@ export const getFree = async (symbol: string, provider: number) => {
 
   return data[provider];
 };
+
+
+type assetsHistoricalDataResponseType = {
+  [k: string]: {
+    meta: {
+      symbol: string,
+      interval: string,
+      currency: string,
+      exchange_timezone: string,
+      exchange: string,
+      mic_code: string,
+      type: string
+    },
+    values: [
+      {
+        datetime: string,
+        open: string,
+        high: string,
+        low: string,
+        close: string,
+        volume: string
+      },
+    ],
+    status: "ok"
+  }
+}
+
+
+export const periodToIntervalsAndOutputSize: { [k: string]: { interval: string, outputsize: number } } = {
+  "1w": {
+    interval: "30min",
+    outputsize: 2 * 24 * 7,
+  },
+  "1m": {
+    interval: "2h",
+    outputsize: 12 * 30,
+  },
+  "1y": {
+    interval: "1day",
+    outputsize: 365,
+  },
+  "5y": {
+    interval: "1day",
+    outputsize: 365 * 5,
+  }
+}
+
+function getCustomPeriodIntervalsAndOutputSize(startDate: number, endDate: number) {
+  const diffTime = Math.abs(startDate - endDate);
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  console.log({diffDays})
+  if (diffDays <= 7) {
+    return {
+      interval: "30min",
+      outputsize: 2 * 24 * diffDays,
+    }
+  } else if (diffDays <= 30) {
+    return {
+      interval: "2h",
+      outputsize: 12 * diffDays,
+    }
+  } else if (diffDays <= 365) {
+    return {
+      interval: "1day",
+      outputsize: diffDays,
+    }
+  }  else {
+    return {
+      interval: "1week",
+      outputsize: Math.round(diffDays / 7),
+    }
+  }
+}
+
+export async function getAssetsHistoricalData(symbols: string[], period: EnumSmartAllocationSimulationPeriod, startDate?: Date, endDate?: Date) {
+  const params: { [k: string]: any } = {
+    symbol: symbols.join(","),
+    apikey: process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY
+  }
+
+  if (period === EnumSmartAllocationSimulationPeriod.custom) {
+    if (startDate && endDate) {
+      const customPeriod = getCustomPeriodIntervalsAndOutputSize(startDate.getTime(), endDate.getTime());
+      params.interval = customPeriod.interval;
+      params.outputsize = customPeriod.outputsize;
+      params.start_date = moment(startDate, 'DD-MM-YYYY');
+      params.end_date = moment(endDate, 'DD-MM-YYYY');
+    } else {
+      params.interval = periodToIntervalsAndOutputSize["1y"].interval;
+      params.outputsize = periodToIntervalsAndOutputSize["1y"].outputsize;
+    }
+  } else {
+    params.interval = periodToIntervalsAndOutputSize[period].interval;
+    params.outputsize = periodToIntervalsAndOutputSize[period].outputsize;
+  }
+
+  return axios.get<assetsHistoricalDataResponseType>(
+    process.env.NEXT_PUBLIC_TWELEVE_API_URL ?? "", {
+    params
+  });
+}

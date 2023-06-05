@@ -127,10 +127,10 @@ import CustomScroll from '../../../../../../shared/CustomScroll/CustomScroll'
   return (
     <AlertDialog.Root>
         <AlertDialog.Trigger asChild>
-            <Button className="w-full bg-blue-1 py-2.5 px-5 rounded-md text-sm font-bold">{t('rebalanceNow')}</Button>
+            <Button className="w-full bg-green-1 h-12 px-5 rounded-md text-sm font-bold">{t('Execute')}</Button>
         </AlertDialog.Trigger>
         <AlertDialog.Portal>
-            <AlertDialog.Overlay className="dialog-overlay data-[state=open]:animate-overlayShow" />
+            <AlertDialog.Overlay className="dialog-overlay data-[state=open]:animate-overlayShow bg-white" />
             <AlertDialog.Content className="fixed left-0 right-0 bottom-0 top-[60px] md:right-auto md:top-1/2 md:left-1/2 md:translate-x-[-50%] md:translate-y-[-50%] md:h-[500px] md:w-[90vw] md:rounded-lg p-7 bg-black-1 z-10 flex flex-col data-[state=open]:animate-contentShow max-w-[900px] focus:outline-none justify-between">
                 <div className='flex flex-col items-start gap-4 w-full'>
                     <AlertDialog.Title className="dialog-title">{t('rebalanceNow')}</AlertDialog.Title>

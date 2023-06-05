@@ -29,6 +29,7 @@ import styles from "./dashboard.module.scss"
 import { PieChartIcon } from "../../svg/pieChartIcon";
 import { LineChartIcon } from "../../svg/lineChartIcon";
 import { useResponsive } from "../../../context/responsive.context";
+import { getCoinColor } from "../../../utils/helpers/coinsColors"
 
 
 const Dashboard: FC = () => {
@@ -105,7 +106,6 @@ const Dashboard: FC = () => {
     initPortfolioHoldings();
   }, [initPortfolioSnapshots, initPortfolioHoldings]);
 
-
   const portfolioDoughnutChart = useMemo(() => {
 
     if (portfolioHoldings.length) {
@@ -114,6 +114,7 @@ const Dashboard: FC = () => {
           <DoughnutChart
             maxWidth="min(100%, 300px)"
             chartData={portfolioHoldings.map(asset => ({
+              coinSymbol: asset.asset_details?.symbol ?? "",
               label: asset.name ?? "",
               value: (asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0),
             }))}
@@ -139,15 +140,6 @@ const Dashboard: FC = () => {
       }
     });
 
-    const smartAllocationData: chartDataType[] = portfolioSnapshots?.map((snapshot) => {
-
-      const time = new Date(snapshot.created_at).getTime();
-      return {
-        time: Math.floor((time / 1000)) as chartDataType["time"],
-        value: snapshot.smart_allocation_total_evaluation ?? 0,
-      }
-    });
-
     return (
       <Col className="w-full gap-10">
         {!isTabletOrMobileScreen && <Row className="justify-end h-10">
@@ -157,11 +149,15 @@ const Dashboard: FC = () => {
             onclick={onSeriesClick}
           />
         </Row>}
-        <LineChart primaryLineData={chartData} secondaryLineData={!isTabletOrMobileScreen?smartAllocationData:undefined} className={"h-[200px] md:h-[400px]"} />
+        <LineChart primaryLineData={chartData} className={"h-[200px] md:h-[400px]"} tooltip={{
+          show: true,
+          title: t("portfolioValue"),
+          showValue: true,
+        }} />
       </Col>
     )
 
-  }, [activeSeries, isTabletOrMobileScreen, onSeriesClick, portfolioSnapshots])
+  }, [activeSeries, isTabletOrMobileScreen, onSeriesClick, portfolioSnapshots, t])
 
   const charts = useMemo(() => {
     if (isTabletOrMobileScreen) {
@@ -263,7 +259,7 @@ const Dashboard: FC = () => {
         </tr>
       )
     } else {
-      return portfolioHoldings.map(asset => {
+      return portfolioHoldings.map((asset, index) => {
         const isPriceChangePositive = (asset?.asset_details?.price_change_percentage_24h ?? 0) > 0;
         const signal = isPriceChangePositive ? '+' : '-';
 
@@ -271,6 +267,8 @@ const Dashboard: FC = () => {
         const formattedChangePrice = `${signal}$${formatNumber(Math.abs(asset?.asset_details?.price_change_24h ?? 0))}`;
 
         const assetPortfolioPercentage = asset.weight;
+
+        const coinColor = getCoinColor(asset.asset_details?.symbol ?? "", index);
 
 
         if (isTabletOrMobileScreen) {
@@ -310,8 +308,9 @@ const Dashboard: FC = () => {
                 <Row className="justify-between items-center w-[120px]">
                   <p>{percentageFormat(asset.weight ?? 0)}%</p>
                   <Row className="h-[5px] rounded-full w-[50px] bg-white">
-                    <Row className={`h-full rounded-full bg-blue-1`} style={{
-                      width: `${Math.ceil(assetPortfolioPercentage ?? 0)}%`
+                    <Row className={`h-full rounded-full`} style={{
+                      width: `${Math.ceil(assetPortfolioPercentage ?? 0)}%`,
+                      backgroundColor: coinColor,
                     }} />
                   </Row>
                 </Row>
