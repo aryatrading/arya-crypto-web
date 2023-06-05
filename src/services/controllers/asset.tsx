@@ -40,6 +40,7 @@ export const getAssetDetails = async (symbol?: any) => {
   _asset.priceChange = _res.price_change_24h.toFixed(3);
   _asset.circlSupply = _res.circulating_supply;
   _asset.isHoldingAsset = _trade ? true : false;
+  _asset.favoriteCount = data?.asset_favorites_count ?? 0;
 
   store.dispatch(setAsset(_asset));
   store.dispatch(setAssetHolding(_holding));
