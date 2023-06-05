@@ -86,5 +86,6 @@
     "YEARLY":"Annuelle",
     "rebalancingFrequency":"Fréquence de rééquilibrage ?",
     "exitStrategy":"Stratégie de sortie",
-    "rebalancing":"Rééquilibrage"
+    "rebalancing":"Rééquilibrage",
+    "profitChange%":"Variation des bénéfices %"
 }

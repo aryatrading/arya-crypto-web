@@ -94,7 +94,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
           </Row>
 
           {view === "price" ? (
-            <LineChart primaryLineData={timeseries} className="w-full h-80" tooltip={{show: true, title: "Price", showValue: true}}/>
+            <LineChart primaryLineData={timeseries} className="w-full h-80" tooltip={{show: true, title: t("common:price"), showValue: true}}/>
           ) : (
             <TradingViewWidget />
           )}

@@ -151,13 +151,13 @@ const Dashboard: FC = () => {
         </Row>}
         <LineChart primaryLineData={chartData} className={"h-[200px] md:h-[400px]"} tooltip={{
           show: true,
-          title: "Portfolio value",
+          title: t("portfolioValue"),
           showValue: true,
         }} />
       </Col>
     )
 
-  }, [activeSeries, isTabletOrMobileScreen, onSeriesClick, portfolioSnapshots])
+  }, [activeSeries, isTabletOrMobileScreen, onSeriesClick, portfolioSnapshots, t])
 
   const charts = useMemo(() => {
     if (isTabletOrMobileScreen) {

@@ -37,8 +37,8 @@ const LineChart: FC<GraphChartType> = ({
     `;
 
     return (`
-        ${tooltip.showProfitChange? profitChange : ''}
-        ${tooltip.showValue? value: ''}
+        ${tooltip.showProfitChange ? profitChange : ''}
+        ${tooltip.showValue ? value : ''}
         `);
 
   }, [tooltip.showProfitChange, tooltip.showValue]);
@@ -119,7 +119,7 @@ const LineChart: FC<GraphChartType> = ({
       height: chartContainerRef?.current?.clientHeight,
       layout: {
         background: { type: ColorType.Solid, color: "#00000000" },
-        textColor: "#6B7280",
+        textColor: isTabletOrMobileScreen ? "#050913" : "#6B7280",
         fontSize: 12,
       },
       grid: {
@@ -144,8 +144,8 @@ const LineChart: FC<GraphChartType> = ({
         visible: false,
       },
       timeScale: {
-        borderColor: "#1F2A41",
-        visible: !isTabletOrMobileScreen,
+        borderColor: isTabletOrMobileScreen ? "transparent" : "#1F2A41",
+        visible: true,
         timeVisible: true,
         secondsVisible: false,
       },

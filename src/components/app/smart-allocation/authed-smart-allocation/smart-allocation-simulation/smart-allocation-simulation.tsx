@@ -287,14 +287,14 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     fixed={true}
                     tooltip={{
                         show: true,
-                        title: "Profit Change %",
+                        title: t("profitChange%"),
                         showProfitChange: true,
                     }}
                 />
                 {graphLegend}
             </Col>
         )
-    }, [currentWeightsData, graphLegend, isLoading, setWeightsData])
+    }, [currentWeightsData, graphLegend, isLoading, setWeightsData, t])
 
 
     const charts = useMemo(() => {

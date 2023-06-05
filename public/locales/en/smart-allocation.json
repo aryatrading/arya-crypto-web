@@ -87,5 +87,6 @@
     "YEARLY":"Yearly",
     "rebalancingFrequency":"Rebalancing Frequency?",
     "exitStrategy":"Exit strategy",
-    "rebalancing":"Rebalancing"
+    "rebalancing":"Rebalancing",
+    "profitChange%":"Profit Change %"
 }
