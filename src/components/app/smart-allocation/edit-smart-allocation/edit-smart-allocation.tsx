@@ -540,12 +540,14 @@ const EditSmartAllocation: FC = () => {
                     </Col>
                     <Row className="flex-[2] justify-evenly h-44 md:h-[300px] gap-5">
                         <CutoutDoughnutChart
-                            title={t("currentWeight")}
+                            title={t<any>("currentWeight")}
                             chartData={smartAllocationHoldings.filter(usdtFilter).map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" }))}
+                            className="w-[160px] md:w-[262px]"
                         />
                         <CutoutDoughnutChart
-                            title={t("setWeight")}
+                            title={t<any>("setWeight")}
                             chartData={smartAllocationHoldings.filter(usdtFilter).map(asset => ({ label: asset?.name ?? "", value: smartAllocationTotalEvaluation * (asset.weight ?? 0), coinSymbol: asset.name ?? "" }))}
+                            className="w-[160px] md:w-[262px]"
                         />
                     </Row>
                 </Col>

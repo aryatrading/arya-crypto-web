@@ -2,7 +2,7 @@ import Image from "next/image";
 import { FC, useMemo } from "react"
 import OverallExchangeIcon from "../../svg/OverallExchangeIcon";
 
-export const ExchangeImage: FC<{ providerId?: number, width?: number, height?: number }> = ({ providerId, width = 23, height = 23 }) => {
+export const ExchangeImage: FC<{ providerId?: number, width?: number, height?: number }> = ({ providerId, width = 17, height = 17 }) => {
 
     return useMemo(() => {
         if (providerId) {

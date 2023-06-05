@@ -5,8 +5,9 @@ import { Col, Row } from "../../layout/flex";
 import { getCoinColor } from "../../../../utils/helpers/coinsColors";
 import { doughnutChartDataType } from "./doughnut";
 import { shortNumberFormat } from "../../../../utils/helpers/prices";
+import clsx from "clsx";
 
-const CutoutDoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[] }> = ({ title, chartData }) => {
+const CutoutDoughnutChart: FC<{ title?: string, chartData: doughnutChartDataType[], className?: string, cutout?:string }> = ({ title, chartData, className, cutout="80%" }) => {
 
     ChartJS.register(ArcElement, Tooltip);
 
@@ -50,19 +51,19 @@ const CutoutDoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[
                         display: false,
                     },
                 },
-                cutout: "80%",
+                cutout,
             }
 
             return (
                 <Doughnut data={data} options={graphOptions} />
             );
         }
-    }, [chartData]);
+    }, [chartData, cutout]);
 
 
     if (chartData?.length) {
         return (
-            <Col className='justify-center items-center relative gap-5 overflow-hidden aspect-square w-[160px] md:w-[262px]'>
+            <Col className={clsx('justify-center items-center relative gap-5 overflow-hidden aspect-square', className)}>
                 {doughnutChart}
                 <Row className='items-center justify-center font-bold inset-0 m-auto absolute -z-10'>
                     <p className='font-bold sm:text-sm xl:text-xl'>{title}</p>

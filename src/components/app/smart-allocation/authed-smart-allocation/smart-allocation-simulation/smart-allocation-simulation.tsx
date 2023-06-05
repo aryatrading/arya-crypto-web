@@ -188,6 +188,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 <CutoutDoughnutChart
                     title={chartTitle}
                     chartData={chartData}
+                    className="w-[160px] md:w-[262px]"
                 />
                 {(!!riskValue) && <Col className="justify-center gap-5 px-2">
                     <Row className="gap-5 flex-wrap">
