@@ -45,7 +45,10 @@ const AssetTrade: FC = () => {
 
     setLoading(true);
     const payload: SwapTradeType = {
-      symbol_name: `${to.symbol}${from.symbol}`,
+      symbol_name:
+        provider === 2
+          ? `${to.symbol}-${from.symbol}`
+          : `${to.symbol}${from.symbol}`,
       asset_name: to.symbol,
       base_name: from.symbol,
       entry_order: {
@@ -59,7 +62,10 @@ const AssetTrade: FC = () => {
     };
 
     if (payload.entry_order.type === "SELL") {
-      payload.symbol_name = `${from.symbol}${to.symbol}`;
+      payload.symbol_name =
+        provider === 2
+          ? `${from.symbol}-${to.symbol}`
+          : `${from.symbol}${to.symbol}`;
       payload.asset_name = from.symbol;
       payload.base_name = to.symbol;
     }
