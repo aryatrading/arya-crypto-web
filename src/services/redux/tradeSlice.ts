@@ -48,9 +48,7 @@ export const tradeSlice = createSlice({
         .toUpperCase()
         .replace("-", "");
       state.trade.symbol_name =
-        `${action.payload.asset_name}${action.payload.base_name}`
-          .toUpperCase()
-          .replace("-", "");
+        `${action.payload.asset_name}${action.payload.base_name}`.toUpperCase();
       state.trade.available_quantity = action.payload?.available_quantity ?? 0;
       state.trade.entry_order = {
         trigger_price: 0,
@@ -58,6 +56,9 @@ export const tradeSlice = createSlice({
         order_type: "MARKET",
         price_based: true,
       };
+    },
+    setSymbol: (state, action: { payload: string }) => {
+      state.trade.symbol_name = action.payload;
     },
     setFilter: (state, action: { payload: { filter: string } }) => {
       state.tradeFilter = action.payload.filter;
@@ -184,6 +185,7 @@ export const {
   addTrailing,
   removeTrailing,
   clearOrder,
+  setSymbol,
 } = tradeSlice.actions;
 
 export const getTrade = (state: AppState) => state.trade.trade;

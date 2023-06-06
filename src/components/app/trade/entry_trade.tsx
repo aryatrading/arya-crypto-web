@@ -32,6 +32,7 @@ export const EntryTrade: FC = () => {
   const selectedExchange = useSelector(selectSelectedExchange);
 
   const onBuySelect = async () => {
+    dispatch(setSide({ side: "BUY" }));
     dispatch(
       setTrade({
         asset_name: trade.asset_name ?? "btc",
@@ -42,7 +43,6 @@ export const EntryTrade: FC = () => {
         ),
       })
     );
-    dispatch(setSide({ side: "BUY" }));
   };
 
   const onSellSelect = async () => {

@@ -9,7 +9,11 @@ import { StoplossTrade } from "./stoploss_trade";
 import { TakeprofitTrade } from "./takeprofit_trade";
 import { TrailingTrade } from "./trailing_trade";
 import { useDispatch, useSelector } from "react-redux";
-import { clearTrade, getTrade } from "../../../services/redux/tradeSlice";
+import {
+  clearTrade,
+  getTrade,
+  setSymbol,
+} from "../../../services/redux/tradeSlice";
 import { AssetTradeDropdown } from "../../shared/assetDropdown/assetTradeDropdown";
 import { OpenOrders } from "../../shared/tables/openOrderTable";
 import { OrderHistory } from "../../shared/tables/orderHistoryTable";
@@ -27,7 +31,7 @@ const Trade: FC = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation(["trade"]);
   const [activeTab, setActiveTab] = useState("entry");
-  const trade = useSelector(getTrade);
+  let trade = useSelector(getTrade);
   const [laoding, setLoading] = useState(false);
   const selectedExchange = useSelector(selectSelectedExchange);
 
@@ -73,6 +77,10 @@ const Trade: FC = () => {
     }
 
     setLoading(true);
+
+    // if (selectedExchange?.provider_id === 2) {
+    //   _trade.symbol_name = `${trade.asset_name}-${trade.base_name}`;
+    // }
 
     try {
       await createTrade(trade, selectedExchange?.provider_id ?? 1);

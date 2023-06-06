@@ -2,11 +2,11 @@ import axios from "axios";
 import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
-const auth = getAuth(getApp())
+const auth = getAuth(getApp());
 
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  timeout: 10000,
+  timeout: 20000,
   headers: {
     "Access-Control-Allow-Origin": "*",
     "X-AryaCrypto-Version": "1.0.0 web",
@@ -16,14 +16,13 @@ export const axiosInstance = axios.create({
 // Intercept request
 axiosInstance.interceptors.request.use(
   async function (config) {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const localStorageToken = localStorage?.getItem("idToken");
-      const idToken = await auth.currentUser?.getIdToken()
+      const idToken = await auth.currentUser?.getIdToken();
       if (idToken) {
         config.headers.Authorization = `Bearer ${idToken}`;
         localStorage?.setItem("idToken", idToken);
-      }
-      else if (localStorageToken) {
+      } else if (localStorageToken) {
         config.headers.Authorization = `Bearer ${localStorageToken}`;
       }
     }
