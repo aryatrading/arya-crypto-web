@@ -59,8 +59,8 @@ const AssetTrade: FC = () => {
     };
 
     if (payload.entry_order.type === "SELL") {
-      (payload.symbol_name = `${from.symbol}${to.symbol}`),
-        (payload.asset_name = from.symbol);
+      payload.symbol_name = `${from.symbol}${to.symbol}`;
+      payload.asset_name = from.symbol;
       payload.base_name = to.symbol;
     }
 
