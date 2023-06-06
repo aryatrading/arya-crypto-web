@@ -64,7 +64,7 @@ const TradingImg = ({ activeIndex }: any) => (
 
 const HomePage = () => {
     const [activeIndex, setActiveIndex] = useState<number>(0);
-    const { filteredAssets, setSearchTerm } = useAssetSearch({ fullModal: true });
+    const { filteredAssets, setSearchTerm, assetLivePrice } = useAssetSearch({ fullModal: true });
     const { isTabletOrMobileScreen } = useResponsive();
 
 
@@ -171,7 +171,7 @@ const HomePage = () => {
                                     <td className='font-bold text-sm'>{asset.rank}</td>
                                     <td><AssetRow icon={asset.iconUrl} name={asset.name} symbol={asset.symbol} /></td>
                                     <td className={clsx(asset.change24H && asset.change24H > 0 ? "text-green-1" : "text-red-1", "font-bold text-sm")}>{asset.change24H}</td>
-                                    <td className='font-bold text-sm'>{formatNumber(asset.currentPrice || 0, true)}</td>
+                                    <td className='font-bold text-sm'>{formatNumber(assetLivePrice?.[asset.symbol || ''] || asset.currentPrice || 0, true)}</td>
                                     {!isTabletOrMobileScreen && <td className='font-bold text-sm'>{formatNumber(asset.mrkCap || 0, false)}</td>}
                                     {!isTabletOrMobileScreen && <td className='font-bold text-sm'>{formatNumber(asset.volume || 0, false)}</td>}
                                 </tr>
