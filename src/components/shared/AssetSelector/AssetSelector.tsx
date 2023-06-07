@@ -63,7 +63,7 @@ const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClic
 
 
   return (
-    <Dialog.Root modal={false} open={showDialog}>
+    <Dialog.Root modal={!fullModal} open={showDialog}>
       <Dialog.Trigger asChild onClick={() => setShowDialog(true)}>
         {trigger}
       </Dialog.Trigger>

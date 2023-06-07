@@ -178,7 +178,7 @@ const AuthedSmartAllocation: FC = () => {
     const withAllocation = useMemo(() => {
         return (
             <Col className="items-center justify-center col-span-full gap-10">
-                <Row className="w-full justify-between items-end">
+                <Row className="w-full justify-center items-end">
                     <ExchangeSwitcher canSelectOverall={false} />
                 </Row>
                 <SmartAllocationSimulation smartAllocationHoldings={smartAllocationHoldings} />

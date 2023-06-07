@@ -311,7 +311,7 @@ const EditSmartAllocation: FC = () => {
             const newState = [...oldState];
             const assetAlreadyExists = oldState.find(asset => selectedAsset?.symbol?.toLowerCase() === asset?.name?.toLowerCase());
             if (!assetAlreadyExists) {
-                if (selectedAsset?.stable) {
+                if (!selectedAsset?.stable) {
                     newState.push({
                         name: selectedAsset.symbol?.toUpperCase() ?? "",
                         weight: 0,
@@ -336,11 +336,11 @@ const EditSmartAllocation: FC = () => {
     const assetSelector = useMemo(() => {
         return (
             <AssetSelector
-                trigger={<Button disabled={!userHasSubscription} className="w-full md:w-max px-5 min-w-[5rem] bg-blue-1 h-11 rounded-md">{t('common:addAsset')}</Button>}
+                trigger={<Button className="w-full md:w-max px-5 min-w-[5rem] bg-blue-1 h-11 rounded-md">{t('common:addAsset')}</Button>}
                 onClick={onSelectAsset}
             />
         );
-    }, [onSelectAsset, t, userHasSubscription]);
+    }, [onSelectAsset, t]);
 
     const tableFooter = useMemo(() => {
         let totalPercentage = 0;
