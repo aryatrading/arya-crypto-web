@@ -64,19 +64,19 @@ const Market: FC = () => {
           {tab === "all" ? (
             <Row className="w-full items-center justify-center gap-8 flex flex-col lg:flex-row">
               <MarketStats
-                bgColor={clsx({ "bg-green-2": marketCapDetails?.marketCapPercentage > 0, "bg-red-2": marketCapDetails?.marketCapPercentage < 0, "bg-grey-2": marketCapDetails?.marketCapPercentage === 0 }, "w-full lg:w-64")}
+                bgColor={clsx({ "bg-green-2": marketCapDetails?.marketCapPercentage > 0, "bg-red-2": marketCapDetails?.marketCapPercentage < 0, "bg-grey-2": marketCapDetails?.marketCapPercentage === 0 }, "w-full lg:w-72")}
                 percent={marketCapDetails?.marketCapPercentage || '0'}
                 amount={marketCapDetails?.marketCap || '0'}
                 title={t("marketcap")}
               />
               <MarketStats
-                bgColor={clsx({ "bg-green-2": marketCapDetails?.vol24Percentage > 0, "bg-red-2": marketCapDetails?.vol24Percentage < 0, "bg-grey-2": marketCapDetails?.vol24Percentage === 0 }, "w-full lg:w-64")}
+                bgColor={clsx({ "bg-green-2": marketCapDetails?.vol24Percentage > 0, "bg-red-2": marketCapDetails?.vol24Percentage < 0, "bg-grey-2": marketCapDetails?.vol24Percentage === 0 }, "w-full lg:w-72")}
                 percent={marketCapDetails?.vol24Percentage || '0'}
                 amount={marketCapDetails?.vol24 || '0'}
                 title={t("volume")}
               />
               <MarketStats
-                bgColor={clsx({ "bg-green-2": marketCapDetails.BTCDominancePercentage > 0, "bg-red-2": marketCapDetails.BTCDominancePercentage < 0, "bg-grey-2": marketCapDetails.BTCDominancePercentage === 0 }, "w-full lg:w-64")}
+                bgColor={clsx({ "bg-green-2": marketCapDetails.BTCDominancePercentage > 0, "bg-red-2": marketCapDetails.BTCDominancePercentage < 0, "bg-grey-2": marketCapDetails.BTCDominancePercentage === 0 }, "w-full lg:w-72")}
                 percent={marketCapDetails.BTCDominancePercentage}
                 amount={marketCapDetails.BTCDominance}
                 title={t("btcDominance")}
