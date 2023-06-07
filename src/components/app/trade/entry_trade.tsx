@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { ShadowButton } from "../../shared/buttons/shadow_button";
 import { Row } from "../../shared/layout/flex";
 import { useSelector, useDispatch } from "react-redux";
@@ -30,6 +30,12 @@ export const EntryTrade: FC = () => {
   const { t } = useTranslation(["trade"]);
   const trade = useSelector(getTrade);
   const selectedExchange = useSelector(selectSelectedExchange);
+
+  const livePrice = useMemo(() => {
+    return (
+      _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ?? _price ?? 0
+    );
+  }, [trade?.asset_name]);
 
   const onBuySelect = async () => {
     dispatch(setSide({ side: "BUY" }));
@@ -90,10 +96,7 @@ export const EntryTrade: FC = () => {
                 onClick={() => {
                   dispatch(
                     setTriggerPrice({
-                      price:
-                        _assetprice[
-                          trade?.asset_name?.toLowerCase() ?? "btc"
-                        ] ?? _price,
+                      price: livePrice,
                     })
                   );
                   dispatch(setOrderType({ orderType: "MARKET" }));
@@ -130,7 +133,7 @@ export const EntryTrade: FC = () => {
         amount={
           trade?.entry_order?.trigger_price
             ? trade?.entry_order?.trigger_price
-            : _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ?? _price
+            : livePrice
         }
         onchange={(e: string) => dispatch(setTriggerPrice({ price: e }))}
       />
@@ -141,9 +144,7 @@ export const EntryTrade: FC = () => {
         onchange={(e: any) => {
           dispatch(
             setPrice({
-              price:
-                _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ??
-                _price * e,
+              price: livePrice * e,
             })
           );
           dispatch(
@@ -160,15 +161,12 @@ export const EntryTrade: FC = () => {
           onclick={async (e: any) => {
             setPercent(e.key);
 
-            dispatch(
-              setQuantity({
-                quantity:
-                  (trade.available_quantity * (e.key / 100)) /
-                    _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ??
-                  _price,
-              })
-            );
             if (trade?.entry_order?.type === "SELL") {
+              dispatch(
+                setQuantity({
+                  quantity: trade.available_quantity * (e.key / 100),
+                })
+              );
               dispatch(
                 setPrice({
                   price:
@@ -180,6 +178,12 @@ export const EntryTrade: FC = () => {
                 })
               );
             } else {
+              dispatch(
+                setQuantity({
+                  quantity:
+                    (trade.available_quantity * (e.key / 100)) / livePrice,
+                })
+              );
               dispatch(
                 setPrice({ price: trade.available_quantity * (e.key / 100) })
               );
@@ -195,9 +199,7 @@ export const EntryTrade: FC = () => {
           dispatch(setPrice({ price: e }));
           dispatch(
             setQuantity({
-              quantity:
-                e / _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ??
-                _price,
+              quantity: e / livePrice,
             })
           );
         }}

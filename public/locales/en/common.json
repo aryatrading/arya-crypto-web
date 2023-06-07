@@ -44,8 +44,8 @@
     "goToSettings": "Go to settings",
     "total": "Total",
     "asset": "Asset",
-    "buy":"Buy",
-    "target":"Target",
+    "buy": "Buy",
+    "target": "Target",
     "#": "#",
     "type": "Type",
     "status": "Status",
@@ -57,5 +57,7 @@
     "CANCELLED": "Cancelled",
     "FULFILLED": "Fulfilled",
     "BROKER_ERROR": "Broker Error",
-    "DATA_ERROR": "Data Error"
+    "DATA_ERROR": "Data Error",
+    "premiumusersfeature": "This feature is for premium users",
+    "upgradenow": "Upgrade now"
 }

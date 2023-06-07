@@ -12,10 +12,15 @@ const initialState: initialStateType = {
   marketAssets: [],
 };
 
-const selectMarketData = (state: AppState) => state.market
+const selectMarketData = (state: AppState) => state.market;
 
-export const selectMarketAssets = createSelector([selectMarketData], data => { return data.marketAssets })
-export const selectAssetLivePrice = createSelector([selectMarketData], data => data.assetLivePrice)
+export const selectMarketAssets = createSelector([selectMarketData], (data) => {
+  return data.marketAssets;
+});
+export const selectAssetLivePrice = createSelector(
+  [selectMarketData],
+  (data) => data.assetLivePrice
+);
 
 export const marketSlice = createSlice({
   name: "market",
@@ -25,7 +30,7 @@ export const marketSlice = createSlice({
       state.marketAssets = action.payload;
     },
     pricechange: (state, action) => {
-      const { symbol, price } = action.payload
+      const { symbol, price } = action.payload;
       state.assetLivePrice = {
         ...state.assetLivePrice,
         [symbol]: price,

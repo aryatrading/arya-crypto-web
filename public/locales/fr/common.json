@@ -40,9 +40,9 @@
     "QUARTERLY": "Trimestriel",
     "YEARLY": "Annuel",
     "asset": "Vermögen",
-    "buy":"Achat",
-    "target":"Target",
-    "cancel":"Annuler",
+    "buy": "Achat",
+    "target": "Target",
+    "cancel": "Annuler",
     "sell": "Vendre",
     "total": "Total",
     "#": "#",
@@ -58,5 +58,7 @@
     "BROKER_ERROR": "Erreur du courtier",
     "DATA_ERROR": "Erreur de données",
     "english": "anglais",
-    "french": "français"
+    "french": "français",
+    "premiumusersfeature": "Cette fonctionnalité est réservée aux utilisateurs premium",
+    "upgradenow": "Mettre à niveau maintenant"
 }
