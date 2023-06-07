@@ -13,8 +13,9 @@ import AssetPnl from "../../../../../shared/containers/asset/assetPnl";
 import { useResponsive } from "../../../../../../context/responsive.context";
 import { getCoinColor } from "../../../../../../utils/helpers/coinsColors";
 import { chartDefaultColorsHex } from "../../../../../../utils/constants/customColors";
+import { TableRowSkeleton } from "../../../../../shared/skeletons/skeletons";
 
-const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], smartAllocationTotalEvaluation: number }> = ({ smartAllocationHoldings, smartAllocationTotalEvaluation }) => {
+const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], isLoading: boolean }> = ({ smartAllocationHoldings, isLoading }) => {
 
     const { t } = useTranslation(['smart-allocation']);
 
@@ -49,86 +50,123 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
         }
     }, [isTabletOrMobileScreen, t]);
 
-    const tableBody = useMemo(() => {
-        return smartAllocationHoldings.map((asset, index) => {
-            if (asset.name !== USDTSymbol) {
-                const setWeight = asset.weight ?? 0;
-                const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
-                const coinColor = getCoinColor(asset.name ?? "", index);
 
-                if (isTabletOrMobileScreen) {
-                    return (
-                        <tr key={asset.name}>
-                            <td>
-                                <Col className="gap-3">
-                                    <p>{asset.asset_details?.asset_data?.name}</p>
-                                    <span className="text-sm text-grey-1">{asset.name}</span>
-                                </Col>
-                            </td>
-                            <td>
-                                <Col className="gap-3">
-                                    <p>{formatNumber(asset?.available ?? 0)}</p>
-                                    <p>{formatNumber(asset?.current_value ?? 0, true)}</p>
-                                </Col>
-                            </td>
-                            <td>
-                                <Col className="gap-3">
-                                    <p>
-                                        {percentageFormat(setWeight * 100)}%
-                                    </p>
-                                    <p className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
-                                        {percentageFormat((asset.current_weight ?? 0) * 100)}%
-                                    </p>
-                                </Col>
-                            </td>
-                        </tr>
-                    );
-                } else {
-                    return (
-                        <tr key={asset.name}>
-                            <td>{index + 1}</td>
-                            <td>
-                                <Row className="gap-3 items-center">
-                                    <Image src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
-                                    <p>{asset.asset_details?.asset_data?.name}</p>
-                                    <span className="text-sm text-grey-1">{asset.name}</span>
-                                </Row>
-                            </td>
-                            <td>
-                                <AssetPnl
-                                    value={asset.pnl?.percent ?? 0}
-                                />
-                            </td>
-                            <td>{formatNumber(asset?.asset_details?.asset_data?.current_price ?? 0, true)}</td>
-                            <td>{formatNumber(asset?.available ?? 0)}</td>
-                            <td>{formatNumber(asset?.current_value ?? 0, true)}</td>
-                            <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
-                                {percentageFormat((asset.current_weight ?? 0) * 100)}%
-                            </td>
-                            <td className="">
-                                <Row className="gap-2 items-center">
-                                    <p>
-                                        {percentageFormat(setWeight * 100)}%
-                                    </p>
-                                    <Row className="w-16 rounded-full overflow-hidden bg-white flex-1" style={{ height: 10 }}>
-                                        <Row
-                                            className={`rounded-full`}
-                                            style={{
-                                                width: `${percentageFormat(setWeight * 100)}%`,
-                                                backgroundColor: coinColor === "#ffffffff" ? chartDefaultColorsHex[0] : coinColor,
-                                            }}
-                                        />
-                                    </Row>
-                                </Row>
-                            </td>
-                        </tr>
-                    );
-                }
+    const tableLoadingSkeleton = useMemo(() => {
+        if (isTabletOrMobileScreen) {
+            return (
+                <>
+                    <TableRowSkeleton numberOfColumns={3} />
+                    <TableRowSkeleton numberOfColumns={3} />
+                    <TableRowSkeleton numberOfColumns={3} />
+                    <TableRowSkeleton numberOfColumns={3} />
+                    <TableRowSkeleton numberOfColumns={3} />
+                </>
+            )
+        } else {
+            return (
+                <>
+                    <TableRowSkeleton numberOfColumns={8} />
+                    <TableRowSkeleton numberOfColumns={8} />
+                    <TableRowSkeleton numberOfColumns={8} />
+                    <TableRowSkeleton numberOfColumns={8} />
+                </>
+            )
+        }
+    }, [isTabletOrMobileScreen]);
+
+    const tableBody = useMemo(() => {
+
+        if (!smartAllocationHoldings.length) {
+            if (isLoading) {
+                return tableLoadingSkeleton;
             } else {
-                return <></>
+                return (
+                    <tr>
+                        <td colSpan={8} className="row-span-full">{t("common:noAssets")}</td>
+                    </tr>
+                )
             }
-        });
-    }, [isTabletOrMobileScreen, smartAllocationHoldings])
+        } else {
+            return smartAllocationHoldings.map((asset, index) => {
+                if (asset.name !== USDTSymbol) {
+                    const setWeight = asset.weight ?? 0;
+                    const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
+                    const coinColor = getCoinColor(asset.name ?? "", index);
+
+                    if (isTabletOrMobileScreen) {
+                        return (
+                            <tr key={asset.name}>
+                                <td>
+                                    <Col className="gap-3">
+                                        <p>{asset.asset_details?.asset_data?.name}</p>
+                                        <span className="text-sm text-grey-1">{asset.name}</span>
+                                    </Col>
+                                </td>
+                                <td>
+                                    <Col className="gap-3">
+                                        <p>{formatNumber(asset?.available ?? 0)}</p>
+                                        <p>{formatNumber(asset?.current_value ?? 0, true)}</p>
+                                    </Col>
+                                </td>
+                                <td>
+                                    <Col className="gap-3">
+                                        <p>
+                                            {percentageFormat(setWeight * 100)}%
+                                        </p>
+                                        <p className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
+                                            {percentageFormat((asset.current_weight ?? 0) * 100)}%
+                                        </p>
+                                    </Col>
+                                </td>
+                            </tr>
+                        );
+                    } else {
+                        return (
+                            <tr key={asset.name}>
+                                <td>{index + 1}</td>
+                                <td>
+                                    <Row className="gap-3 items-center">
+                                        <Image src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
+                                        <p>{asset.asset_details?.asset_data?.name}</p>
+                                        <span className="text-sm text-grey-1">{asset.name}</span>
+                                    </Row>
+                                </td>
+                                <td>
+                                    <AssetPnl
+                                        value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
+                                    />
+                                </td>
+                                <td>{formatNumber(asset?.asset_details?.asset_data?.current_price ?? 0, true)}</td>
+                                <td>{formatNumber(asset?.available ?? 0)}</td>
+                                <td>{formatNumber(asset?.current_value ?? 0, true)}</td>
+                                <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
+                                    {percentageFormat((asset.current_weight ?? 0) * 100)}%
+                                </td>
+                                <td className="">
+                                    <Row className="gap-2 items-center">
+                                        <p>
+                                            {percentageFormat(setWeight * 100)}%
+                                        </p>
+                                        <Row className="w-16 rounded-full overflow-hidden bg-white flex-1" style={{ height: 10 }}>
+                                            <Row
+                                                className={`rounded-full`}
+                                                style={{
+                                                    width: `${percentageFormat(setWeight * 100)}%`,
+                                                    backgroundColor: coinColor === "#ffffffff" ? chartDefaultColorsHex[0] : coinColor,
+                                                }}
+                                            />
+                                        </Row>
+                                    </Row>
+                                </td>
+                            </tr>
+                        );
+                    }
+                } else {
+                    return <></>
+                }
+            });
+        }
+    }, [isLoading, isTabletOrMobileScreen, smartAllocationHoldings, t, tableLoadingSkeleton])
 
     const table = useMemo(() => {
         return (
@@ -139,12 +177,11 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                         {tableBody}
                     </tbody>
                 </table>
-
             </Row>
         )
     }, [tableBody, tableHeader])
 
-    if (smartAllocationHoldings?.length) {
+    if (smartAllocationHoldings?.length || isLoading) {
         return (
             <Col className="gap-10">
                 {table}

@@ -8,6 +8,7 @@ import { formatNumber, percentageFormat, shortNumberFormat } from "../../../../u
 import { useResponsive } from "../../../../context/responsive.context";
 import { GraphChartType } from "./graph.type";
 import { Col } from "../../layout/flex";
+import { TextSkeleton } from "../../skeletons/skeletons";
 
 const LineChart: FC<GraphChartType> = ({
   primaryLineData,
@@ -211,7 +212,7 @@ const LineChart: FC<GraphChartType> = ({
         <Col reference={chartContainerRef} className={clsx('relative', className)} >
           {loadingOverlay}
         </Col>
-      ) : (
+      ) : isLoading ? <TextSkeleton heightClassName="h-full" widthClassName="w-full" /> : (
         <></>
       )}
       {tooltipContainer}

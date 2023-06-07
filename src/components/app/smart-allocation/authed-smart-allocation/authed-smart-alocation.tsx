@@ -11,13 +11,12 @@ import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/
 import { selectConnectedExchanges, selectSelectedExchange } from "../../../../services/redux/exchangeSlice";
 import { getExitStrategy, getSmartAllocation } from "../../../../services/controllers/smart-allocation";
 import SmartAllocationSimulation from "./smart-allocation-simulation/smart-allocation-simulation";
+import { getAssetCurrentValue, getAssetCurrentWeight } from "../../../../utils/smart-allocation";
 import { EnumReBalancingFrequency } from "../../../../utils/constants/smartAllocation";
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { MODE_DEBUG } from "../../../../utils/constants/config";
-import PageLoader from "../../../shared/pageLoader/pageLoader";
 import { Col, Row } from "../../../shared/layout/flex";
-import { getAssetCurrentValue, getAssetCurrentWeight } from "../../../../utils/smart-allocation";
 
 
 
@@ -39,10 +38,9 @@ const AuthedSmartAllocation: FC = () => {
     const router = useRouter()
 
     const [isLoadingExitStrategy, setIsLoadingExitStrategy] = useState<boolean>(false);
-    const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
+    const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(true);
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
     const [smartAllocationExists, setSmartAllocationExists] = useState<boolean>();
-    const [smartAllocationTotalEvaluation, setSmartAllocationTotalEvaluation] = useState<number>(0);
     const [fetchingHoldingsError, setFetchingHoldingsError] = useState<string>();
 
     const [rebalancingDate, setRebalancingDate] = useState<Date | null>(null);
@@ -121,13 +119,6 @@ const AuthedSmartAllocation: FC = () => {
 
 
     useEffect(() => {
-        if (smartAllocationHoldings.length) {
-            const totalValue = getTotalAssetsValue(smartAllocationHoldings)
-            setSmartAllocationTotalEvaluation(totalValue);
-        }
-    }, [getTotalAssetsValue, smartAllocationHoldings])
-
-    useEffect(() => {
         if (selectedExchange?.provider_id) {
             initSmartAllocationHoldings();
         }
@@ -166,53 +157,49 @@ const AuthedSmartAllocation: FC = () => {
                     <Tab className="text-sm shrink-0 outline-none cursor-pointer px-5">{t('portfolioTradeHistory')}</Tab>
                 </TabList>
                 <TabPanel>
-                    <SmartAllocationHoldingsTab smartAllocationHoldings={smartAllocationHoldings} smartAllocationTotalEvaluation={smartAllocationTotalEvaluation} />
+                    <SmartAllocationHoldingsTab smartAllocationHoldings={smartAllocationHoldings} isLoading={isLoadingSmartAllocationHoldings} />
                 </TabPanel>
                 <TabPanel>
                     <SmartAllocationTradeLog />
                 </TabPanel>
             </Tabs>
         )
-    }, [smartAllocationHoldings, smartAllocationTotalEvaluation, t]);
+    }, [isLoadingSmartAllocationHoldings, smartAllocationHoldings, t]);
 
     const withAllocation = useMemo(() => {
         return (
-            <Col className="items-center justify-center col-span-full gap-10">
-                <Row className="w-full justify-center items-end">
+            <Col className="w-full items-center justify-center col-span-full gap-10">
+                <Row className="w-full justify-between items-end">
                     <ExchangeSwitcher canSelectOverall={false} />
                 </Row>
-                <SmartAllocationSimulation smartAllocationHoldings={smartAllocationHoldings} />
+                <SmartAllocationSimulation smartAllocationHoldings={smartAllocationHoldings} isLoadingSmartAllocationHoldings={isLoadingSmartAllocationHoldings}/>
                 {tabs}
             </Col>
         )
-    }, [smartAllocationHoldings, tabs]);
+    }, [isLoadingSmartAllocationHoldings, smartAllocationHoldings, tabs]);
 
-    if (isLoadingSmartAllocationHoldings) {
-        return <PageLoader />;
+    const connectedExchangesWithProviders = useMemo(() => connectedExchanges?.filter(exchange => exchange.provider_id), [connectedExchanges]);
+
+    if (connectedExchangesWithProviders?.length || isLoadingSmartAllocationHoldings || isLoadingExitStrategy) {
+        return (
+            <SmartAllocationContext.Provider value={{
+                rebalancingDate,
+                rebalancingFrequency,
+                isLoadingSmartAllocationData: isLoadingSmartAllocationHoldings,
+                fetchSmartAllocationData: initSmartAllocationHoldings,
+                exitStrategyData: exitStrategy,
+                isLoadingExitStrategy,
+                fetchExitStrategy
+            }}>
+                <Col className="w-full md:gap-10 lg:gap-16 md:items-center pb-20 items-start justify-start">
+                    {(smartAllocationExists || isLoadingSmartAllocationHoldings) ? withAllocation : noAllocation}
+                </Col>
+            </SmartAllocationContext.Provider>
+        )
     } else {
-        const connectedExchangesWithProviders = connectedExchanges?.filter(exchange => exchange.provider_id);
-        if (connectedExchangesWithProviders?.length) {
-            return (
-                <SmartAllocationContext.Provider value={{
-                    rebalancingDate,
-                    rebalancingFrequency,
-                    isLoadingSmartAllocationData: isLoadingSmartAllocationHoldings,
-                    fetchSmartAllocationData: initSmartAllocationHoldings,
-                    exitStrategyData: exitStrategy,
-                    isLoadingExitStrategy,
-                    fetchExitStrategy
-                }}>
-                    <Col className="w-full md:gap-10 lg:gap-16 md:items-center pb-20 items-start justify-start">
-                        {isLoadingSmartAllocationHoldings && <PageLoader />}
-                        {smartAllocationExists ? withAllocation : noAllocation}
-                    </Col>
-                </SmartAllocationContext.Provider>
-            )
-        } else {
-            return (
-                <NoConnectedExchangePage />
-            )
-        }
+        return (
+            <NoConnectedExchangePage />
+        )
     }
 }
 

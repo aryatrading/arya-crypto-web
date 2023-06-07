@@ -13,7 +13,9 @@ import { getAssetsHistoricalData } from "../../../../../services/controllers/ass
 import { doughnutChartDataType } from "../../../../shared/charts/doughnut/doughnut";
 import { chartDataType } from "../../../../shared/charts/graph/graph.type";
 import { useResponsive } from "../../../../../context/responsive.context";
+import { stableCoinsFilter } from "../../../../../utils/smart-allocation";
 import { ShadowButton } from "../../../../shared/buttons/shadow_button";
+import { TextSkeleton } from "../../../../shared/skeletons/skeletons";
 import { USDTSymbol } from "../../../../../utils/constants/market";
 import { SmartAllocationContext } from "../authed-smart-alocation";
 import LineChart from "../../../../shared/charts/graph/graph";
@@ -22,22 +24,21 @@ import { PieChartIcon } from "../../../../svg/pieChartIcon";
 import { Col, Row } from "../../../../shared/layout/flex";
 import { Trans, useTranslation } from "next-i18next";
 import Input from "../../../../shared/inputs/Input";
-import { stableCoinsFilter } from "../../../../../utils/smart-allocation";
 
 function getShiftedDayDate(prevDay: Date, shiftInDays: number) {
     return new Date(prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate() + shiftInDays);
 }
 
-const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationAssetType[] }> = ({ smartAllocationHoldings }) => {
+const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationAssetType[], isLoadingSmartAllocationHoldings: boolean }> = ({ smartAllocationHoldings, isLoadingSmartAllocationHoldings }) => {
 
-    const [simulationPeriod, setSimulationPeriod] = useState<EnumSmartAllocationSimulationPeriod>(EnumSmartAllocationSimulationPeriod["5y"]);
+    const [simulationPeriod, setSimulationPeriod] = useState<EnumSmartAllocationSimulationPeriod>(EnumSmartAllocationSimulationPeriod["1m"]);
     const [initialValue, setInitialValue] = useState<number>(10_000);
     const [currentWeightsData, setCurrentWeightsData] = useState<chartDataType[]>([]);
     const [setWeightsData, setSetWeightsData] = useState<chartDataType[]>([]);
     const [currentWeightsDrawdown, setCurrentWeightsDrawdown] = useState<number>();
     const [setWeightsDrawdown, setSetWeightsDrawdown] = useState<number>();
     const [assetsHistoricalData, setAssetsHistoricalData] = useState<{ [k: string]: chartDataType[] }>();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(isLoadingSmartAllocationHoldings);
     const [selectedChart, setSelectedChart] = useState<"doughnut" | "graph">("graph");
     const [customPeriodStartDate, setCustomPeriodStartDate] = useState<Date>(getShiftedDayDate(new Date(), -1));
     const [customPeriodEndDate, setCustomPeriodEndDate] = useState<Date>(new Date());
@@ -189,26 +190,27 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     title={chartTitle}
                     chartData={chartData}
                     className="w-[160px] md:w-[262px]"
+                    isLoading={isLoadingSmartAllocationHoldings}
                 />
-                {(!!riskValue) && <Col className="justify-center gap-5 px-2">
+                {<Col className="justify-center gap-5 px-2">
                     <Row className="gap-5 flex-wrap">
                         <Col>
                             <p className="text-sm font-bold">{t("drawdown")}</p>
-                            <p className={clsx("text-sm font-bold", { "text-green-1": drawdown >= initialValue, "text-red-1": drawdown < initialValue })}>{percentageFormat(riskPercentage * 100)}%</p>
+                            {isLoading ? <TextSkeleton widthClassName="w-full"/> : <p className={clsx("text-sm font-bold", { "text-green-1": drawdown >= initialValue, "text-red-1": drawdown < initialValue })}>{percentageFormat(riskPercentage * 100)}%</p>}
                         </Col>
                         <Col>
                             <p className="text-sm font-bold">{t("profit")}</p>
-                            <p className={clsx("text-sm font-bold", { "text-green-1": maxProfit >= initialValue, "text-red-1": maxProfit < initialValue })}>{percentageFormat(returnPercentage * 100)}%</p>
+                            {isLoading ? <TextSkeleton widthClassName="w-full"/> : <p className={clsx("text-sm font-bold", { "text-green-1": maxProfit >= initialValue, "text-red-1": maxProfit < initialValue })}>{percentageFormat(returnPercentage * 100)}%</p>}
                         </Col>
                     </Row>
                     <Col>
                         <p className="text-sm font-bold">{t("returnRisk")}</p>
-                        <p className={clsx("text-4xl font-bold", { "text-green-1": isLowRisk, "text-red-1": !isLowRisk })}>{formatNumber(returnRiskRatio)}</p>
+                        {isLoading ? <TextSkeleton widthClassName="w-full"/> : <p className={clsx("text-4xl font-bold", { "text-green-1": isLowRisk, "text-red-1": !isLowRisk })}>{formatNumber(returnRiskRatio)}</p>}
                     </Col>
                 </Col>}
             </Col>
         )
-    }, [initialValue, t]);
+    }, [initialValue, isLoading, isLoadingSmartAllocationHoldings, t]);
 
     const doughnutCharts = useMemo(() => {
         return (
@@ -329,7 +331,6 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 </Col>
             )
         } else {
-
             return (
                 <Col className="w-full gap-10">
                     {graphChart}

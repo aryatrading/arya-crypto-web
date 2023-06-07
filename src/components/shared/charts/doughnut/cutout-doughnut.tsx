@@ -5,9 +5,10 @@ import { Col, Row } from "../../layout/flex";
 import { getCoinColor } from "../../../../utils/helpers/coinsColors";
 import { doughnutChartDataType } from "./doughnut";
 import { shortNumberFormat } from "../../../../utils/helpers/prices";
+import { DoughnutSkeleton, TextSkeleton } from "../../skeletons/skeletons";
 import clsx from "clsx";
 
-const CutoutDoughnutChart: FC<{ title?: string, chartData: doughnutChartDataType[], className?: string, cutout?:string }> = ({ title, chartData, className, cutout="80%" }) => {
+const CutoutDoughnutChart: FC<{ title?: string, chartData: doughnutChartDataType[], isLoading?: boolean , cutout?:string, className?: string}> = ({ title, chartData, isLoading, cutout="80%", className }) => {
 
     ChartJS.register(ArcElement, Tooltip);
 
@@ -61,18 +62,15 @@ const CutoutDoughnutChart: FC<{ title?: string, chartData: doughnutChartDataType
     }, [chartData, cutout]);
 
 
-    if (chartData?.length) {
-        return (
-            <Col className={clsx('justify-center items-center relative gap-5 overflow-hidden aspect-square', className)}>
-                {doughnutChart}
-                <Row className='items-center justify-center font-bold inset-0 m-auto absolute -z-10'>
-                    <p className='font-bold sm:text-sm xl:text-xl'>{title}</p>
-                </Row>
-            </Col>
-        )
-    } else {
-        return <></>;
-    }
+
+    return (
+        <Col className={clsx('justify-center items-center relative gap-5 overflow-hidden aspect-square', className)}>
+            {isLoading ? <DoughnutSkeleton /> : doughnutChart}
+            <Row className='items-center justify-center font-bold inset-0 m-auto absolute -z-10'>
+                {isLoading ? <TextSkeleton /> : <p className='font-bold sm:text-sm xl:text-xl'>{title}</p>}
+            </Row>
+        </Col>
+    )
 }
 
 export default CutoutDoughnutChart;
