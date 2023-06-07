@@ -16,10 +16,10 @@ import {
   setSelectedExchange,
 } from "../../../services/redux/exchangeSlice";
 import { percentageFormat, formatNumber } from "../../../utils/helpers/prices";
-import LoadingSpinner from "../loading-spinner/loading-spinner";
 import AsyncStatusWrapper from "../async-status-wrapper/async-status-wrapper";
 import ExchangeImage from "../exchange-image/exchange-image";
 import { ExchangeType } from "../../../types/exchange.types";
+import { useResponsive } from "../../../context/responsive.context";
 
 const ExchangeSwitcher: FC<{
   canSelectOverall?: boolean;
@@ -32,6 +32,7 @@ const ExchangeSwitcher: FC<{
   const dispatch = useDispatch();
 
   const { t } = useTranslation(["common"]);
+  const { isMobileOnly } = useResponsive();
 
   useEffect(() => {
     if (!canSelectOverall) {
@@ -131,11 +132,17 @@ const ExchangeSwitcher: FC<{
       <DropdownMenu.Root modal={false}>
         <DropdownMenu.Trigger asChild>
           <button>
-            <PlayIcon
-              className="rotate-90 text-blue-1"
-              height="15px"
-              width="15px"
-            />
+            <Row className="items-center justify-center gap-2 z-10">
+              <ExchangeImage providerId={selectedExchange?.provider_id} />
+              <h3 className="text-xl md:text-3xl font-bold capitalize">
+                {selectedExchange?.name?.toLowerCase()}
+              </h3>
+              <PlayIcon
+                className="rotate-90 text-blue-1"
+                height="15px"
+                width="15px"
+              />
+            </Row>
           </button>
         </DropdownMenu.Trigger>
 
@@ -143,6 +150,7 @@ const ExchangeSwitcher: FC<{
           <DropdownMenu.Content
             sideOffset={15}
             align="start"
+            side={isMobileOnly ? "bottom" : "right"}
             className="w-[400px] max-w-[calc(100%_-_28px)] bg-grey-3 rounded-md overflow-hidden z-10"
           >
             {connectedExchanges?.map((exchange) => dropdownItem(exchange))}
@@ -150,7 +158,7 @@ const ExchangeSwitcher: FC<{
             <DropdownMenu.Item className={"p-4 rounded-md"} disabled={true}>
               <Row className="items-center gap-5 h-full">
                 <Link
-                  href="settings"
+                  href="settings?tab=exchange"
                   className="w-full py-3 px-2 rounded-md bg-grey-2"
                 >
                   <Row className="w-full font-bold justify-center gap-1">
@@ -164,7 +172,7 @@ const ExchangeSwitcher: FC<{
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
     );
-  }, [connectedExchanges, dropdownItem, t]);
+  }, [connectedExchanges, dropdownItem, selectedExchange?.name, selectedExchange?.provider_id, t]);
 
   return (
     <AsyncStatusWrapper
@@ -174,13 +182,7 @@ const ExchangeSwitcher: FC<{
       whenRejectedComponent={<></>}
     >
       <Col className="col-span-12 items-center md:items-start gap-1">
-        <Row className="items-center justify-center gap-2 z-10">
-          <ExchangeImage providerId={selectedExchange?.provider_id} />
-          <h3 className="text-xl md:text-3xl font-bold capitalize">
-            {selectedExchange?.name?.toLowerCase()}
-          </h3>
-          {dropdown}
-        </Row>
+        {dropdown}
         {hideExchangeStats === false ? (
           <Row className="items-center gap-3">
             <h3 className="text-3xl md:text-4xl font-bold">

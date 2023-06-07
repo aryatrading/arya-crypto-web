@@ -8,12 +8,14 @@ import { screens } from "tailwindcss/defaultTheme";
 
 export const ResponsiveContext = createContext({
     isTabletOrMobileScreen: false,
+    isMobileOnly: false,
 });
 
 const ResponsiveProvider: FC<{ children: any }> = ({ children }) => {
     const isTabletOrMobileScreen = useMediaQuery({ query: `(max-width: ${screens.md})` })
+    const isMobileOnly = useMediaQuery({ query: `(max-width: ${screens.sm})` })
 
-    const contextValue = { isTabletOrMobileScreen };
+    const contextValue = { isTabletOrMobileScreen, isMobileOnly };
 
     return (
         <ResponsiveContext.Provider value={contextValue}>
