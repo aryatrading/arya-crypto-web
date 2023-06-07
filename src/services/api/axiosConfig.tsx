@@ -7,11 +7,15 @@ const auth = getAuth(getApp())
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   timeout: 10000,
+});
+
+export const axiosShopProdInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_SHOP_URL,
+  timeout: 10000,
   headers: {
     "Access-Control-Allow-Origin": "*",
-    "X-AryaCrypto-Version": "1.0.0 web",
   },
-});
+})
 
 // Intercept request
 axiosInstance.interceptors.request.use(
@@ -38,6 +42,26 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => {
     return response;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
+
+axiosShopProdInstance.interceptors.request.use(
+  async function (config) {
+    if (typeof window !== 'undefined') {
+      const localStorageToken = localStorage?.getItem("idToken");
+      const idToken = await auth.currentUser?.getIdToken()
+      if (idToken) {
+        config.headers.Authorization = `Bearer firebase ${idToken}`;
+        localStorage?.setItem("idToken", idToken);
+      }
+      else if (localStorageToken) {
+        config.headers.Authorization = `Bearer firebase ${localStorageToken}`;
+      }
+    }
+    return config;
   },
   function (error) {
     return Promise.reject(error);

@@ -7,7 +7,7 @@ import { GetStaticProps } from "next";
 import Layout from "../../components/layout/layout";
 import PageLoader from "../../components/shared/pageLoader/pageLoader";
 import { Col } from "../../components/shared/layout/flex";
-import { getNotifications, updateUnseenNotifications } from "../../services/controllers/notifications";
+import { updateUnseenNotifications } from "../../services/controllers/notifications";
 import { useSelector } from "react-redux";
 import { NotificationType } from "../../types/notifications";
 import LoadingSpinner from "../../components/shared/loading-spinner/loading-spinner";
