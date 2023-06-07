@@ -1,9 +1,12 @@
-import { FC, useCallback, useEffect, useMemo } from "react";
 import { PlayIcon, PlusIcon } from "@heroicons/react/24/solid";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { FC, useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import clsx from "clsx";
 import { useTranslation } from "next-i18next";
+import Skeleton from 'react-loading-skeleton';
+import Link from "next/link";
+import clsx from "clsx";
+
 
 import { Col, Row } from "../layout/flex";
 import {
@@ -17,7 +20,6 @@ import LoadingSpinner from "../loading-spinner/loading-spinner";
 import AsyncStatusWrapper from "../async-status-wrapper/async-status-wrapper";
 import ExchangeImage from "../exchange-image/exchange-image";
 import { ExchangeType } from "../../../types/exchange.types";
-import Link from "next/link";
 
 const ExchangeSwitcher: FC<{
   canSelectOverall?: boolean;
@@ -165,19 +167,13 @@ const ExchangeSwitcher: FC<{
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
     );
-  }, [
-    connectedExchanges,
-    dropdownItem,
-    selectedExchange?.name,
-    selectedExchange?.provider_id,
-    t,
-  ]);
+  }, [connectedExchanges, dropdownItem, t]);
 
   return (
     <AsyncStatusWrapper
       asyncStatus={exchangeStoreStatus}
-      whenIdleComponent={<LoadingSpinner />}
-      whenPendingComponent={<LoadingSpinner />}
+      whenIdleComponent={<Skeleton />}
+      whenPendingComponent={<Skeleton />}
       whenRejectedComponent={<></>}
     >
       <Col className="col-span-12 items-start gap-1">

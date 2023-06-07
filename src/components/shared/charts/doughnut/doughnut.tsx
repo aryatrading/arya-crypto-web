@@ -4,6 +4,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { Col, Row } from "../../layout/flex";
 import { getCoinColor } from "../../../../utils/helpers/coinsColors";
 import { shortNumberFormat } from "../../../../utils/helpers/prices";
+import { DoughnutSkeleton, TextSkeleton } from "../../skeletons/skeletons";
 
 export type doughnutChartDataType = {
     coinSymbol: string,
@@ -11,12 +12,12 @@ export type doughnutChartDataType = {
     value: number,
 }
 
-const DoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[], maxWidth: string }> = ({ title, chartData, maxWidth }) => {
+const DoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[], maxWidth: string, isLoading?: boolean }> = ({ title, chartData, maxWidth, isLoading }) => {
 
     ChartJS.register(ArcElement, Tooltip);
 
     const doughnutChart = useMemo(() => {
-        if (chartData) {
+        if (chartData.length) {
             const labels: string[] = [];
             const values: number[] = [];
             const backgroundColors: string[] = [];
@@ -64,21 +65,16 @@ const DoughnutChart: FC<{ title: string, chartData: doughnutChartDataType[], max
         }
     }, [chartData]);
 
-
-    if (chartData?.length) {
-        return (
-            <Col className='justify-center items-start w-full gap-5'>
-                <p className='font-bold'>{title}</p>
-                <Row className='justify-center w-full'>
-                    <Row style={{ maxWidth }}>
-                        {doughnutChart}
-                    </Row>
+    return (
+        <Col className='justify-center items-start w-full gap-5'>
+            {isLoading ? <TextSkeleton /> : <p className='font-bold'>{title}</p>}
+            <Row className='justify-center w-full'>
+                <Row style={{ maxWidth }} className="w-full">
+                    {isLoading ? <DoughnutSkeleton /> : doughnutChart}
                 </Row>
-            </Col>
-        )
-    } else {
-        return <></>;
-    }
+            </Row>
+        </Col>
+    )
 }
 
 export default DoughnutChart;
