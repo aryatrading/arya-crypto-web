@@ -10,6 +10,7 @@ import AssetPnl from "./assetPnl";
 import { useTranslation } from "next-i18next";
 import { formatNumber } from "../../../../utils/helpers/prices";
 import { twMerge } from "tailwind-merge";
+import { TextSkeleton } from "../../skeletons/skeletons";
 
 type AssetHeaderProps = {
   asset: AssetType;
@@ -46,23 +47,23 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
       <Col>
         <Row className="gap-2 items-center">
           <p className="font-medium text-2xl md:text-4xl">
-            {formatNumber(
+            {_assetprice[asset.symbol?.toLowerCase() ?? "btc"] ? formatNumber(
               _assetprice[asset.symbol?.toLowerCase() ?? "btc"] ??
-                asset.currentPrice,
+              asset.currentPrice,
               true
-            )}
+            ) : <TextSkeleton />}
           </p>
-          <AssetPnl
+          {(asset.pnl !== undefined) && <AssetPnl
             value={asset.pnl}
             className={
               asset.pnl <= 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"
             }
-          />
-          <AssetPnl
+          />}
+          {(asset.priceChange !== undefined) && <AssetPnl
             value={asset.priceChange!}
-            className={twMerge(asset.priceChange! <= 0 ? "text-red-1" : "text-green-1",'hidden md:flex')}
+            className={twMerge(asset.priceChange! <= 0 ? "text-red-1" : "text-green-1", 'hidden md:flex')}
             transform={formatNumber}
-          />
+          />}
         </Row>
       </Col>
     </Col>
