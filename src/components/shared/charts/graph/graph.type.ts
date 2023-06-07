@@ -5,7 +5,14 @@ export interface GraphChartType {
   secondaryLineData?: chartDataType[];
   className?: string;
   fixed?: boolean;
+  isLoading?: boolean;
   responsive?: boolean;
+  tooltip: {
+    show: boolean,
+    title: string,
+    showProfitChange?: boolean,
+    showValue?: boolean,
+  }
 }
 
 export interface chartDataType {

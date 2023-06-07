@@ -10,7 +10,10 @@ import { getRemoteConfig, fetchAndActivate } from "firebase/remote-config";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
+import { SkeletonTheme } from 'react-loading-skeleton';
+
 import "react-toastify/dist/ReactToastify.css";
+import 'react-loading-skeleton/dist/skeleton.css'
 
 import AuthModalProvider from "../context/authModal.context";
 import { firebaseConfig } from "../services/firebase/auth/config";
@@ -94,9 +97,11 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
         <AuthModalProvider>
           <ResponsiveProvider>
             <PushNotificationLayout>
-              <main className={poppins.className}>
-                <Component {...props.pageProps} />
-              </main>
+              <SkeletonTheme baseColor="#202020" highlightColor="#444">
+                <main className={poppins.className}>
+                  <Component {...props.pageProps} />
+                </main>
+              </SkeletonTheme>
             </PushNotificationLayout>
           </ResponsiveProvider>
         </AuthModalProvider>

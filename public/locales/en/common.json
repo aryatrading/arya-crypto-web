@@ -57,5 +57,6 @@
     "CANCELLED": "Cancelled",
     "FULFILLED": "Fulfilled",
     "BROKER_ERROR": "Broker Error",
-    "DATA_ERROR": "Data Error"
+    "DATA_ERROR": "Data Error",
+    "preview": "Preview"
 }

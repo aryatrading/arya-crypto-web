@@ -1,287 +1,164 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
-import Button from '../../../../../shared/buttons/button'
+import React, { FC, useCallback, useMemo } from 'react'
 import { Col, Row } from '../../../../../shared/layout/flex'
-import { ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-import { EnumExitStrategyTrigger } from '../../../../../../utils/constants/smartAllocation'
+import { EnumExitStrategyTrigger, EnumSmartAllocationAssetStatus } from '../../../../../../utils/constants/smartAllocation'
 import ExitStrategyInput from './ExitStrategyInput'
-import { selectSelectedExchange } from '../../../../../../services/redux/exchangeSlice'
-import { useSelector } from 'react-redux'
-import { createExitStrategy, deleteExitStrategy, updateExitStrategy } from '../../../../../../services/controllers/smart-allocation'
-import { MODE_DEBUG } from '../../../../../../utils/constants/config'
-import { toast } from 'react-toastify'
-import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import { SmartAllocationExitStrategyType } from '../../../../../../types/smart-allocation.types'
 import { Trans, useTranslation } from 'next-i18next'
-import { SmartAllocationContext } from '../../authed-smart-alocation'
+import SwitchInput from '../../../../../shared/form/inputs/switch/switch'
+import { formatNumber, percentageFormat } from '../../../../../../utils/helpers/prices'
 
 
-const SmartAllocationExitStrategy = () => {
-    const {exitStrategyData,fetchExitStrategy,isLoadingExitStrategy} = useContext(SmartAllocationContext)
-    const [portfolioChange,setPortfolioChange] = useState<number>(0)
-    const [sellPortion,setSellPortion] = useState<number>(0)
-    const [assetChangeType, setAssetChangeType] = useState<EnumExitStrategyTrigger>(EnumExitStrategyTrigger.RisesBy)
-    const selectedExchange = useSelector(selectSelectedExchange);
-    const {t} = useTranslation(['smart-allocation','common'])
 
-    const saveExitStrategy = useCallback(() =>{
-        if(!selectedExchange?.provider_id||!assetChangeType||!portfolioChange||!sellPortion){
-            if(MODE_DEBUG){
-                console.log(`saveExitStrategy: missing provider_id:${selectedExchange?.provider_id} assetChangeType:${assetChangeType} portfolioChange:${portfolioChange} sellPortion:${sellPortion}`)
+type SmartAllocationExitStrategyPropsType = {
+    exitStrategy: SmartAllocationExitStrategyType | null,
+    onChange: (newExitStrategy: SmartAllocationExitStrategyType | null) => void
+}
+
+const SmartAllocationExitStrategy: FC<SmartAllocationExitStrategyPropsType> = ({ exitStrategy, onChange }) => {
+
+    const { t } = useTranslation(['smart-allocation', 'common'])
+
+
+    const portfolioChange: number = useMemo(() => {
+        if (exitStrategy) {
+            const { exit_type, exit_value } = exitStrategy
+            if (exit_type === EnumExitStrategyTrigger.RisesBy) {
+                return parseFloat(((exit_value ?? 0) * 100).toFixed(4));
             }
-            return
-        }
-        let portflolioValue:number = portfolioChange
-        if(assetChangeType === EnumExitStrategyTrigger.RisesBy){
-            portflolioValue = portfolioChange/100
-        }
-        const sellValue = sellPortion/100
-        if(exitStrategyData){
-            //update
-            updateExitStrategy(selectedExchange?.provider_id,assetChangeType,portflolioValue,sellValue).then((res) =>{
-                if(MODE_DEBUG){
-                    console.log(res)
-                }
-                fetchExitStrategy()
-                toast.success(t('exitStrategyUpdated'))
-            }).catch((error) =>{
-                if(MODE_DEBUG){
-                    console.log(error)
-                }
-                toast.error(t('updateExitStrategyFailed'))
-            })
-        }
-        else{
-            //create
-            createExitStrategy(selectedExchange?.provider_id,assetChangeType,portflolioValue,sellValue).then((res) =>{
-                if(MODE_DEBUG){
-                    console.log(res)
-                }
-                fetchExitStrategy()
-                toast.success(t('exitStrategyCreated'))
-            }).catch((error) =>{
-                if(MODE_DEBUG){
-                    console.log(error)
-                }
-                toast.error(t('createExitStrategyFailed'))
-            })
-        }
-
-    },[assetChangeType, exitStrategyData, fetchExitStrategy, portfolioChange, selectedExchange?.provider_id, sellPortion, t])
-
-    const removeExitStrategy = useCallback(() =>{
-        if(!selectedExchange?.provider_id){
-            if(MODE_DEBUG){
-                console.log(`deleteExitStrategy: missing provider_id:${selectedExchange?.provider_id}`)
+            else {
+                return exit_value ?? 0;
             }
-            return
+        } else {
+            return 0;
         }
-        deleteExitStrategy(selectedExchange?.provider_id).then((res) =>{
-            if(MODE_DEBUG){
-                console.log(res)
-            }
-            fetchExitStrategy()
-            toast.success(t('exitStrategyDeleted'))
-        }).catch((error) =>{
-            if(MODE_DEBUG){
-                console.log(error)
-            }
-            toast.error(t('deleteExitStrategyFailed'))
-        })
+    }, [exitStrategy])
 
-    },[fetchExitStrategy, selectedExchange?.provider_id, t])
 
-    
-    const triggerMovement = useCallback(() =>{
+    const sellPortion: number = useMemo(() => {
+        if (exitStrategy) {
+            return parseFloat(((exitStrategy?.exit_percentage ?? 0) * 100).toFixed(4))
+        } else {
+            return 0;
+        }
+    }, [exitStrategy])
+
+    const assetChangeType: EnumExitStrategyTrigger = useMemo(() => {
+        if (exitStrategy) {
+            return exitStrategy.exit_type ?? EnumExitStrategyTrigger.RisesBy;
+        } else {
+            return EnumExitStrategyTrigger.RisesBy;
+        }
+    }, [exitStrategy])
+
+    const onExitStrategyChange = useCallback((portfolioChange: number, sellPortion: number, assetChangeType: EnumExitStrategyTrigger) => {
+
+        const exit_value = assetChangeType === EnumExitStrategyTrigger.RisesBy ? parseFloat((portfolioChange / 100).toFixed(4)) : portfolioChange;
+        const exit_percentage = parseFloat((sellPortion / 100).toFixed(4));
+        const exit_type = assetChangeType;
+
+        if (exitStrategy?.status === EnumSmartAllocationAssetStatus.ACTIVE) {
+            onChange({ ...exitStrategy, exit_value, exit_percentage, exit_type });
+        } else {
+            onChange({ exit_value, exit_percentage, exit_type, status: EnumSmartAllocationAssetStatus.ACTIVE });
+        }
+
+    }, [exitStrategy, onChange]);
+
+
+    const triggerMovement = useCallback(() => {
         return <DropdownMenu.Root modal={false}>
-        <DropdownMenu.Trigger asChild>
-          <button
-            className="px-6 py-3 inline-flex items-center justify-center text-blue-1 bg-black-2 rounded-md gap-0 w-full md:w-auto md:gap-6"
-          > 
-            <span className='w-full text-center md:text-left'>{t(assetChangeType)}</span>
-            <ChevronDownIcon className='w-5 h-5 text-grey-1 ml-auto md:m-auto'/>
-          </button>
-        </DropdownMenu.Trigger>
-          <DropdownMenu.Content
-            className="w-[--radix-dropdown-menu-trigger-width] flex flex-col bg-black-2 rounded-md p-[5px]"
-            align='start'
-            sideOffset={2}
-          >
-            {
-                Object.values(EnumExitStrategyTrigger).map((trigger) =>{
-                    return <DropdownMenu.Item
-                        className='text-left px-6 py-3 hover:text-blue-1'
-                        key={trigger}
-                        onSelect={() => setAssetChangeType(trigger)}
-                    >
-                        {t(trigger)}
-                    </DropdownMenu.Item>
-                })
-            }
-          </DropdownMenu.Content>
-      </DropdownMenu.Root>
-    }, [assetChangeType, t])
-    
+            <DropdownMenu.Trigger asChild>
+                <button
+                    className="px-6 py-3 inline-flex items-center justify-center text-blue-1 bg-black-2 rounded-md gap-0 w-full md:gap-6"
+                >
+                    <span className='w-full text-center md:text-left'>{t(assetChangeType)}</span>
+                    <ChevronDownIcon className='w-5 h-5 text-grey-1 ml-auto md:m-auto' />
+                </button>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content
+                className="w-[--radix-dropdown-menu-trigger-width] flex flex-col bg-black-2 rounded-md p-[5px]"
+                align='start'
+                sideOffset={2}
+            >
+                {
+                    Object.values(EnumExitStrategyTrigger).map((trigger) => {
+                        return <DropdownMenu.Item
+                            className='text-left px-6 py-3 hover:text-blue-1'
+                            key={trigger}
+                            onSelect={() => {
+                                onExitStrategyChange(0, sellPortion, trigger);
+                            }}
+                        >
+                            {t(trigger)}
+                        </DropdownMenu.Item>
+                    })
+                }
+            </DropdownMenu.Content>
+        </DropdownMenu.Root>
+    }, [assetChangeType, onExitStrategyChange, sellPortion, t])
+
     const triggerPercentage = useCallback(
-        () =>{
-            return <Row className='bg-black-2 rounded-lg py-3 px-4 text-sm text-blue-1 w-full md:w-auto'>
-                <ExitStrategyInput  isPercentage={assetChangeType === EnumExitStrategyTrigger.RisesBy} value={portfolioChange} setValue={setPortfolioChange}/>
+        () => {
+            return <Row className='bg-black-2 rounded-lg py-3 px-4 text-sm text-blue-1 w-full'>
+                <ExitStrategyInput isPercentage={assetChangeType === EnumExitStrategyTrigger.RisesBy} value={portfolioChange} onChange={(value) => {
+                    onExitStrategyChange(value, sellPortion, assetChangeType);
+                }} />
             </Row>
         }
-      ,
-      [assetChangeType, portfolioChange],
+        ,
+        [assetChangeType, onExitStrategyChange, portfolioChange, sellPortion],
     )
 
-    const sellPercentage = useCallback(() =>{
+    const sellPercentage = useCallback(() => {
         return <Row className='bg-black-2 rounded-lg py-3 px-4 text-sm text-blue-1 w-full md:w-auto'>
-            <ExitStrategyInput isPercentage={true} value={sellPortion} setValue={setSellPortion}/>
+            <ExitStrategyInput isPercentage={true} value={sellPortion} onChange={(value) => {
+                onExitStrategyChange(portfolioChange, value, assetChangeType);
+            }} />
         </Row>
-    }, [sellPortion])
+    }, [assetChangeType, onExitStrategyChange, portfolioChange, sellPortion])
 
-
-    const deleteExitStrategyBtn = useCallback(
-        () => {
-          return <AlertDialog.Root>
-                  <AlertDialog.Trigger asChild>
-                      <Button className='font-semibold text-xs bg-transparent'><TrashIcon className='w-6 h-6 text-grey-1'/></Button>
-                  </AlertDialog.Trigger>
-                  <AlertDialog.Portal>
-                      <AlertDialog.Overlay className="dialog-overlay data-[state=open]:animate-overlayShow" />
-                      <AlertDialog.Content className="dialog-content data-[state=open]:animate-contentShow">
-                          <AlertDialog.Title className="dialog-title">{t('deleteExitStrategyTitle')}</AlertDialog.Title>
-                          <AlertDialog.Description className="dialog-description">
-                                {t('deleteExitStrategyDescription')}
-                          </AlertDialog.Description>
-                          <div className='flex flex-col gap-6 justify-end text-base font-semibold'>
-                            <AlertDialog.Action asChild>
-                                <Button className="px-14 py-2  bg-red-1 rounded-lg" onClick={removeExitStrategy}>{t('deleteExitStrategy')}</Button>
-                            </AlertDialog.Action>
-                            <AlertDialog.Cancel asChild>
-                                <Button className="alert-dialog-cancel-btn">{t('common:cancel')}</Button>
-                            </AlertDialog.Cancel>
-                          </div>
-                      </AlertDialog.Content>
-                  </AlertDialog.Portal>
-              </AlertDialog.Root>
-        },
-        [removeExitStrategy, t],
-      )
-
-
-      const saveExitStrategyButton = useCallback(
-        () => {
-          return <AlertDialog.Root >
-                  <AlertDialog.Trigger asChild>
-                      <Button className='bg-blue-1 w-full py-3 rounded-lg font-semibold text-xs md:w-56'>{
-                            exitStrategyData?
-                            t('updateExitStrategy')
-                            :t('setExitStrategy')
-                        }</Button>
-                  </AlertDialog.Trigger>
-                  <AlertDialog.Portal>
-                      <AlertDialog.Overlay className="dialog-overlay data-[state=open]:animate-overlayShow" />
-                      <AlertDialog.Content className="dialog-content data-[state=open]:animate-contentShow">
-                            <AlertDialog.Title className="dialog-title">
-                                {
-                                    exitStrategyData?
-                                    t('updateExitStrategyTitle')
-                                    :t('createExitStrategyTitle')
-                                }
-                            </AlertDialog.Title>
-                            <AlertDialog.Description className="dialog-description">
-                                {
-                                    exitStrategyData?
-                                    t('updateExitStrategyDescription')
-                                    :t('createExitStrategyDescription')
-                                }
-                            </AlertDialog.Description>
-                          <div className='flex flex-col gap-6 items-center text-base font-semibold'>
-                              <AlertDialog.Action asChild>
-                                  <Button className=" bg-blue-1 rounded-lg py-2 px-14" onClick={()=>saveExitStrategy()}>{
-                                    exitStrategyData?
-                                    t('updateExitStrategy')
-                                    :t('setExitStrategy')
-                                  }</Button>
-                              </AlertDialog.Action>
-                              <AlertDialog.Cancel asChild>
-                                  <Button className="alert-dialog-cancel-btn">{t('common:cancel')}</Button>
-                              </AlertDialog.Cancel>
-                          </div>
-                      </AlertDialog.Content>
-                  </AlertDialog.Portal>
-              </AlertDialog.Root>
-        },
-        [exitStrategyData, saveExitStrategy, t],
-      )
-    
-    useEffect(()=>{
-        fetchExitStrategy()
-    },[fetchExitStrategy])
-
-    useEffect(() => {
-        if(exitStrategyData){
-            const {exit_percentage,exit_type,exit_value} = exitStrategyData
-            if(exit_type === EnumExitStrategyTrigger.RisesBy){
-                setPortfolioChange(exit_value*100)
-            }
-            else if(exit_type === EnumExitStrategyTrigger.Reaches){
-                setPortfolioChange(exit_value)
-            }
-            setSellPortion(exit_percentage*100)
-            setAssetChangeType(exit_type)
-        }
-        else{
-            setPortfolioChange(0)
-            setSellPortion(0)
-            setAssetChangeType(EnumExitStrategyTrigger.RisesBy)
-        }
-    }, [exitStrategyData])
-    
-  return (
-    <Col className='items-start gap-7'>
-            <Row className='flex py-5 px-4 bg-black-2 rounded-lg w-full lg:w-1/2 justify-between items-center'>
-                <Col className='gap-2 text-sm'>
-                    {/* TODO:Fix the responsive after merge with tradeLog */}
-                    <span className='font-semibold text-white'>{t('currentExitStrategy')}</span>
-                    {   isLoadingExitStrategy?
-                            <div className='animate-pulse'>
-                                <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
-                            </div>
-                        :exitStrategyData?
-                        <span className='text-grey-1 whitespace-pre'>
-                            <Trans i18nKey={'smart-allocation:haveExitStrategy'}  
-                            
-                            components={{blueText:<span className='text-blue-1'/>}}
-                            values={{assetChangeType:t( exitStrategyData.exit_type),
-                                assetChangeValue: `${exitStrategyData.exit_type===EnumExitStrategyTrigger.RisesBy?`${exitStrategyData.exit_value*100}%`:`${exitStrategyData.exit_value}$`}`,
-                                assetSellPercentage: `${exitStrategyData.exit_percentage*100}%`
+    return (
+        <Col className='w-full items-start gap-7'>
+            <Col className="w-full gap-10">
+                <Row className="items-center gap-5">
+                    <p className="font-bold">{t('common:exitStrategy')}</p>
+                    <SwitchInput checked={!!exitStrategy} onClick={() => {
+                        if (exitStrategy) {
+                            onChange(null)
+                        } else {
+                            onChange({ exit_type: EnumExitStrategyTrigger.RisesBy, exit_value: 0, exit_percentage: 0, status: EnumSmartAllocationAssetStatus.ACTIVE })
+                        }
+                    }} />
+                </Row>
+                {exitStrategy &&
+                    <span className='text-grey-1 lg:whitespace-pre'>
+                        <Trans i18nKey={'smart-allocation:haveExitStrategy'}
+                            components={{ blueText: <span className='text-blue-1' /> }}
+                            values={{
+                                assetChangeType: t(assetChangeType),
+                                assetChangeValue: assetChangeType === EnumExitStrategyTrigger.RisesBy ? `${percentageFormat(portfolioChange)}%` : `${formatNumber(portfolioChange)}$`,
+                                assetSellPercentage: `${percentageFormat(sellPortion)}%`
                             }}
-                            />
-                        </span>
-                        :
-                        <span className='text-grey-1'>{t('noExitStrategySet')}</span>
-                    }
-                </Col> 
-                {!isLoadingExitStrategy&&!!exitStrategyData&&deleteExitStrategyBtn()}
-            </Row>
-            <Col className='text-sm gap-3 lg:w-2/3'>
-                <span className='font-semibold text-white'>{t('smart-allocation:whatIsExitStrategy')}</span>
-                <span className='text-grey-1'>{t('exitStrategyDescription')}</span>
+                        />
+                    </span>}
+                <p className="text-grey-1">
+                    {t("setAContingencyPlanToSell")}
+                </p>
             </Col>
-            <Col className='gap-5 font-semibold w-full'>
-                <span >{t('common:exitStrategy')}</span>
-                <div className='flex flex-col gap-6 items-center w-full md:w-auto md:items-start'>
-                    <div className='flex flex-col gap-3 items-center px-1 w-full md:w-auto md:flex-row'>
-                        <span>{t('whenPortfolio')}</span>
-                        {triggerMovement()}
-                        {triggerPercentage()}
-                        <span className='text-white'>{t('common:sell')}</span>
-                        {sellPercentage()}
-                    </div>
-                    {saveExitStrategyButton()}
-                </div>
-            </Col>
+            {exitStrategy && <Col className='gap-5 font-semibold w-full'>
+                <p className="font-bold">{t('common:exitStrategy')}</p>
+                <Col className='gap-3 items-center px-1 w-full md:flex-row'>
+                    <span className='w-full text-white text-center md:text-start'>{t('whenPortfolio')}</span>
+                    {triggerMovement()}
+                    {triggerPercentage()}
+                    <span className='w-full text-white text-center'>{t('common:sell')}</span>
+                    {sellPercentage()}
+                </Col>
+            </Col>}
         </Col>
-  )
+    )
 }
 
 export default SmartAllocationExitStrategy

@@ -29,6 +29,8 @@ import styles from "./dashboard.module.scss"
 import { PieChartIcon } from "../../svg/pieChartIcon";
 import { LineChartIcon } from "../../svg/lineChartIcon";
 import { useResponsive } from "../../../context/responsive.context";
+import { getCoinColor } from "../../../utils/helpers/coinsColors"
+import { TableRowSkeleton } from "../../shared/skeletons/skeletons"
 
 
 const Dashboard: FC = () => {
@@ -105,24 +107,22 @@ const Dashboard: FC = () => {
     initPortfolioHoldings();
   }, [initPortfolioSnapshots, initPortfolioHoldings]);
 
-
   const portfolioDoughnutChart = useMemo(() => {
-
-    if (portfolioHoldings.length) {
-      return (
-        <Col className="justify-center w-full sm:max-w-[300px] h-[400px]">
-          <DoughnutChart
-            maxWidth="min(100%, 300px)"
-            chartData={portfolioHoldings.map(asset => ({
-              label: asset.name ?? "",
-              value: (asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0),
-            }))}
-            title={t("common:portfolioComposition")}
-          />
-        </Col>
-      )
-    }
-  }, [portfolioHoldings, t])
+    return (
+      <Col className="justify-center w-full sm:max-w-[300px] h-[400px]">
+        <DoughnutChart
+          maxWidth="min(100%, 300px)"
+          chartData={portfolioHoldings.map(asset => ({
+            coinSymbol: asset.asset_details?.symbol ?? "",
+            label: asset.name ?? "",
+            value: (asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0),
+          }))}
+          title={t("common:portfolioComposition")}
+          isLoading={isLoadingPortfolioHoldings}
+        />
+      </Col>
+    )
+  }, [isLoadingPortfolioHoldings, portfolioHoldings, t])
 
   const onSeriesClick = useCallback(async (series: any) => {
     setActiveSeries(series.key);
@@ -139,15 +139,6 @@ const Dashboard: FC = () => {
       }
     });
 
-    const smartAllocationData: chartDataType[] = portfolioSnapshots?.map((snapshot) => {
-
-      const time = new Date(snapshot.created_at).getTime();
-      return {
-        time: Math.floor((time / 1000)) as chartDataType["time"],
-        value: snapshot.smart_allocation_total_evaluation ?? 0,
-      }
-    });
-
     return (
       <Col className="w-full gap-10">
         {!isTabletOrMobileScreen && <Row className="justify-end h-10">
@@ -157,11 +148,17 @@ const Dashboard: FC = () => {
             onclick={onSeriesClick}
           />
         </Row>}
-        <LineChart primaryLineData={chartData} secondaryLineData={!isTabletOrMobileScreen?smartAllocationData:undefined} className={"h-[200px] md:h-[400px]"} />
+        <LineChart primaryLineData={chartData} className={"h-[200px] md:h-[400px]"} tooltip={{
+          show: true,
+          title: t("portfolioValue"),
+          showValue: true,
+        }}
+          isLoading={isLoadingPortfolioSnapshots}
+        />
       </Col>
     )
 
-  }, [activeSeries, isTabletOrMobileScreen, onSeriesClick, portfolioSnapshots])
+  }, [activeSeries, isLoadingPortfolioSnapshots, isTabletOrMobileScreen, onSeriesClick, portfolioSnapshots, t])
 
   const charts = useMemo(() => {
     if (isTabletOrMobileScreen) {
@@ -253,17 +250,43 @@ const Dashboard: FC = () => {
     }
   }, [isTabletOrMobileScreen, t]);
 
-
-  const tableBody = useMemo(() => {
-
-    if (!portfolioHoldings.length) {
+  const tableLoadingSkeleton = useMemo(() => {
+    if (isTabletOrMobileScreen) {
       return (
-        <tr>
-          <td colSpan={7} className="row-span-full">{t("common:noAssets")}</td>
-        </tr>
+        <>
+          <TableRowSkeleton numberOfColumns={3} />
+          <TableRowSkeleton numberOfColumns={3} />
+          <TableRowSkeleton numberOfColumns={3} />
+          <TableRowSkeleton numberOfColumns={3} />
+          <TableRowSkeleton numberOfColumns={3} />
+        </>
       )
     } else {
-      return portfolioHoldings.map(asset => {
+      return (
+        <>
+          <TableRowSkeleton numberOfColumns={7} />
+          <TableRowSkeleton numberOfColumns={7} />
+          <TableRowSkeleton numberOfColumns={7} />
+          <TableRowSkeleton numberOfColumns={7} />
+          <TableRowSkeleton numberOfColumns={7} />
+        </>
+      )
+    }
+  }, [isTabletOrMobileScreen]);
+
+  const tableBody = useMemo(() => {
+    if (!portfolioHoldings.length) {
+      if (isLoadingPortfolioHoldings) {
+        return tableLoadingSkeleton;
+      } else {
+        return (
+          <tr>
+            <td colSpan={7} className="row-span-full">{t("common:noAssets")}</td>
+          </tr>
+        )
+      }
+    } else {
+      return portfolioHoldings.map((asset, index) => {
         const isPriceChangePositive = (asset?.asset_details?.price_change_percentage_24h ?? 0) > 0;
         const signal = isPriceChangePositive ? '+' : '-';
 
@@ -271,6 +294,8 @@ const Dashboard: FC = () => {
         const formattedChangePrice = `${signal}$${formatNumber(Math.abs(asset?.asset_details?.price_change_24h ?? 0))}`;
 
         const assetPortfolioPercentage = asset.weight;
+
+        const coinColor = getCoinColor(asset.asset_details?.symbol ?? "", index);
 
 
         if (isTabletOrMobileScreen) {
@@ -310,8 +335,9 @@ const Dashboard: FC = () => {
                 <Row className="justify-between items-center w-[120px]">
                   <p>{percentageFormat(asset.weight ?? 0)}%</p>
                   <Row className="h-[5px] rounded-full w-[50px] bg-white">
-                    <Row className={`h-full rounded-full bg-blue-1`} style={{
-                      width: `${Math.ceil(assetPortfolioPercentage ?? 0)}%`
+                    <Row className={`h-full rounded-full`} style={{
+                      width: `${Math.ceil(assetPortfolioPercentage ?? 0)}%`,
+                      backgroundColor: coinColor,
                     }} />
                   </Row>
                 </Row>
@@ -340,7 +366,7 @@ const Dashboard: FC = () => {
         }
       });
     }
-  }, [isTabletOrMobileScreen, portfolioHoldings, t, tableExchangesImages]);
+  }, [isLoadingPortfolioHoldings, isTabletOrMobileScreen, portfolioHoldings, t, tableExchangesImages]);
 
   const table = useMemo(() => {
     return (
@@ -356,43 +382,38 @@ const Dashboard: FC = () => {
   }, [tableBody, tableHeader]);
 
   const holdingsTable = useMemo(() => {
-    if (portfolioHoldings.length) {
-      return (
-        <Col className="w-full gap-5">
-          <Row className="items-center justify-between w-full">
-            <h3 className="text-2xl font-semibold">{t("yourHoldings")}</h3>
-            <Link href="/trade" className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1">
-              <PlusIcon width={15} />
-              <p className="font-bold">
-                {t('addAssets')}
-              </p>
-            </Link>
-          </Row>
-          {table}
-        </Col>
-      )
-    }
-  }, [portfolioHoldings.length, t, table]);
+    return (
+      <Col className="w-full gap-5">
+        <Row className="items-center justify-between w-full">
+          <h3 className="text-2xl font-semibold">{t("yourHoldings")}</h3>
+          <Link href="/trade" className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1">
+            <PlusIcon width={15} />
+            <p className="font-bold">
+              {t('addAssets')}
+            </p>
+          </Link>
+        </Row>
+        {table}
+      </Col>
+    )
+  }, [t, table]);
 
 
+  const connectedExchangesWithProviders = useMemo(() => connectedExchanges?.filter(exchange => exchange.provider_id), [connectedExchanges]);
 
-  if (isLoadingPortfolioSnapshots || isLoadingPortfolioHoldings || exchangeStoreStatus === StatusAsync.PENDING) {
-    return <PageLoader />;
+
+  if (!connectedExchanges || connectedExchangesWithProviders?.length) {
+    return (
+      <Col className="w-full gap-10 lg:gap-16 pb-20 items-start justify-start">
+        <ExchangeSwitcher />
+        {charts}
+        {holdingsTable}
+      </Col>
+    )
   } else {
-    const connectedExchangesWithProviders = connectedExchanges?.filter(exchange => exchange.provider_id);
-    if (connectedExchangesWithProviders?.length) {
-      return (
-        <Col className="w-full gap-10 lg:gap-16 pb-20 items-start justify-start">
-          <ExchangeSwitcher />
-          {charts}
-          {holdingsTable}
-        </Col>
-      )
-    } else {
-      return (
-        <NoConnectedExchangePage />
-      )
-    }
+    return (
+      <NoConnectedExchangePage />
+    )
   }
 }
 

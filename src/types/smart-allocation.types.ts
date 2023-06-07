@@ -1,4 +1,4 @@
-import { EnumExitStrategyTrigger, EnumRebalancingFrequency, EnumSmartAllocationAssetStatus } from "../utils/constants/smartAllocation"
+import { EnumExitStrategyTrigger, EnumReBalancingFrequency, EnumSmartAllocationAssetStatus } from "../utils/constants/smartAllocation"
 import { PortfolioAssetDetailsType } from "./exchange.types"
 
 export type SmartAllocationResponseType = {
@@ -7,20 +7,19 @@ export type SmartAllocationResponseType = {
     user_id?: number,
     provider?: number,
     provider_name?: string,
-    frequency?: EnumRebalancingFrequency,
+    frequency?: EnumReBalancingFrequency,
     status?:EnumSmartAllocationAssetStatus,
     base_asset_value?: number,
     created_at?: string,
     modified_at?: string,
     next_run_time?: string,
     assets?: SmartAllocationAssetType[],
-    total_asset_value?: number
+    exit_strategy: SmartAllocationExitStrategyType
 }
 
 export type SmartAllocationAssetType = {
     id?: number,
     name?: string,
-    ask_price?: number,
     available?: number,
     current_weight?: number,
     current_value?: number,
@@ -47,6 +46,12 @@ export type SmartAllocationAssetDetails = {
 }
 
 
+export type SmartAllocationSaveRequestType = {
+    assets: SaveSmartAllocationAssetType[],
+    frequency: EnumReBalancingFrequency | null,
+    exit_strategy: SmartAllocationExitStrategyType | null
+}
+
 export type SaveSmartAllocationAssetType = {
     name?: string,
     weight?: number,
@@ -55,23 +60,23 @@ export type SaveSmartAllocationAssetType = {
 }
 
 export type SmartAllocationExitStrategyType = {
-    id: number;
-    exit_type: EnumExitStrategyTrigger;
-    status: string;
-    provider: number;
-    exit_value: number;
-    created_time: string;
-    exit_percentage: number;
-    executed_asset_data: string;
-    executed_asset_total_evaluation: number;
-    completed_at: Date | null;
-    executed_at: Date | null;
-    provider_name: string;
+    id?: number;
+    exit_type?: EnumExitStrategyTrigger;
+    status?: EnumSmartAllocationAssetStatus;
+    provider?: number;
+    exit_value?: number;
+    created_time?: string;
+    exit_percentage?: number;
+    executed_asset_data?: string;
+    executed_asset_total_evaluation?: number;
+    completed_at?: Date | null;
+    executed_at?: Date | null;
+    provider_name?: string;
 }
 
 export interface ISmartAllocationContext {
     rebalancingDate: Date|null,
-    rebalancingFrequency: EnumRebalancingFrequency|null,
+    rebalancingFrequency: EnumReBalancingFrequency|null,
     isLoadingSmartAllocationData: boolean,
     exitStrategyData: SmartAllocationExitStrategyType|null,
     isLoadingExitStrategy: boolean
