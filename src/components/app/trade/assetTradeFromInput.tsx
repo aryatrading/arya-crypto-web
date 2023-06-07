@@ -23,7 +23,7 @@ const AssetTradeFromInput: FC = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation(["asset"]);
   const router = useRouter();
-  const { symbol } = router.query;
+  const { s } = router.query;
   const asset = useSelector(getFrom);
   const provider = useSelector(getProvider);
   const [loading, setLoading] = useState(false);
@@ -32,7 +32,7 @@ const AssetTradeFromInput: FC = () => {
     if (asset?.symbol) {
       onFromSelect(asset);
     }
-  }, [asset.symbol, symbol]);
+  }, [asset.symbol, s]);
 
   const onFromSelect = async (elm: any) => {
     setLoading(true);
@@ -97,7 +97,7 @@ const AssetTradeFromInput: FC = () => {
           ) : null}
           {loading ? (
             <LoadingSpinner />
-          ) : symbol === asset?.symbol?.toLowerCase() ? (
+          ) : s === asset?.symbol?.toLowerCase() ? (
             <p>{asset.symbol}</p>
           ) : (
             <AssetDropdown
@@ -111,7 +111,7 @@ const AssetTradeFromInput: FC = () => {
               t={t}
               disabled={false}
               title={asset.symbol ?? t("selectAsset")}
-              removeAsset={symbol}
+              removeAsset={s}
               showContentHeaderLabel={false}
             />
           )}

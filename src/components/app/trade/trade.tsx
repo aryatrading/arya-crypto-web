@@ -9,11 +9,7 @@ import { StoplossTrade } from "./stoploss_trade";
 import { TakeprofitTrade } from "./takeprofit_trade";
 import { TrailingTrade } from "./trailing_trade";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearTrade,
-  getTrade,
-  setSymbol,
-} from "../../../services/redux/tradeSlice";
+import { clearTrade, getTrade } from "../../../services/redux/tradeSlice";
 import { AssetTradeDropdown } from "../../shared/assetDropdown/assetTradeDropdown";
 import { OpenOrders } from "../../shared/tables/openOrderTable";
 import { OrderHistory } from "../../shared/tables/orderHistoryTable";
@@ -77,10 +73,6 @@ const Trade: FC = () => {
     }
 
     setLoading(true);
-
-    // if (selectedExchange?.provider_id === 2) {
-    //   _trade.symbol_name = `${trade.asset_name}-${trade.base_name}`;
-    // }
 
     try {
       await createTrade(trade, selectedExchange?.provider_id ?? 1);
@@ -149,11 +141,15 @@ const Trade: FC = () => {
   };
 
   const renderTradingView = useMemo(() => {
+    console.log("> name >> ()==", trade.asset_name);
+
     return (
-      <TradingViewWidget
-        height={500}
-        asset={`${trade.asset_name?.toUpperCase()}USDT`}
-      />
+      <div className="h-[500px] w-full">
+        <TradingViewWidget
+          height={500}
+          asset={`${trade.asset_name?.toUpperCase()}USDT`}
+        />
+      </div>
     );
   }, [trade.asset_name]);
 
@@ -163,13 +159,7 @@ const Trade: FC = () => {
       <AssetTradeDropdown />
 
       <div className="flex flex-col lg:flex-row gap-4">
-        <div className="lg:w-2/3 flex-none">
-          {renderTradingView}
-          {/* <TradingViewWidget
-            height={500}
-            asset={`${trade.asset_name?.toUpperCase()}USDT`}
-          /> */}
-        </div>
+        <div className="lg:w-2/3 flex-none">{renderTradingView}</div>
 
         <div className="w-full">
           <Col className=" bg-black-2 rounded-md gap-5 px-5 py-5">

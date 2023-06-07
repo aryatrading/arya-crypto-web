@@ -18,7 +18,6 @@ import {
   addAssetToWatchlist,
   removeAssetFromWatchlist,
 } from "../../../services/controllers/market";
-import axios from "axios";
 
 type AssetsTableProps = {
   assets: AssetType[];
@@ -136,14 +135,11 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
         {assets.length ? (
           <tbody>
             {assets.map((elm, index) => {
-              {
-                console.log(elm);
-              }
               return (
                 <tr
                   key={index}
                   className="hover:bg-black-2/25 hover:bg-blend-darken cursor-pointer"
-                  onClick={() => router.push(`/asset?symbol=${elm.symbol}`)}
+                  onClick={() => router.push(`/asset?s=${elm.symbol}`)}
                 >
                   <th
                     scope="row"

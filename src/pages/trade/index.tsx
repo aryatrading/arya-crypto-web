@@ -29,7 +29,7 @@ const TradePage = () => {
   const trade = useSelector(getTrade);
 
   const router = useRouter();
-  const { symbol } = router.query;
+  const { s } = router.query;
 
   useEffect(() => {
     if (id != null) {
@@ -44,7 +44,7 @@ const TradePage = () => {
       try {
         dispatch(clearTrade());
         await initiateTrade(
-          (symbol as string) ?? "BTC",
+          (s as string) ?? "BTC",
           selectedExchange?.provider_id ?? 1
         );
       } catch (error) {
@@ -56,7 +56,7 @@ const TradePage = () => {
     return () => {
       dispatch(clearTrade());
     };
-  }, [symbol, selectedExchange, id]);
+  }, [s, selectedExchange]);
 
   useEffect(() => {
     getAssetOpenOrders(trade.symbol_name, selectedExchange?.provider_id ?? 1);

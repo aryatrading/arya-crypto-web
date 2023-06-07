@@ -26,7 +26,7 @@ const AssetTrade: FC = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
-  const { symbol } = router.query;
+  const { s } = router.query;
   const from = useSelector(getFrom);
   const to = useSelector(getTo);
   const provider = useSelector(getProvider);
@@ -52,7 +52,7 @@ const AssetTrade: FC = () => {
       asset_name: to.symbol,
       base_name: from.symbol,
       entry_order: {
-        type: from.symbol.toLowerCase() === symbol ? "SELL" : "BUY",
+        type: from.symbol.toLowerCase() === s ? "SELL" : "BUY",
         trigger_price: 0,
         order_type: "MARKET",
         quantity: 0,
@@ -72,7 +72,7 @@ const AssetTrade: FC = () => {
 
     await createSwapTrade(payload, provider)
       .then(async () => {
-        await getAssetDetails(symbol);
+        await getAssetDetails(s);
         dispatch(clearSwap());
         toast.success(t("swap_success"));
       })

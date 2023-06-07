@@ -23,15 +23,15 @@ const AssetPage = () => {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const { symbol } = router.query;
+  const { s } = router.query;
 
   useEffect(() => {
     (async () => {
       setLoading(true);
       try {
-        await getAssetDetails(symbol ?? "btc");
-        await getAssetTimeseriesPrice(symbol ?? "btc", "5min", 288);
-        await getPosts({ searchTerm: symbol?.toString() ?? "btc" });
+        await getAssetDetails(s ?? "btc");
+        await getAssetTimeseriesPrice(s ?? "btc", "5min", 288);
+        await getPosts({ searchTerm: s?.toString() ?? "btc" });
       } catch (error) {
         toast.warn(t("somethingWentWrong"));
       } finally {
@@ -43,7 +43,7 @@ const AssetPage = () => {
       dispatch(clearAsset());
       dispatch(clearSwap());
     };
-  }, [symbol]);
+  }, [s]);
 
   return <Layout>{loading ? <PageLoader /> : <Asset />}</Layout>;
 };

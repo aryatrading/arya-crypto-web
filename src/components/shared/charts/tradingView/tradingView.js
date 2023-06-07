@@ -31,7 +31,9 @@ export default function TradingViewWidget({ height, asset }) {
 
     return () => (onLoadScriptRef.current = null);
 
+
     function createWidget() {
+      console.log('> asset >> ', asset)
       if (
         document.getElementById("tradingview_d2d35") &&
         "TradingView" in window
@@ -39,6 +41,7 @@ export default function TradingViewWidget({ height, asset }) {
         new window.TradingView.widget({
           width: '100%',
           height: height.height,
+          symbol: `BINANCE:${asset}`,
           interval: "D",
           timezone: "Etc/UTC",
           theme: "dark",
