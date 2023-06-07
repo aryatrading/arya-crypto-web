@@ -36,6 +36,7 @@ const CheckoutPage = () => {
                 
             }
         },
+        paymentMethodCreation:'manual'
       };
     
   return (
