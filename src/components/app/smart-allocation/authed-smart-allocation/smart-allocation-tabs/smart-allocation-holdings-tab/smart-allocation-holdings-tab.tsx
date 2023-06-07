@@ -53,26 +53,26 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
 
     const tableLoadingSkeleton = useMemo(() => {
         if (isTabletOrMobileScreen) {
-          return (
-            <>
-              <TableRowSkeleton numberOfColumns={3} />
-              <TableRowSkeleton numberOfColumns={3} />
-              <TableRowSkeleton numberOfColumns={3} />
-              <TableRowSkeleton numberOfColumns={3} />
-              <TableRowSkeleton numberOfColumns={3} />
-            </>
-          )
+            return (
+                <>
+                    <TableRowSkeleton numberOfColumns={3} />
+                    <TableRowSkeleton numberOfColumns={3} />
+                    <TableRowSkeleton numberOfColumns={3} />
+                    <TableRowSkeleton numberOfColumns={3} />
+                    <TableRowSkeleton numberOfColumns={3} />
+                </>
+            )
         } else {
-          return (
-            <>
-              <TableRowSkeleton numberOfColumns={8} />
-              <TableRowSkeleton numberOfColumns={8} />
-              <TableRowSkeleton numberOfColumns={8} />
-              <TableRowSkeleton numberOfColumns={8} />
-            </>
-          )
+            return (
+                <>
+                    <TableRowSkeleton numberOfColumns={8} />
+                    <TableRowSkeleton numberOfColumns={8} />
+                    <TableRowSkeleton numberOfColumns={8} />
+                    <TableRowSkeleton numberOfColumns={8} />
+                </>
+            )
         }
-      }, [isTabletOrMobileScreen]);
+    }, [isTabletOrMobileScreen]);
 
     const tableBody = useMemo(() => {
 

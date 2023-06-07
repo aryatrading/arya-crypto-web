@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from "react"
 import { PlusIcon } from "@heroicons/react/24/solid"
 import { useTranslation } from "next-i18next"
 import { useSelector } from "react-redux"
+import { twMerge } from "tailwind-merge"
 import Image from "next/image"
 import Link from "next/link"
 import clsx from "clsx"
@@ -14,24 +15,22 @@ import { GraphDataRange, chartDataType } from "../../shared/charts/graph/graph.t
 import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries"
 import ExchangeSwitcher from "../../shared/exchange-switcher/exchange-switcher"
 import { percentageFormat, formatNumber } from "../../../utils/helpers/prices"
+import CutoutDoughnutChart from "../../shared/charts/doughnut/cutout-doughnut"
 import { portfolioGraphDataRanges } from "../../../utils/constants/dashboard"
 import ExchangeImage from "../../shared/exchange-image/exchange-image"
+import { useResponsive } from "../../../context/responsive.context"
+import { TableRowSkeleton } from "../../shared/skeletons/skeletons"
+import { getCoinColor } from "../../../utils/helpers/coinsColors"
 import { ShadowButton } from "../../shared/buttons/shadow_button"
 import DoughnutChart from "../../shared/charts/doughnut/doughnut"
 import AssetPnl from "../../shared/containers/asset/assetPnl"
 import { MODE_DEBUG } from "../../../utils/constants/config"
-import PageLoader from "../../shared/pageLoader/pageLoader"
+import { LineChartIcon } from "../../svg/lineChartIcon"
 import LineChart from "../../shared/charts/graph/graph"
-import StatusAsync from "../../../utils/status-async"
+import { PieChartIcon } from "../../svg/pieChartIcon"
 import { Col, Row } from "../../shared/layout/flex"
 
 import styles from "./dashboard.module.scss"
-import { PieChartIcon } from "../../svg/pieChartIcon";
-import { LineChartIcon } from "../../svg/lineChartIcon";
-import { useResponsive } from "../../../context/responsive.context";
-import { getCoinColor } from "../../../utils/helpers/coinsColors"
-import { TableRowSkeleton } from "../../shared/skeletons/skeletons"
-
 
 const Dashboard: FC = () => {
   const [isLoadingPortfolioSnapshots, setIsLoadingPortfolioSnapshots] = useState<boolean>(false);
@@ -127,6 +126,23 @@ const Dashboard: FC = () => {
     )
   }, [isLoadingPortfolioHoldings, portfolioHoldings, t])
 
+
+
+  const portfolioCutoutDoughnutChart = useMemo(() => {
+    return (
+      <Col className="justify-center w-full sm:max-w-[300px] h-[200px]  md:h-[400px]">
+        <CutoutDoughnutChart
+          chartData={portfolioHoldings.map(asset => ({
+            coinSymbol: asset.asset_details?.symbol ?? "",
+            label: asset.name ?? "",
+            value: (asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0),
+          }))}
+          cutout="70%"
+        />
+      </Col>
+    )
+  }, [portfolioHoldings])
+
   const onSeriesClick = useCallback(async (series: any) => {
     setActiveSeries(series.key);
   }, []);
@@ -167,33 +183,44 @@ const Dashboard: FC = () => {
     if (isTabletOrMobileScreen) {
       return (
         <Col className="w-full items-center justify-center gap-5">
-          {selectedChart === "doughnut" ? portfolioDoughnutChart : portfolioLineChart}
-          <Row className="w-full h-10 justify-between gap-2 overflow-auto">
-            <Row className="gap-1">
+          {selectedChart === "doughnut" ? portfolioCutoutDoughnutChart : portfolioLineChart}
+          <Row className="w-full h-10 justify-between gap-0.5 overflow-auto">
+            {portfolioGraphDataRanges.map((elm, index) => {
+              return (
+                <ShadowButton
+                  className={twMerge('px-3 py-2 gap-0 w-full')}
+                  key={index}
+                  title={elm.title}
+                  onClick={() => onSeriesClick(elm)}
+                  showBadge={index % 2 === 0}
+                  border={index === 0 ? "rounded-l-md" : ""}
+                  iconSvg={null}
+                  bgColor={activeSeries === elm.key ? "bg-blue-3" : "bg-grey-2"}
+                  textColor={activeSeries === elm.key ? "text-blue-2" : "text-grey-1"}
+                  textSize={`font-medium text-xs`}
+                />
+              );
+            })}
+            {selectedChart === "doughnut" ?
               <ShadowButton
-                onClick={() => { setSelectedChart('doughnut') }}
                 iconSvg={
-                  <PieChartIcon stroke={selectedChart === "doughnut" ? "#558AF2" : "#6B7280"} />
-                }
-                border="rounded-l-md"
-                bgColor={selectedChart === "doughnut" ? "bg-blue-3" : "bg-grey-2"}
-                textColor={selectedChart === "doughnut" ? "text-blue-2" : ""}
-              />
-              <ShadowButton
-                iconSvg={
-                  <LineChartIcon pathFill={selectedChart !== "doughnut" ? "#558AF2" : "#6B7280"} />
+                  <LineChartIcon pathFill={"#558AF2"} />
                 }
                 onClick={() => { setSelectedChart('graph') }}
                 border="rounded-r-md"
-                bgColor={selectedChart !== "doughnut" ? "bg-blue-3" : "bg-grey-2"}
-                textColor={selectedChart !== "doughnut" ? "text-blue-2" : ""}
+                bgColor={"bg-black-2"}
+                textColor={"text-blue-1"}
               />
-            </Row>
-            {selectedChart !== "doughnut" && <TimeseriesPicker
-              series={portfolioGraphDataRanges}
-              active={activeSeries}
-              onclick={onSeriesClick}
-            />}
+              : <ShadowButton
+                onClick={() => { setSelectedChart('doughnut') }}
+                iconSvg={
+                  <PieChartIcon stroke={"#558AF2"}/>
+                }
+                border="rounded-r-md"
+                bgColor={"bg-black-2"}
+                textColor={"text-blue-1"}
+              />
+            }
           </Row>
         </Col>
       )
@@ -205,7 +232,7 @@ const Dashboard: FC = () => {
         </Col>
       )
     }
-  }, [activeSeries, isTabletOrMobileScreen, onSeriesClick, portfolioDoughnutChart, portfolioLineChart, selectedChart]);
+  }, [activeSeries, isTabletOrMobileScreen, onSeriesClick, portfolioCutoutDoughnutChart, portfolioDoughnutChart, portfolioLineChart, selectedChart]);
 
   const tableExchangesImages = useCallback((exchanges_ids?: number[]) => {
     if (exchanges_ids?.length) {
@@ -290,10 +317,9 @@ const Dashboard: FC = () => {
       }
     } else {
       return portfolioHoldings.map((asset, index) => {
-        const isPriceChangePositive = (asset?.asset_details?.price_change_percentage_24h ?? 0) > 0;
+        const isPriceChangePositive = (asset?.pnl?.percentage ?? 0) > 0;
         const signal = isPriceChangePositive ? '+' : '-';
 
-        const formattedChangePercentage = `${signal}${percentageFormat(Math.abs(asset?.asset_details?.price_change_percentage_24h ?? 0))}`;
         const formattedChangePrice = `${signal}$${formatNumber(Math.abs(asset?.asset_details?.price_change_24h ?? 0))}`;
 
         const assetPortfolioPercentage = asset.weight;
@@ -318,10 +344,15 @@ const Dashboard: FC = () => {
               </td>
               <td className="text-right">
                 <AssetPnl
-                  value={asset?.asset_details?.price_change_percentage_24h ?? 0}
+                  value={asset?.pnl?.percentage ?? 0}
+                  className={
+                    (asset?.pnl?.percentage ?? 0) <= 0
+                      ? "bg-red-2 text-red-1"
+                      : "bg-green-2 text-green-1"
+                  }
                 />
               </td>
-              <td className="text-right text-xs font-semibold">${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
+              <td className="text-right font-semibold">${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
             </tr>
           );
         } else {
@@ -346,15 +377,19 @@ const Dashboard: FC = () => {
                 </Row>
               </td>
               <td className="text-right">{formatNumber(asset.free ?? 0)} {asset.name}</td>
-              <td className="text-right font-semibold">${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
+              <td className="text-right">${formatNumber(asset?.asset_details?.current_price ?? 0)}</td>
               <td className="text-right">${formatNumber((asset?.free ?? 0) * (asset?.asset_details?.current_price ?? 0))}</td>
               <td className="text-right">
                 <Row className="items-center justify-end ">
                   <Row className={clsx({ "text-green-1": isPriceChangePositive, "text-red-1": !isPriceChangePositive }, "mr-4")}>{formattedChangePrice}</Row>
-
-                  <Row className={clsx({ "bg-green-2 text-green-1": isPriceChangePositive, "bg-red-2 text-red-1": !isPriceChangePositive }, "rounded-md py-1 px-2 font-semibold text-sm")}>
-                    {formattedChangePercentage}%
-                  </Row>
+                  <AssetPnl
+                    value={asset?.pnl?.percentage ?? 0}
+                    className={
+                      (asset?.pnl?.percentage ?? 0) <= 0
+                        ? "bg-red-2 text-red-1"
+                        : "bg-green-2 text-green-1"
+                    }
+                  />
                 </Row>
 
               </td>
@@ -369,7 +404,7 @@ const Dashboard: FC = () => {
         }
       });
     }
-  }, [isLoadingPortfolioHoldings, isTabletOrMobileScreen, portfolioHoldings, t, tableExchangesImages]);
+  }, [isLoadingPortfolioHoldings, isTabletOrMobileScreen, portfolioHoldings, t, tableExchangesImages, tableLoadingSkeleton]);
 
   const table = useMemo(() => {
     return (
@@ -414,9 +449,20 @@ const Dashboard: FC = () => {
       </Col>
     )
   } else {
-    return (
-      <NoConnectedExchangePage />
-    )
+    const connectedExchangesWithProviders = connectedExchanges?.filter(exchange => exchange.provider_id);
+    if (connectedExchangesWithProviders?.length) {
+      return (
+        <Col className="w-full gap-10 lg:gap-16 pb-20 items-center md:items-start justify-start">
+          <ExchangeSwitcher />
+          {charts}
+          {holdingsTable}
+        </Col>
+      )
+    } else {
+      return (
+        <NoConnectedExchangePage />
+      )
+    }
   }
 }
 
