@@ -104,8 +104,11 @@ const Dashboard: FC = () => {
 
   useEffect(() => {
     initPortfolioSnapshots();
+  }, [initPortfolioSnapshots]);
+
+  useEffect(() => {
     initPortfolioHoldings();
-  }, [initPortfolioSnapshots, initPortfolioHoldings]);
+  }, [initPortfolioHoldings]);
 
   const portfolioDoughnutChart = useMemo(() => {
     return (
