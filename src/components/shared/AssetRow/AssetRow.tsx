@@ -18,7 +18,7 @@ export interface IAssetRowProps {
 const AssetRow = ({ icon, name, symbol, className, showIcon }: IAssetRowProps) => {
     const { isTabletOrMobileScreen } = useResponsive();
     return (
-        <Row className={twMerge("items-center m gap-3 md:gap-6 justify-start", className)}>
+        <Row className={twMerge("items-center gap-3 md:gap-6 justify-start", className)}>
             {!!icon &&
                 <Image
                     className={clsx({ "hidden": isTabletOrMobileScreen && !showIcon, "block": showIcon, }, "w-5 h-5 rounded-full md:w-7 md:h-7")}
