@@ -145,8 +145,8 @@ const Nav = () => {
     saveUserLanguage(lang);
     window.localStorage.setItem('language', lang);
 
-    getNotifications(0, 100, 'desc');
-  }, [asPath, pathname, push, query])
+    getNotifications(0, notifications.length, 'desc');
+  }, [asPath, notifications.length, pathname, push, query])
 
   const changeLanguageView = useCallback((hide: boolean) => {
     if (locale == null || hide) {

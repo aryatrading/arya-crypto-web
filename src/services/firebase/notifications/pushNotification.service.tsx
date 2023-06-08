@@ -10,9 +10,10 @@ const firebaseCloudMessaging = {
             if (status && status === "granted") {
                 // Get new token from Firebase
                 const fcm_token = await getToken(getMessaging(getApp()));
+                const savedToken = window.localStorage.getItem("fcm_token");
 
                 // Set token in our local storage
-                if (fcm_token) {
+                if (fcm_token !== savedToken) {
                     window.localStorage.setItem("fcm_token", fcm_token);
                     updateFCMToken(fcm_token);
                     return fcm_token;
