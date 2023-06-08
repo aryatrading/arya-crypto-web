@@ -13,6 +13,7 @@ const SmartAllocation: FC = () => {
                 <>Login please</>
             );
         } else {
+            console.log(authUser.id)
             return <AuthedSmartAllocation />
         }
     } else {

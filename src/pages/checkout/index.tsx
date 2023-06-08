@@ -36,12 +36,12 @@ const CheckoutPage = () => {
                 
             }
         },
-        paymentMethodCreation:'manual'
+        paymentMethodCreation:'manual',
       };
     
   return (
     <Elements stripe={stripePromise} options={options} >
-        <div className='w-full h-screen flex justify-center items-center'>
+        <div className='w-full lg:h-screen flex justify-center items-center'>
             <Checkout/>
         </div>
     </Elements>

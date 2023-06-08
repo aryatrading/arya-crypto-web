@@ -65,7 +65,7 @@ const PaymentCard = () => {
     <Col className='items-center gap-2'>
         <Image width={315} height={245} src='/assets/images/publicPages/pricing/1.png' alt='pricing-header-image'/>
         <Col className='items-center gap-6'>
-            <span className='font-semibold text-3xl'>
+            <span className='font-semibold md:text-3xl text-2xl text-center'>
                 Upgrade to Arya Crypto Premium  
             </span>
             <span className='text-center opacity-60'>
@@ -80,7 +80,7 @@ const PaymentCard = () => {
                     Save 50%
                 </span>
             </Row>
-            <Col className='md:flex-row gap-11'>
+            <Col className='flex-col-reverse md:flex-row gap-11'>
                 <Col className='rounded-xl border-2 border-grey-1 w-[300px] min-h-[500px]'>
                     <Row className='w-full gap-3 py-3 px-9 items-center border-b-2 border-grey-1 font-semibold h-[60px]'>
                         <span className='text-xl'>Basic</span>
