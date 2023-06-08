@@ -138,7 +138,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
               return (
                 <tr
                   key={index}
-                  className="hover:bg-black-2/25 hover:bg-blend-darken cursor-pointer"
+                  className="hover:bg-black-2/25 hover:bg-grey-4 cursor-pointer"
                   onClick={() => router.push(`/asset?s=${elm.symbol}`)}
                 >
                   <th
