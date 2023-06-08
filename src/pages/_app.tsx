@@ -70,7 +70,7 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
       push({ pathname, query }, asPath, { locale: lang })
     }
 
-    getNotifications(0, 100, 'desc');
+    getNotifications(0, 10, 'desc');
 
     // Create the inital favorites list in localstorage
     localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
@@ -105,7 +105,7 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
             </PushNotificationLayout>
           </ResponsiveProvider>
         </AuthModalProvider>
-        <ToastContainer />
+        <ToastContainer limit={3} />
       </ThemeProvider>
     </Provider>
   );

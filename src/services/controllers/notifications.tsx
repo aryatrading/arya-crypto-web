@@ -2,12 +2,24 @@ import { axiosInstance } from "../api/axiosConfig";
 import { setNotifications } from "../redux/notificationsSlice";
 import { store } from "../redux/store";
 
-export const getNotifications = async (offset: number, limit: number, order: 'asc' | 'desc') => {
+export const getNotifications = async (offset: number, limit: number, order: 'asc' | 'desc', setCanLoadMore?: any) => {
     const { data } = await axiosInstance.get(
         `/notifications/?limit=${limit}&skip=${offset}&order_by=${order}`
     );
+    const oldNotifications = store?.getState().notifications.notifications.notifications;
 
-    store?.dispatch(setNotifications(data));
+    let notifications;
+
+    if (setCanLoadMore) {
+        notifications = [...oldNotifications, ...(data?.notifications || data)];
+        setCanLoadMore((data?.notifications || data).length > 0);
+    } else {
+        notifications = data?.notifications || data;
+    }
+
+    store?.dispatch(setNotifications({
+        notifications: notifications,
+    }));
 };
 
 export const updateFCMToken = (token: string) => {

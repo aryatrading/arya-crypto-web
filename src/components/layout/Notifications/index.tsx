@@ -25,9 +25,11 @@ function PushNotificationLayout({ children }: any) {
 
     const onMessaging = () => {
         onMessage(getMessaging(getApp()), async ({ data }: any) => {
-            const currentNotifications: NotificationType[] = [...await store?.getState()?.notifications?.notifications];
+            const currentNotifications: NotificationType[] = [...await store?.getState()?.notifications?.notifications.notifications];
             currentNotifications.unshift(data);
-            store.dispatch(setNotifications(currentNotifications));
+            store.dispatch(setNotifications({
+                notifications: currentNotifications,
+            }));
             store.dispatch(updateNotificationBadge(true));
             toast(<Row className="gap-4">
                 {data?.provider_id && <ExchangeImage providerId={parseInt(data?.provider_id)} width={24} height={24} />}
