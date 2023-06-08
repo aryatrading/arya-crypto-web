@@ -1,6 +1,7 @@
 import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 import ExchangeImage from "../components/shared/exchange-image/exchange-image";
 import { PortfolioDefault } from "../components/svg/navbar/portfolioIcon";
+import { WarningIcon } from "../components/svg/warning";
 
 export const titleColor = (type: string | undefined) => {
     switch (type) {
@@ -15,6 +16,7 @@ export const titleColor = (type: string | undefined) => {
         case "SMART_ALLOCATION_REBALANCED":
         case "EXIT_STRATEGY_EXECUTED":
         case "TRAILIING_EXECUTED":
+        case "PORTFOLIO_AND_SA_NOT_MATCH":
             return 'text-blue-1';
         default:
             return 'text-white';
@@ -35,5 +37,7 @@ export const notificationIcon = (type: string, id?: number) => {
         case "SMART_ALLOCATION_REBALANCED":
         case "EXIT_STRATEGY_EXECUTED":
             return <PortfolioDefault className="stroke-white w-7 h-7" color="#0E1421" fill="white" />;
+        case "PORTFOLIO_AND_SA_NOT_MATCH":
+            return <WarningIcon />
     }
 }
