@@ -17,7 +17,9 @@ export const getNotifications = async (offset: number, limit: number, order: 'as
         notifications = data?.notifications || data;
     }
 
-    store?.dispatch(setNotifications(notifications));
+    store?.dispatch(setNotifications({
+        notifications: notifications,
+    }));
 };
 
 export const updateFCMToken = (token: string) => {

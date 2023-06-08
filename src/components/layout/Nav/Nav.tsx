@@ -195,7 +195,9 @@ const Nav = () => {
               dispatch(updateNotificationBadge(false));
             } else {
               const updatedArr = [...notifications.map((notification: NotificationType) => notification.is_seen === 'false' ? ({ ...notification, is_seen: 'true' }) : notification)];
-              dispatch(setNotifications(updatedArr));
+              dispatch(setNotifications({
+                notifications: updatedArr,
+              }));
               setIsNotificationsActive(false);
               updateUnseenNotifications(notifications.map((e: NotificationType) => !e.is_seen ? e.id : null).filter((x: number) => x != null));
             }
