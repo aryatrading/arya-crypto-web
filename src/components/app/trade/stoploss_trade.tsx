@@ -19,6 +19,8 @@ import {
 } from "../../../services/controllers/trade";
 import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
 import { isPremiumUser } from "../../../services/redux/userSlice";
+import { Row } from "../../shared/layout/flex";
+import { LockClosedIcon } from "@heroicons/react/24/solid";
 
 export const StoplossTrade: FC = () => {
   const trade = useSelector(getTrade);
@@ -47,6 +49,18 @@ export const StoplossTrade: FC = () => {
     dispatch(removeStoploss());
   };
 
+  const onsetstoploss = () => {
+    if (slValue <= 0) {
+      return toast.info(t("usdtamountreq"));
+    }
+
+    if (!isPremium) {
+      return toast.info(t("premium"));
+    }
+
+    dispatch(addStoploss({ value: slValue }));
+  };
+
   return (
     <>
       {isPremium ? null : <PremiumBanner />}
@@ -59,20 +73,13 @@ export const StoplossTrade: FC = () => {
       />
 
       <Button
-        className="bg-blue-3 rounded-md py-3"
-        onClick={() => {
-          if (slValue <= 0) {
-            return toast.info(t("usdtamountreq"));
-          }
-
-          if (!isPremium) {
-            return toast.info(t("premium"));
-          }
-
-          dispatch(addStoploss({ value: slValue }));
-        }}
+        className={`${isPremium ? "bg-blue-3" : "bg-grey-1"} rounded-md py-3`}
+        onClick={() => onsetstoploss()}
       >
-        <p>{t("addstoploss")}</p>
+        <Row className="justify-center items-center gap-2">
+          <LockClosedIcon width={15} height={15} color="bg-orange-1" />
+          <p>{t("addstoploss")}</p>
+        </Row>
       </Button>
       {trade && trade?.stop_loss?.length ? (
         <p className="font-bold text-base">{t("stoploss")}</p>

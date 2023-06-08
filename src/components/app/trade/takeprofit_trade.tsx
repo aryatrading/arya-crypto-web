@@ -22,6 +22,8 @@ import { useTranslation } from "next-i18next";
 import { toast } from "react-toastify";
 import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
 import { isPremiumUser } from "../../../services/redux/userSlice";
+import { Row } from "../../shared/layout/flex";
+import { LockClosedIcon } from "@heroicons/react/24/solid";
 
 export const TakeprofitTrade: FC = () => {
   const dispatch = useDispatch();
@@ -118,8 +120,14 @@ export const TakeprofitTrade: FC = () => {
           }}
         />
       </div>
-      <Button className="bg-blue-3 rounded-md py-3" onClick={() => onAddTp()}>
-        <p>{t("addtakeprofit")}</p>
+      <Button
+        className={`${isPremium ? "bg-blue-3" : "bg-grey-1"} rounded-md py-3`}
+        onClick={() => onAddTp()}
+      >
+        <Row className="justify-center items-center gap-2">
+          <LockClosedIcon width={15} height={15} color="bg-orange-1" />
+          <p>{t("addtakeprofit")}</p>
+        </Row>
       </Button>
       {trade && trade?.take_profit?.length ? (
         <p className="font-bold text-base">{t("takeprofit")}</p>

@@ -21,6 +21,8 @@ import {
 } from "../../../services/controllers/trade";
 import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
 import { isPremiumUser } from "../../../services/redux/userSlice";
+import { LockClosedIcon } from "@heroicons/react/24/solid";
+import { Row } from "../../shared/layout/flex";
 
 export const TrailingTrade: FC = () => {
   const { t } = useTranslation(["trade"]);
@@ -127,10 +129,13 @@ export const TrailingTrade: FC = () => {
         />
       ) : null}
       <Button
-        className="bg-blue-3 rounded-md py-3"
+        className={`${isPremium ? "bg-blue-3" : "bg-grey-1"} rounded-md py-3`}
         onClick={() => onAddTrailing()}
       >
-        <p>{t("addtrailing")}</p>
+        <Row className="justify-center items-center gap-2">
+          <LockClosedIcon width={15} height={15} color="bg-orange-1" />
+          <p>{t("addtrailing")}</p>
+        </Row>
       </Button>
       {trade?.trailing_stop_loss?.length > 0 ? (
         <p className="font-bold text-base">{t("currenttrailing")}</p>
