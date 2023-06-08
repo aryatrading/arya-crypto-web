@@ -39,7 +39,7 @@ const Nav = () => {
   const [isUserDropdownActive, setIsUserDropdownActive] = useState(false)
   const [isNotificationsActive, setIsNotificationsActive] = useState(false)
   const { modalTrigger, setVisibleSection } = useAuthModal();
-  const { notifications, hasNewNotifications } = useSelector(({ notifications }: any) => notifications);
+  const { notifications: { notifications }, hasNewNotifications } = useSelector(({ notifications }: any) => notifications);
   const { t } = useTranslation(['nav', 'coin', 'asset', 'common', 'auth', 'notification']);
   const { pathname, push, locale, asPath, query } = useRouter()
   const { isTabletOrMobileScreen } = useResponsive();

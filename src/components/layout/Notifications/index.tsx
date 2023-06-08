@@ -25,7 +25,7 @@ function PushNotificationLayout({ children }: any) {
 
     const onMessaging = () => {
         onMessage(getMessaging(getApp()), async ({ data }: any) => {
-            const currentNotifications: NotificationType[] = [...await store?.getState()?.notifications?.notifications];
+            const currentNotifications: NotificationType[] = [...await store?.getState()?.notifications?.notifications.notifications];
             currentNotifications.unshift(data);
             store.dispatch(setNotifications({
                 notifications: currentNotifications,

@@ -19,7 +19,7 @@ const NotificationPage = () => {
     const { t } = useTranslation(['notification']);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [canLoadMore, setCanLoadMore] = useState(true);
-    const { notifications } = useSelector(({ notifications }: any) => notifications);
+    const { notifications: { notifications } } = useSelector(({ notifications }: any) => notifications);
     const observer = useRef<any>();
 
     useEffect(() => {

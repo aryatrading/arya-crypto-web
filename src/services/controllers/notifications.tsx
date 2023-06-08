@@ -6,7 +6,7 @@ export const getNotifications = async (offset: number, limit: number, order: 'as
     const { data } = await axiosInstance.get(
         `/notifications/?limit=${limit}&skip=${offset}&order_by=${order}`
     );
-    const oldNotifications = store?.getState().notifications.notifications;
+    const oldNotifications = store?.getState().notifications.notifications.notifications;
 
     let notifications;
 
