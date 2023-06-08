@@ -35,13 +35,11 @@ const TradePage = () => {
     return () => {
       dispatch(clearTrade());
     };
-  }, [symbol, selectedExchange, id]);
+  }, [symbol, selectedExchange, dispatch]);
 
   useEffect(() => {
-    if (id != null) {
-      getHistoryOrders(trade.asset_name, selectedExchange?.provider_id ?? 1);
-    }
-  }, [trade.symbol_name, id]);
+    getHistoryOrders(trade.asset_name, selectedExchange?.provider_id ?? 1);
+  }, [selectedExchange?.provider_id, trade.asset_name, trade.symbol_name]);
 
   return (
     <Layout>
@@ -58,6 +56,6 @@ export default withAuthUser({})(TradePage);
 
 export const getStaticProps: GetStaticProps<any> = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? "en")),
+    ...(await serverSideTranslations(locale ?? 'en')),
   },
 });

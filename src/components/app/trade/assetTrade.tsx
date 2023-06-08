@@ -69,9 +69,8 @@ const AssetTrade: FC = () => {
   };
 
   return (
-    <Col className="bg-grey-2 px-5 py-5 rounded-md gap-5 items-center">
+    <Col className="bg-grey-2 px-5 py-5 rounded-md gap-5 items-center w-full">
       <ProviderDropDown />
-
       <AssetTradeFromInput />
       <Button
         onClick={() => onswapClick()}

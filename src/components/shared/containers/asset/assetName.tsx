@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { Row } from "../../layout/flex";
-import { useTranslation } from "next-i18next";
 type AssetNameProps = {
   iconUrl?: string;
   name?: string;
@@ -8,7 +7,6 @@ type AssetNameProps = {
 };
 
 export const AssetName: FC<AssetNameProps> = ({ iconUrl, name, symbol }) => {
-  const { t } = useTranslation(["asset"]);
 
   return (
     <Row className="gap-3 align-center items-center">
@@ -17,6 +15,6 @@ export const AssetName: FC<AssetNameProps> = ({ iconUrl, name, symbol }) => {
       <span className="text-white font-medium text-lg md:text-3xl">{name}</span>
       <span className="text-grey-1 font-medium text-lg md:text-3xl"> · {symbol}</span>
       </h2>
-    </Row>
+    </Row> 
   );
 };

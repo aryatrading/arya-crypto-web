@@ -7,8 +7,14 @@ import { Button } from "../../shared/buttons/button";
 import { ProfitSet } from "../../shared/containers/trade/profit_set";
 import { PremiumBanner } from "../../shared/containers/premiumBanner";
 import { useTranslation } from "next-i18next";
+import { Col } from "../../shared/layout/flex";
 
-export const TrailingTrade: FC = () => {
+
+interface ITrailingTrade {
+  assetScreen?:boolean
+}
+
+export const TrailingTrade: FC<ITrailingTrade> = ({assetScreen = false}) => {
   const { t } = useTranslation(["trade"]);
   const trade = useSelector(getTrade);
   const [values, setValues] = useState({
@@ -46,20 +52,22 @@ export const TrailingTrade: FC = () => {
         />
       ) : null}
       <Button
-        className="bg-blue-3 rounded-md py-3"
+        className="bg-blue-3 rounded-md py-3 font-semibold"
         onClick={() => console.log(".")}
       >
         <p>{t("addtrailing")}</p>
       </Button>
-      <p className="font-bold text-base">{t("currenttrailing")}</p>
-      <ProfitSet
-        content={`Fixed at {{v}} with {{t}} {{tl}}`}
-        profit={{ value: 3 }}
-        symbol={trade.asset_name}
-        quantity="3"
-        base="USD"
-        action={() => console.log(",")}
-      />
+      {!assetScreen&&<Col className="gap-6">
+        <p className="font-bold text-base">{t("currenttrailing")}</p>
+        <ProfitSet
+          content={`Fixed at {{v}} with {{t}} {{tl}}`}
+          profit={{ value: 3 }}
+          symbol={trade.asset_name}
+          quantity="3"
+          base="USD"
+          action={() => console.log(",")}
+        />
+      </Col>}
     </>
   );
 };

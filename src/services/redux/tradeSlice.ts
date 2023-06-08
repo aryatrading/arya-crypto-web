@@ -90,8 +90,8 @@ export const tradeSlice = createSlice({
     addStoploss: (state, action: { payload: ProfitsType }) => {
       state.trade.stop_loss = [action.payload];
     },
-    removeStoploss: (satte) => {
-      satte.trade.stop_loss = [];
+    removeStoploss: (state) => {
+      state.trade.stop_loss = [];
     },
     addTakeProfit: (state, action: { payload: any }) => {
       state.trade.take_profit = [

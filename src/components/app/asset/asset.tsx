@@ -13,10 +13,12 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import AssetHoldingTab from "./assetHolding";
 import AssetExitStrategy from "./AssetExitStrategy";
 import AssetSparkLine from "../../shared/containers/asset/AssetSparkLine";
+import { useResponsive } from "../../../context/responsive.context";
 
 const Asset: FC = () => {
   const { t } = useTranslation(["asset","common"]);
   const asset = useSelector(getAsset);
+  const { isTabletOrMobileScreen } = useResponsive(); 
 
   const stats = useMemo(() => {
     return [
@@ -77,9 +79,9 @@ const Asset: FC = () => {
                 {t("holdingsinfo")}
               </Tab>
             )}
-            <Tab className='font font-semibold text-sm outline-none cursor-pointer lg:hidden'>
+            <Tab className='font-semibold text-sm outline-none cursor-pointer'>
               {
-                t("trade_title")
+                isTabletOrMobileScreen? t("trade_title"):t("common:exitStrategy")
               }
             </Tab>
           </Row>

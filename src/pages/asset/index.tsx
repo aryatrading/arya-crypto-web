@@ -30,7 +30,7 @@ const AssetPage = () => {
       dispatch(clearAsset());
       dispatch(clearSwap());
     };
-  }, [symbol]);
+  }, [dispatch, symbol]);
 
   return (
     <Layout>

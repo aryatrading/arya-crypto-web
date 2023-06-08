@@ -157,13 +157,14 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
                       />
                     </Row>
                   </td>
-
-                  <td className="leading-6 text-white text-right font-semibold text-xs md:text-base">
-                    {formatNumber(
-                      _assetprice[elm.symbol ?? ""] ?? elm.currentPrice,
-                      true
-                    )}
-                  </td>
+                  {!isTabletOrMobileScreen && !isMobileScreen ? (
+                    <td className="leading-6 text-white text-right font-semibold">
+                      {formatNumber(
+                        _assetprice[elm.symbol ?? ""] ?? elm.currentPrice,
+                        true
+                      )}
+                    </td>
+                  ) : null}
 
                   {!isTabletOrMobileScreen ? (
                     <>
