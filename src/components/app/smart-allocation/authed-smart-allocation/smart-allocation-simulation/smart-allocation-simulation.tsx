@@ -13,7 +13,9 @@ import { getAssetsHistoricalData } from "../../../../../services/controllers/ass
 import { doughnutChartDataType } from "../../../../shared/charts/doughnut/doughnut";
 import { chartDataType } from "../../../../shared/charts/graph/graph.type";
 import { useResponsive } from "../../../../../context/responsive.context";
+import { stableCoinsFilter } from "../../../../../utils/smart-allocation";
 import { ShadowButton } from "../../../../shared/buttons/shadow_button";
+import { TextSkeleton } from "../../../../shared/skeletons/skeletons";
 import { USDTSymbol } from "../../../../../utils/constants/market";
 import { SmartAllocationContext } from "../authed-smart-alocation";
 import LineChart from "../../../../shared/charts/graph/graph";
@@ -22,8 +24,6 @@ import { PieChartIcon } from "../../../../svg/pieChartIcon";
 import { Col, Row } from "../../../../shared/layout/flex";
 import { Trans, useTranslation } from "next-i18next";
 import Input from "../../../../shared/inputs/Input";
-import { usdtFilter } from "../../../../../utils/smart-allocation";
-import { TextSkeleton } from "../../../../shared/skeletons/skeletons";
 
 function getShiftedDayDate(prevDay: Date, shiftInDays: number) {
     return new Date(prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate() + shiftInDays);
@@ -53,7 +53,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
     const getAssetSymbol = useCallback((holding: SmartAllocationAssetType) => {
         const exchange = "BINANCE";
-        if (holding.asset_details?.asset_name) {
+        if (holding.asset_details?.asset_name?.toLowerCase() !== USDTSymbol.toLowerCase()) {
             return `${holding.asset_details?.asset_name}/usd:${exchange}`
         } else {
             return `${holding.name}/usd`
@@ -189,6 +189,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 <CutoutDoughnutChart
                     title={chartTitle}
                     chartData={chartData}
+                    className="w-[160px] md:w-[262px]"
                     isLoading={isLoadingSmartAllocationHoldings}
                 />
                 {<Col className="justify-center gap-5 px-2">
@@ -216,13 +217,13 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
             <Row className="md:flex-[2] justify-between md:justify-evenly md:h-[250px] gap-2.5 md:gap-20 w-full">
                 {weightsDoughnutCharts({
                     chartTitle: t("currentWeight"),
-                    chartData: smartAllocationHoldings?.filter(usdtFilter)?.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
+                    chartData: smartAllocationHoldings?.filter(stableCoinsFilter)?.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
                     drawdown: currentWeightsDrawdown ?? initialValue,
                     maxProfit: currentWeightsData[currentWeightsData.length - 1]?.value ?? 0,
                 })}
                 {weightsDoughnutCharts({
                     chartTitle: t("setWeight"),
-                    chartData: smartAllocationHoldings?.filter(usdtFilter)?.map(asset => ({ label: asset?.name ?? "", value: (asset.current_value ?? 0) / (asset.current_weight ?? 0) * (asset.weight ?? 0), coinSymbol: asset.name ?? "" })) ?? [],
+                    chartData: smartAllocationHoldings?.filter(stableCoinsFilter)?.map(asset => ({ label: asset?.name ?? "", value: (asset.current_value ?? 0)/(asset.current_weight ?? 0) * (asset.weight ?? 0), coinSymbol: asset.name ?? "" })) ?? [],
                     drawdown: setWeightsDrawdown ?? initialValue,
                     maxProfit: setWeightsData[setWeightsData.length - 1]?.value ?? 0,
                 })}

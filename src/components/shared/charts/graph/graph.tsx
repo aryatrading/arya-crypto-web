@@ -207,16 +207,14 @@ const LineChart: FC<GraphChartType> = ({
   }, [])
 
   return (
-    <>
-      {primaryLineData ? (
-        <Col reference={chartContainerRef} className={clsx('relative', className)} >
-          {loadingOverlay}
-        </Col>
-      ) : isLoading ? <TextSkeleton heightClassName="h-full" widthClassName="w-full" /> : (
-        <></>
-      )}
-      {tooltipContainer}
-    </>
+    primaryLineData ? (
+      <Col reference={chartContainerRef} className={clsx('relative', className)} >
+        {loadingOverlay}
+        {tooltipContainer}
+      </Col>
+    ) : isLoading ? <TextSkeleton heightClassName="h-full" widthClassName="w-full" /> : (
+      <></>
+    )
   );
 };
 

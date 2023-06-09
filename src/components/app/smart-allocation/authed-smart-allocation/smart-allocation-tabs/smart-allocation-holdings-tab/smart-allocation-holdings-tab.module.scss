@@ -23,7 +23,7 @@
             }
 
             th:nth-child(2) {
-                width: 170px;
+                @apply md:w-[170px];
             }
 
             th:nth-child(3),
@@ -31,7 +31,7 @@
             th:nth-child(5),
             th:nth-child(6),
             th:nth-child(7) {
-                width: 120px;
+                @apply md:w-[120px];
             }
         }
     }

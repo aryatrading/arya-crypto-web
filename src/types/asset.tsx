@@ -25,6 +25,7 @@ export interface AssetType {
   circlSupply?: number;
   isHoldingAsset?: boolean;
   description?: string;
+  stable?:boolean;
   mrkCapYesterday?: number;
   change24H?: number;
   change7D?: number;

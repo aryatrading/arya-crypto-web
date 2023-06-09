@@ -63,8 +63,8 @@ const TradingImg = ({ activeIndex }: any) => (
 )
 
 const HomePage = () => {
-    const [activeIndex, setActiveIndex] = useState<number>(1);
-    const { filteredAssets, setSearchTerm } = useAssetSearch({ fullModal: true });
+    const [activeIndex, setActiveIndex] = useState<number>(0);
+    const { filteredAssets, setSearchTerm, assetLivePrice } = useAssetSearch({ fullModal: true });
     const { isTabletOrMobileScreen } = useResponsive();
 
 
@@ -98,7 +98,8 @@ const HomePage = () => {
                 </Col>
 
                 <Col className={'flex-1 w-full h-full relative justify-center items-center'}>
-                    <Image alt='' src={require('../../../public/assets/images/publicPages/home/homeMailImg.png')} className='w-full' />
+                    <Image alt='' src={require('../../../public/assets/images/publicPages/home/homeMailImg.png')} className={clsx(styles.animateImg, 'w-full absolute')} />
+                    <Image alt='' src={require('../../../public/assets/images/publicPages/home/homeMailImg.png')} className='w-full opacity-0' />
                 </Col>
             </Row>
 
@@ -150,7 +151,7 @@ const HomePage = () => {
                 </Col>
             </Row>
 
-            <Col className='w-full md:w-[100vw] bg-grey-3 mt-40 md:mt-20 items-center py-10 px-0 md:px-80 gap-12 rounded-lg '>
+            <Col className='w-full md:w-[100vw] bg-grey-3 mt-40 md:mt-96 lg:mt-20 items-center py-10 px-0 md:px-20 lg:px-80 gap-12 rounded-lg px-4 md:rounded-none'>
                 <h2 className='font-bold text-white text-2xl text-center'>Popular cryptocurrencies</h2>
 
                 <table className={styles.table}>
@@ -170,7 +171,7 @@ const HomePage = () => {
                                     <td className='font-bold text-sm'>{asset.rank}</td>
                                     <td><AssetRow icon={asset.iconUrl} name={asset.name} symbol={asset.symbol} /></td>
                                     <td className={clsx(asset.change24H && asset.change24H > 0 ? "text-green-1" : "text-red-1", "font-bold text-sm")}>{asset.change24H}</td>
-                                    <td className='font-bold text-sm'>{formatNumber(asset.currentPrice || 0, true)}</td>
+                                    <td className='font-bold text-sm'>{formatNumber(assetLivePrice?.[asset.symbol || ''] || asset.currentPrice || 0, true)}</td>
                                     {!isTabletOrMobileScreen && <td className='font-bold text-sm'>{formatNumber(asset.mrkCap || 0, false)}</td>}
                                     {!isTabletOrMobileScreen && <td className='font-bold text-sm'>{formatNumber(asset.volume || 0, false)}</td>}
                                 </tr>
