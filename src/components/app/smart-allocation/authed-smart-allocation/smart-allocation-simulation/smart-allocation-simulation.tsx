@@ -53,7 +53,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
     const getAssetSymbol = useCallback((holding: SmartAllocationAssetType) => {
         const exchange = "BINANCE";
-        if (holding.asset_details?.asset_name) {
+        if (holding.asset_details?.asset_name?.toLowerCase() !== USDTSymbol.toLowerCase()) {
             return `${holding.asset_details?.asset_name}/usd:${exchange}`
         } else {
             return `${holding.name}/usd`

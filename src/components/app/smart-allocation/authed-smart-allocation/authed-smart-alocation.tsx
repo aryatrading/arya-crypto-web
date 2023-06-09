@@ -11,7 +11,7 @@ import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/
 import { selectConnectedExchanges, selectSelectedExchange } from "../../../../services/redux/exchangeSlice";
 import { getExitStrategy, getSmartAllocation } from "../../../../services/controllers/smart-allocation";
 import SmartAllocationSimulation from "./smart-allocation-simulation/smart-allocation-simulation";
-import { getAssetCurrentValue, getAssetCurrentWeight } from "../../../../utils/smart-allocation";
+import { getAssetCurrentValue, getAssetCurrentWeight, sortSmartAllocationsHoldings } from "../../../../utils/smart-allocation";
 import { EnumReBalancingFrequency } from "../../../../utils/constants/smartAllocation";
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
@@ -78,10 +78,17 @@ const AuthedSmartAllocation: FC = () => {
                     setRebalancingDate(null);
                 }
                 if (holdings && data.exists) {
+
                     const totalValue = getTotalAssetsValue(holdings);
-                    holdings.sort((a, b) => ((getAssetCurrentWeight(b, b.asset_details?.asset_data?.current_price ?? 0, totalValue)) - (getAssetCurrentWeight(a, a.asset_details?.asset_data?.current_price ?? 0, totalValue))));
+
+                    holdings.sort((a, b) => sortSmartAllocationsHoldings(a, b, totalValue));
+
                     setSmartAllocationHoldings(holdings.map((holding) => {
-                        return { ...holding, current_value: getAssetCurrentValue(holding, holding.asset_details?.asset_data?.current_price ?? 0), current_weight: getAssetCurrentWeight(holding, holding.asset_details?.asset_data?.current_price ?? 0, totalValue) };
+                        return {
+                            ...holding,
+                            current_value: getAssetCurrentValue(holding, holding.asset_details?.asset_data?.current_price ?? 0),
+                            current_weight: getAssetCurrentWeight(holding, holding.asset_details?.asset_data?.current_price ?? 0, totalValue),
+                        };
                     }));
                 }
             })
@@ -172,7 +179,7 @@ const AuthedSmartAllocation: FC = () => {
                 <Row className="w-full justify-between items-end">
                     <ExchangeSwitcher canSelectOverall={false} />
                 </Row>
-                <SmartAllocationSimulation smartAllocationHoldings={smartAllocationHoldings} isLoadingSmartAllocationHoldings={isLoadingSmartAllocationHoldings}/>
+                <SmartAllocationSimulation smartAllocationHoldings={smartAllocationHoldings} isLoadingSmartAllocationHoldings={isLoadingSmartAllocationHoldings} />
                 {tabs}
             </Col>
         )

@@ -88,63 +88,68 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
             }
         } else {
             return smartAllocationHoldings.map((asset, index) => {
-                if (asset.name !== USDTSymbol) {
-                    const setWeight = asset.weight ?? 0;
-                    const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
-                    const coinColor = getCoinColor(asset.name ?? "", index);
+                const setWeight = asset.weight ?? 0;
+                const isCurrentWeightMoreThanSetWeight = (asset.current_weight ?? 0) >= setWeight;
+                const coinColor = getCoinColor(asset.name ?? "", index);
 
-                    if (isTabletOrMobileScreen) {
-                        return (
-                            <tr key={asset.name}>
-                                <td>
-                                    <Col className="gap-3">
-                                        <p>{asset.asset_details?.asset_data?.name}</p>
-                                        <span className="text-sm text-grey-1">{asset.name}</span>
-                                    </Col>
-                                </td>
-                                <td>
-                                    <Col className="gap-3">
-                                        <p>{formatNumber(asset?.available ?? 0)}</p>
-                                        <p>{formatNumber(asset?.current_value ?? 0, true)}</p>
-                                    </Col>
-                                </td>
-                                <td>
-                                    <Col className="gap-3">
-                                        <p>
-                                            {percentageFormat(setWeight * 100)}%
-                                        </p>
-                                        <p className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
-                                            {percentageFormat((asset.current_weight ?? 0) * 100)}%
-                                        </p>
-                                    </Col>
-                                </td>
-                            </tr>
-                        );
-                    } else {
-                        return (
-                            <tr key={asset.name}>
-                                <td>{index + 1}</td>
-                                <td>
-                                    <Row className="gap-3 items-center">
-                                        <Image src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
-                                        <p>{asset.asset_details?.asset_data?.name}</p>
-                                        <span className="text-sm text-grey-1">{asset.name}</span>
-                                    </Row>
-                                </td>
-                                <td>
-                                    <AssetPnl
-                                        value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
-                                    />
-                                </td>
-                                <td>{formatNumber(asset?.asset_details?.asset_data?.current_price ?? 0, true)}</td>
-                                <td>{formatNumber(asset?.available ?? 0)}</td>
-                                <td>{formatNumber(asset?.current_value ?? 0, true)}</td>
-                                <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
-                                    {percentageFormat((asset.current_weight ?? 0) * 100)}%
-                                </td>
-                                <td className="">
+                if (isTabletOrMobileScreen) {
+                    return (
+                        <tr key={asset.name}>
+                            <td>
+                                <Col className="gap-3">
+                                    <p>{asset.asset_details?.asset_data?.name}</p>
+                                    <span className="text-sm text-grey-1">{asset.name}</span>
+                                </Col>
+                            </td>
+                            <td>
+                                <Col className="gap-3">
+                                    <p>{formatNumber(asset?.available ?? 0)}</p>
+                                    <p>{formatNumber(asset?.current_value ?? 0, true)}</p>
+                                </Col>
+                            </td>
+                            <td>
+                                <Col className="gap-3">
+                                    <p>
+                                        {percentageFormat(setWeight * 100)}%
+                                    </p>
+                                    {asset.stable ? <p className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
+                                        {percentageFormat((asset.current_weight ?? 0) * 100)}%
+                                    </p> : <></>}
+                                </Col>
+                            </td>
+                        </tr>
+                    );
+                } else {
+                    return (
+                        <tr key={asset.name}>
+                            <td>{index + 1}</td>
+                            <td>
+                                <Row className="gap-3 items-center">
+                                    <Image src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
+                                    <p>{asset.asset_details?.asset_data?.name}</p>
+                                    <span className="text-sm text-grey-1">{asset.name}</span>
+                                </Row>
+                            </td>
+                            <td>
+                                <AssetPnl
+                                    value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
+                                    className={
+                                        (asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0) <= 0
+                                            ? "bg-red-2 text-red-1 mr-5"
+                                            : "bg-green-2 text-green-1 mr-5"
+                                    }
+                                />
+                            </td>
+                            <td>{formatNumber(asset?.asset_details?.asset_data?.current_price ?? 0, true)}</td>
+                            <td>{formatNumber(asset?.available ?? 0)}</td>
+                            <td>{formatNumber(asset?.current_value ?? 0, true)}</td>
+                            <td className={clsx({ "text-green-1": isCurrentWeightMoreThanSetWeight, "text-red-1": !isCurrentWeightMoreThanSetWeight })}>
+                                {percentageFormat((asset.current_weight ?? 0) * 100)}%
+                            </td>
+                            <td className="">
+                                {(!asset.stable) ?
                                     <Row className="gap-2 items-center">
-                                        <p>
+                                        <p className="min-w-[50px]">
                                             {percentageFormat(setWeight * 100)}%
                                         </p>
                                         <Row className="w-16 rounded-full overflow-hidden bg-white flex-1" style={{ height: 10 }}>
@@ -157,12 +162,11 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                             />
                                         </Row>
                                     </Row>
-                                </td>
-                            </tr>
-                        );
-                    }
-                } else {
-                    return <></>
+                                    : <p className="font-bold text-grey-1">{asset.name === USDTSymbol ? "Your USDT holdings will be used on the next re-balancing" : "This stable coin will not be used in smart allocation"}</p>
+                                }
+                            </td>
+                        </tr>
+                    );
                 }
             });
         }
