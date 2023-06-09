@@ -6,9 +6,9 @@ import clsx from "clsx";
 import { Col, Row } from "../layout/flex";
 import Button from "../buttons/button";
 import { AssetType } from "../../../types/asset";
-import LoadingSpinner from "../loading-spinner/loading-spinner";
 import { converterTop6Coins, usdt } from "../../../utils/constants/defaultConverterList";
 import { AssetDropdown } from "../assetDropdown";
+import { TextSkeleton } from "../skeletons/skeletons";
 
 const inputClasses = "font-medium text-white bg-transparent flex-1 h-[40px] pl-4 mr-12 border-transparent focus:ring-0 focus:border-0 focus:outline-none";
 
@@ -91,6 +91,31 @@ export const CoinConverter = (props: CoinConverterTypes) => {
         );
     }), [assetLivePrice, convertValues, firstCoin, firstCoinAmount, props.preDefined]);
 
+    const coinConverterSkeleton = useMemo(() => {
+        return (
+            <Col className="flex-col gap-5 bg-transparent rounded-md lg:flex-row items-start justify-start w-full">
+                <Col className="justify-center gap-4 w-full lg:w-3/5">
+                    <Row className="gap-4 items-center rounded-md">
+                        <TextSkeleton widthClassName="w-20" />
+                        <TextSkeleton widthClassName="w-full" />
+                    </Row>
+                    <Row className="gap-4 items-center rounded-md">
+                        <TextSkeleton widthClassName="w-20" />
+                        <TextSkeleton widthClassName="w-full" />
+                    </Row>
+                </Col>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full justify-items-start lg:w-2/5 h-full">
+                    <TextSkeleton widthClassName="w-full" />
+                    <TextSkeleton widthClassName="w-full" />
+                    <TextSkeleton widthClassName="w-full" />
+                    <TextSkeleton widthClassName="w-full" />
+                    <TextSkeleton widthClassName="w-full" />
+                    <TextSkeleton widthClassName="w-full" />
+                </div>
+            </Col>
+        )
+    }, [])
+
     return (
         <Col className="items-start w-full gap-4">
             <h3 className="asset-header">{t('cryptoConverter')}</h3>
@@ -129,7 +154,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
                         </div>
                     </Row>
                 </>
-                : <LoadingSpinner />}
+                : coinConverterSkeleton}
         </Col>
     );
 };

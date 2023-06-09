@@ -13,24 +13,26 @@ import {
 import { clearAsset } from "../../services/redux/assetSlice";
 import { clearSwap } from "../../services/redux/swapSlice";
 import { getPosts } from "../../services/firebase/community/posts";
+import { getParameterByName } from "../../utils/helpers/url";
 
 const AssetPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { symbol } = router.query;
 
   useEffect(() => {
+    const symbol = getParameterByName("symbol", router.asPath);
+
     getAssetDetails(symbol ?? "btc");
     getAssetTimeseriesPrice(symbol ?? "btc", "5min", 288);
     if (symbol) {
       getPosts({ searchTerm: symbol?.toString() || "" });
     }
-
+    
     return () => {
       dispatch(clearAsset());
       dispatch(clearSwap());
     };
-  }, [symbol]);
+  }, [dispatch, router]);
 
   return (
     <Layout>

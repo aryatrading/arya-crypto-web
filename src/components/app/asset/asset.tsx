@@ -58,7 +58,7 @@ const Asset: FC = () => {
           <AssetHeader asset={asset} />
           <AssetSparkLine symbol={asset.symbol} />
         </Row>
-        <AssetVote className="hidden md:flex" />
+        <AssetVote className="hidden md:flex w-full" />
       </Row>
       <Row className="mt-7 flex-wrap gap-5 xl:gap-16 xl:justify-start hidden md:flex">
         {stats.map((elm, index) => {
