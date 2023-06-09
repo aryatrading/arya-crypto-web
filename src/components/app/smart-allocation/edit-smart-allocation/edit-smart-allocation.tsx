@@ -278,7 +278,7 @@ const EditSmartAllocation: FC = () => {
                             <td>
                                 {(!asset.stable) ? <Button className="flex justify-center w-full" onClick={() => onRemoveAsset(asset)}>
                                     <XMarkIcon width={20} height={20} color="white" />
-                                </Button> : <p className="text-[9px] text-center select-none">STABLE<br />COIN</p>}
+                                </Button> : <p className="text-[9px] text-center select-none">{t("STABLE_COIN")}</p>}
                             </td>
                         </tr>
                     );
@@ -327,7 +327,7 @@ const EditSmartAllocation: FC = () => {
                             <td>
                                 {(!asset.stable) ? <Button className="flex justify-center w-full" onClick={() => onRemoveAsset(asset)}>
                                     <XMarkIcon width={20} height={20} color="white" />
-                                </Button> : <p className="text-[9px] text-center select-none">STABLE<br />COIN</p>}
+                                </Button> : <p className="text-[9px] text-center select-none">{t("STABLE_COIN")}</p>}
                             </td>
                         </tr>
                     );

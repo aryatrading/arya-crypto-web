@@ -87,5 +87,8 @@
     "rebalancingFrequency":"Fréquence de rééquilibrage ?",
     "exitStrategy":"Stratégie de sortie",
     "rebalancing":"Rééquilibrage",
-    "profitChange%":"Variation des bénéfices %"
+    "profitChange%":"Variation des bénéfices %",
+    "yourUSDTHoldingsWillBeUsedOnTheNextRebalancing": "Vos avoirs en USDT seront utilisés lors du prochain rééquilibrage.",
+    "thisStableCoinWillNotBeUsedInSmartAllocation": "Cette pièce stable ne sera pas utilisée dans le cadre de l'allocation intelligente.",
+    "STABLE_COIN": "MONNAIE STABLE"
 }
