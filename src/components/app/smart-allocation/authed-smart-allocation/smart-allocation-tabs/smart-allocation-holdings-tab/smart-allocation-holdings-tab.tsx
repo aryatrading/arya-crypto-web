@@ -162,7 +162,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                                             />
                                         </Row>
                                     </Row>
-                                    : <p className="font-bold text-grey-1">{asset.name === USDTSymbol ? t("yourUSDTHoldingsWillBeUsedOnTheNextRebalancing") : t("thisStableCoinWillNotBeUsedInSmartAllocation")}</p>
+                                    : <p className="font-bold text-grey-1 whitespace-nowrap text-ellipsis overflow-hidden">{asset.name === USDTSymbol ? t("yourUSDTHoldingsWillBeUsedOnTheNextRebalancing") : t("thisStableCoinWillNotBeUsedInSmartAllocation")}</p>
                                 }
                             </td>
                         </tr>
