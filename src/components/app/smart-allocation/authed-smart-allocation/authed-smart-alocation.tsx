@@ -17,6 +17,7 @@ import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switche
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { MODE_DEBUG } from "../../../../utils/constants/config";
 import { Col, Row } from "../../../shared/layout/flex";
+import { USDTSymbol } from "../../../../utils/constants/market";
 
 
 
@@ -50,7 +51,9 @@ const AuthedSmartAllocation: FC = () => {
     const connectedExchanges = useSelector(selectConnectedExchanges);
 
     const getTotalAssetsValue = useCallback((smartAllocationHoldings: SmartAllocationAssetType[]) => {
-        return smartAllocationHoldings.map(holding => getAssetCurrentValue(holding, holding.asset_details?.asset_data?.current_price ?? 0)).reduce((prev, curr) => prev + curr);
+        const total = smartAllocationHoldings.map(holding => getAssetCurrentValue(holding, holding.asset_details?.asset_data?.current_price ?? 0)).reduce((prev, curr) => prev + curr);
+        const stableCoinsExceptUSDTTotal = smartAllocationHoldings.map(holding => holding.stable && holding.name !== USDTSymbol ? getAssetCurrentValue(holding, holding.asset_details?.asset_data?.current_price ?? 0) : 0).reduce((prev, curr) => (prev ?? 0) + (curr ?? 0));
+        return total - stableCoinsExceptUSDTTotal;
     }, [])
 
     const initSmartAllocationHoldings = useCallback(() => {
@@ -84,10 +87,12 @@ const AuthedSmartAllocation: FC = () => {
                     holdings.sort((a, b) => sortSmartAllocationsHoldings(a, b, totalValue));
 
                     setSmartAllocationHoldings(holdings.map((holding) => {
+                        const currentWeight = getAssetCurrentWeight(holding, holding.asset_details?.asset_data?.current_price ?? 0, totalValue);
                         return {
                             ...holding,
                             current_value: getAssetCurrentValue(holding, holding.asset_details?.asset_data?.current_price ?? 0),
-                            current_weight: getAssetCurrentWeight(holding, holding.asset_details?.asset_data?.current_price ?? 0, totalValue),
+                            current_weight: currentWeight,
+                            expected_value: (holding.weight ?? 0) * totalValue,
                         };
                     }));
                 }
