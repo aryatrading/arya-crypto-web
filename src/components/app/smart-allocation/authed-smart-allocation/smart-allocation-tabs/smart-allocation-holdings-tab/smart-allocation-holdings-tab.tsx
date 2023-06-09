@@ -96,7 +96,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                     return (
                         <tr key={asset.name}>
                             <td>
-                                <Col className="gap-3">
+                                <Col className="gap-1">
                                     <p>{asset.asset_details?.asset_data?.name}</p>
                                     <span className="text-sm text-grey-1">{asset.name}</span>
                                 </Col>
