@@ -38,7 +38,11 @@ export const shortNumberFormat = (number: number) => {
 
 export const percentageFormat = (number: number) => {
   if (number) {
-    return numeral(number).format("0a[.]00");
+    if (Math.abs(number) < 0.01) {
+      return numeral(number).format("0a[.]0000");
+    } else {
+      return numeral(number).format("0a[.]00");
+    }
   }
   return 0;
 };
