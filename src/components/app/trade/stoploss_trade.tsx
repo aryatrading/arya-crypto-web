@@ -46,7 +46,7 @@ export const StoplossTrade: FC<ITrailingTrade> = ({assetScreen}) => {
         base_name:trade.base_name,
         available_quantity:trade.available_quantity
       }
-      tradeData.stop_loss =[slValue]
+      tradeData.stop_loss =[{value:slValue}]
       await createTrade(tradeData, selectedExchange?.provider_id ?? 1);
       toast.success(`${trade.symbol_name} stoploss created`);
 

@@ -74,6 +74,8 @@ export const TakeprofitTrade: FC<ITrailingTrade> = ({assetScreen}) => {
         available_quantity:trade.available_quantity
       }
       tradeData.take_profit =[values]
+
+      console.log(tradeData)
       
       await createTrade(tradeData, selectedExchange?.provider_id ?? 1);
       toast.success(`${trade.symbol_name} trade created`);
