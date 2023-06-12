@@ -88,5 +88,8 @@
     "rebalancingFrequency":"Rebalancing Frequency?",
     "exitStrategy":"Exit strategy",
     "rebalancing":"Rebalancing",
-    "profitChange%":"Profit Change %"
+    "profitChange%":"Profit Change %",
+    "yourUSDTHoldingsWillBeUsedOnTheNextRebalancing": "Your USDT holdings will be used on the next re-balancing",
+    "thisStableCoinWillNotBeUsedInSmartAllocation": "This stable coin will not be used in smart allocation",
+    "STABLE_COIN": "STABLE\nCOIN"
 }

@@ -53,7 +53,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
     const getAssetSymbol = useCallback((holding: SmartAllocationAssetType) => {
         const exchange = "BINANCE";
-        if (holding.asset_details?.asset_name) {
+        if (holding.asset_details?.asset_name?.toLowerCase() !== USDTSymbol.toLowerCase()) {
             return `${holding.asset_details?.asset_name}/usd:${exchange}`
         } else {
             return `${holding.name}/usd`
@@ -185,11 +185,11 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
         const isLowRisk = returnRiskRatio > 0;
 
         return (
-            <Col className="items-center w-[165px] md:flex-row md:flex-1 gap-5 md:h-full">
+            <Col className="items-center w-[165px] md:flex-row md:flex-1 gap-5 md:h-full shrink-0">
                 <CutoutDoughnutChart
                     title={chartTitle}
                     chartData={chartData}
-                    className="w-[160px] md:w-[262px]"
+                    className="w-[160px] md:w-[262px] md:min-w-[130px]"
                     isLoading={isLoadingSmartAllocationHoldings}
                 />
                 {<Col className="justify-center gap-5 px-2">
@@ -205,7 +205,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     </Row>
                     <Col>
                         <p className="text-sm font-bold">{t("returnRisk")}</p>
-                        {isLoading ? <TextSkeleton widthClassName="w-full"/> : <p className={clsx("text-4xl font-bold", { "text-green-1": isLowRisk, "text-red-1": !isLowRisk })}>{formatNumber(returnRiskRatio)}</p>}
+                        {isLoading ? <TextSkeleton widthClassName="w-full"/> : <p className={clsx("text-3xl font-bold", { "text-green-1": isLowRisk, "text-red-1": !isLowRisk })}>{formatNumber(returnRiskRatio)}</p>}
                     </Col>
                 </Col>}
             </Col>
@@ -214,7 +214,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
     const doughnutCharts = useMemo(() => {
         return (
-            <Row className="md:flex-[2] justify-between md:justify-evenly md:h-[250px] gap-2.5 md:gap-20 w-full">
+            <Row className="md:flex-[2] justify-between md:justify-evenly md:h-[250px] gap-2.5 w-full">
                 {weightsDoughnutCharts({
                     chartTitle: t("currentWeight"),
                     chartData: smartAllocationHoldings?.filter(stableCoinsFilter)?.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" })) ?? [],
@@ -334,7 +334,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
             return (
                 <Col className="w-full gap-10">
                     {graphChart}
-                    <Col className="gap-20 md:flex-row">
+                    <Col className="gap-10 md:flex-row flex-wrap">
                         {doughnutCharts}
                         {reBalanceNow}
                     </Col>
