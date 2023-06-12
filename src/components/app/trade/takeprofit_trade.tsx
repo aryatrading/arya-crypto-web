@@ -17,6 +17,7 @@ import { useTranslation } from "next-i18next";
 import { toast } from "react-toastify";
 import { TradeType } from "../../../types/trade";
 import { MODE_DEBUG } from "../../../utils/constants/config";
+import { twMerge } from "tailwind-merge";
 
 
 interface ITrailingTrade {
@@ -118,7 +119,7 @@ export const TakeprofitTrade: FC<ITrailingTrade> = ({assetScreen}) => {
           }}
         />
       </div>
-      <Button className="bg-blue-3 rounded-md py-3 font-semibold" onClick={() => onAddTp()}>
+      <Button className={twMerge("bg-blue-3 rounded-md py-3 font-semibold",assetScreen?"mt-auto":'')} onClick={() => onAddTp()}>
         <p>{t("addtakeprofit")}</p>
       </Button>
       {trade && trade?.take_profit?.length ? (

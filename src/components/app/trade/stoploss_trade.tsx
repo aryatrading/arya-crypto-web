@@ -16,6 +16,7 @@ import { createTrade, initiateTrade } from "../../../services/controllers/trade"
 import { TradeType } from "../../../types/trade";
 import { MODE_DEBUG } from "../../../utils/constants/config";
 import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
+import { twMerge } from "tailwind-merge";
 
 interface ITrailingTrade {
   assetScreen?:boolean
@@ -72,17 +73,16 @@ export const StoplossTrade: FC<ITrailingTrade> = ({assetScreen}) => {
 
   return (
     <>
-      <PremiumBanner />
-      <p className="font-bold text-base">{t("addstoploss")}</p>
-      <TradeInput
-        title="Price"
-        value={trade.base_name ?? "USDT"}
-        amount={slValue}
-        onchange={(e: string) => setSlValue(e)}
-      />
-
+        <PremiumBanner />
+        <p className="font-bold text-base">{t("addstoploss")}</p>
+        <TradeInput
+          title="Price"
+          value={trade.base_name ?? "USDT"}
+          amount={slValue}
+          onchange={(e: string) => setSlValue(e)}
+        />
       <Button
-        className="bg-blue-3 rounded-md py-3 font-semibold"
+        className={twMerge("bg-blue-3 rounded-md py-3 font-semibold",assetScreen?"mt-auto":'')}
         onClick={addSl }
       >
         <p>{t("addstoploss")}</p>

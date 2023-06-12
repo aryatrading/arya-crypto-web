@@ -97,8 +97,8 @@ export const getAssetOpenOrders = async (symbol: string, provider: number) => {
       symbol,
       skip:0,
       limit:100,
-      order_origin:'manual_order',
-      order_status:[0,100]
+      order_origin:['manual_order'],
+      order_status:[0,100],
     }}
   );
   // store.dispatch(setOpenOrders({ orders: _openOrders }));

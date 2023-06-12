@@ -8,6 +8,7 @@ import { ProfitSet } from "../../shared/containers/trade/profit_set";
 import { PremiumBanner } from "../../shared/containers/premiumBanner";
 import { useTranslation } from "next-i18next";
 import { Col } from "../../shared/layout/flex";
+import { twMerge } from "tailwind-merge";
 
 
 interface ITrailingTrade {
@@ -52,7 +53,7 @@ export const TrailingTrade: FC<ITrailingTrade> = ({assetScreen = false}) => {
         />
       ) : null}
       <Button
-        className="bg-blue-3 rounded-md py-3 font-semibold"
+        className={twMerge("bg-blue-3 rounded-md py-3 font-semibold",assetScreen?"mt-auto":'')}
         onClick={() => console.log(".")}
       >
         <p>{t("addtrailing")}</p>
