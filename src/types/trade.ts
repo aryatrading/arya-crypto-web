@@ -52,6 +52,39 @@ export interface TradeOrder {
   type?: string;
   amount?: number;
   price?: number;
-  createdAt?: string;
+  createdAt?: Date;
   exchange?: string;
 }
+
+
+export type Order = {
+  id: number;
+  quantity: number;
+  order_value: number;
+  value: number;
+  number: number;
+  executed_amount: number;
+  total_price: number;
+  total_fees: number;
+  type: string;
+  status: number;
+  cancel_reason: null | string;
+  edited_time: null | Date;
+  created_at: Date;
+  settled_at: null | Date;
+  order_data: {
+    trailing_delta?: string;
+    activation_price?: string;
+    stop_price?: string;
+    status_check_time: null | Date;
+    status_check_delay: number;
+    side?: string;
+    entry_type?: string;
+    price_based?: string;
+  };
+  provider_data: {};
+  order_origin: string;
+  order_status: string;
+  order_symbol: string;
+  order_provider: number;
+};

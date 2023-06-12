@@ -9,7 +9,7 @@ export const TpHeaderOptions = [
 
 export const TrailingHeaderOptions = [
     "Type",
-    "Price",
+    "Activation Price",
     "Limit",
     "Percentage",
     "Status",

@@ -79,11 +79,13 @@ const Asset: FC = () => {
                 {t("holdingsinfo")}
               </Tab>
             )}
-            <Tab className='font-semibold text-sm outline-none cursor-pointer'>
-              {
-                isTabletOrMobileScreen? t("trade_title"):t("common:exitStrategy")
-              }
-            </Tab>
+            {!!asset?.isHoldingAsset && (
+              <Tab className='font-semibold text-sm outline-none cursor-pointer'>
+                {
+                  isTabletOrMobileScreen? t("trade_title"):t("common:exitStrategy")
+                }
+              </Tab>
+            )}
           </Row>
         </TabList>
         <TabPanel>
@@ -95,9 +97,11 @@ const Asset: FC = () => {
             <AssetHoldingTab />
           </TabPanel>
         }
-        <TabPanel>
-          <AssetExitStrategy/>
-        </TabPanel>
+        {!!asset?.isHoldingAsset &&       
+          <TabPanel>
+            <AssetExitStrategy/>
+          </TabPanel>
+        }
       </Tabs>
     </Col>
   );
