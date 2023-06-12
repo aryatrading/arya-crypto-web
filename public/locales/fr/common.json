@@ -39,6 +39,10 @@
     "none": "aucun",
     "QUARTERLY": "Trimestriel",
     "YEARLY": "Annuel",
+    "asset": "Vermögen",
+    "buy": "Achat",
+    "target": "Target",
+    "cancel": "Annuler",
     "asset": "Crypto",
     "buy":"Achat",
     "target":"Target",
@@ -59,5 +63,8 @@
     "DATA_ERROR": "Erreur de données",
     "english": "anglais",
     "french": "français",
+    "preview": "Avant-première",
+    "premiumusersfeature": "Cette fonctionnalité est réservée aux utilisateurs premium",
+    "upgradenow": "Mettre à niveau maintenant",
     "preview": "Visualiser"
 }

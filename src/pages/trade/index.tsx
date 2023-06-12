@@ -6,50 +6,64 @@ import { useRouter } from "next/router";
 
 import Layout from "../../components/layout/layout";
 import Trade from "../../components/app/trade/trade";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { clearTrade, getTrade } from "../../services/redux/tradeSlice";
 import {
+  getAssetCurrentPrice,
+  getAssetOpenOrders,
   getHistoryOrders,
   initiateTrade,
 } from "../../services/controllers/trade";
 import { selectSelectedExchange } from "../../services/redux/exchangeSlice";
 import { TradingSalesPage } from "../../components/app/trade/salesPage";
+import { toast } from "react-toastify";
+import PageLoader from "../../components/shared/pageLoader/pageLoader";
+import { useTranslation } from "next-i18next";
 
 const TradePage = () => {
   const { id } = useAuthUser();
   const dispatch = useDispatch();
+  const { t } = useTranslation(["common"]);
   const selectedExchange = useSelector(selectSelectedExchange);
+  const [loading, setLoading] = useState(false);
   const trade = useSelector(getTrade);
 
   const router = useRouter();
-  const { symbol } = router.query;
+  const { s } = router.query;
 
   useEffect(() => {
     if (id != null) {
-      initiateTrade(
-        (symbol as string) ?? "BTC",
-        selectedExchange?.provider_id ?? 1
-      );
+      initiateTrade((s as string) ?? "BTC", selectedExchange?.provider_id ?? 1);
     }
 
+    (async () => {
+      setLoading(true);
+      try {
+        dispatch(clearTrade());
+        await initiateTrade(
+          (s as string) ?? "BTC",
+          selectedExchange?.provider_id ?? 1
+        );
+      } catch (error) {
+        toast.warn(t("somethingWentWrong"));
+      } finally {
+        setLoading(false);
+      }
+    })();
     return () => {
       dispatch(clearTrade());
     };
-  }, [symbol, selectedExchange, id]);
+  }, [s, selectedExchange]);
 
   useEffect(() => {
-    if (id != null) {
-      getHistoryOrders(trade.asset_name, selectedExchange?.provider_id ?? 1);
-    }
-  }, [trade.symbol_name, id]);
+    getAssetOpenOrders(trade.symbol_name, selectedExchange?.provider_id ?? 1);
+    getHistoryOrders(trade.asset_name, selectedExchange?.provider_id ?? 1);
+    getAssetCurrentPrice(trade.asset_name ?? "btc");
+  }, [trade.symbol_name]);
 
   return (
     <Layout>
-      {
-        id != null ?
-          <Trade />
-          : <TradingSalesPage />
-      }
+      {loading ? <PageLoader /> : id != null ? <Trade /> : <TradingSalesPage />}
     </Layout>
   );
 };

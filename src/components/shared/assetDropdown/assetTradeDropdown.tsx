@@ -8,6 +8,7 @@ import { AssetPairSelector } from "../containers/trade/assetpairSelector";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  clearTrade,
   getFilter,
   getTrade,
   getTradedAssets,
@@ -38,12 +39,13 @@ export const AssetTradeDropdown: FC = () => {
 
   const assetSelect = async (asset: string) => {
     setSearchFilter("");
+    dispatch(clearTrade());
+
     const _symbol = asset.split(filter);
-    // window.history.replaceState(null, `?symbol=${_symbol}`);
 
     dispatch(
       setTrade({
-        asset_name: _symbol[0] ?? "btc",
+        asset_name: _symbol[0].replace("-", "") ?? "btc",
         base_name: filter,
         available_quantity: await getAssetAvailable(
           filter,
@@ -54,7 +56,7 @@ export const AssetTradeDropdown: FC = () => {
   };
 
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
         <button
           className="bg-grey-3 md:w-40 py-2 rounded-full"
@@ -100,7 +102,7 @@ export const AssetTradeDropdown: FC = () => {
                   key={index}
                   className="ring-0 cursor-pointer"
                 >
-                  {elm}
+                  {elm.replace("-", "")}
                 </DropdownMenu.Item>
               );
             })}

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getAsset, getOrders } from "../../../services/redux/assetSlice";
 import { Col } from "../layout/flex";
@@ -7,20 +7,40 @@ import moment from "moment";
 import { CapitalizeString } from "../../../utils/format_string";
 import { useTranslation } from "next-i18next";
 import { ThemedContainer } from "../containers/themedContainer";
+import { useMediaQuery } from "react-responsive";
 
 export const AssetOrdersTable: FC = () => {
   const { t } = useTranslation(["asset"]);
   const orders = useSelector(getOrders);
   const asset = useSelector(getAsset);
 
-  const header = [
+  const isMobileScreen = useMediaQuery({
+    query: `(max-width:600px)`,
+  });
+
+  const [header, setHeader] = useState([
     t("type"),
     t("status"),
     t("amount"),
     t("price"),
     t("date"),
     t("exchange"),
-  ];
+  ]);
+
+  useEffect(() => {
+    if (isMobileScreen) {
+      setHeader([t("type"), t("status"), t("amount")]);
+    } else {
+      setHeader([
+        t("type"),
+        t("status"),
+        t("amount"),
+        t("price"),
+        t("date"),
+        t("exchange"),
+      ]);
+    }
+  }, [isMobileScreen]);
 
   const renderOrderColumn = (order: string) => {
     if (order === "PENDING_ENTRY" || order === "ACTIVE") return t("pending");
@@ -67,24 +87,33 @@ export const AssetOrdersTable: FC = () => {
                       ? "text-red-1"
                       : "text-green-1"
                   }
-                  content={elm.order_data?.side.toUpperCase()}
+                  content={elm.order_data?.side?.toUpperCase()}
                 />
                 <td className="font-medium leading-6 text-white pl-5">
-                  {renderOrderColumn(elm.order_status)}
+                  <Col className="flex justify-start">
+                    <p>{renderOrderColumn(elm.order_status)}</p>
+                    {!isMobileScreen ? null : (
+                      <p>{moment(elm?.created_at).format("DD/MM/YY")}</p>
+                    )}
+                  </Col>
                 </td>
 
                 <td className="font-medium leading-6 text-white pl-5">
-                  {formatNumber(elm.quantity)} {asset.symbol.toUpperCase()}
+                  {formatNumber(elm?.quantity)} {asset?.symbol?.toUpperCase()}
                 </td>
-                <td className="font-medium leading-6 text-white pl-5">
-                  {formatNumber(elm.value, true)}
-                </td>
-                <td className="font-medium leading-6 text-white pl-5">
-                  {moment(elm.created_at).format("DD/MM/YY")}
-                </td>
-                <td className="font-medium leading-6 text-white pl-5">
-                  {CapitalizeString(elm.provider_name.toLowerCase())}
-                </td>
+                {!isMobileScreen ? (
+                  <>
+                    <td className="font-medium leading-6 text-white pl-5">
+                      {formatNumber(elm?.value, true)}
+                    </td>
+                    <td className="font-medium leading-6 text-white pl-5">
+                      {moment(elm?.created_at).format("DD/MM/YY")}
+                    </td>
+                    <td className="font-medium leading-6 text-white pl-5">
+                      {CapitalizeString(elm?.provider_name?.toLowerCase())}
+                    </td>
+                  </>
+                ) : null}
               </tr>
             );
           })}
