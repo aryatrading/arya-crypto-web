@@ -13,8 +13,8 @@ import { AppProps } from "next/app";
 import { SkeletonTheme } from "react-loading-skeleton";
 
 import "react-toastify/dist/ReactToastify.css";
-import 'react-loading-skeleton/dist/skeleton.css';
-import 'react-circular-progressbar/dist/styles.css';
+import "react-loading-skeleton/dist/skeleton.css";
+import "react-circular-progressbar/dist/styles.css";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import AuthModalProvider from "../context/authModal.context";
@@ -24,7 +24,7 @@ import initAuth from "../initFirebaseAuth";
 import { axiosInstance } from "../services/api/axiosConfig";
 import "../styles/globals.css";
 import { FAVORITES_LIST } from "../utils/constants/config";
-import "../services/api/socketConfig";
+import { openConnection } from "../services/api/socketConfig";
 import ResponsiveProvider from "../context/responsive.context";
 import { getUserLanguage } from "../services/controllers/utils";
 import PushNotificationLayout from "../components/layout/Notifications";
@@ -89,6 +89,10 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
 
   const { store, props } = wrapper.useWrappedStore(rest);
 
+  // useEffect(() => {
+  //   console.log("changing here");
+  //   openConnection();
+  // }, [store.getState().exchange]);
 
   return getLayout(
     <Provider store={store}>

@@ -20,6 +20,10 @@ import ExchangeImage from "../exchange-image/exchange-image";
 import { ExchangeType } from "../../../types/exchange.types";
 import { useResponsive } from "../../../context/responsive.context";
 import { setProvider } from "../../../services/redux/swapSlice";
+import {
+  closeConnection,
+  openConnection,
+} from "../../../services/api/socketConfig";
 
 const ExchangeSwitcher: FC<{
   canSelectOverall?: boolean;
@@ -51,6 +55,17 @@ const ExchangeSwitcher: FC<{
     dispatch,
     selectedExchange?.provider_id,
   ]);
+
+  useEffect(() => {
+    // Close the connection first and clear the data
+    closeConnection();
+
+    // Load the new data with the selected exchange
+    let _exc = "binance";
+    if (selectedExchange?.provider_id === 2) _exc = "coinbase";
+    console.log("Selected exchange ", _exc);
+    openConnection(_exc);
+  }, [selectedExchange?.provider_id]);
 
   const changePercentage = useCallback((exchange: ExchangeType | null) => {
     const changeIn24h = exchange?.["24h_change_percentage"] ?? 0;
@@ -173,7 +188,13 @@ const ExchangeSwitcher: FC<{
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
     );
-  }, [connectedExchanges, dropdownItem, selectedExchange?.name, selectedExchange?.provider_id, t]);
+  }, [
+    connectedExchanges,
+    dropdownItem,
+    selectedExchange?.name,
+    selectedExchange?.provider_id,
+    t,
+  ]);
 
   return (
     <AsyncStatusWrapper
