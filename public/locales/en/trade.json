@@ -21,6 +21,7 @@
     "addtrailing": "Add Trailing",
     "slprice": "Sl Price",
     "percentage": "Percentage",
+    "breakeven": "Breakeven",
     "currenttrailing": "Current Trailing",
     "addentryerror": "Please add the entry order price",
     "addentrtyqty": "Please add the entry order quantity",

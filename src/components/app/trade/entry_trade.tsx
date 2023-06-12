@@ -21,11 +21,15 @@ import { percentTabs } from "../../../utils/constants/profitsPercentage";
 import { useTranslation } from "next-i18next";
 import { getAssetAvailable } from "../../../services/controllers/trade";
 import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
+import { isPremiumUser } from "../../../services/redux/userSlice";
+import { toast } from "react-toastify";
+import { PremiumBanner } from "../../shared/containers/premiumBanner";
 
 export const EntryTrade: FC = () => {
   const dispatch = useDispatch();
   const _assetprice = useSelector(selectAssetLivePrice);
   const _price = useSelector(getAssetPrice);
+  const isPremium = useSelector(isPremiumUser);
   const [percent, setPercent] = useState("");
   const { t } = useTranslation(["trade"]);
   const trade = useSelector(getTrade);
@@ -116,6 +120,9 @@ export const EntryTrade: FC = () => {
               <Tab
                 className="font-semibold text-sm outline-none cursor-pointer w-full text-center"
                 onClick={() => {
+                  if (!isPremium) {
+                    return toast.info(t("premium"));
+                  }
                   setIndex(1);
                   dispatch(setOrderType({ orderType: "CONDITIONAL" }));
                 }}
@@ -126,6 +133,7 @@ export const EntryTrade: FC = () => {
           </TabList>
         </Tabs>
       </div>
+      {isPremium ? null : <PremiumBanner />}
       <p className="font-bold text-sm">
         {t("available")}: {formatNumber(trade.available_quantity)}{" "}
         {trade?.entry_order?.type === "SELL"
@@ -187,11 +195,6 @@ export const EntryTrade: FC = () => {
                       trade.base_name,
                       selectedExchange?.provider_id ?? 1
                     )),
-                  // (await getAssetAvailable(
-                  //   trade.base_name,
-                  //   selectedExchange?.provider_id ?? 1
-                  // )) *
-                  // (e.key / 100),
                 })
               );
             } else {

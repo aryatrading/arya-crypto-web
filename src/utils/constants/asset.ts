@@ -1,17 +1,9 @@
-export const TpHeaderOptions = [
-  // "Sequence",
-  "Action",
-  "Quantity",
-  "Price",
-  //   "Status",
-  "",
-];
+export const TpHeaderOptions = ["Action", "Quantity", "Price", ""];
 
 export const TrailingHeaderOptions = [
   "Type",
   "Activation Price",
   "Limit",
   "Percentage",
-  //   "Status",
   "",
 ];

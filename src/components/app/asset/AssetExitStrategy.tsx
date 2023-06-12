@@ -26,7 +26,7 @@ import { formatNumber } from "../../../utils/helpers/prices";
 const AssetExitStrategy = () => {
   const { t } = useTranslation(["trade"]);
   const selectedExchange = useSelector(selectSelectedExchange);
-  const { isTabletOrMobileScreen } = useResponsive();
+
   const asset = useSelector(getAsset);
   const [orders, setOrders] = useState<Order[]>([]);
 
@@ -88,17 +88,17 @@ const AssetExitStrategy = () => {
   const OpenOrdersOptions = useMemo(() => {
     return [
       {
-        name: "Take profit",
+        name: t("takeprofit"),
         values: orders.filter((order) => order.type === "TP"),
         header: TpHeaderOptions,
       },
       {
-        name: "Stoploss",
+        name: t("stoploss"),
         values: orders.filter((order) => order.type === "SL"),
         header: TpHeaderOptions,
       },
       {
-        name: "Trailing",
+        name: t("trailing"),
         values: orders.filter((order) => order.type === "T_SL"),
         header: TrailingHeaderOptions,
       },
@@ -145,18 +145,18 @@ const AssetExitStrategy = () => {
                   <tbody>
                     {values.map((order: any, index: any) => {
                       return (
-                        <tr className="font-medium text-base">
+                        <tr className="font-medium text-base" key={index}>
                           {option.name === "Trailing" ? (
                             <td>
                               {order?.order_delta?.trailing_delta
-                                ? "Percentage"
-                                : "Breakeven"}
+                                ? t("percentage")
+                                : t("breakeven")}
                             </td>
                           ) : null}
                           <td className="py-4">
                             {option.name === "Trailing"
                               ? order.order_data.activation_price
-                              : "Sell"}
+                              : t("sell")}
                           </td>
                           <td className="py-4">
                             {option.name === "Trailing"

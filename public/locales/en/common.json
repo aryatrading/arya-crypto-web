@@ -60,7 +60,8 @@
     "BROKER_ERROR": "Broker Error",
     "DATA_ERROR": "Data Error",
     "preview": "Preview",
-    "getStarted":"Get Started",
-    "premiumusersfeature": "Continue with ARYA Prenium",
-    "upgradenow": "Upgrade now"
+    "getStarted": "Get Started",
+    "premiumusersfeature": "Continue with ARYA Premium",
+    "upgradenow": "Upgrade now",
+    "footerdesc": "Your all-in-one solution for crypto enthusiasts. Track real-time market data, store securely, and trade seamlessly with our user-friendly app. Stay informed with personalized news alerts and gain insights with our portfolio management feature. Experience the future of cryptocurrency with AryCrypto today"
 }

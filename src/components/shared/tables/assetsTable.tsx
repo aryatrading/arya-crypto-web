@@ -183,9 +183,6 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
 
                   {!isTabletOrMobileScreen ? (
                     <>
-                      {/* <td className="font-medium leading-6 text-white text-right">
-                        {elm.currentPrice ?? 0 / _btc}
-                      </td> */}
                       <td className="font-medium leading-6 text-white text-right">
                         {formatNumber(elm.mrkCap ?? 0, true)}
                       </td>

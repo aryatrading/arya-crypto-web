@@ -41,9 +41,9 @@
     "QUARTERLY": "Trimestriel",
     "YEARLY": "Annuel",
     "asset": "Crypto",
-    "buy":"Achat",
-    "target":"Target",
-    "cancel":"Annuler",
+    "buy": "Achat",
+    "target": "Target",
+    "cancel": "Annuler",
     "sell": "Vendre",
     "total": "Total",
     "#": "#",
@@ -60,8 +60,9 @@
     "DATA_ERROR": "Erreur de données",
     "english": "anglais",
     "french": "français",
-    "getStarted":"Commencer",
+    "getStarted": "Commencer",
     "premiumusersfeature": "Continuer avec ARYA Prenium",
     "upgradenow": "Découvrir",
-    "preview": "Visualiser"
+    "preview": "Visualiser",
+    "footerdesc": "Votre solution tout-en-un pour les amateurs de crypto-monnaies. Suivez les données du marché en temps réel, stockez-les en toute sécurité et négociez en toute transparence grâce à notre application conviviale. Restez informé grâce à des alertes personnalisées et gagnez en visibilité grâce à notre fonction de gestion de portefeuille. Découvrez l'avenir des crypto-monnaies avec AryCrypto dès aujourd'hui."
 }

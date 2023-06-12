@@ -67,21 +67,4 @@ export const footerLinks = [
       },
     ],
   },
-  //   {
-  //     name: "Our products",
-  //     links: [
-  //       {
-  //         name: "Arya Trading",
-  //         route: "https://www.arya.com",
-  //       },
-  //       {
-  //         name: "Arya App",
-  //         route: "https://www.arya.com",
-  //       },
-  //       {
-  //         name: "Arya Crypto",
-  //         route: "https://www.aryacrypto.com",
-  //       },
-  //     ],
-  //   },
 ];

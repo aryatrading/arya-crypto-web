@@ -6,20 +6,16 @@ import Link from "next/link";
 import { footerLinks, socials } from "../../../utils/constants/footer";
 import { EmailIcon } from "../../svg/SocialIcons";
 import _ from "lodash";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { t } = useTranslation(["common"]);
   return (
     <div className="bg-grey-2 py-5 w-full lg:h-96">
       <div className="flex flex-col lg:flex-row container lg:pt-12 gap-14 justify-between">
         <Col className="gap-6 lg:w-3/12">
           <Image src={logo} alt="arya-footer-logo" className="w-40" />
-          <p className="text-grey-1 text-xs font-medium">
-            Your all-in-one solution for crypto enthusiasts. Track real-time
-            market data, store securely, and trade seamlessly with our
-            user-friendly app. Stay informed with personalized news alerts and
-            gain insights with our portfolio management feature. Experience the
-            future of cryptocurrency with AryCrypto today
-          </p>
+          <p className="text-grey-1 text-xs font-medium">{t("footerdesc")}</p>
           <Row className="gap-5 items-center">
             {socials.map((social) => {
               return (

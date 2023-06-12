@@ -21,6 +21,7 @@
     "addtrailing": "Ajouter un trailing",
     "slprice": "Prix Sl",
     "percentage": "Pourcentage",
+    "breakeven": "Seuil de rentabilité",
     "addentryerror": "Merci de renseigner la quantité ou le total voulus",
     "addentrtyqty": "Merci de renseigner la quantité voulus",
     "tradecreated": "Ordre créé",
