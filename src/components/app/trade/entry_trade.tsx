@@ -26,9 +26,14 @@ export const EntryTrade: FC = () => {
   const dispatch = useDispatch();
   const _assetprice = useSelector(selectAssetLivePrice);
   const _price = useSelector(getAssetPrice);
-  const [percent, setPercent] = useState("5");
+  const [percent, setPercent] = useState("");
   const { t } = useTranslation(["trade"]);
   const trade = useSelector(getTrade);
+  const [tabIndex, setIndex] = useState(
+    trade?.entry_order && trade?.entry_order?.order_type === "MARKET"
+      ? 0
+      : 1 ?? 0
+  );
   const selectedExchange = useSelector(selectSelectedExchange);
 
   const livePrice = useMemo(() => {
@@ -88,12 +93,16 @@ export const EntryTrade: FC = () => {
         />
       </Row>
       <div className="w-full">
-        <Tabs selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1">
+        <Tabs
+          selectedIndex={tabIndex}
+          selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1"
+        >
           <TabList className="border-b-[1px] border-grey-3 mb-2">
             <Row className="gap-6">
               <Tab
                 className="font-semibold text-sm outline-none cursor-pointer w-full text-center"
                 onClick={() => {
+                  setIndex(0);
                   dispatch(
                     setTriggerPrice({
                       price: livePrice,
@@ -106,9 +115,10 @@ export const EntryTrade: FC = () => {
               </Tab>
               <Tab
                 className="font-semibold text-sm outline-none cursor-pointer w-full text-center"
-                onClick={() =>
-                  dispatch(setOrderType({ orderType: "CONDITIONAL" }))
-                }
+                onClick={() => {
+                  setIndex(1);
+                  dispatch(setOrderType({ orderType: "CONDITIONAL" }));
+                }}
               >
                 {t("conditional")}
               </Tab>
@@ -142,6 +152,7 @@ export const EntryTrade: FC = () => {
         value={trade.asset_name}
         amount={trade?.entry_order?.quantity}
         onchange={(e: any) => {
+          setPercent("");
           dispatch(
             setPrice({
               price: livePrice * e,
@@ -194,8 +205,9 @@ export const EntryTrade: FC = () => {
       <TradeInput
         title={t("total")}
         value={trade.base_name}
-        amount={trade?.entry_order?.price ?? 10}
+        amount={trade?.entry_order?.price}
         onchange={(e: any) => {
+          setPercent("");
           dispatch(setPrice({ price: e }));
           dispatch(
             setQuantity({

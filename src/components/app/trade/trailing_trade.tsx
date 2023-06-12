@@ -68,19 +68,7 @@ export const TrailingTrade: FC = () => {
   };
 
   const renderContent = () => {
-    if (trade?.trailing_stop_loss[0]?.trailing_delta) {
-      return `Fixed at ${
-        trade?.trailing_stop_loss[0]?.stop_price ?? 0
-      } with limit ${trade?.trailing_stop_loss[0]?.trailing_delta}`;
-    }
-
-    if (trade?.trailing_stop_loss[0]?.trigger_value) {
-      return `Fixed at ${
-        trade?.trailing_stop_loss[0]?.stop_price ?? 0
-      } with limit ${trade?.trailing_stop_loss[0]?.trigger_value}`;
-    }
-
-    return "---";
+    return `Fixed at ${values.price ?? 0} with limit ${values.value}`;
   };
 
   const onremovetrailing = async (order: any) => {

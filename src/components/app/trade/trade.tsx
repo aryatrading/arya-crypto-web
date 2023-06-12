@@ -85,8 +85,13 @@ const Trade: FC = () => {
         selectedExchange?.provider_id ?? 1,
         trade.base_name
       );
-    } catch (error) {
-      toast.error(`${t("errorcreating")} ${trade.symbol_name}: ${error}`);
+    } catch (error: any) {
+      toast.error(`${t("errorcreating")} ${trade.symbol_name}`);
+      const _list = error.response.data.trade_engine_response.detail.list;
+
+      for (var i = 0; i < _list.length; i++) {
+        toast.info(_list[i]);
+      }
     } finally {
       setLoading(false);
     }
@@ -141,8 +146,6 @@ const Trade: FC = () => {
   };
 
   const renderTradingView = useMemo(() => {
-    console.log("> name >> ()==", trade.asset_name);
-
     return (
       <div className="h-[500px] w-full">
         <TradingViewWidget

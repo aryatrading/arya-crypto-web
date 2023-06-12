@@ -33,10 +33,7 @@ const TradePage = () => {
 
   useEffect(() => {
     if (id != null) {
-      initiateTrade(
-        (symbol as string) ?? "BTC",
-        selectedExchange?.provider_id ?? 1
-      );
+      initiateTrade((s as string) ?? "BTC", selectedExchange?.provider_id ?? 1);
     }
 
     (async () => {
@@ -64,7 +61,11 @@ const TradePage = () => {
     getAssetCurrentPrice(trade.asset_name ?? "btc");
   }, [trade.symbol_name]);
 
-  return <Layout>{id != null ? <Trade /> : <TradingSalesPage />}</Layout>;
+  return (
+    <Layout>
+      {loading ? <PageLoader /> : id != null ? <Trade /> : <TradingSalesPage />}
+    </Layout>
+  );
 };
 
 export default withAuthUser({})(TradePage);
