@@ -71,3 +71,20 @@ body {
 .asset-header {
   @apply text-base md:text-xl font-medium text-white
 }
+
+.highlighted-text {
+  @apply text-blue-1;
+  position: relative;
+}
+
+.highlighted-text:after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 0;
+  height: 15px;
+  width: 100%;
+  border: solid 3px #558af2;
+  border-color: #558af2 transparent transparent transparent;
+  border-radius: 50%;
+}

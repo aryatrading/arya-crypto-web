@@ -7,9 +7,7 @@ import Layout from '../../components/layout/layout'
 
 const PortrolioPage = () => {
     return (
-        <Layout>
-            <Portrolio />
-        </Layout>
+        <Portrolio />
     )
 }
 
