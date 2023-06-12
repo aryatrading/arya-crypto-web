@@ -121,7 +121,9 @@ export const TrailingTrade: FC = () => {
         onClick={() => onAddTrailing()}
       >
         <Row className="justify-center items-center gap-2">
-          <LockClosedIcon width={15} height={15} color="bg-orange-1" />
+          {isPremium ? null : (
+            <LockClosedIcon width={15} height={15} color="bg-orange-1" />
+          )}
           <p>{t("addtrailing")}</p>
         </Row>
       </Button>

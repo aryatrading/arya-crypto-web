@@ -180,7 +180,7 @@ const Trade: FC = () => {
           </Button>
         </div>
       </div>
-      <Tabs selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1">
+      <Tabs className="text-blue-1 font-bold text-lg border-b-2 border-blue-1">
         <TabList className="border-b-[1px] border-grey-3 mb-2">
           <Row className="gap-6">
             <Tab className="font-semibold text-sm outline-none cursor-pointer w-full text-center">
