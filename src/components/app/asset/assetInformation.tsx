@@ -3,6 +3,9 @@ import { Col, Row } from "../../shared/layout/flex";
 import { assetTimeseries } from "../../../utils/constants/assetTimeseries";
 import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
 import {
   getAsset,
   getAssetTimeseries,
@@ -21,6 +24,8 @@ import AssetVote from "../../shared/containers/asset/assetVote";
 import CandleStickGraphFilled from "../../svg/candleStickGraphFilled";
 import LineGraphIcon from "../../svg/LineGraphIcon";
 import AssetStatistics from "../../shared/containers/asset/assetStatistics";
+import Button from "../../shared/buttons/button";
+import clsx from "clsx";
 
 type seriesInterface = {
   title: string;
@@ -36,9 +41,10 @@ type stats = {
 
 interface IAssetInformationTab {
   stats: stats[];
+  coinstats?: any
 }
 
-const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
+const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => {
   const { t } = useTranslation(["asset"]);
   const asset = useSelector(getAsset);
   const timeseries = useSelector(getAssetTimeseries);
@@ -94,7 +100,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
           </Row>
 
           {view === "price" ? (
-            <LineChart primaryLineData={timeseries} className="w-full h-80" tooltip={{show: true, title: t("common:price"), showValue: true}}/>
+            <LineChart primaryLineData={timeseries} className="w-full h-80" tooltip={{ show: true, title: t("common:price"), showValue: true }} />
           ) : (
             <TradingViewWidget />
           )}
@@ -128,6 +134,67 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
         </Row>
 
         <AssetInformation asset={asset} />
+        <Col className="justify-center gap-6">
+          <h3 className="asset-header">{t('insights')}</h3>
+
+          <Row className="gap-10 items-center flex-col xl:flex-row flex-1">
+            <Col className="relative flex-1">
+              <Row className={clsx({ "blur-md": coinstats?.premium }, "bg-grey-3 px-6 py-4 rounded-lg gap-8 flex-col sm:flex-row sm:items w-full")}>
+                <Col>
+                  <CircularProgressbar text="" value={coinstats?.premium ? 12.6 : coinstats?.portfolio_holdings} className="max-w-28 h-28" strokeWidth={18} styles={buildStyles({
+                    pathColor: "#F7931A",
+                    strokeLinecap: 'butt',
+                  })} />
+                </Col>
+                <Col className="flex-1 justify-center gap-2">
+                  <p className="text-4xl font-bold text-orange-1 text-center sm:text-left">{coinstats?.premium ? '12.6' : coinstats?.portfolio_holdings}%</p>
+                  <p className="text-lg md:text-sm font-bold text-white text-center sm:text-left">{t('statsHolding')}</p>
+                </Col>
+              </Row>
+
+              {coinstats?.premium && <Row className="top-0 right-0 bottom-0 left-0 absolute items-center justify-center gap-4 px-5">
+                <svg width="19" height="14" viewBox="0 0 19 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12.9391 5.53333L10.1904 0.560852C9.7823 -0.18679 8.71145 -0.186954 8.30307 0.560379L5.54681 5.53273L1.65117 3.08802L1.6466 3.08519C0.835375 2.58549 -0.221885 3.30958 0.0409489 4.27744L0.0412243 4.27845L2.18223 12.2227L2.18269 12.2244C2.36327 12.8872 2.96454 13.3372 3.63922 13.3372H14.8626C15.5497 13.3372 16.1395 12.8835 16.3191 12.2244L16.3196 12.2227L18.4608 4.27767C18.7153 3.34106 17.6794 2.55101 16.8464 3.09073L12.9391 5.53333Z" fill="#F7931A" />
+                </svg>
+
+                <p className="text-white font-bold">{t('common:premiumMsg')}</p>
+
+                <Button className="bg-orange-1 h-12 md:px-4 rounded-lg text-bold text-white font-bold text-sm">
+                  {t('common:upgrade')}
+                </Button>
+              </Row>}
+            </Col>
+
+            <Col className="relative flex-1">
+              <Row className={clsx({ "blur-md": coinstats?.premium }, "bg-grey-3 px-6 py-4 rounded-lg flex-1 gap-8 md:gap-0 min-h-[126px] w-full relative flex-col md:flex-row justify-center")}>
+                <Col className="flex-1 justify-center gap-2">
+                  <p className="text-4xl font-bold text-orange-1 text-center sm:text-left">{coinstats?.premium ? '1011' : coinstats?.trades[0]?.orders_count || 0}</p>
+                  <p className="text-lg md:text-sm font-bold text-white text-center sm:text-left">{t('todayTrades')}</p>
+                </Col>
+                <Col className="flex-1 justify-center gap-2">
+                  <p className="text-4xl font-bold text-orange-1 text-center sm:text-left">{coinstats?.premium ? '+12' : coinstats?.trades.length < 2 ? "0" : ((coinstats?.trades[0]?.orders_count - coinstats?.trades[1]?.orders_count) / (coinstats?.trades[1]?.orders_count) * 100).toFixed(2)}%</p>
+                  <p className="text-lg md:text-sm font-bold text-white text-center sm:text-left">{t('todayVolume')}</p>
+                </Col>
+
+                <Button className="bg-blue-3 h-12 md:px-4 rounded-lg text-bold text-white font-bold text-sm">
+                  {t('seeMore')}
+                </Button>
+              </Row>
+
+              {coinstats?.premium && <Row className="top-0 right-0 bottom-0 left-0 absolute items-center justify-center gap-4 px-5">
+                <svg width="19" height="14" viewBox="0 0 19 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12.9391 5.53333L10.1904 0.560852C9.7823 -0.18679 8.71145 -0.186954 8.30307 0.560379L5.54681 5.53273L1.65117 3.08802L1.6466 3.08519C0.835375 2.58549 -0.221885 3.30958 0.0409489 4.27744L0.0412243 4.27845L2.18223 12.2227L2.18269 12.2244C2.36327 12.8872 2.96454 13.3372 3.63922 13.3372H14.8626C15.5497 13.3372 16.1395 12.8835 16.3191 12.2244L16.3196 12.2227L18.4608 4.27767C18.7153 3.34106 17.6794 2.55101 16.8464 3.09073L12.9391 5.53333Z" fill="#F7931A" />
+                </svg>
+
+                <p className="text-white font-bold">{t('common:premiumMsg')}</p>
+
+                <Button className="bg-orange-1 h-12 md:px-4 rounded-lg text-bold text-white font-bold text-sm">
+                  {t('common:upgrade')}
+                </Button>
+              </Row>}
+            </Col>
+          </Row>
+        </Col>
         <AssetVote className="md:hidden" />
         <Col className="gap-4">
           <h3 className="asset-header">{t('cryptoProfitCalculator')}</h3>
@@ -166,7 +233,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
           )}
         </Col>
       </Col>
-    </Col>
+    </Col >
   );
 };
 

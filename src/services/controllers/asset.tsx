@@ -90,7 +90,7 @@ export const getAssetTimeseriesPrice = async (
   );
 };
 
-export const getAssetSparkLineData = async (symbol:string)=>{
+export const getAssetSparkLineData = async (symbol: string) => {
   return await axios.get(`${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=1h&outputsize=168&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}`)
 }
 
@@ -166,7 +166,7 @@ export const periodToIntervalsAndOutputSize: { [k: string]: { interval: string, 
 function getCustomPeriodIntervalsAndOutputSize(startDate: number, endDate: number) {
   const diffTime = Math.abs(startDate - endDate);
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  console.log({diffDays})
+  console.log({ diffDays })
   if (diffDays <= 7) {
     return {
       interval: "30min",
@@ -182,7 +182,7 @@ function getCustomPeriodIntervalsAndOutputSize(startDate: number, endDate: numbe
       interval: "1day",
       outputsize: diffDays,
     }
-  }  else {
+  } else {
     return {
       interval: "1week",
       outputsize: Math.round(diffDays / 7),
@@ -216,4 +216,12 @@ export async function getAssetsHistoricalData(symbols: string[], period: EnumSma
     process.env.NEXT_PUBLIC_TWELEVE_API_URL ?? "", {
     params
   });
+}
+
+export const getStats = async (symbol: string) => {
+  let { data } = await axiosInstance.get(
+    `trade-engine/assets/statistics?asset=${symbol}`
+  );
+
+  return data;
 }

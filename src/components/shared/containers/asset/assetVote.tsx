@@ -60,7 +60,7 @@ const AssetVote: FC<{ className?: string }> = ({ className }) => {
     <Col className={twMerge('gap-3 w-full md:w-auto', className)}>
       <p className="font-medium text-sm">
         {hasVoted
-          ? `${asset?.symbol.toUpperCase()} ${t("assetvoted")}`
+          ? `${asset?.symbol?.toUpperCase()} ${t("assetvoted")}`
           : t("assetvoting")}
       </p>
       {hasVoted === false ? (
