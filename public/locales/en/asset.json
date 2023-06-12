@@ -64,5 +64,9 @@
     "select_provider": "Please select a provider to trade",
     "select_base": "Please select a base asset",
     "trade_error": "Error creating trade",
-    "cryptoProfitCalculator":"Crypto Profit Calculator"
+    "cryptoProfitCalculator": "Crypto Profit Calculator",
+    "insights": "Insights",
+    "statsHolding": "BTC holders in ARYA Crypto",
+    "todayTrades": "BTC trades today",
+    "todayVolume": "Volume (24h)"
 }
