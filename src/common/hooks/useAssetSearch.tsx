@@ -9,7 +9,7 @@ import { AssetType } from '../../types/asset';
 import { selectSelectedExchange } from '../../services/redux/exchangeSlice';
 
 
-const useAssetSearch = ({ fullModal, showShowOnlyTradableAssets }: { fullModal: boolean, showShowOnlyTradableAssets: boolean }) => {
+const useAssetSearch = ({ fullModal, showShowOnlyTradableAssets }: { fullModal: boolean, showShowOnlyTradableAssets?: boolean }) => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [showDialog, setShowDialog] = useState<boolean>(false);
     const [fetchingError, setFetchingError] = useState<boolean>(false);
