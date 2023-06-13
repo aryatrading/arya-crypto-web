@@ -1,6 +1,28 @@
+.underlined {
+    position: relative;
+    margin-right: 1rem;
+    color: #558AF2;
+}
+
+.underlined:after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    height: 17px;
+    width: 100%;
+    border: solid 2px #558AF2;
+    border-color: #558AF2 transparent transparent transparent;
+    border-radius: 60%;
+}
+
+.bgImage {
+    background-image: url('/assets/images/publicPages/pattern.png');
+    background-size: cover;
+}
+
 .startBtn {
     background: transparent linear-gradient(90deg, #668EF1 0%, #3C5EB1 100%) 0% 0% no-repeat padding-box;
-    border-radius: 10px;
     height: 44px;
     padding-left: 30px;
     padding-right: 30px;
@@ -9,7 +31,6 @@
 
 .secondBtn {
     background: #3C5EB148;
-    border-radius: 10px;
     border: 1px solid #668EF1;
     height: 44px;
     padding-left: 30px;
