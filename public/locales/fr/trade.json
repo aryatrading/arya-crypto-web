@@ -2,7 +2,7 @@
     "entry": "Entrée",
     "stoploss": "Stop loss",
     "takeprofit": "Prendre des bénéfices",
-    "trailing": "Traînante",
+    "trailing": "Trailing",
     "placeorder": "Passer commande",
     "openorders": "Commandes en cours",
     "orderhistory": "Historique des commandes",
@@ -18,8 +18,16 @@
     "addtakeprofit": "Ajouter un take profit",
     "quantity": "Quantité",
     "selecttrailing": "Sélectionner le type de suivi",
-    "addtrailing": "Ajouter une queue",
+    "addtrailing": "Ajouter un trailing",
     "slprice": "Prix Sl",
     "percentage": "Pourcentage",
-    "currenttrailing": "Courant Suivi"
+    "currenttrailing": "Courant Suivi",
+    "addentryerror": "Veuillez ajouter le prix de l'ordre d'entrée",
+    "addentrtyqty": "Veuillez ajouter la quantité de la commande d'entrée",
+    "tradecreated": "commerce créé",
+    "errorcreating": "erreur de création",
+    "openorderclosed": "Commande ouverte Commande fermée",
+    "usdtamountreq": "Veuillez ajouter le montant en USDT",
+    "premium": "Il s'agit d'une fonctionnalité premium",
+    "tp3": "Vous ne pouvez définir que 3 TP par actif."
 }

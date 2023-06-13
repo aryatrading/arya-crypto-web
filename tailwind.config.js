@@ -30,6 +30,7 @@ export const theme = {
       green: {
         1: "#22C55E",
         2: "#0E3F2D",
+        3: "#3CC8C8"
       },
       blue: {
         1: "#558AF2",
@@ -61,7 +62,7 @@ export const theme = {
         2: "#CC9D2B"
       },
       orange: {
-        1: "#F7931A"
+        1: "#F7931A",
       }
     },
     keyframes: {

@@ -1,5 +1,5 @@
 {
-    "coin": "Pièce de monnaie",
+    "coin": "Crypto",
     "investment": "Investissement",
     "buyPrice": "Prix ​​d'achat",
     "sellPrice": "Prix ​​de vente",
@@ -7,9 +7,9 @@
     "profit/loss": "Perte de profit",
     "totalInvestmentAmount": "Montant d'entrée",
     "totalExitAmount": "Montant de sortie",
-    "cryptoConverter": "Convertisseur de chiffrement",
-    "selectAsset": "Sélectionnez l'actif",
-    "searchAsset": "Rechercher un élément",
+    "cryptoConverter": "Convertisseur de crypto",
+    "selectAsset": "Sélectionnez une crypto",
+    "searchAsset": "Rechercher une crypto",
     "emptySearch": "Recherche vide",
-    "coins": "Pièces de monnaie"
+    "coins": "Cryptos"
 }

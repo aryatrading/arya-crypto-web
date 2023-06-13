@@ -59,5 +59,7 @@
     "FULFILLED": "Fulfilled",
     "BROKER_ERROR": "Broker Error",
     "DATA_ERROR": "Data Error",
-    "preview": "Preview"
+    "preview": "Preview",
+    "premiumusersfeature": "This feature is for premium users",
+    "upgradenow": "Upgrade now"
 }

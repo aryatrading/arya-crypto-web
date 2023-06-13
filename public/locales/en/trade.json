@@ -21,5 +21,13 @@
     "addtrailing": "Add Trailing",
     "slprice": "Sl Price",
     "percentage": "Percentage",
-    "currenttrailing": "Current Trailing"
+    "currenttrailing": "Current Trailing",
+    "addentryerror": "Please add the entry order price",
+    "addentrtyqty": "Please add the entry order quantity",
+    "tradecreated": "trade created",
+    "errorcreating": "error creating",
+    "openorderclosed": "Open Order Closed",
+    "usdtamountreq": "Please add USDT amount",
+    "premium": "This is a premium feature",
+    "tp3": "You can only set 3 TP's per asset"
 }
