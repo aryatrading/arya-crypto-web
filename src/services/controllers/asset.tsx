@@ -167,7 +167,7 @@ export const periodToIntervalsAndOutputSize: { [k: string]: { interval: string, 
 function getCustomPeriodIntervalsAndOutputSize(startDate: number, endDate: number) {
   const diffTime = Math.abs(startDate - endDate);
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  console.log({ diffDays })
+
   if (diffDays <= 7) {
     return {
       interval: "30min",

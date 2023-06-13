@@ -146,14 +146,14 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
             <Col className="relative flex-1">
               <Row className={clsx({ "blur-md": coinstats?.premium }, "bg-grey-3 px-6 py-4 rounded-lg gap-8 flex-col sm:flex-row sm:items w-full")}>
                 <Col>
-                  <CircularProgressbar text="" value={coinstats?.premium ? 12.6 : coinstats?.portfolio_holdings} className="max-w-28 h-28" strokeWidth={18} styles={buildStyles({
+                  <CircularProgressbar text="" value={coinstats?.premium ? 12.6 : coinstats?.portfolio_holdings[0].holding_count} className="max-w-28 h-28" strokeWidth={18} styles={buildStyles({
                     pathColor: "#558AF2",
                     strokeLinecap: 'butt',
                   })} />
                 </Col>
                 <Col className="flex-1 justify-center gap-2">
-                  <p className="text-4xl font-bold text-blue-1 text-center sm:text-left">{coinstats?.premium ? '12.6' : coinstats?.portfolio_holdings}%</p>
-                  <p className="text-lg md:text-sm font-bold text-white text-center sm:text-left">{t('statsHolding')}</p>
+                  <p className="text-4xl font-bold text-blue-1 text-center sm:text-left">{coinstats?.premium ? '12.6' : coinstats?.portfolio_holdings[0].holding_count}%</p>
+                  <p className="text-lg md:text-sm font-bold text-white text-center sm:text-left">{t('statsHolding', { coin: asset?.symbol?.toUpperCase() || '' })}</p>
                 </Col>
               </Row>
 
@@ -172,7 +172,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
               <Row className={clsx({ "blur-md": coinstats?.premium }, "bg-grey-3 px-6 py-4 rounded-lg flex-1 gap-8 md:gap-0 min-h-[126px] w-full relative flex-col md:flex-row justify-center")}>
                 <Col className="flex-1 justify-center gap-2">
                   <p className="text-4xl font-bold text-blue-1 text-center sm:text-left">{coinstats?.premium ? '1011' : coinstats?.trades[0]?.orders_count || 0}</p>
-                  <p className="text-lg md:text-sm font-bold text-white text-center sm:text-left">{t('todayTrades')}</p>
+                  <p className="text-lg md:text-sm font-bold text-white text-center sm:text-left">{t('todayTrades', { coin: asset?.symbol?.toUpperCase() || '' })}</p>
                 </Col>
                 <Col className="flex-1 justify-center gap-2">
                   <p className="text-4xl font-bold text-blue-1 text-center sm:text-left">{coinstats?.premium ? '+12' : coinstats?.trades.length < 2 ? "0" : ((coinstats?.trades[0]?.orders_count - coinstats?.trades[1]?.orders_count) / (coinstats?.trades[1]?.orders_count) * 100).toFixed(2)}%</p>

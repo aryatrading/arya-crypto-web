@@ -65,7 +65,7 @@
     "trade_error": "Erreur lors de la création d'un ordre  ",
     "cryptoProfitCalculator": "Calculateur de profit ",
     "insights": "Connaissances",
-    "statsHolding": "Détenteurs de BTC dans ARYA Crypto",
-    "todayTrades": "BTC se négocie aujourd'hui",
+    "statsHolding": "Détenteurs de {{coing}} dans ARYA Crypto",
+    "todayTrades": "{{coin}} se négocie aujourd'hui",
     "todayVolume": "Volume (24h)"
 }
