@@ -5,6 +5,7 @@ import Dashboard from "../dashboard/dashboard";
 
 import { PortfolioSalesPage } from "../dashboard/salesPage";
 import PageLoader from "../../shared/pageLoader/pageLoader";
+import Layout, { SalesPagesLayout } from "../../layout/layout";
 
 const Portfolio: FC = () => {
 
@@ -13,13 +14,23 @@ const Portfolio: FC = () => {
     if (authUser.clientInitialized) {
         if (!authUser.id) {
             return (
-                <PortfolioSalesPage />
+                <SalesPagesLayout>
+                    <PortfolioSalesPage />
+                </SalesPagesLayout>
             );
         } else {
-            return <Dashboard />
+            return (
+                <Layout>
+                    <Dashboard />
+                </Layout>
+            )
         }
     } else {
-        return <PageLoader />
+        return (
+            <Layout>
+                <PageLoader />
+            </Layout>
+        )
     }
 }
 

@@ -25,7 +25,6 @@ const AssetVote: FC<{ className?: string }> = ({ className }) => {
     bearish: 0,
   });
 
-
   const initBearishAndBullishVoting = useCallback(() => {
     if (asset?.id) {
       getAssetVotes(asset.id).then((response) => {
@@ -39,7 +38,7 @@ const AssetVote: FC<{ className?: string }> = ({ className }) => {
   }, [asset.id]);
 
   useEffect(() => {
-    initBearishAndBullishVoting()
+    initBearishAndBullishVoting();
   }, [initBearishAndBullishVoting]);
 
   const onVotePress = async (vote: string) => {
@@ -57,7 +56,7 @@ const AssetVote: FC<{ className?: string }> = ({ className }) => {
   };
 
   return (
-    <Col className={twMerge('gap-3 w-full md:w-auto', className)}>
+    <Col className={twMerge("gap-3 w-full md:w-auto", className)}>
       <p className="font-medium text-sm">
         {hasVoted
           ? `${asset?.symbol?.toUpperCase()} ${t("assetvoted")}`

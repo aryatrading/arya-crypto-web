@@ -12,6 +12,7 @@ import { Col } from '../../../../../../shared/layout/flex'
 import { twMerge } from 'tailwind-merge'
 import AssetRow from '../../../../../../shared/AssetRow/AssetRow'
 import CustomScroll from '../../../../../../shared/CustomScroll/CustomScroll'
+import { formatNumber } from '../../../../../../../utils/helpers/prices'
  
  
  
@@ -95,8 +96,7 @@ import CustomScroll from '../../../../../../shared/CustomScroll/CustomScroll'
                                     </div>
                                     <div className='col-span-1 py-4 px-4 text-sm md:text-base'>
                                         {!buy&&<span className='flex flex-col md:flex-row gap-1 items-end md:items-center'>
-                                            <span>USD</span>
-                                            <span>${((current_value||0)-(expected_value||0)).toFixed(2)}</span>
+                                            <span>{formatNumber((current_value||0)-(expected_value||0), true)}</span>
                                         </span>
                                         }
                                     </div>
@@ -113,8 +113,7 @@ import CustomScroll from '../../../../../../shared/CustomScroll/CustomScroll'
                                     
                                     <div className='col-span-1 py-4 px-4 text-sm md:text-base'>
                                         {buy&&<span className='flex flex-col md:flex-row gap-1 items-start md:items-center'>
-                                            <span>USD</span>
-                                            <span>${((expected_value||0)-(current_value||0)).toFixed(2)}</span>
+                                            <span>{formatNumber((expected_value||0)-(current_value||0), true)}</span>
                                         </span>}
                                     </div>
                                 </div>

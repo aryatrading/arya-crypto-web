@@ -15,6 +15,7 @@ import CustomScroll from '../CustomScroll/CustomScroll';
 import { AssetType } from '../../../types/asset'
 
 import AssetSelectorSkeleton from './AssetSelectorSkeleton';
+import { formatNumber } from '../../../utils/helpers/prices'
 
 interface IAssetSelectorProps {
   onClick: (asset: AssetType) => void,
@@ -22,10 +23,11 @@ interface IAssetSelectorProps {
   showDialogTitle?: boolean,
   dismissOnClick?: boolean,
   fullModal?: boolean,
+  showShowOnlyTradableAssets?: boolean,
 }
 
-const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClick = false, fullModal = false }: IAssetSelectorProps) => {
-  const { fetchingError, filteredAssets, isSearching, debouncedSearch, assetLivePrice, showDialog, setShowDialog, transitions } = useAssetSearch({ fullModal });
+const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClick = false, fullModal = false, showShowOnlyTradableAssets = false }: IAssetSelectorProps) => {
+  const { fetchingError, filteredAssets, isSearching, debouncedSearch, assetLivePrice, showDialog, setShowDialog, transitions } = useAssetSearch({ fullModal, showShowOnlyTradableAssets });
 
   const { t } = useTranslation(['common', 'coin']);
 
@@ -50,7 +52,7 @@ const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClic
             filteredAssets.map((asset) => {
               return <Button onClick={() => onPress(asset)} key={_.uniqueId()} className='flex w-full justify-between py-3 px-2 items-center hover:bg-grey-3 hover:rounded-md'>
                 <AssetRow icon={asset.iconUrl} name={asset.name} symbol={asset.symbol} className='font-semibold' />
-                <span className={`text-xs font-bold tracking-[1px] md:text-sm ms-10 md:ms-0 ${(asset.pnl < 0) ? 'text-red-1' : 'text-green-1'}`}>USD {assetLivePrice?.[asset?.symbol?.toLowerCase() || ''] || asset.currentPrice}</span>
+                <span className={`text-xs font-bold tracking-[1px] md:text-sm ms-10 md:ms-0 ${(asset.pnl < 0) ? 'text-red-1' : 'text-green-1'}`}>{formatNumber(assetLivePrice?.[asset?.symbol?.toLowerCase() || ''] || asset.currentPrice, true)}</span>
               </Button>
             }) :
             <Row className='w-full justify-center items-center h-20 gap-4 font-semibold text-xl text-grey-1'>
@@ -77,7 +79,7 @@ const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClic
               }}
             />
           </Dialog.Overlay>
-          {!fullModal ? <Dialog.Content onPointerDownOutside={()=>setShowDialog(false)} className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[600px] w-[90vw] max-w-[466px] translate-x-[-50%] translate-y-[-50%] rounded-lg bg-grey-2 p-7 focus:outline-none font-sans flex flex-col gap-3 z-30">
+          {!fullModal ? <Dialog.Content onPointerDownOutside={() => setShowDialog(false)} className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[600px] w-[90vw] max-w-[466px] translate-x-[-50%] translate-y-[-50%] rounded-lg bg-grey-2 p-7 focus:outline-none font-sans flex flex-col gap-3 z-30">
             <div className='flex w-full justify-end items-center'>
               <Dialog.Close asChild onClick={() => setShowDialog(false)}>
                 <Button

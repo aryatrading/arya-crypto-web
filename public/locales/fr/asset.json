@@ -48,7 +48,7 @@
     "error_voting": "Erreur lors du vote, réessayez !",
     "selectAsset": "Sélectionner",
     "searchAsset": "Recherche",
-    "trade_title": "Commerce",
+    "trade_title": "Trade",
     "advance_mode": "Mode avancé",
     "from_title": "Depuis",
     "balance_title": "Équilibre",
@@ -68,5 +68,5 @@
     "insights": "Connaissances",
     "statsHolding": "Détenteurs de BTC dans ARYA Crypto",
     "todayTrades": "BTC se négocie aujourd'hui",
-    "todayVolume": "Volume (24h)"
+    "todayVolume": "Volume (24h)",
 }

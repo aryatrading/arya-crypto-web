@@ -10,7 +10,7 @@ const channel = `${process.env.NEXT_PUBLIC_TWELEVE_SOCKET}?apikey=${process.env.
 const socket = new W3CWebSocket(channel);
 
 socket.onopen = async () => {
-  let _assets = await fetchAssets();
+  let _assets = await fetchAssets("", 100);
 
   let _list = await fetchSymbolsList(_assets);
 

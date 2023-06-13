@@ -21,7 +21,8 @@ module.exports = {
     "coin",
     'smart-allocation',
     'notification',
-    'trade'
+    'trade',
+    'pricing-plans',
   ],
   /** To avoid issues when deploying to some paas (vercel...) */
   localePath:

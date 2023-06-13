@@ -1,10 +1,21 @@
 .startBtn {
     background: transparent linear-gradient(90deg, #668EF1 0%, #3C5EB1 100%) 0% 0% no-repeat padding-box;
-    border-radius: 10px;
     height: 44px;
     padding-left: 30px;
     padding-right: 30px;
     margin-bottom: 20px;
+}
+
+.mainBanner {
+    width: 100%;
+    background-image: url('/assets/images/publicPages/portfolio/mainBannerBG.png');
+    background-size: cover;
+}
+
+.securityBanner {
+    width: 100%;
+    background-image: url('/assets/images/publicPages/portfolio/securitySectionBG.png');
+    background-size: cover;
 }
 
 .animateImg {
