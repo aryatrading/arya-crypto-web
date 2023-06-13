@@ -18,7 +18,7 @@
 
 @layer components {
   #__next {
-    @apply h-full w-full flex flex-col;
+    @apply h-full w-full flex flex-col overflow-x-hidden overflow-y-scroll;
   }
 
   html,

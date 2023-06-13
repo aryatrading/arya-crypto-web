@@ -39,7 +39,7 @@ const Nav = () => {
   const [isUserDropdownActive, setIsUserDropdownActive] = useState(false)
   const [isNotificationsActive, setIsNotificationsActive] = useState(false)
   const { modalTrigger, setVisibleSection } = useAuthModal();
-  const { notifications, hasNewNotifications } = useSelector(({ notifications }: any) => notifications);
+  const { notifications: { notifications }, hasNewNotifications } = useSelector(({ notifications }: any) => notifications);
   const { t } = useTranslation(['nav', 'coin', 'asset', 'common', 'auth', 'notification']);
   const { pathname, push, locale, asPath, query } = useRouter()
   const { isTabletOrMobileScreen } = useResponsive();
@@ -145,8 +145,8 @@ const Nav = () => {
     saveUserLanguage(lang);
     window.localStorage.setItem('language', lang);
 
-    getNotifications(0, 100, 'desc');
-  }, [asPath, pathname, push, query])
+    getNotifications(0, notifications.length, 'desc');
+  }, [asPath, notifications.length, pathname, push, query])
 
   const changeLanguageView = useCallback((hide: boolean) => {
     if (locale == null || hide) {
@@ -195,7 +195,9 @@ const Nav = () => {
               dispatch(updateNotificationBadge(false));
             } else {
               const updatedArr = [...notifications.map((notification: NotificationType) => notification.is_seen === 'false' ? ({ ...notification, is_seen: 'true' }) : notification)];
-              dispatch(setNotifications(updatedArr));
+              dispatch(setNotifications({
+                notifications: updatedArr,
+              }));
               setIsNotificationsActive(false);
               updateUnseenNotifications(notifications.map((e: NotificationType) => !e.is_seen ? e.id : null).filter((x: number) => x != null));
             }

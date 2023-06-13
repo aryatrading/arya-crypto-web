@@ -11,7 +11,7 @@ type ShadowButtonProps = {
   px?: string;
   py?: string;
   textSize?: string;
-  className?:string
+  className?: string;
   showBadge?: boolean;
 };
 
@@ -30,12 +30,23 @@ export const ShadowButton: FC<ShadowButtonProps> = ({
 }) => {
   return (
     <div
-      className={twMerge('flex flex-row items-center gap-2 justify-center hover:cursor-pointer',px,py ,
-        border ?? "",bgColor, className)}
+      className={twMerge(
+        "flex flex-row items-center gap-2 justify-center hover:cursor-pointer",
+        px,
+        py,
+        border ?? "",
+        bgColor,
+        className
+      )}
       onClick={() => onClick!()}
     >
       {iconSvg ?? null}
-      {title && <span className={twMerge(`font-semibold text-sm`,textColor,textSize)}>{title}</span>}
+      {title && (
+        <span className={twMerge(`font-semibold text-sm`, textColor, textSize)}>
+          {title}
+        </span>
+      )}
+      {showBadge ? <div className="w-2 h-2 bg-red-500 rounded -mt-5" /> : null}
     </div>
   );
 };

@@ -77,7 +77,7 @@ const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClic
               }}
             />
           </Dialog.Overlay>
-          {!fullModal ? <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[600px] w-[90vw] max-w-[466px] translate-x-[-50%] translate-y-[-50%] rounded-lg bg-grey-2 p-7 focus:outline-none font-sans flex flex-col gap-3 z-30">
+          {!fullModal ? <Dialog.Content onPointerDownOutside={()=>setShowDialog(false)} className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[600px] w-[90vw] max-w-[466px] translate-x-[-50%] translate-y-[-50%] rounded-lg bg-grey-2 p-7 focus:outline-none font-sans flex flex-col gap-3 z-30">
             <div className='flex w-full justify-end items-center'>
               <Dialog.Close asChild onClick={() => setShowDialog(false)}>
                 <Button

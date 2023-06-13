@@ -3,10 +3,9 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { FC, useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "next-i18next";
-import Skeleton from 'react-loading-skeleton';
+import Skeleton from "react-loading-skeleton";
 import Link from "next/link";
 import clsx from "clsx";
-
 
 import { Col, Row } from "../layout/flex";
 import {
@@ -20,6 +19,7 @@ import LoadingSpinner from "../loading-spinner/loading-spinner";
 import AsyncStatusWrapper from "../async-status-wrapper/async-status-wrapper";
 import ExchangeImage from "../exchange-image/exchange-image";
 import { ExchangeType } from "../../../types/exchange.types";
+import { setProvider } from "../../../services/redux/swapSlice";
 
 const ExchangeSwitcher: FC<{
   canSelectOverall?: boolean;
@@ -74,6 +74,7 @@ const ExchangeSwitcher: FC<{
 
   const selectExchange = useCallback(
     (exchange: ExchangeType) => {
+      dispatch(setProvider(exchange.provider_id ?? 0));
       dispatch(setSelectedExchange(exchange));
     },
     [dispatch]
@@ -130,10 +131,7 @@ const ExchangeSwitcher: FC<{
     return (
       <DropdownMenu.Root modal={false}>
         <DropdownMenu.Trigger asChild>
-          <button
-            className="bg-white rounded-full p-2 "
-            aria-label="Customise options"
-          >
+          <button>
             <PlayIcon
               className="rotate-90 text-blue-1"
               height="15px"
@@ -176,19 +174,18 @@ const ExchangeSwitcher: FC<{
       whenPendingComponent={<Skeleton />}
       whenRejectedComponent={<></>}
     >
-      <Col className="col-span-12 items-start gap-1">
-        <Row className="items-center justify-center gap-4 z-10">
+      <Col className="col-span-12 items-center md:items-start gap-1">
+        <Row className="items-center justify-center gap-2 z-10">
           <ExchangeImage providerId={selectedExchange?.provider_id} />
-          <h3 className="text-3xl font-bold capitalize">
+          <h3 className="text-xl md:text-3xl font-bold capitalize">
             {selectedExchange?.name?.toLowerCase()}
           </h3>
           {dropdown}
         </Row>
         {hideExchangeStats === false ? (
           <Row className="items-center gap-3">
-            <h3 className="text-4xl font-bold">
+            <h3 className="text-3xl md:text-4xl font-bold">
               {formatNumber(selectedExchange?.last_5m_evaluation ?? 0, true)}{" "}
-              <span className="text-2xl">USD</span>
             </h3>
             {changePercentage(selectedExchange)}
           </Row>

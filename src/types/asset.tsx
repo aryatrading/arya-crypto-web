@@ -25,9 +25,11 @@ export interface AssetType {
   circlSupply?: number;
   isHoldingAsset?: boolean;
   description?: string;
+  stable?: boolean;
   mrkCapYesterday?: number;
   change24H?: number;
   change7D?: number;
+  favoriteCount?: number;
 }
 
 export interface AssetSwapType {
@@ -38,105 +40,104 @@ export interface AssetSwapType {
   price?: number;
 }
 
-
 export interface PostTypes {
-  Category?: string,
+  Category?: string;
   LastComment?: {
     Author?: {
-      Id?: string,
-      VanityAlias?: string,
-      PictureDate?: string,
-      Job?: string,
-      Name?: string,
-      SystemAlias?: string
-    },
-    Text?: string,
-    Id?: string,
+      Id?: string;
+      VanityAlias?: string;
+      PictureDate?: string;
+      Job?: string;
+      Name?: string;
+      SystemAlias?: string;
+    };
+    Text?: string;
+    Id?: string;
     TextLocalizations?: {
-      fr?: string,
-      en?: string
-    },
-    Date?: string,
-    TextLang?: string
-  },
-  Images?: string[],
+      fr?: string;
+      en?: string;
+    };
+    Date?: string;
+    TextLang?: string;
+  };
+  Images?: string[];
   Video?: {
-    size?: number,
-    videoUrl?: string,
-    width?: number,
-    height: number,
-    thumbnailUrl: string
-  },
+    size?: number;
+    videoUrl?: string;
+    width?: number;
+    height: number;
+    thumbnailUrl: string;
+  };
   IndexMentions?: [
     {
-      Length?: number,
-      Start?: number,
+      Length?: number;
+      Start?: number;
       MarketItem?: {
-        Symbol?: string,
-        To?: string,
-        Market?: string,
-        Key?: string,
-        Name?: string
-      },
-      Name?: string
+        Symbol?: string;
+        To?: string;
+        Market?: string;
+        Key?: string;
+        Name?: string;
+      };
+      Name?: string;
     }
-  ],
-  CommentsCount?: number,
+  ];
+  CommentsCount?: number;
   Author?: {
-    Id?: string,
-    PictureDate?: string,
-    Job?: string,
-    Name?: string
-  },
-  Text?: string,
+    Id?: string;
+    PictureDate?: string;
+    Job?: string;
+    Name?: string;
+  };
+  Text?: string;
   TextLocalizations?: {
-    fr?: string,
-    en?: string
-  },
-  Date?: string,
-  LastActivity?: string,
-  TextLang?: string,
-  _id?: string,
+    fr?: string;
+    en?: string;
+  };
+  Date?: string;
+  LastActivity?: string;
+  TextLang?: string;
+  _id?: string;
   FinancialData?: {
-    IsPriceEvaluationCompleted?: boolean,
-    Type?: string,
-    BreakEven?: number,
-    Timeframe?: string,
-    ExpirationDate?: string,
-    Sell?: boolean,
+    IsPriceEvaluationCompleted?: boolean;
+    Type?: string;
+    BreakEven?: number;
+    Timeframe?: string;
+    ExpirationDate?: string;
+    Sell?: boolean;
     Instrument?: {
-      Length?: number,
-      Start?: number,
-      MarketItemKey?: string,
+      Length?: number;
+      Start?: number;
+      MarketItemKey?: string;
       MarketItem?: {
-        Symbol?: string,
-        To?: string,
-        Market?: string,
-        Key?: string,
-        Name?: string
-      },
-      Name?: string
-    },
-    StopLoss?: number,
-    EntryValue?: number,
+        Symbol?: string;
+        To?: string;
+        Market?: string;
+        Key?: string;
+        Name?: string;
+      };
+      Name?: string;
+    };
+    StopLoss?: number;
+    EntryValue?: number;
     PriceEvaluations?: [
       {
-        ReachedAt?: string,
-        Type?: string,
-        Price?: number
-      },
-    ],
+        ReachedAt?: string;
+        Type?: string;
+        Price?: number;
+      }
+    ];
     TakeProfits?: [
       {
-        Value?: number
+        Value?: number;
       }
-    ]
-  },
-  AwardsCount?: any,
+    ];
+  };
+  AwardsCount?: any;
   ReactionCounts?: {
-    Likes?: number,
-  },
-  SharesCount?: number,
-  Audio?: string,
-  RestrictedTo?: string,
+    Likes?: number;
+  };
+  SharesCount?: number;
+  Audio?: string;
+  RestrictedTo?: string;
 }

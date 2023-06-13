@@ -60,7 +60,7 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
                         :
                         filteredAssets?.map(coin => {
                             return (
-                                <Button className="min-h-[44px] py-1 px-2 cursor-pointer z-50 w-full" onClick={() => {
+                                <Button className="min-h-[44px] py-1 px-2 cursor-pointer z-50 w-full hover:bg-grey-3 hover:rounded-lg" onClick={() => {
                                     if (onClick) {
                                         onClick(coin);
                                     } else {

@@ -38,6 +38,10 @@ export type PortfolioSnapshotType = {
 
 export type PortfolioAssetType = {
     name?: string,
+    pnl?: {
+        percentage?: number,
+        value?: number,
+    },
     pnl_value?: number,
     pnl_percent?: number,
     weight?: number,
