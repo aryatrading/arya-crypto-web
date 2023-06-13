@@ -165,43 +165,43 @@ export const EntryTrade: FC = () => {
           );
         }}
       />
-      <div className="flex justify-center">
-        <TimeseriesPicker
-          series={percentTabs}
-          active={percent}
-          onclick={async (e: any) => {
-            setPercent(e.key);
 
-            if (trade?.entry_order?.type === "SELL") {
-              dispatch(
-                setQuantity({
-                  quantity: trade.available_quantity * (e.key / 100),
-                })
-              );
-              dispatch(
-                setPrice({
-                  price:
-                    (await getAssetAvailable(
-                      trade.base_name,
-                      selectedExchange?.provider_id ?? 1
-                    )) *
-                    (e.key / 100),
-                })
-              );
-            } else {
-              dispatch(
-                setQuantity({
-                  quantity:
-                    (trade.available_quantity * (e.key / 100)) / livePrice,
-                })
-              );
-              dispatch(
-                setPrice({ price: trade.available_quantity * (e.key / 100) })
-              );
-            }
-          }}
-        />
-      </div>
+      <TimeseriesPicker
+        series={percentTabs}
+        active={percent}
+        onclick={async (e: any) => {
+          setPercent(e.key);
+
+          if (trade?.entry_order?.type === "SELL") {
+            dispatch(
+              setQuantity({
+                quantity: trade.available_quantity * (e.key / 100),
+              })
+            );
+            dispatch(
+              setPrice({
+                price:
+                  (await getAssetAvailable(
+                    trade.base_name,
+                    selectedExchange?.provider_id ?? 1
+                  )) *
+                  (e.key / 100),
+              })
+            );
+          } else {
+            dispatch(
+              setQuantity({
+                quantity:
+                  (trade.available_quantity * (e.key / 100)) / livePrice,
+              })
+            );
+            dispatch(
+              setPrice({ price: trade.available_quantity * (e.key / 100) })
+            );
+          }
+        }}
+      />
+
       <TradeInput
         title={t("total")}
         value={trade.base_name}

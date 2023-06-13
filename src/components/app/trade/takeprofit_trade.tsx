@@ -12,9 +12,9 @@ import { ProfitSet } from "../../shared/containers/trade/profit_set";
 import {
   getAssetAvailable,
   getAssetOpenOrders,
-  createTrade, 
+  createTrade,
   initiateTrade,
-  cancelOrder
+  cancelOrder,
 } from "../../../services/controllers/trade";
 import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
 import { TimeseriesPicker } from "../../shared/containers/asset/graphTimeseries";
@@ -30,15 +30,18 @@ import { isPremiumUser } from "../../../services/redux/userSlice";
 import { Row } from "../../shared/layout/flex";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 
-
 interface ITrailingTrade {
-  assetScreen?:boolean
+  assetScreen?: boolean;
+  postCreation?: Function;
 }
 
-export const TakeprofitTrade: FC<ITrailingTrade> = ({assetScreen}) => {
+export const TakeprofitTrade: FC<ITrailingTrade> = ({
+  assetScreen,
+  postCreation,
+}) => {
   const dispatch = useDispatch();
   const { t } = useTranslation(["trade"]);
-  const trade:TradeType = useSelector(getTrade);
+  const trade: TradeType = useSelector(getTrade);
   const _price = useSelector(getAssetPrice);
   const isPremium = useSelector(isPremiumUser);
   const _assetprice = useSelector(selectAssetLivePrice);
@@ -62,7 +65,7 @@ export const TakeprofitTrade: FC<ITrailingTrade> = ({assetScreen}) => {
   }, [selectedExchange?.provider_id, trade.asset_name, trade.symbol_name]);
 
   const onAddTp = () => {
-    if (trade?.take_profit?.length??0 >= 3) {
+    if (trade?.take_profit?.length ?? 0 >= 3) {
       return toast.info(t("tp3"));
     }
 
@@ -78,57 +81,55 @@ export const TakeprofitTrade: FC<ITrailingTrade> = ({assetScreen}) => {
       return toast.info(t("premium"));
     }
 
-    if(assetScreen){
-      submitTakeProfit()
-    }
-    else{
+    if (assetScreen) {
+      submitTakeProfit();
+    } else {
       dispatch(addTakeProfit(values));
     }
   };
 
-    
-  const submitTakeProfit = useCallback(
-    async () => {
-      if( !values.value || !values.quantity){
-        if(MODE_DEBUG){
-          console.log(`submitTakeProfit is passed falsy value:${values.value} or quantity:${values.quantity}`)
-        }
-        return
+  const submitTakeProfit = useCallback(async () => {
+    if (!values.value || !values.quantity) {
+      if (MODE_DEBUG) {
+        console.log(
+          `submitTakeProfit is passed falsy value:${values.value} or quantity:${values.quantity}`
+        );
       }
-      const tradeData:TradeType = {
-        symbol_name:trade.symbol_name,
-        asset_name:trade.asset_name,
-        base_name:trade.base_name,
-        available_quantity:trade.available_quantity
-      }
-      tradeData.take_profit =[values]
+      return;
+    }
+    const tradeData: TradeType = {
+      symbol_name: trade.symbol_name,
+      asset_name: trade.asset_name,
+      base_name: trade.base_name,
+      available_quantity: trade.available_quantity,
+    };
+    tradeData.take_profit = [values];
 
-      if(MODE_DEBUG){
-        console.log(tradeData)
-      }
-      
-      await createTrade(tradeData, selectedExchange?.provider_id ?? 1);
-      toast.success(`${trade.symbol_name} trade created`);
+    if (MODE_DEBUG) {
+      console.log(tradeData);
+    }
 
-      await initiateTrade(
-        trade.asset_name,
-        selectedExchange?.provider_id ?? 1,
-        trade.base_name
-      );
-    },
-    [selectedExchange?.provider_id, trade, values],
-  )
+    await createTrade(tradeData, selectedExchange?.provider_id ?? 1);
+    postCreation!();
+    toast.success(`${trade.symbol_name} trade created`);
+
+    await initiateTrade(
+      trade.asset_name,
+      selectedExchange?.provider_id ?? 1,
+      trade.base_name
+    );
+  }, [selectedExchange?.provider_id, trade, values]);
 
   const onremoveProfit = async (_index: number) => {
-    if(!trade.take_profit){
-      return
+    if (!trade.take_profit) {
+      return;
     }
     let _new = trade.take_profit;
     _new = _new.filter((elm: any, index: number) => index !== _index);
-    
+
     if (trade.take_profit[_index].order_id) {
       await cancelOrder(
-        trade.take_profit[_index].order_id||0,
+        trade.take_profit[_index].order_id || 0,
         selectedExchange?.provider_id ?? 1
       );
       await getAssetOpenOrders(
@@ -160,7 +161,7 @@ export const TakeprofitTrade: FC<ITrailingTrade> = ({assetScreen}) => {
       />
       <div className="flex justify-center">
         <TimeseriesPicker
-          buttonClassName='w-full'
+          buttonClassName="w-full"
           series={percentTabs}
           active={percent}
           onclick={(e: any) => {
@@ -173,7 +174,11 @@ export const TakeprofitTrade: FC<ITrailingTrade> = ({assetScreen}) => {
         />
       </div>
       <Button
-        className={twMerge(isPremium ? "bg-blue-3" : "bg-grey-1" ,'rounded-md py-3',assetScreen?"mt-auto":'')}
+        className={twMerge(
+          isPremium ? "bg-blue-3" : "bg-grey-1",
+          "rounded-md py-3",
+          assetScreen ? "mt-auto" : ""
+        )}
         onClick={() => onAddTp()}
       >
         <Row className="justify-center items-center gap-2">
@@ -187,7 +192,8 @@ export const TakeprofitTrade: FC<ITrailingTrade> = ({assetScreen}) => {
         <p className="font-bold text-base">{t("takeprofit")}</p>
       ) : null}
 
-      {!assetScreen&&trade &&
+      {!assetScreen &&
+        trade &&
         trade?.take_profit?.map((elm: any, index: number) => {
           return (
             <ProfitSet

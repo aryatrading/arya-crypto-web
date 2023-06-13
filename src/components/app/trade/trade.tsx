@@ -58,9 +58,10 @@ const Trade: FC = () => {
 
   const renderTradeContent = () => {
     if (activeTab === "entry") return <EntryTrade />;
-    if (activeTab === "stoploss") return <StoplossTrade />;
-    if (activeTab === "takeprofit") return <TakeprofitTrade />;
-    if (activeTab === "trailing") return <TrailingTrade />;
+    if (activeTab === "stoploss") return <StoplossTrade assetScreen={false} />;
+    if (activeTab === "takeprofit")
+      return <TakeprofitTrade assetScreen={false} />;
+    if (activeTab === "trailing") return <TrailingTrade assetScreen={false} />;
   };
 
   const onCreateTrade = async () => {

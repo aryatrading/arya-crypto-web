@@ -124,7 +124,6 @@ export const getAssetOpenOrders = async (symbol: string, provider: number) => {
       createdAt: data[i]?.created_at,
     });
 
-    // console.log(data[i]);
     if (data[i]?.type === "SL") {
       store.dispatch(
         addStoploss({
@@ -159,7 +158,7 @@ export const getAssetOpenOrders = async (symbol: string, provider: number) => {
 };
 
 export const getHistoryOrders = async (symbol: string, provider: number) => {
-  const { data }:{data:Order[]} = await axiosInstance.get(
+  const { data }: { data: Order[] } = await axiosInstance.get(
     `trade-engine/orders?provider=${provider}&symbol=${symbol}usdt&skip=0&limit=100&order_status=200&order_status=-100&order_status=-200&order_status=-300&order_origin=manual_order`
   );
 
@@ -182,26 +181,31 @@ export const getHistoryOrders = async (symbol: string, provider: number) => {
   store.dispatch(setHistoryOrders({ orders: _history }));
 };
 
-export const getOrders = async (symbol: string, provider: number,status:EnumStatusCodes[],orderType:EnumOrderType[],skip?:number,limit?:number) => {
-  return await axiosInstance.get(
-    `trade-engine/orders`,{
-      params:{
-        provider,
-        symbol:`${symbol}usdt`,
-        skip:skip?skip:0,
-        limit:limit?limit:100,
-        order_status:status,
-        order_origin:orderType
-      }
-    }
-  );
+export const getOrders = async (
+  symbol: string,
+  provider: number,
+  status: EnumStatusCodes[],
+  orderType: EnumOrderType[],
+  skip?: number,
+  limit?: number
+) => {
+  return await axiosInstance.get(`trade-engine/orders`, {
+    params: {
+      provider,
+      symbol: `${symbol}usdt`,
+      skip: skip ? skip : 0,
+      limit: limit ? limit : 100,
+      order_status: status,
+      order_origin: orderType,
+    },
+  });
 };
 
-export const cancelOrder = async (id:number, provider:number)=>{
-  return axiosInstance.put('/trade-engine/cancel',null,{
-    params:{
-      order_id:id,
-      provider
-    }
-  })
-}
+export const cancelOrder = async (id: number, provider: number) => {
+  return axiosInstance.put("/trade-engine/cancel", null, {
+    params: {
+      order_id: id,
+      provider,
+    },
+  });
+};

@@ -91,9 +91,11 @@ export const getAssetTimeseriesPrice = async (
   );
 };
 
-export const getAssetSparkLineData = async (symbol:string)=>{
-  return await axios.get(`${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=1h&outputsize=168&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}`)
-}
+export const getAssetSparkLineData = async (symbol: string) => {
+  return await axios.get(
+    `${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=1h&outputsize=168&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}`
+  );
+};
 
 export const getAssetVotes = async (assetId: number) => {
   const { data } = await axiosInstance.get(
@@ -118,34 +120,42 @@ export const getFree = async (symbol: string, provider: number) => {
   return data[provider];
 };
 
+export const getOpenOrdersApi = async (symbol: string, provider: number) => {
+  const { data } = await axiosInstance.get(
+    `trade-engine/orders?provider=${provider}&skip=0&limit=100&symbol=${symbol}USDT&order_origin=manual_order&order_status=0&order_status=100`
+  );
+
+  return data;
+};
 
 type assetsHistoricalDataResponseType = {
   [k: string]: {
     meta: {
-      symbol: string,
-      interval: string,
-      currency: string,
-      exchange_timezone: string,
-      exchange: string,
-      mic_code: string,
-      type: string
-    },
+      symbol: string;
+      interval: string;
+      currency: string;
+      exchange_timezone: string;
+      exchange: string;
+      mic_code: string;
+      type: string;
+    };
     values: [
       {
-        datetime: string,
-        open: string,
-        high: string,
-        low: string,
-        close: string,
-        volume: string
-      },
-    ],
-    status: "ok"
-  }
-}
+        datetime: string;
+        open: string;
+        high: string;
+        low: string;
+        close: string;
+        volume: string;
+      }
+    ];
+    status: "ok";
+  };
+};
 
-
-export const periodToIntervalsAndOutputSize: { [k: string]: { interval: string, outputsize: number } } = {
+export const periodToIntervalsAndOutputSize: {
+  [k: string]: { interval: string; outputsize: number };
+} = {
   "1w": {
     interval: "30min",
     outputsize: 2 * 24 * 7,
@@ -161,49 +171,60 @@ export const periodToIntervalsAndOutputSize: { [k: string]: { interval: string, 
   "5y": {
     interval: "1day",
     outputsize: 365 * 5,
-  }
-}
+  },
+};
 
-function getCustomPeriodIntervalsAndOutputSize(startDate: number, endDate: number) {
+function getCustomPeriodIntervalsAndOutputSize(
+  startDate: number,
+  endDate: number
+) {
   const diffTime = Math.abs(startDate - endDate);
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  console.log({diffDays})
+  console.log({ diffDays });
   if (diffDays <= 7) {
     return {
       interval: "30min",
       outputsize: 2 * 24 * diffDays,
-    }
+    };
   } else if (diffDays <= 30) {
     return {
       interval: "2h",
       outputsize: 12 * diffDays,
-    }
+    };
   } else if (diffDays <= 365) {
     return {
       interval: "1day",
       outputsize: diffDays,
-    }
-  }  else {
+    };
+  } else {
     return {
       interval: "1week",
       outputsize: Math.round(diffDays / 7),
-    }
+    };
   }
 }
 
-export async function getAssetsHistoricalData(symbols: string[], period: EnumSmartAllocationSimulationPeriod, startDate?: Date, endDate?: Date) {
+export async function getAssetsHistoricalData(
+  symbols: string[],
+  period: EnumSmartAllocationSimulationPeriod,
+  startDate?: Date,
+  endDate?: Date
+) {
   const params: { [k: string]: any } = {
     symbol: symbols.join(","),
-    apikey: process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY
-  }
+    apikey: process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY,
+  };
 
   if (period === EnumSmartAllocationSimulationPeriod.custom) {
     if (startDate && endDate) {
-      const customPeriod = getCustomPeriodIntervalsAndOutputSize(startDate.getTime(), endDate.getTime());
+      const customPeriod = getCustomPeriodIntervalsAndOutputSize(
+        startDate.getTime(),
+        endDate.getTime()
+      );
       params.interval = customPeriod.interval;
       params.outputsize = customPeriod.outputsize;
-      params.start_date = moment(startDate, 'DD-MM-YYYY');
-      params.end_date = moment(endDate, 'DD-MM-YYYY');
+      params.start_date = moment(startDate, "DD-MM-YYYY");
+      params.end_date = moment(endDate, "DD-MM-YYYY");
     } else {
       params.interval = periodToIntervalsAndOutputSize["1y"].interval;
       params.outputsize = periodToIntervalsAndOutputSize["1y"].outputsize;
@@ -214,7 +235,9 @@ export async function getAssetsHistoricalData(symbols: string[], period: EnumSma
   }
 
   return axios.get<assetsHistoricalDataResponseType>(
-    process.env.NEXT_PUBLIC_TWELEVE_API_URL ?? "", {
-    params
-  });
+    process.env.NEXT_PUBLIC_TWELEVE_API_URL ?? "",
+    {
+      params,
+    }
+  );
 }

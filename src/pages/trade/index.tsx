@@ -16,7 +16,6 @@ import {
 } from "../../services/controllers/trade";
 import { selectSelectedExchange } from "../../services/redux/exchangeSlice";
 import { TradingSalesPage } from "../../components/app/trade/salesPage";
-import { toast } from "react-toastify";
 import PageLoader from "../../components/shared/pageLoader/pageLoader";
 import { useTranslation } from "next-i18next";
 
@@ -33,23 +32,15 @@ const TradePage = () => {
 
   useEffect(() => {
     if (id != null) {
-      initiateTrade((s as string) ?? "BTC", selectedExchange?.provider_id ?? 1);
-    }
-
-    (async () => {
-      setLoading(true);
-      try {
-        dispatch(clearTrade());
+      (async () => {
+        setLoading(true);
         await initiateTrade(
           (s as string) ?? "BTC",
           selectedExchange?.provider_id ?? 1
         );
-      } catch (error) {
-        toast.warn(t("somethingWentWrong"));
-      } finally {
         setLoading(false);
-      }
-    })();
+      })();
+    }
     return () => {
       dispatch(clearTrade());
     };
@@ -72,6 +63,6 @@ export default withAuthUser({})(TradePage);
 
 export const getStaticProps: GetStaticProps<any> = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? 'en')),
+    ...(await serverSideTranslations(locale ?? "en")),
   },
 });
