@@ -1,5 +1,33 @@
 {
     "yourHoldings": "Your Holdings",
     "addAssets": "Add Assets",
-    "portfolioValue": "Portfolio value"
+    "portfolioValue": "Portfolio value",
+    "salesPage": {
+        "trackYourCryptoPortfoliosIn": "Track Your Crypto Portfolios In",
+        "onePlace":"One Place",
+        "monitorYourCryptosAcrossDifferentExchangesOnUnifiedDashboard":"Monitor your cryptos, across different exchanges, on a unified dashboard",
+        "connectPortfolioNow":"Connect Portfolio Now",
+        "allInOnePlatformForTrackingAllYourAssets":"All-In-One Platform For Tracking All your Crypto Assets",
+        "ARYACryptoSupportsTheMostPopularCryptocurrencyPlatforms":"ARYA Crypto supports the most popular cryptocurrency platforms, including Binance, Coinbase, and a lot more coming soon.",
+        "oneDashboardForEverything":"One Dashboard for Everything",
+        "trackEveryAssetYouHaveFromOneDashboard":"Track Every asset you have from one dashboard, and stay on top of your game.",
+        "globalPerspective":"Global Perspective",
+        "haveGlobalVisionOnYourCryptoWealthAndStartTakeStepsToImproveIt":"Have a global vision on your crypto wealth and start take steps to improve it.",
+        "quick&Secure":"Quick & Secure",
+        "gettingStartedWithARYACryptoOnlyTakesFewMinutes":"Getting started with ARYA Crypto only takes a few minutes, and it’s completely free and safe.",
+        "getStartedInFewMinutes":"Get started in a few minutes",
+        "seamlesslyConnectYourEntireCryptoPortfolioInJustFewSteps":"Seamlessly Connect Your Entire Crypto Portfolio in just a few steps.",
+        "createAnAccount":"Create an account",
+        "linkYourAccount":"link your account",
+        "manageYourCryptos":"Manage your cryptos",
+        "connectYourExchange":"Connect your exchange",
+        "theUltimateSecurityForYourDigitalAssets":"The Ultimate Security for Your Digital Assets",
+        "ARYACryptoIsEquippedWithTopQualityInfrastructure":"ARYA Crypto is equipped with top-quality infrastructure designed to ensure maximum protection of assets at all times. Since we ask for read-only access only, your holdings are perfectly safe under all conditions.",
+        "encrypted":"Encrypted",
+        "weUseAdvancedEncryptionToSecurelyTransferAndStoreData":"We use advanced encryption to securely transfer and store data.",
+        "secured":"Secured",
+        "weProtectYouAndYourCryptoAssetsFromExternalThreats":"We protect you and your crypto assets from external threats.",
+        "bestPractices":"Best Practices",
+        "weFollowTheMostAdvancedSecurityProcedures":"We follow the most advanced security procedures to ensure that your account is safe as possible."
+    }
 }

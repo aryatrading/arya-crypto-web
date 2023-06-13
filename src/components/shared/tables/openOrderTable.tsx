@@ -17,11 +17,13 @@ import {
   getAssetOpenOrders,
 } from "../../../services/controllers/trade";
 import { toast } from "react-toastify";
+import { useTranslation } from "next-i18next";
 
 export const OpenOrders: FC = () => {
   const dispatch = useDispatch();
   const openOrders = useSelector(getOpenOrders);
   const trade = useSelector(getTrade);
+  const { t } = useTranslation(["common"]);
 
   const isTabletOrMobileScreen = useMediaQuery({
     query: `(max-width:950px)`,
@@ -31,18 +33,18 @@ export const OpenOrders: FC = () => {
   });
 
   const [header, setHeader] = useState([
-    "Status",
-    "Type",
-    "Amount",
-    "Price",
-    "Creation date",
+    t("status"),
+    t("type"),
+    t("amount"),
+    t("price"),
+    t("date"),
   ]);
 
   useEffect(() => {
     if (isMobileScreen) {
-      setHeader(["Status", "Type", "Amount"]);
+      setHeader([t("status"), t("type"), t("amount")]);
     } else {
-      setHeader(["Status", "Type", "Amount", "Price", "Creation date"]);
+      setHeader([t("status"), t("type"), t("amount"), t("price"), t("date")]);
     }
   }, [isTabletOrMobileScreen, isMobileScreen]);
 

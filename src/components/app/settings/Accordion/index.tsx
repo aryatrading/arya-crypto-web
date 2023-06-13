@@ -36,10 +36,10 @@ const ExchangeAccordionCard = ({ cardId, exchange, setExchanges, exchanges }: an
 
     const formScheme = useCallback(() => {
         return Yup.object().shape({
-            portfolioname: Yup.string().min(4).required(t('common:required').toString()),
+            portfolioname: Yup.string().min(4, t('common:min', { number: 4 }).toString()).required(t('common:required').toString()),
             creationDate: Yup.string().required(t('common:required').toString()),
-            apiKey: Yup.string().min(10).required(t('common:required').toString()),
-            apiSecret: Yup.string().min(10).required(t('common:required').toString()),
+            apiKey: Yup.string().min(10, t('common:min', { number: 10 }).toString()).required(t('common:required').toString()),
+            apiSecret: Yup.string().min(10, t('common:min', { number: 10 }).toString()).required(t('common:required').toString()),
         });
     }, [t]);
 
