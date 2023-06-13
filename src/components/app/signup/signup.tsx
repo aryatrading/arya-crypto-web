@@ -25,9 +25,9 @@ const Signup: FC<any> = (props: any) => {
 
     const signupValidationScheme = useCallback(() => {
         return Yup.object().shape({
-            name: Yup.string().min(2, t('common:nameErrorMsg').toString()).required(),
+            name: Yup.string().min(2, t('common:min', { number: 2 }).toString()).required(),
             email: Yup.string().email().required(t('common:required').toString()),
-            password: Yup.string().min(2, t('common:passwordErrorMsg').toString()).required(),
+            password: Yup.string().min(2, t('common:min', { number: 2 }).toString()).required(),
         });
     }, [t])
 

@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 
 let tvScriptLoadingPromise;
 
-export default function TradingViewWidget(height) {
+export default function TradingViewWidget({ height, asset }) {
 
   const onLoadScriptRef = useRef();
   const { i18n } = useTranslation();
@@ -31,7 +31,9 @@ export default function TradingViewWidget(height) {
 
     return () => (onLoadScriptRef.current = null);
 
+
     function createWidget() {
+      console.log('> asset >> ', asset)
       if (
         document.getElementById("tradingview_d2d35") &&
         "TradingView" in window
@@ -39,6 +41,7 @@ export default function TradingViewWidget(height) {
         new window.TradingView.widget({
           width: '100%',
           height: height.height,
+          symbol: `BINANCE:${asset}`,
           interval: "D",
           timezone: "Etc/UTC",
           theme: "dark",

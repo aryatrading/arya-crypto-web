@@ -17,9 +17,9 @@ export const MarketStats: FC<MarketProps> = ({
   percent
 }) => {
   return (
-    <Col className={`${bgColor} w-60 rounded-md min-h-20 pl-5 py-2`}>
+    <Col className={`${bgColor} rounded-md min-h-20 px-5 py-2`}>
       <Row className="items-center">
-        <p className="text-[#F9FAFB] text-sm font-medium leading-5 items-center max-w-[100px]">
+        <p className="text-[#F9FAFB] text-base font-bold leading-5 items-center">
           {title}
         </p>
         <AssetPnl className={(percent < 0) ? 'text-red-1' : 'text-green-1'} value={percent} />

@@ -13,6 +13,11 @@ import { formatNumber } from "../../../utils/helpers/prices";
 import AssetRow from "../AssetRow/AssetRow";
 import styles from "./assetsTable.module.scss";
 import { useMediaQuery } from "react-responsive";
+import { useAuthUser } from "next-firebase-auth";
+import {
+  addAssetToWatchlist,
+  removeAssetFromWatchlist,
+} from "../../../services/controllers/market";
 
 type AssetsTableProps = {
   assets: AssetType[];
@@ -22,6 +27,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
   const router = useRouter();
   const { t } = useTranslation(["market"]);
   const _assetprice = useSelector(selectAssetLivePrice);
+  const authUser = useAuthUser();
   const isTabletOrMobileScreen = useMediaQuery({
     query: `(max-width:950px)`,
   });
@@ -35,7 +41,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
     t("name") ?? "",
     t("pnl") ?? "",
     t("currentprice") ?? "",
-    t("priceinbtc") ?? "",
+    // t("priceinbtc") ?? "",
     t("marketcap") ?? "",
     t("volume") ?? "",
     "",
@@ -51,19 +57,14 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
         "",
       ]);
     } else if (isMobileScreen) {
-      setheader([
-        t("rank") ?? "",
-        t("name") ?? "",
-
-        t("currentprice") ?? "",
-      ]);
+      setheader([t("rank") ?? "", t("name") ?? "", t("currentprice") ?? ""]);
     } else {
       setheader([
         t("rank") ?? "",
         t("name") ?? "",
         t("pnl") ?? "",
         t("currentprice") ?? "",
-        t("priceinbtc") ?? "",
+        // t("priceinbtc") ?? "",
         t("marketcap") ?? "",
         t("volume") ?? "",
         "",
@@ -81,7 +82,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
     else return `w-4 h-4 stroke-1`;
   };
 
-  const handleFavoritesToggle = (asset: AssetType) => {
+  const handleFavoritesToggle = async (asset: AssetType) => {
     // Check if a favorites list is found in local storage
     const favoritesList = localStorage.getItem(FAVORITES_LIST);
 
@@ -92,6 +93,10 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
     let _list = JSON.parse(favoritesList);
 
     if (_list.includes(asset.id)) {
+      // TRIGGER THE BACKEND IF USER IS LOGGED IN
+      if (authUser.email) {
+        await removeAssetFromWatchlist(asset.id ?? 1);
+      }
       return localStorage.setItem(
         FAVORITES_LIST,
         JSON.stringify(_list.filter((elm: number) => elm !== asset.id))
@@ -99,6 +104,12 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
     } else {
       // ADD THE ASSET TO THE FAVORITES LIST
       _list.push(asset.id);
+
+      // TRIGGER THE BACKEND IF USER IS LOGGED IN
+      if (authUser.email) {
+        await addAssetToWatchlist(asset.id ?? 1);
+      }
+
       return localStorage.setItem(FAVORITES_LIST, JSON.stringify(_list));
     }
   };
@@ -127,8 +138,8 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
               return (
                 <tr
                   key={index}
-                  className="hover:bg-black-2/25 hover:bg-blend-darken cursor-pointer"
-                  onClick={() => router.push(`/asset?symbol=${elm.symbol}`)}
+                  className="hover:bg-black-2/25 hover:bg-grey-4 cursor-pointer"
+                  onClick={() => router.push(`/asset?s=${elm.symbol}`)}
                 >
                   <th
                     scope="row"
@@ -141,7 +152,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
                       icon={elm.iconUrl ?? ""}
                       name={elm.name ?? ""}
                       symbol={elm.symbol ?? ""}
-                      className={`font-medium ${index === 0 ? 'pt-2' : 'pt-0'}`}
+                      className={`font-medium ${index === 0 ? "pt-2" : "pt-0"}`}
                       showIcon
                     />
                   </td>
@@ -167,12 +178,9 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
 
                   {!isTabletOrMobileScreen ? (
                     <>
-                      <td className="font-medium leading-6 text-white text-right">
-                        {!!_assetprice &&
-                          (
-                            _assetprice[elm.symbol ?? ""] / _assetprice["btc"]
-                          ).toFixed(7)}
-                      </td>
+                      {/* <td className="font-medium leading-6 text-white text-right">
+                        {elm.currentPrice ?? 0 / _assetprice["btc"]}
+                      </td> */}
                       <td className="font-medium leading-6 text-white text-right">
                         {formatNumber(elm.mrkCap ?? 0, true)}
                       </td>
@@ -185,8 +193,8 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
                   <td
                     className="font-medium  text-white text-right"
                     onClick={(e) => {
-                      handleFavoritesToggle(elm);
                       e.stopPropagation();
+                      handleFavoritesToggle(elm);
                     }}
                   >
                     <Row className="justify-end">

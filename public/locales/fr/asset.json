@@ -4,7 +4,7 @@
     "circsupply": "Alimentation en circulation",
     "volume": "Volume 24h",
     "totalsupply": "Offre totale",
-    "dailylow": "Quotidiennement bas",
+    "dailylow": "Minimum journalier",
     "dailyhigh": "Maximum journalier",
     "rank": "Rang",
     "pricelivedata": "Prix et information du {{asset.name}} en temps réel",
@@ -47,7 +47,7 @@
     "error_voting": "Erreur de vote, réessayez!",
     "selectAsset": "Sélectionner",
     "searchAsset": "Recherche",
-    "trade_title": "Commerce",
+    "trade_title": "Trade",
     "advance_mode": "Mode avancé",
     "from_title": "De",
     "balance_title": "Équilibre",
@@ -61,7 +61,7 @@
     "market": "Marché",
     "swap_success": "Échange créé",
     "select_provider": "Veuillez sélectionner un fournisseur à échanger",
-    "select_base": "Veuillez sélectionner un actif de base",
-    "trade_error": "Erreur lors de la création d'un commerce",
-    "cryptoProfitCalculator":"Calculateur de profit cryptographique"
+    "select_base": "Veuillez sélectionner une crypto de base",
+    "trade_error": "Erreur lors de la création d'un ordre  ",
+    "cryptoProfitCalculator":"Calculateur de profit "
 }

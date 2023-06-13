@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserType } from "../../types/user";
+import { AppState } from "./store";
 
 const initialState: UserType = {
   email: null,
@@ -7,6 +8,7 @@ const initialState: UserType = {
   firebaseId: null,
   knownKeys: [],
   subscription: false,
+  language: null,
 };
 
 export const userSlice = createSlice({
@@ -14,15 +16,15 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state: UserType, action) => {
-      state.email = action.payload.data.email;
-      state.userId = action.payload.data.user_id;
-      state.firebaseId = action.payload.data.firebase_id;
-      state.knownKeys = action.payload.data.known_keys;
-      state.subscription = action.payload.data.subscription;
+      state.firebaseId = action.payload.data?.firebase_id ?? null;
+      state.subscription = action.payload.data?.subscription ?? false;
     },
   },
 });
 
-export const {  } = userSlice.actions;
+export const { setUser } = userSlice.actions;
+
+export const isPremiumUser = (state: AppState) => state.user.subscription;
+export const firebaseId = (state: AppState) => state.user;
 
 export default userSlice.reducer;

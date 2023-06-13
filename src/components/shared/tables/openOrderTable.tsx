@@ -2,15 +2,28 @@ import { FC, useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Col, Row } from "../layout/flex";
 import styles from "./assetsTable.module.scss";
-import { useSelector } from "react-redux";
-import { getOpenOrders, getTrade } from "../../../services/redux/tradeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearOrder,
+  getOpenOrders,
+  getTrade,
+} from "../../../services/redux/tradeSlice";
 import { ThemedContainer } from "../containers/themedContainer";
 import { formatNumber } from "../../../utils/helpers/prices";
 import { XMarkIcon, TrashIcon } from "@heroicons/react/24/outline";
+import moment from "moment";
+import {
+  cancelOpenOrder,
+  getAssetOpenOrders,
+} from "../../../services/controllers/trade";
+import { toast } from "react-toastify";
+import { useTranslation } from "next-i18next";
 
 export const OpenOrders: FC = () => {
+  const dispatch = useDispatch();
   const openOrders = useSelector(getOpenOrders);
   const trade = useSelector(getTrade);
+  const { t } = useTranslation(["common"]);
 
   const isTabletOrMobileScreen = useMediaQuery({
     query: `(max-width:950px)`,
@@ -20,20 +33,31 @@ export const OpenOrders: FC = () => {
   });
 
   const [header, setHeader] = useState([
-    "Status",
-    "Type",
-    "Amount",
-    "Price",
-    "Creation date",
+    t("status"),
+    t("type"),
+    t("amount"),
+    t("price"),
+    t("date"),
   ]);
 
   useEffect(() => {
     if (isMobileScreen) {
-      setHeader(["Status", "Type", "Amount"]);
+      setHeader([t("status"), t("type"), t("amount")]);
     } else {
-      setHeader(["Status", "Type", "Amount", "Price", "Creation date"]);
+      setHeader([t("status"), t("type"), t("amount"), t("price"), t("date")]);
     }
   }, [isTabletOrMobileScreen, isMobileScreen]);
+
+  const onclosepress = async (order: any) => {
+    try {
+      await cancelOpenOrder(order.id ?? 1, order.provider_id);
+      dispatch(clearOrder());
+      await getAssetOpenOrders(trade.symbol_name, order.provider_id);
+      toast.success(`${order.type} order closed`);
+    } catch (error) {
+      toast.info(`Error closing ${order.type} order, try again`);
+    }
+  };
 
   return (
     <Col className="flex items-center justify-center flex-1 gap-10 w-full">
@@ -66,19 +90,22 @@ export const OpenOrders: FC = () => {
                     className="px-6 py-4 font-bold leading-6 text-white text-left"
                   >
                     <Col>
-                      {elm.status} {isMobileScreen ? <p>35/5/2023</p> : null}
+                      {elm.status}{" "}
+                      {isMobileScreen ? (
+                        <p> {moment(elm.createdAt).format("MM/DD/YY")}</p>
+                      ) : null}
                     </Col>
                   </th>
 
                   <ThemedContainer
                     content={elm.type}
                     colorClass={
-                      elm.type.toLowerCase() === "sell"
-                        ? "bg-red-2"
-                        : "bg-green-2"
+                      elm?.type?.toLowerCase() === "sell"
+                        ? "bg-red-2 mb-3"
+                        : "bg-green-2 mb-3"
                     }
                     textColor={
-                      elm.type.toLowerCase() === "sell"
+                      elm?.type?.toLowerCase() === "sell"
                         ? "text-red-1"
                         : "text-green-1"
                     }
@@ -99,7 +126,9 @@ export const OpenOrders: FC = () => {
                       <th className="text-left">
                         {formatNumber(elm?.price ?? 0, true)}
                       </th>
-                      <th className="text-left">{elm.createdAt}</th>
+                      <th className="text-left">
+                        {moment(elm.createdAt).format("MM/DD/YY")}
+                      </th>
                     </>
                   ) : null}
 
@@ -107,7 +136,7 @@ export const OpenOrders: FC = () => {
                     <Row className="justify-start">
                       <button
                         className="bg-transparent"
-                        onClick={() => console.log("close")}
+                        onClick={() => onclosepress(elm)}
                       >
                         <XMarkIcon width={20} height={20} />
                       </button>

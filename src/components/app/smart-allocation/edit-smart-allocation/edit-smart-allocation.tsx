@@ -13,9 +13,9 @@ import SmartAllocationExitStrategy from "../authed-smart-allocation/SmartAllocat
 import SmartAllocationRebalancing from "../authed-smart-allocation/SmartAllocationAutomation/SmartAllocationRebalancing/SmartAllocationRebalancing"
 import { EnumReBalancingFrequency, EnumSmartAllocationAssetStatus } from "../../../../utils/constants/smartAllocation"
 import { getSmartAllocation, updateSmartAllocation } from "../../../../services/controllers/smart-allocation"
-import { getAssetCurrentValue, getAssetCurrentWeight, stableCoinsFilter } from "../../../../utils/smart-allocation"
+import { getAssetCurrentValue, getAssetCurrentWeight, sortSmartAllocationsHoldings, stableCoinsFilter } from "../../../../utils/smart-allocation"
 import ExchangeSwitcher from "../../../shared/exchange-switcher/exchange-switcher"
-import { selectSelectedExchange } from "../../../../services/redux/exchangeSlice"
+import { selectConnectedExchanges, selectSelectedExchange } from "../../../../services/redux/exchangeSlice"
 import { percentageFormat, formatNumber } from "../../../../utils/helpers/prices"
 import CutoutDoughnutChart from "../../../shared/charts/doughnut/cutout-doughnut"
 import AssetSelector from "../../../shared/AssetSelector/AssetSelector"
@@ -23,28 +23,31 @@ import { useResponsive } from "../../../../context/responsive.context"
 import { getCoinColor } from "../../../../utils/helpers/coinsColors"
 import AssetPnl from "../../../shared/containers/asset/assetPnl"
 import { MODE_DEBUG } from "../../../../utils/constants/config"
-import PageLoader from "../../../shared/pageLoader/pageLoader"
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
 import styles from "./edit-smart-allocation.module.scss"
 import { Col, Row } from "../../../shared/layout/flex"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../../../shared/buttons/button"
 import { AssetType } from "../../../../types/asset"
+import { USDTSymbol } from "../../../../utils/constants/market"
+import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/no-exchange-connected-page"
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline"
 
 
 const EditSmartAllocation: FC = () => {
 
-    const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
+    const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(true);
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
     const [smartAllocationTotalEvaluation, setSmartAllocationTotalEvaluation] = useState<number>(0);
     const [smartAllocationExists, setSmartAllocationExists] = useState<boolean>(false);
     const [isSavingSmartAllocation, setIsSavingSmartAllocation] = useState<boolean>(false);
-    const [userHasSubscription, setUserHasSubscription] = useState<boolean>(true);
     const [reBalancingFrequency, setReBalancingFrequency] = useState<EnumReBalancingFrequency | null>(null);
     const [reBalancingDate, setReBalancingDate] = useState<Date | null>(null);
     const [exitStrategy, setExitStrategy] = useState<SmartAllocationExitStrategyType | null>(null);
+    const [fetchingHoldingsError, setFetchingHoldingsError] = useState<string>();
 
     const selectedExchange = useSelector(selectSelectedExchange);
+    const connectedExchanges = useSelector(selectConnectedExchanges);
 
     const { t } = useTranslation(['smart-allocation']);
 
@@ -71,11 +74,23 @@ const EditSmartAllocation: FC = () => {
                 setSmartAllocationExists(data?.exists ?? false);
                 const holdings: SmartAllocationAssetType[] | undefined = data.assets;
                 if (holdings) {
-                    setSmartAllocationTotalEvaluation(getTotalAssetsValue(holdings));
                     const totalValue = getTotalAssetsValue(holdings);
-                    holdings.sort((a, b) => ((getAssetCurrentWeight(b, b.asset_details?.asset_data?.current_price ?? 0, totalValue)) - (getAssetCurrentWeight(a, a.asset_details?.asset_data?.current_price ?? 0, totalValue))));
-                    setSmartAllocationHoldings(holdings.filter(stableCoinsFilter).map((holding) => {
-                        return { ...holding, current_value: getAssetCurrentValue(holding, holding.asset_details?.asset_data?.current_price ?? 0), current_weight: getAssetCurrentWeight(holding, holding.asset_details?.asset_data?.current_price ?? 0, totalValue) };
+                    setSmartAllocationTotalEvaluation(totalValue);
+
+                    holdings.sort((a, b) => sortSmartAllocationsHoldings(a, b, totalValue));
+
+                    const stableCoinsWeight = holdings.map((holding) => {
+                        const currentWeight = getAssetCurrentWeight(holding, holding.stable ? 1 : holding.asset_details?.asset_data?.current_price ?? 0, totalValue);
+                        return holding.stable && holding.name !== USDTSymbol ? currentWeight : 0
+                    }).reduce((prev, curr) => prev + curr);
+                    setSmartAllocationHoldings(holdings.map((holding) => {
+                        const currentWeight = getAssetCurrentWeight(holding, holding.stable ? 1 : holding.asset_details?.asset_data?.current_price ?? 0, totalValue);
+                        return {
+                            ...holding,
+                            current_value: getAssetCurrentValue(holding, holding.stable ? 1 : holding.asset_details?.asset_data?.current_price ?? 0),
+                            current_weight: currentWeight,
+                            weight: holding.weight ? (holding.weight??0) * (1 - stableCoinsWeight): holding.stable && holding.name !== USDTSymbol ? currentWeight : 0,
+                        };
                     }));
                 }
                 const frequency = data.frequency;
@@ -96,6 +111,7 @@ const EditSmartAllocation: FC = () => {
                 }
             })
             .catch((error) => {
+                setFetchingHoldingsError(error.message);
                 if (MODE_DEBUG)
                     console.error("Error while initSmartAllocationHoldings (initSmartAllocationHoldings)", error)
             })
@@ -111,12 +127,19 @@ const EditSmartAllocation: FC = () => {
     }, [initSmartAllocationHoldings]);
 
     const distributeWeightsEqually = useCallback(() => {
+        const stableCoinsCount = smartAllocationHoldings?.filter(holding => (holding.stable)).length ?? 0;
+        const stableCoinsWeight = smartAllocationHoldings?.map(holding => (holding.stable && (holding.name !== USDTSymbol)) ? holding.current_weight : 0)?.reduce((prev, curr) => ((prev ?? 0) + (curr ?? 0))) ?? 0;
+
         setSmartAllocationHoldings((oldState) => {
             return oldState.map((holding) => {
-                return { ...holding, weight: 1 / (oldState.length) };
+                if (holding.stable) {
+                    return holding;
+                } else {
+                    return { ...holding, weight: (1 - stableCoinsWeight) / ((oldState.length - stableCoinsCount) ?? 1) };
+                }
             })
-        })
-    }, [])
+        });
+    }, [smartAllocationHoldings]);
 
 
     const onSetWeightChange = useCallback((value: number, asset: SmartAllocationAssetType) => {
@@ -136,9 +159,15 @@ const EditSmartAllocation: FC = () => {
     }, [smartAllocationHoldings])
 
     const onRemoveAsset = useCallback((asset: SmartAllocationAssetType) => {
-        setSmartAllocationHoldings((oldState) => {
-            return oldState.map((holding) => holding.name === asset.name ? { ...holding, removed: (!asset.id), weight: 0 } : holding);
-        })
+        if (asset.current_weight) {
+            setSmartAllocationHoldings((oldState) => {
+                return oldState.map((holding) => holding.name === asset.name ? { ...holding, removed: (!asset.id), weight: 0 } : holding);
+            })
+        } else {
+            setSmartAllocationHoldings((oldState) => {
+                return oldState.filter((holding) => holding.name !== asset.name);
+            })
+        }
     }, [])
 
     const tableHeader = useMemo(() => {
@@ -177,6 +206,25 @@ const EditSmartAllocation: FC = () => {
         }
     }, [distributeWeightsEqually, isTabletOrMobileScreen, t]);
 
+    const weightSlider = useCallback((asset: SmartAllocationAssetType, setWeight: number, coinColor: string) => {
+        return (
+            <Slider.Root
+                className="relative flex items-center select-none flex-1"
+                value={[setWeight * 100]}
+                max={100}
+                step={1}
+                aria-label="Volume"
+                onValueChange={(value) => onSetWeightChange(value[0], asset)}
+                disabled={asset.stable}
+            >
+                <Slider.Track className={clsx("flex-grow flex-1 bg-[#D9D9D9] rounded-full h-3 overflow-hidden", { "bg-[#D9D9D9]": asset.stable, "bg-blue-3": asset.stable, })}>
+                    <Slider.Range className="absolute h-full rounded-full" style={{ backgroundColor: coinColor }} />
+                </Slider.Track>
+                {(!asset.stable) && <Slider.Thumb className={clsx(`block w-6 h-6 bg-white rounded-full shadow-lg shadow-black-1 hover:bg-[#D9D9D9] focus:outline-none`)} />}
+            </Slider.Root>
+        )
+    }, [onSetWeightChange]);
+
     const tableBody = useMemo(() => {
 
 
@@ -207,32 +255,20 @@ const EditSmartAllocation: FC = () => {
                             </td>
                             <td className="text-sm">
                                 <Row className="w-full gap-4 items-center">
-                                    <Slider.Root
-                                        className="relative flex items-center select-none flex-1"
-                                        value={[setWeight * 100]}
-                                        max={100}
-                                        step={1}
-                                        aria-label="Volume"
-                                        onValueChange={(value) => onSetWeightChange(value[0], asset)}
-                                    >
-                                        <Slider.Track className="flex-grow flex-1 bg-[#D9D9D9] rounded-full h-3">
-                                            <Slider.Range className="absolute h-full rounded-full" style={{ backgroundColor: coinColor }} />
-                                        </Slider.Track>
-                                        <Slider.Thumb className="block w-6 h-6 bg-white rounded-full shadow-lg shadow-black-1 focus:outline-none" />
-                                    </Slider.Root>
-
+                                    {weightSlider(asset, setWeight, coinColor)}
                                 </Row>
                             </td>
                             <td>
                                 <Col className="gap-2">
                                     <Row className="gap-1 items-center">
                                         <input
-                                            className="bg-grey-3 focus-within:outline focus-within:outline-1 focus-within:outline-grey-1 w-16 h-10 text-center rounded-md text-sm p-0"
+                                            className="bg-grey-3 focus-within:outline focus-within:outline-1 focus-within:outline-grey-1 w-16 h-10 text-center rounded-md text-sm p-0 disabled:border-0"
                                             value={percentageFormat(setWeight * 100)}
                                             type="number"
                                             onChange={(event) => {
                                                 onSetWeightChange(parseFloat(event.target.value), asset);
                                             }}
+                                            disabled={asset.stable}
                                         />
                                         <p className="font-bold">%</p>
                                     </Row>
@@ -240,9 +276,9 @@ const EditSmartAllocation: FC = () => {
                                 </Col>
                             </td>
                             <td>
-                                {(userHasSubscription) && <Button onClick={() => onRemoveAsset(asset)}>
+                                {(!asset.stable) ? <Button className="flex justify-center w-full" onClick={() => onRemoveAsset(asset)}>
                                     <XMarkIcon width={20} height={20} color="white" />
-                                </Button>}
+                                </Button> : <p className="text-[9px] text-center select-none">{t("STABLE_COIN")}</p>}
                             </td>
                         </tr>
                     );
@@ -259,6 +295,11 @@ const EditSmartAllocation: FC = () => {
                             <td>
                                 <AssetPnl
                                     value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
+                                    className={
+                                        (asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0) <= 0
+                                        ? "bg-red-2 text-red-1"
+                                        : "bg-green-2 text-green-1"
+                                    }
                                 />
                             </td>
                             <td>{formatNumber(asset?.asset_details?.asset_data?.current_price ?? 0, true)}</td>
@@ -269,42 +310,31 @@ const EditSmartAllocation: FC = () => {
                             </td>
                             <td className="text-sm">
                                 <Row className="w-full gap-4 items-center">
-                                    <Slider.Root
-                                        className="relative flex items-center select-none flex-1"
-                                        value={[setWeight * 100]}
-                                        max={100}
-                                        step={1}
-                                        aria-label="Volume"
-                                        onValueChange={(value) => onSetWeightChange(value[0], asset)}
-                                    >
-                                        <Slider.Track className="flex-grow flex-1 bg-[#D9D9D9] rounded-full h-3">
-                                            <Slider.Range className="absolute h-full rounded-full" style={{ backgroundColor: coinColor }} />
-                                        </Slider.Track>
-                                        <Slider.Thumb className={`block w-6 h-6 bg-white rounded-full shadow-lg shadow-black-1 hover:bg-[#D9D9D9] focus:outline-none`} />
-                                    </Slider.Root>
+                                    {weightSlider(asset, setWeight, coinColor)}
                                     <input
-                                        className="bg-grey-3 focus-within:outline focus-within:outline-1 focus-within:outline-grey-1 w-12 h-8 text-center rounded-md text-sm p-0"
+                                        className="bg-grey-3 focus-within:outline focus-within:outline-1 focus-within:outline-grey-1 w-12 h-8 text-center rounded-md text-sm p-0 disabled:border-0"
                                         value={percentageFormat(setWeight * 100)}
                                         type="number"
                                         onChange={(event) => {
                                             onSetWeightChange(parseFloat(event.target.value), asset);
                                         }}
+                                        disabled={asset.stable}
                                     />
                                     <p className="font-bold">%</p>
                                     <p className="font-bold w-32">USD {formatNumber(assetEvaluation, true)}</p>
                                 </Row>
                             </td>
                             <td>
-                                {(userHasSubscription) && <Button onClick={() => onRemoveAsset(asset)}>
+                                {(!asset.stable) ? <Button className="flex justify-center w-full" onClick={() => onRemoveAsset(asset)}>
                                     <XMarkIcon width={20} height={20} color="white" />
-                                </Button>}
+                                </Button> : <p className="text-[9px] text-center select-none">{t("STABLE_COIN")}</p>}
                             </td>
                         </tr>
                     );
                 }
             })
         }
-    }, [isTabletOrMobileScreen, onRemoveAsset, onSetWeightChange, smartAllocationHoldings, smartAllocationTotalEvaluation, t, userHasSubscription]);
+    }, [isTabletOrMobileScreen, onRemoveAsset, onSetWeightChange, smartAllocationHoldings, smartAllocationTotalEvaluation, t, weightSlider]);
 
     const onSelectAsset = useCallback((selectedAsset: AssetType) => {
         setSmartAllocationHoldings((oldState) => {
@@ -338,6 +368,7 @@ const EditSmartAllocation: FC = () => {
             <AssetSelector
                 trigger={<Button className="w-full md:w-max px-5 min-w-[5rem] bg-blue-1 h-11 rounded-md">{t('common:addAsset')}</Button>}
                 onClick={onSelectAsset}
+                showShowOnlyTradableAssets={true}
             />
         );
     }, [onSelectAsset, t]);
@@ -414,15 +445,20 @@ const EditSmartAllocation: FC = () => {
             if (totalPercentage >= .999) {
 
                 setIsSavingSmartAllocation(true);
-                const assets: SaveSmartAllocationAssetType[] = smartAllocationHoldings.map((holding) => {
+
+                const holdingsWithoutStableCoins = smartAllocationHoldings.filter(stableCoinsFilter);
+                const totalWeightWithoutStableCoins = holdingsWithoutStableCoins.map(holding => holding.weight).reduce((prev, curr) => ((prev ?? 0) + (curr ?? 0))) ?? 1;
+
+                const assets: SaveSmartAllocationAssetType[] = holdingsWithoutStableCoins.filter(stableCoinsFilter).map((holding) => {
                     return (
                         {
                             name: holding.name,
-                            weight: holding.weight,
+                            weight: (holding.weight ?? 0) * 1 / totalWeightWithoutStableCoins,
                             status: EnumSmartAllocationAssetStatus.ACTIVE,
                             id: holding.id,
                         })
                 });
+
 
                 const requestData: SmartAllocationSaveRequestType = {
                     assets,
@@ -498,9 +534,24 @@ const EditSmartAllocation: FC = () => {
         }
     }, [isTabletOrMobileScreen, smartAllocationExitStrategy, smartAllocationRebalancing, t]);
 
-    if (isLoadingSmartAllocationHoldings) {
-        return <PageLoader />
-    } else {
+    const noAllocation = useMemo(() => {
+        return (
+            <Col className="w-full md:items-center justify-center col-span-full gap-10">
+                <ExchangeSwitcher canSelectOverall={false} />
+                <Row className="justify-center  mt-40">
+                    <Col className="items-center gap-5">
+                        <Col className="items-center gap-5">
+                            <ExclamationTriangleIcon color="yellow" width={50} />
+                            <p className="text-2xl max-w-xs md:max-w-none font-semibold text-center md:text-start">{t("somethingWentWrongWhileFetchingYourSmartAllocation")}</p>
+                        </Col>
+                        <p className="text-grey-1 text-center md:text-start">{fetchingHoldingsError}</p>
+                    </Col>
+                </Row>
+            </Col>
+        )
+    }, [fetchingHoldingsError, t]);
+
+    const withAllocation = useMemo(() => {
         return (
             <Col className="w-full gap-10 lg:gap-16 pb-20 items-start justify-start">
                 <Col className="w-full md:flex-row justify-between gap-5">
@@ -534,6 +585,16 @@ const EditSmartAllocation: FC = () => {
                 {isTabletOrMobileScreen && assetSelector}
                 {smartAllocationAutomation}
             </Col>
+        )
+    }, [assetSelector, isSavingSmartAllocation, isTabletOrMobileScreen, onSaveSmartAllocation, smartAllocationAutomation, smartAllocationHoldings, smartAllocationTotalEvaluation, t, table]);
+
+    const connectedExchangesWithProviders = useMemo(() => connectedExchanges?.filter(exchange => exchange.provider_id), [connectedExchanges]);
+
+    if (connectedExchangesWithProviders?.length || isLoadingSmartAllocationHoldings) {
+        return <>{(fetchingHoldingsError) ? noAllocation : withAllocation}</>;
+    } else {
+        return (
+            <NoConnectedExchangePage />
         )
     }
 }

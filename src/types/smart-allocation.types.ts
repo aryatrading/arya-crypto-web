@@ -100,3 +100,8 @@ export interface ISmartAllocationOrderLog{
     asset_name: string;
     order_id: number;
 }
+
+export type TradableAssetType = {
+    symbol?: string,
+    asset_details?: PortfolioAssetDetailsType,
+}
