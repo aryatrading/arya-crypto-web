@@ -1,7 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import Layout from "../../components/layout/layout";
@@ -13,32 +15,37 @@ import {
 import { clearAsset } from "../../services/redux/assetSlice";
 import { clearSwap } from "../../services/redux/swapSlice";
 import { getPosts } from "../../services/firebase/community/posts";
-import { getParameterByName } from "../../utils/helpers/url";
+import PageLoader from "../../components/shared/pageLoader/pageLoader";
 
 const AssetPage = () => {
+  const { t } = useTranslation(["common"]);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
+  const { s } = router.query;
 
   useEffect(() => {
-    const symbol = getParameterByName("symbol", router.asPath);
+    (async () => {
+      setLoading(true);
+      try {
+        await getAssetDetails(s ?? "btc");
+        await getAssetTimeseriesPrice(s ?? "btc", "5min", 288);
+        await getPosts({ searchTerm: s?.toString() ?? "btc" });
+      } catch (error) {
+        toast.warn(t("somethingWentWrong"));
+      } finally {
+        setLoading(false);
+      }
+    })();
 
-    getAssetDetails(symbol ?? "btc");
-    getAssetTimeseriesPrice(symbol ?? "btc", "5min", 288);
-    if (symbol) {
-      getPosts({ searchTerm: symbol?.toString() || "" });
-    }
-    
     return () => {
       dispatch(clearAsset());
       dispatch(clearSwap());
     };
-  }, [dispatch, router]);
+  }, [dispatch, s, t]);
 
-  return (
-    <Layout>
-      <Asset />
-    </Layout>
-  );
+  return <Layout>{loading ? <PageLoader /> : <Asset />}</Layout>;
 };
 
 export default AssetPage;

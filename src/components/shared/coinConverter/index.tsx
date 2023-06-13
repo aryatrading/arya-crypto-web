@@ -10,7 +10,7 @@ import { converterTop6Coins, usdt } from "../../../utils/constants/defaultConver
 import { AssetDropdown } from "../assetDropdown";
 import { TextSkeleton } from "../skeletons/skeletons";
 
-const inputClasses = "font-medium text-white bg-transparent flex-1 h-[40px] pl-4 mr-12 border-transparent focus:ring-0 focus:border-0 focus:outline-none";
+const inputClasses = "font-bold text-white bg-transparent flex-1 h-[50px] pl-4 mr-12 border-transparent focus:ring-0 focus:border-0 focus:outline-none";
 
 const numericInput = (value: string | number, onChange: ChangeEventHandler, disabled: boolean) => {
     return (
@@ -85,7 +85,7 @@ export const CoinConverter = (props: CoinConverterTypes) => {
             }
         }
         return (
-            <Button key={e.symbol} className="bg-blue-3 rounded-md hover:bg-grey-4 w-full px-5 py-2.5 lg:py-0 lg:px-0 h-full xl:font-sm font-xs font-medium" onClick={onClick}>
+            <Button key={e.symbol} className="bg-grey-3 rounded-md text-grey-1 hover:text-white hover:bg-grey-4 w-full px-5 py-2.5 lg:py-0 lg:px-2 xl:font-sm  font-xs font-bold h-[50px]" onClick={onClick}>
                 {props.preDefined ? firstCoin?.symbol?.toUpperCase() + ' > ' + e?.symbol.toUpperCase() : e?.symbol.toUpperCase() + ' > ' + usdt?.symbol.toUpperCase()}
             </Button>
         );
@@ -117,13 +117,13 @@ export const CoinConverter = (props: CoinConverterTypes) => {
     }, [])
 
     return (
-        <Col className="items-start w-full gap-4">
+        <Col className="items-start w-full gap-6">
             <h3 className="asset-header">{t('cryptoConverter')}</h3>
             {assetLivePrice?.[usdt.symbol] != null ?
                 <>
-                    <Row className="flex-col gap-5 bg-transparent rounded-md lg:flex-row items-start justify-start w-full">
-                        <Col className="justify-center gap-4 w-full lg:w-3/5">
-                            <Row className="gap-4 items-center bg-blue-3 px-4 rounded-md">
+                    <Row className="flex-col gap-6 bg-transparent rounded-md lg:flex-row items-start justify-start w-full">
+                        <Col className="justify-center gap-6 w-full lg:w-3/5">
+                            <Row className="gap-4 items-center bg-grey-3 px-4 rounded-md">
                                 <AssetDropdown
                                     onClick={(data: any) => {
                                         setFirstCoin(data);
@@ -131,25 +131,25 @@ export const CoinConverter = (props: CoinConverterTypes) => {
                                     }}
                                     t={t}
                                     disabled={props?.preDefined}
-                                    title={firstCoin?.symbol}
+                                    title={firstCoin?.symbol?.toUpperCase()}
                                 />
-                                <Col className="h-[40px] w-[4px] bg-black-1" />
+                                <Col className="h-[50px] w-[4px] bg-black-2" />
                                 {numericInput(firstCoinAmount, onChnageFirstCoinAmount, !firstCoin?.name || !secondCoin?.name)}
                             </Row>
-                            <Row className="gap-4 items-center bg-blue-3 px-4 rounded-md">
+                            <Row className="gap-4 items-center bg-grey-3 px-4 rounded-md">
                                 <AssetDropdown
                                     onClick={(data: any) => {
                                         setSecondCoin(data);
                                         setSecondCoinAmount(convertValues(parseFloat(firstCoinAmount.toString()), firstCoin?.currentPrice || 0, data?.currentPrice || 0));
                                     }}
                                     t={t}
-                                    title={secondCoin?.symbol}
+                                    title={secondCoin?.symbol?.toUpperCase()}
                                 />
-                                <Col className="h-[40px] w-[4px] bg-black-1" />
+                                <Col className="h-[50px] w-[4px] bg-black-2" />
                                 {numericInput(secondCoinAmount, onChnageSecondCoinAmount, !secondCoin?.name || !secondCoin?.name)}
                             </Row>
                         </Col>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full justify-items-start lg:w-2/5 h-full">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full justify-items-start lg:w-2/5 h-full">
                             {defaultList}
                         </div>
                     </Row>

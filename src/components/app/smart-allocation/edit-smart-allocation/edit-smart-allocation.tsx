@@ -368,6 +368,7 @@ const EditSmartAllocation: FC = () => {
             <AssetSelector
                 trigger={<Button className="w-full md:w-max px-5 min-w-[5rem] bg-blue-1 h-11 rounded-md">{t('common:addAsset')}</Button>}
                 onClick={onSelectAsset}
+                showShowOnlyTradableAssets={true}
             />
         );
     }, [onSelectAsset, t]);

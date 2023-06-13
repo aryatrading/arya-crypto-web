@@ -1,8 +1,14 @@
 import { SwapTradeType, TradeOrder, TradeType } from "../../types/trade";
+import { exchangeMapper } from "../../utils/constants/utils";
 import { axiosInstance } from "../api/axiosConfig";
 import { store } from "../redux/store";
 import {
+  addStoploss,
+  addTakeProfit,
   addTradables,
+  addTrailing,
+  clearOrder,
+  setAssetPrice,
   setHistoryOrders,
   setOpenOrders,
   setOrderType,
@@ -23,13 +29,10 @@ export const initiateTrade = async (
     })
   );
 
-  let _pairs = await getAvailablePairs(symbol ?? "btc", provider);
-
-  // await getAssetOpenOrders(symbol ?? "BTC", provider);
+  await getAvailablePairs(symbol ?? "btc", provider);
+  await getAssetOpenOrders(`${symbol ?? "BTC"}${base ?? "USDT"}`, provider);
   await getHistoryOrders(symbol ?? "BTC", provider);
-
-  store.dispatch(addTradables({ assets: _pairs._tradables }));
-  store.dispatch(setPairs({ pairs: _pairs._pairs }));
+  await getAssetCurrentPrice(symbol ?? "BTC");
 
   store.dispatch(setOrderType({ orderType: "MARKET" }));
 };
@@ -57,10 +60,19 @@ export const createTrade = async (payload: TradeType, provider: number) => {
 
 export const getAssetAvailable = async (base: string, provider: number) => {
   const { data } = await axiosInstance.get(
-    `trade-engine/assets/${base}/?provider=${provider}`
+    `trade-engine/assets/${base.replace("-", "")}/?provider=${provider}`
   );
 
   return data[provider].data.free;
+};
+
+export const getAssetCurrentPrice = async (asset_name: string) => {
+  console.log("asset price >> ", asset_name);
+  const { data } = await axiosInstance.get(
+    `utils/asset-details?asset_name=${asset_name}`
+  );
+
+  store.dispatch(setAssetPrice({ price: data.asset_data?.current_price }));
 };
 
 export const getAssetValidation = async (symbol: string, provider: number) => {
@@ -87,16 +99,62 @@ export const getAvailablePairs = async (symbol: any, provider: number) => {
     }
   }
 
-  return { _tradables, _pairs };
+  store.dispatch(addTradables({ assets: _tradables }));
+  store.dispatch(setPairs({ pairs: _pairs }));
 };
 
 export const getAssetOpenOrders = async (symbol: string, provider: number) => {
   const { data } = await axiosInstance.get(
-    `trade-engine/orders?provider=${provider}&symbol=${symbol}&skip=0&limit=100&order_origin=manual_order`
+    `trade-engine/orders?provider=${provider}&skip=0&limit=100&symbol=${symbol}&order_origin=manual_order&order_status=0&order_status=100`
   );
 
-  // return data;
-  // store.dispatch(setOpenOrders({ orders: _openOrders }));
+  let _orders = [];
+
+  store.dispatch(clearOrder());
+
+  for (var i = 0; i < data.length; i++) {
+    _orders.push({
+      id: data[i]?.id,
+      provider_id: data[i]?.order_provider,
+      status: "Placed",
+      type: data[i]?.order_data?.side ?? "SELL",
+      amount: data[i]?.quantity,
+      price: data[i]?.order_value,
+      createdAt: data[i]?.created_at,
+    });
+
+    // console.log(data[i]);
+    if (data[i]?.type === "SL") {
+      store.dispatch(
+        addStoploss({
+          order_id: data[i]?.id,
+          value: data[i]?.order_value,
+          quantity: data[i]?.quantity,
+        })
+      );
+    }
+
+    if (data[i]?.type === "TP") {
+      store.dispatch(
+        addTakeProfit({
+          order_id: data[i]?.id,
+          value: data[i]?.order_value,
+          quantity: data[i]?.quantity,
+        })
+      );
+    }
+
+    if (data[i]?.type === "T_SL") {
+      store.dispatch(
+        addTrailing({
+          order_id: data[i]?.id,
+          trigger_value: data[i]?.order_data?.activation_price,
+        })
+      );
+    }
+  }
+
+  store.dispatch(setOpenOrders({ orders: _orders }));
 };
 
 export const getHistoryOrders = async (symbol: string, provider: number) => {
@@ -107,11 +165,13 @@ export const getHistoryOrders = async (symbol: string, provider: number) => {
   let _history: TradeOrder[] = [];
 
   for (var i = 0; i < data.length; i++) {
+    let _provider = data[i]?.order_provider;
+
     let _order: TradeOrder = {
       status: data[i].order_status,
-      exchange: "Binance",
-      amount: data[i].order_value,
-      price: data[i].executed_amount,
+      exchange: exchangeMapper(_provider),
+      amount: data[i].quantity,
+      price: data[i].order_value,
       createdAt: data[i].created_at,
       type: data[i]?.order_data?.side ?? "BUY",
     };
@@ -119,4 +179,12 @@ export const getHistoryOrders = async (symbol: string, provider: number) => {
   }
 
   store.dispatch(setHistoryOrders({ orders: _history }));
+};
+
+export const cancelOpenOrder = async (orderId: number, provider: number) => {
+  const { data } = await axiosInstance.put(
+    `trade-engine/cancel?order_id=${orderId}&provider=${provider}`
+  );
+
+  return data;
 };

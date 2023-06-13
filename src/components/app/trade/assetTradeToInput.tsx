@@ -35,6 +35,7 @@ const AssetTradeToInput: FC = () => {
     let _value =
       (value * _assetprice[asset?.symbol?.toLowerCase() ?? "btc"]) /
       _assetprice[fromAsset?.symbol?.toLowerCase() ?? "btc"];
+
     dispatch(setFrom({ ...fromAsset, quantity: _value }));
   };
 
@@ -55,7 +56,6 @@ const AssetTradeToInput: FC = () => {
         <input
           className={clsx(inputClasses)}
           value={formatNumber(qty)}
-          maxLength={8}
           placeholder={formatNumber(qty)}
           onChange={(e) => onchangeInput(parseInt(e.target.value))}
         />

@@ -116,27 +116,27 @@ export const CoinProfitCalculator = () => {
                     </Row>
                 </Row>
             </Col>
-            <Row className="border gap-20 md:gap-3 rounded-md p-4 border-grey-1 text-sm font-semibold w-full  items-center md:w-auto md:flex-col sm:items-start">
+            <Row className="bg-grey-3 gap-20 md:gap-3 rounded-md p-4 text-sm font-semibold w-full  items-center md:w-auto md:flex-col sm:items-start">
                 <Col className="gap-4 sm:flex-row">
                     <Col className="gap-2">
                         <label>{t('totalInvestmentAmount')}</label>
-                        <p className={ profit < 0?"text-red-1":"text-green-1" }>${investment !== '' ? parseFloat(investment).toFixed(2) : '0.00'}</p>
+                        <p className={profit < 0 ? "text-red-1" : "text-green-1"}>${investment !== '' ? parseFloat(investment).toFixed(2) : '0.00'}</p>
                     </Col>
                     <Col className="gap-2">
                         <label>{t('totalExitAmount')}</label>
-                        <p className={ profit < 0?"text-red-1":"text-green-1" }>${totalExitAmount.toFixed(2)}</p>
+                        <p className={profit < 0 ? "text-red-1" : "text-green-1"}>${totalExitAmount.toFixed(2)}</p>
                     </Col>
                 </Col>
                 <Col className="gap-1 justify-start">
                     <label>{t('profit/loss')}</label>
                     <Row className="items-center gap-2 justify-start">
-                        <AssetPnl className={twMerge('px-0',profit < 0 ? " text-red-1" : " text-green-1")} value={Math.round(profit * 1e2)/1e2||0}/>
-                        <AssetPnl className={ totalProfitPercentage < 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"} value={Math.round(totalProfitPercentage * 1e2)/1e2||0}/>
+                        <AssetPnl className={twMerge('px-0', profit < 0 ? " text-red-1" : " text-green-1")} value={Math.round(profit * 1e2) / 1e2 || 0} />
+                        <AssetPnl className={totalProfitPercentage < 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"} value={Math.round(totalProfitPercentage * 1e2) / 1e2 || 0} />
                     </Row>
                 </Col>
-                
-                </Row>
-            </Col>
+
+            </Row>
+        </Col>
     );
 };
 

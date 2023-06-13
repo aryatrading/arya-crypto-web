@@ -36,7 +36,7 @@ export const AssetHeader: FC<AssetHeaderProps> = ({ asset }) => {
           border="rounded"
           onClick={() => null}
           iconSvg={<StarIcon className="w-4 h-4 fill-orange-1 stroke-0" />}
-          title="1.8k"
+          title={formatNumber(asset?.favoriteCount ?? 0)}
         />
       </Row>
       <AssetName

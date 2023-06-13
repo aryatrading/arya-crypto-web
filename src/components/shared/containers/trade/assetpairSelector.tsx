@@ -20,8 +20,10 @@ export const AssetPairSelector: FC = () => {
           return (
             <ShadowButton
               key={index}
-              title={elm}
-              onClick={() => dispatch(setFilter({ filter: elm }))}
+              title={elm.replace("-", "")}
+              onClick={() =>
+                dispatch(setFilter({ filter: elm.replace("-", "") }))
+              }
               border={"rounded-md"}
               bgColor={filter === elm ? "bg-blue-3" : "bg-grey-2"}
               textColor={filter === elm ? "text-blue-2" : ""}

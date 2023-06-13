@@ -9,6 +9,21 @@ const poppins = Poppins({
   weight: ["400", "500", "600"],
   subsets: ["latin"],
 });
+
+
+export function SalesPagesLayout({ children }: any) {
+  return (
+    <div className={poppins.className + " min-h-screen flex flex-col justify-between"}>
+      <Nav />
+      <div className="flex flex-col flex-1 sm:items-center">
+        {children}
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+
 export default function Layout({ children }: any) {
   return (
     <div className={poppins.className + " min-h-screen flex flex-col justify-between"}>

@@ -97,7 +97,12 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
           {view === "price" ? (
             <LineChart primaryLineData={timeseries} className="w-full h-80" tooltip={{ show: true, title: t("common:price"), showValue: true }} />
           ) : (
-            <TradingViewWidget />
+            <div className="h-[500px] w-full">
+              <TradingViewWidget
+                asset={`${asset.symbol?.toUpperCase()}USDT`}
+                height={500}
+              />
+            </div>
           )}
 
           <Row className="gap-3 md:hidden justify-between ">
@@ -131,11 +136,10 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
         <AssetInformation asset={asset} />
         <AssetVote className="md:hidden" />
         <Col className="gap-4">
-          <h3 className="asset-header">{t('cryptoProfitCalculator')}</h3>
+          <h3 className="asset-header">{t("cryptoProfitCalculator")}</h3>
           <CoinProfitCalculator />
         </Col>
         {asset?.id && <CoinConverter preDefined staticCoin={asset} />}
-
       </Col>
 
       <Col className="lg:w-4/12 gap-10">

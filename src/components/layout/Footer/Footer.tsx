@@ -10,7 +10,7 @@ import _ from 'lodash'
 const Footer = () => {
     
   return (
-    <div className='bg-grey-2 py-5 w-full mt-20 lg:h-96'>
+    <div className='bg-grey-2 py-5 w-full lg:h-96'>
         <div className='flex flex-col lg:flex-row container lg:pt-12 gap-14 justify-between'>
             <Col className='gap-6 lg:w-3/12'>
                 <Image src={logo} alt='arya-footer-logo' className='w-40'/>
