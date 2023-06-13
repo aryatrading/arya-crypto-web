@@ -27,7 +27,7 @@ export const TradingSalesPage = () => {
 
     return (
         <Col className=" w-full h-full">
-            <Row className={clsx("gap-10 flex-col-reverse lg:flex-row items-center px-4 md:px-12 lg:px-80 py-20 justify-center", styles.bgImage)}>
+            <Row className={clsx("gap-10 flex-col-reverse lg:flex-row items-center px-4 md:px-12 lg:px-60 py-20 justify-center h-[100vh]", styles.bgImage)}>
                 <Col className="flex-1 w-full h-full gap-8 justify-center">
                     <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.mainTitle')} <span className={styles.underlined}>{t('salesPage.results')}</span></h2>
                     <p className="font-medium text-white text-left">{t('salesPage.ourGoal')}</p>
