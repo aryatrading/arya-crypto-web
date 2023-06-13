@@ -25,7 +25,7 @@ const Login: FC<any> = (props: any) => {
     const loginFormSchema = useCallback(() => {
         return Yup.object().shape({
             email: Yup.string().email().required(t('common:required').toString()),
-            password: Yup.string().min(2, t('common:passwordErrorMsg').toString()).required(),
+            password: Yup.string().min(2, t('common:min', { number: 2 }).toString()).required(),
         });
     }, [t])
 
