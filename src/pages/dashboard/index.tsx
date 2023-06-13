@@ -3,13 +3,10 @@ import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import Portrolio from '../../components/app/portfolio';
-import Layout from '../../components/layout/layout'
 
 const PortrolioPage = () => {
     return (
-        <Layout>
-            <Portrolio />
-        </Layout>
+        <Portrolio />
     )
 }
 
