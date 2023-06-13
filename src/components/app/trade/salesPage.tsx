@@ -2,9 +2,11 @@ import Image from "next/image";
 import clsx from "clsx";
 import { CheckIcon } from "@heroicons/react/24/solid";
 import { useTranslation } from "next-i18next";
+import Lottie from 'lottie-react';
 
 import { Col, Row } from "../../shared/layout/flex";
 import PricingSection from "../../shared/pricing-section/pricing-section";
+import TradingImg from "../../../../public/assets/images/publicPages/trading/trading.json";
 
 import styles from './index.module.scss';
 
@@ -48,8 +50,8 @@ export const TradingSalesPage = () => {
                     </Row>
                 </Col>
                 <Col className="flex-1 w-full h-full gap-4 relative">
-                    <Image alt="" src={require('../../../../public/assets/images/publicPages/trading/firstSectionImg.png')} className={clsx(styles.animateImg, "w-full absolute h-full")} />
-                    <Image alt="" src={require('../../../../public/assets/images/publicPages/trading/firstSectionImg.png')} className={clsx("w-full opacity-[0]")} />
+                    <Lottie animationData={TradingImg} className={clsx(styles.animateImg, "w-full scale-125 absolute h-full")} />
+                    <Lottie animationData={TradingImg} className={clsx("w-full scale-125 opacity-[0]")} />
                 </Col>
             </Row>
 
