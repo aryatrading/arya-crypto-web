@@ -1,11 +1,13 @@
+import { useCallback, useMemo } from "react";
+import Lottie from "lottie-react";
 import Image from "next/image";
 
-import { Col } from "../../shared/layout/flex";
-
-import styles from './salesPage.module.scss';
-import { useCallback, useMemo } from "react";
-import Button from "../../shared/buttons/button";
 import PricingSection from "../../shared/pricing-section/pricing-section";
+import Button from "../../shared/buttons/button";
+import { Col } from "../../shared/layout/flex";
+import styles from './salesPage.module.scss';
+
+import logoWithCryptoLogos from "./logoWithCryptoLogos.json";
 
 export const PortfolioSalesPage = () => {
 
@@ -34,6 +36,7 @@ export const PortfolioSalesPage = () => {
                         <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">All-In-One Platform For Tracking All your Crypto Assets</h2>
                         <p className="text-xl max-w-[700px]">ARYA Crypto supports the most popular cryptocurrency platforms, including Binance, Coinbase, and a lot more coming soon.</p>
                     </Col>
+                    {/* <Lottie className="max-w-[750px]" animationData={logoWithCryptoLogos}/> */}
                     <Image src="/assets/images/publicPages/portfolio/logoWithCryptoLogos.png" alt="" width={750} height={500} />
                     <Col className="w-full md:flex-row gap-6 text-center justify-center items-center md:items-start">
                         <Col className="gap-5 items-center w-[350px]">
@@ -144,7 +147,7 @@ export const PortfolioSalesPage = () => {
             {firstSection}
             {secondSection}
             {thirdSection}
-            <PricingSection/>
+            <PricingSection />
         </Col>
     );
 }
