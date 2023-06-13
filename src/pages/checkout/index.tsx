@@ -10,7 +10,7 @@ import { ParsedUrlQuery } from 'querystring'
 
 const stagingStripeKey = 'pk_test_51KeZjcDpPbc5wxXxoMkbMxRdxj0OQjvrjRaHzEBQG2undYldkQP5St0En0W3BdsCn8bB0uKXDqcY5f2UFG175fYB00Z1zSwc3R'
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY||stagingStripeKey)
+const stripePromise = loadStripe(process.env.STRIPE_KEY||stagingStripeKey)
 
 
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Col, Row } from '../../shared/layout/flex'
 import { ArrowLongLeftIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
@@ -11,6 +11,9 @@ import { useFormik } from 'formik'
 import { MODE_DEBUG } from '../../../utils/constants/config'
 import Lottie from 'lottie-react'
 import paymentSpinner from './payment-spinner.json'
+import { getCheckoutDetails } from '../../../services/controllers/checkout'
+import { Price, Subscription } from '../../../types/checkout.types'
+import { AxiosResponse } from 'axios'
  
 
 const Checkout = () => {
@@ -23,12 +26,32 @@ const Checkout = () => {
     const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false)
     const [paymentFailed, setPaymentFailed] = useState<boolean>(false)
 
+    const [monthlyPriceId, setMonthlyPriceId] = useState<string|null>(null)
+    const [yearlyPriceId, setYearlyPriceId] = useState<string|null>(null)
+
+    const fetchPriceData = ()=>{
+        getCheckoutDetails().then((res:AxiosResponse<Subscription>)=>{
+            const {data} = res
+            const {prices} = data
+
+            prices.forEach((priceSingle)=>{
+                if(priceSingle.price.recurring === 'month'){
+                    setMonthlyPriceId(priceSingle.price.stripe_id)
+                }
+                if(priceSingle.price.recurring === 'year'){
+                    setYearlyPriceId(priceSingle.price.stripe_id)
+                }
+            })
+
+        })
+    }
 
     const formik = useFormik({
         initialValues:{
             name:''
         },
         onSubmit: async (values) =>{
+            setLoading(true)
             if(!stripe||!elements){
                 return
             }
@@ -51,6 +74,7 @@ const Checkout = () => {
                         console.log(result.paymentMethod)
                     }
                     const {id} = result.paymentMethod
+                    return id
                 }
                 if(result.error){
                     if(MODE_DEBUG){
@@ -59,9 +83,15 @@ const Checkout = () => {
                     throw(result.error)
                 }
             })
+            .then((paymentID)=>{
+                
+            })
         }
     })
 
+    useEffect(()=>{
+        fetchPriceData()
+    })
 
   return (
     <Col className='lg:w-[1320px] gap-6 lg:gap-3 p-[2rem] lg:p-0'>

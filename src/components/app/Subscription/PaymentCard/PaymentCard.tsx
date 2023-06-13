@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Col, Row } from '../../../shared/layout/flex'
-import Image from 'next/image'
 import _ from 'lodash'
 import { CheckCircleIcon } from '@heroicons/react/24/outline'
 import { twMerge } from 'tailwind-merge'
 import Switch from '../../../shared/Switch/Switch'
 import Link from 'next/link'
 import { EnumPricing } from '../../../../utils/constants/payment'
+
 
 const PaymentCard = () => {
 
@@ -61,10 +61,10 @@ const PaymentCard = () => {
     const checkIcon = (available:boolean) =>{
         return <CheckCircleIcon className={twMerge('w-[15px] h-[15px]',available?'stroke-current stroke-2 text-blue-1':'')}/>
     }
+    
+
   return (
-    <Col className='items-center gap-2'>
-        <Image width={315} height={245} src='/assets/images/publicPages/pricing/1.png' alt='pricing-header-image'/>
-        <Col className='items-center gap-6'>
+        <Col className='items-center w-full gap-6 h-full p-7'>
             <span className='font-semibold md:text-3xl text-2xl text-center'>
                 Upgrade to Arya Crypto Premium  
             </span>
@@ -81,7 +81,7 @@ const PaymentCard = () => {
                 </span>
             </Row>
             <Col className='flex-col-reverse md:flex-row gap-11'>
-                <Col className='rounded-xl border-2 border-grey-1 w-[300px] min-h-[500px]'>
+                <Col className='rounded-xl border-2 border-grey-1 w-[300px] md:min-h-[300px]'>
                     <Row className='w-full gap-3 py-3 px-9 items-center border-b-2 border-grey-1 font-semibold h-[60px]'>
                         <span className='text-xl'>Basic</span>
                         <span className='py-1 px-4 bg-grey-1 rounded-md'>
@@ -89,10 +89,10 @@ const PaymentCard = () => {
                         </span>
                     </Row>
                     <Col className='px-9 py-4 gap-6 justify-between h-full'>
-                        <Col className='gap-3 font-semibold text-3xl min-h-[60px]'>
+                        <Col className='gap-3 font-semibold text-3xl md:min-h-[60px]'>
                             FREE
                         </Col>
-                        <Col className='gap-6 pb-10'>
+                        <Col className='gap-2 pb-10'>
                             {
                                 benefits.map((benefit)=>{
                                     return <Row className={twMerge('gap-4 font-medium font-sm items-center',benefit.basic?'':'text-grey-1')} key={_.uniqueId()}>
@@ -106,7 +106,7 @@ const PaymentCard = () => {
                         </Col>
                     </Col>  
                 </Col>
-                <Col className='rounded-xl border-2 border-blue-1 w-[300px] min-h-[500px] relative'>
+                <Col className='rounded-xl border-2 border-blue-1 w-[300px] md:min-h-[300px] relative'>
                     <Row className='w-full gap-3 py-3 px-9 items-center border-b-2 border-blue-1 font-semibold bg-blue-3 rounded-t-xl h-[60px]'>
                         <span className='text-xl'>Premium</span>
                         
@@ -121,7 +121,7 @@ const PaymentCard = () => {
                                 Billed <span className='text-blue-1'>$144.99</span> per year
                             </span>}
                         </Col>
-                        <Col className='gap-6 pb-10'>
+                        <Col className='gap-2 pb-10'>
                             {
                                 benefits.map((benefit)=>{
                                     return <Row className='gap-4 font-medium font-sm items-center' key={_.uniqueId()}>
@@ -145,11 +145,10 @@ const PaymentCard = () => {
                     </Link>
                 </Col>
             </Col>
-            <span className='text-center opacity-60 pt-6'>
+            <span className='text-center opacity-60 py-6'>
                 Your subscription will renew automatically unless it is cancelled at least 24 hours before the end of the current period <br></br> by upgrading your account, you agree to the Terms of Use & Privacy Policy.
             </span>
         </Col>
-    </Col>
   )
 }
 

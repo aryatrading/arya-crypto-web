@@ -9,7 +9,7 @@ export const axiosInstance = axios.create({
   timeout: 20000,
 });
 
-export const axiosShopProdInstance = axios.create({
+export const axiosShopInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SHOP_URL,
   timeout: 10000,
   headers: {
@@ -48,7 +48,7 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-axiosShopProdInstance.interceptors.request.use(
+axiosShopInstance.interceptors.request.use(
   async function (config) {
     if (typeof window !== 'undefined') {
       const localStorageToken = localStorage?.getItem("idToken");
