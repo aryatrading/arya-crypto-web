@@ -23,6 +23,7 @@ module.exports = {
     'notification',
     'trade',
     'pricing-plans',
+    'home',
   ],
   /** To avoid issues when deploying to some paas (vercel...) */
   localePath:
