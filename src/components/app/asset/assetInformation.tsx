@@ -172,7 +172,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
               <h3 className="asset-header">
                 {t("communityTitle", { coin: asset.name })}
               </h3>
-              <PostSkeleton/>
+              <PostSkeleton />
             </>
             )}
         </Col>
