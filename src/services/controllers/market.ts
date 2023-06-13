@@ -28,10 +28,15 @@ export const fetchSymbolsList = async (assets?: AssetType[]) => {
 };
 
 // GET ASSETS LIST FROM OUT BACKEND
-export const fetchAssets = async (search?: string, limit: number = 20) => {
-  console.log(">>> ", limit);
+export const fetchAssets = async (
+  search?: string,
+  limit: number = 20,
+  firebaseId?: string
+) => {
   const { data } = await axiosInstance.get(
-    `utils/assets?limit=${limit}&offset=0${search ? `&search=${search}` : ""}`
+    `utils/assets?limit=${limit}&offset=0${search ? `&search=${search}` : ""}${
+      firebaseId ? `&firebase_id=${firebaseId}` : ""
+    }`
   );
 
   let _assets: AssetType[] = [];
@@ -54,13 +59,13 @@ export const fetchAssets = async (search?: string, limit: number = 20) => {
         mrkCap: data[i].asset_data.market_cap,
         mrkCapYesterday: mrkCapYesterday,
         symbol: data[i].asset_data.symbol.toLowerCase(),
-        isFavorite: i % 2 === 0,
+        isFavorite: data[i]?.is_favorite ?? false,
         change24H: data[i].asset_data.price_change_percentage_24h,
         change7D: data[i].asset_data.price_change_percentage_7d_in_currency,
       });
     }
   }
-  console.log(_assets.length);
+
   store?.dispatch(storeMrkAssets(_assets));
 
   return _assets;
