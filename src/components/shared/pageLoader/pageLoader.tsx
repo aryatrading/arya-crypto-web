@@ -9,6 +9,7 @@ import loadingLottie from "./loading-lottie.json";
 const PageLoader: FC = () => (
     <Col className="w-full h-[calc(100vh_-_7rem)] md:h-[calc(100vh_-_7rem_-_60px)] items-center justify-center">
             <Lottie
+                className="w-96"
                 animationData={loadingLottie}
             />
     </Col>
