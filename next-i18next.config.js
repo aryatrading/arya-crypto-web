@@ -21,7 +21,8 @@ module.exports = {
       "trade",
       "asset",
       'settings',
-      'notification'
+      'notification',
+      'pricing-plans',
     ],
     /** To avoid issues when deploying to some paas (vercel...) */
     localePath:
