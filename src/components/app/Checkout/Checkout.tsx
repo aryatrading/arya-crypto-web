@@ -12,7 +12,7 @@ import { MODE_DEBUG } from '../../../utils/constants/config'
 import Lottie from 'lottie-react'
 import paymentSpinner from './payment-spinner.json'
 import { getCheckoutDetails } from '../../../services/controllers/checkout'
-import { Price, Subscription } from '../../../types/checkout.types'
+import { Subscription } from '../../../types/checkout.types'
 import { AxiosResponse } from 'axios'
  
 
@@ -83,8 +83,11 @@ const Checkout = () => {
                     throw(result.error)
                 }
             })
-            .then((paymentID)=>{
+            // .then((paymentID)=>{
                 
+            // })
+            .finally(()=>{
+                setLoading(false)
             })
         }
     })
@@ -135,7 +138,7 @@ const Checkout = () => {
                                 <span className='font-semibold'>
                                     Payment details
                                 </span>
-                                <Image width={120} height={30} src='/assets/images/svg/poweredByStripe.svg' alt='stripe-badge'/>
+                                <Image width={120} height={30} className='w-auto h-auto' src='/assets/images/svg/poweredByStripe.svg' alt='stripe-badge'/>
                             </Row>
                             <Col className=' gap-3'>
                                 <Col>

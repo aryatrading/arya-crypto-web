@@ -7,6 +7,9 @@ const auth = getAuth(getApp());
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   timeout: 20000,
+  headers:{
+    'X-AryaCrypto-Version':'1 web'
+  }
 });
 
 export const axiosShopInstance = axios.create({
