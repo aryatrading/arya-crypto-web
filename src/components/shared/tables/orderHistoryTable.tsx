@@ -7,10 +7,12 @@ import { getHistoryOrders, getTrade } from "../../../services/redux/tradeSlice";
 import { ThemedContainer } from "../containers/themedContainer";
 import { formatNumber } from "../../../utils/helpers/prices";
 import moment from "moment";
+import { useTranslation } from "next-i18next";
 
 export const OrderHistory: FC = () => {
   const history = useSelector(getHistoryOrders);
   const trade = useSelector(getTrade);
+  const { t } = useTranslation(["common"]);
 
   const isTabletOrMobileScreen = useMediaQuery({
     query: `(max-width:950px)`,
@@ -20,18 +22,18 @@ export const OrderHistory: FC = () => {
   });
 
   const [header, setHeader] = useState([
-    "Execution Date",
-    "Type",
-    "Amount",
-    "Price",
-    "Exchange",
+    t("date"),
+    t("type"),
+    t("amount"),
+    t("price"),
+    t("exchange"),
   ]);
 
   useEffect(() => {
     if (isMobileScreen) {
-      setHeader(["Date", "Type", "Amount"]);
+      setHeader(["Date", t("type"), t("amount")]);
     } else {
-      setHeader(["Execution Date", "Type", "Amount", "Price", "Exchange"]);
+      setHeader([t("date"), t("type"), t("amount"), t("price"), t("exchange")]);
     }
   }, [isTabletOrMobileScreen, isMobileScreen]);
 
