@@ -33,14 +33,14 @@
     "salesPage": {
         "mainTitle": "Échangez pour Optimal",
         "results": "résultats",
-        "ourGoal": "Notre plateforme vous aide à mieux contrôler votre trading en transformant le travail manuel en actions automatisées.",
+        "ourGoal": "Notre plateforme vous aide à mieux contrôler vos trade en transformant le travail manuel en actions automatisées.",
         "points": {
             "1": "Fixez un stop loss pour protéger votre capital",
             "2": "Jusqu'à 5 prises de bénéfices pour maximiser votre stratégie de sortie",
-            "3": "Modes de fuite pour suivre le marché"
+            "3": "Modes de trailing pour suivre le marché"
         },
-        "getStarted": "Commencer",
-        "watchVideo": "Regarder la présentation vidéo",
+        "getStarted": "Débuter",
+        "watchVideo": "Regardez la vidéo de présentation.",
         "protectCapital": "Protégez votre capital",
         "protectCapitalDesc": "Avec notre stop-loss, vous pouvez éviter de vendre à un prix bas provoqué par la panique, ce qui peut vous aider à préserver votre capital. ",
         "setStopLoss": "Définir un Stop Loss",
