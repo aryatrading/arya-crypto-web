@@ -75,7 +75,7 @@ export const AssetDropdown = ({
         toast.error(err);
         setLoading(false);
       });
-  }, [keyword, resultLimit]);
+  }, [keyword, removeAsset, resultLimit]);
 
   const onChangeKeyword = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -149,16 +149,14 @@ export const AssetDropdown = ({
         <DropdownMenu.Trigger asChild disabled={disabled}>
           {trigger || (
             <button
-              aria-label="Customise options"
               disabled={disabled}
+              className={clsx({ "cursor-not-allowed": disabled }, "max-w-[70px] flex-1")}
             >
-              <Row className="gap-2 items-center">
+              <Row className="gap-2 items-center flex-1 justify-between">
                 <span className="font-semibold text-sm text-white">
                   {title || t("coins")}
                 </span>
-                {!disabled && (
-                  <ChevronDownIcon height="16px" width="16px" color="#fff" />
-                )}
+                <ChevronDownIcon height="16px" width="16px" color="#fff" />
               </Row>
             </button>
           )}
