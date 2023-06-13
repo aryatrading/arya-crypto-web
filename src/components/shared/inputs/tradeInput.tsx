@@ -25,14 +25,15 @@ const TradeInput: FC<InputProps> = ({
         <p className="text-right text-blue-1">Available: {header}</p>
       ) : null}
 
-      <Row className="flex justify-between bg-black-1 p-3 rounded-lg">
+      <Row className="flex justify-between bg-black-1 p-3 rounded-lg items-center h-12">
         <p className="font-bold text-grey-1">{title}</p>
-        <Row className="gap-3">
+        <Row className="gap-3 items-center">
           <Input
             disabled={disabled}
             className="bg-transparent text-right font-bold"
             value={amount ?? ""}
             onChange={(e:any) => onchange(e.target.value ?? 0)}
+            type="number"
           />
           <p className="font-bold text-grey-1">{value}</p>
         </Row>

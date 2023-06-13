@@ -38,13 +38,20 @@ export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
           {asset.symbol?.toUpperCase()}.
         </p>
       </Col>
-      {asset?.description&&
+      {asset?.description && (
         <Col className="gap-4">
-        <p className="font-medium text-base md:text-xl">
-          {t("whatis")} {asset.name}
-        </p>
-        <p className={twMerge("font-semibold text-xs md:text-sm")}>{ asset?.description.replace(/<\/?[^>]+(>|$)/g, "")}</p>
-      </Col>}
+          <p className="font-medium text-base md:text-xl">
+            {t("whatis")} {asset.name}
+          </p>
+          <p
+            className={twMerge(
+              "font-semibold text-xs md:text-sm"
+            )}
+          >
+            {asset?.description.replace(/<\/?[^>]+(>|$)/g, "")}
+          </p>
+        </Col>
+      )}
     </Col>
   );
 };

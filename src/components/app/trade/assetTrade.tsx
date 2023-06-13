@@ -18,15 +18,15 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { createSwapTrade } from "../../../services/controllers/trade";
 import { getAssetDetails } from "../../../services/controllers/asset";
-import { ProviderDropDown } from "../../shared/providerPicker";
 import { useTranslation } from "next-i18next";
+import ExchangeSwitcher from "../../shared/exchange-switcher/exchange-switcher";
 
 const AssetTrade: FC = () => {
   const { t } = useTranslation(["asset"]);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
-  const { symbol } = router.query;
+  const { s } = router.query;
   const from = useSelector(getFrom);
   const to = useSelector(getTo);
   const provider = useSelector(getProvider);
@@ -44,12 +44,15 @@ const AssetTrade: FC = () => {
     if (!from.symbol || !from.quantity) return toast.warn(t("select_base"));
 
     setLoading(true);
-    const paylaod: SwapTradeType = {
-      symbol_name: `${to.symbol}${from.symbol}`,
+    const payload: SwapTradeType = {
+      symbol_name:
+        provider === 2
+          ? `${to.symbol}-${from.symbol}`
+          : `${to.symbol}${from.symbol}`,
       asset_name: to.symbol,
       base_name: from.symbol,
       entry_order: {
-        type: from.symbol.toLowerCase() === symbol ? "SELL" : "BUY",
+        type: from.symbol.toLowerCase() === s ? "SELL" : "BUY",
         trigger_price: 0,
         order_type: "MARKET",
         quantity: 0,
@@ -58,9 +61,18 @@ const AssetTrade: FC = () => {
       },
     };
 
-    await createSwapTrade(paylaod, provider)
+    if (payload.entry_order.type === "SELL") {
+      payload.symbol_name =
+        provider === 2
+          ? `${from.symbol}-${to.symbol}`
+          : `${from.symbol}${to.symbol}`;
+      payload.asset_name = from.symbol;
+      payload.base_name = to.symbol;
+    }
+
+    await createSwapTrade(payload, provider)
       .then(async () => {
-        await getAssetDetails(symbol);
+        await getAssetDetails(s);
         dispatch(clearSwap());
         toast.success(t("swap_success"));
       })
@@ -69,15 +81,18 @@ const AssetTrade: FC = () => {
   };
 
   return (
-    <Col className="bg-grey-2 px-5 py-5 rounded-md gap-5 items-center w-full">
-      <ProviderDropDown />
+    <Col className="bg-grey-2 px-5 py-5 rounded-md gap-5">
+      <ExchangeSwitcher hideExchangeStats={true} canSelectOverall={false} />
+
       <AssetTradeFromInput />
-      <Button
-        onClick={() => onswapClick()}
-        className="flex justify-center items-center rounded-full bg-blue-3 text-white h-11 w-11"
-      >
-        <ArrowsUpDownIcon className="h-5 w-5" />
-      </Button>
+      <div className="flex justify-center">
+        <Button
+          onClick={() => onswapClick()}
+          className="flex justify-center items-center rounded-full bg-blue-3 text-white h-11 w-11"
+        >
+          <ArrowsUpDownIcon className="h-5 w-5" />
+        </Button>
+      </div>
       <AssetTradeToInput />
       <Col className="w-full gap-3">
         <Button

@@ -19,3 +19,9 @@ export enum EnumOrderType {
     closeExposure = 'close_exposure',
     migratedFromProvider = 'migrated_from_provider'
 }
+
+export const exchangeMapper = (provider: number) => {
+  if (provider === 1) return "Binance";
+  if (provider === 2) return "Coinbase";
+  return "Not found";
+};

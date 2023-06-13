@@ -69,8 +69,8 @@ export const OrderHistory: FC = () => {
                     content={elm.type}
                     colorClass={
                       elm.type?.toLowerCase() === "sell"
-                        ? "bg-red-2"
-                        : "bg-green-2"
+                        ? "bg-red-2 mb-3"
+                        : "bg-green-2 mb-3"
                     }
                     textColor={
                       elm.type?.toLowerCase() === "sell"
