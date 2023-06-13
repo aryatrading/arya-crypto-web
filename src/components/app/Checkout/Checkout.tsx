@@ -4,7 +4,7 @@ import { ArrowLongLeftIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import Input from '../../shared/inputs/Input'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Button from '../../shared/buttons/button'
 import { EnumPricing } from '../../../utils/constants/payment'
 import { useFormik } from 'formik'
@@ -21,6 +21,7 @@ const Checkout = () => {
     const paymentFrequency:any = searchParams.get('payment')
     const elements = useElements()
     const stripe = useStripe();
+    const router = useRouter()
 
     const [loading, setLoading] = useState<boolean>(false)
     const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false)
@@ -29,6 +30,14 @@ const Checkout = () => {
 
     const [priceId, setPriceId] = useState<string|null>(null)
     const [paymentError, setPaymentError] = useState<string>('Try again, or change card payment details.')
+
+
+    const resetPayment = () =>{
+        formik.resetForm()
+        setPaymentSuccess(false)
+        setPaymentFailed(false)
+        setLoading(false)
+    }
 
     const fetchPriceData = useCallback(
         ()=>{
@@ -228,10 +237,10 @@ const Checkout = () => {
 
   return (
     <Col className='lg:w-[1320px] gap-6 lg:gap-3 p-[2rem] lg:p-0'>
-        <Row className='gap-4'>
+        <Button onClick={()=>router.back()} className='flex gap-4'>
             <ArrowLongLeftIcon className='w-[18px]'/>
             <span>Go back</span>
-        </Row>
+        </Button>
         <Col className='lg:bg-black-2 lg:py-14 lg:px-40 min-h-[650px]'>
             {
                 paymentSuccess?
@@ -241,7 +250,7 @@ const Checkout = () => {
                         <span className='text-white opacity-60 text-base font-medium'>Thank you, you are now subscribed to ARYA Premium</span>
                     </Col>
                     <Image width={256} height={157}  alt='payment-success' src='/assets/images/svg/success.svg'/>
-                    <Button  className='py-4 px-8 bg-blue-1 font-semibold text-base rounded-lg'>Back to ARYA Crypto</Button>
+                    <Button onClick={()=>(router.back())} className='py-4 px-8 bg-blue-1 font-semibold text-base rounded-lg'>Back to ARYA Crypto</Button>
                 </Col>:
                 paymentFailed?
                 <Col className=' justify-center items-center w-full lg:h-[500px] gap-11'>
@@ -250,7 +259,7 @@ const Checkout = () => {
                         <span className='text-white opacity-60 text-base font-medium'>{paymentError}</span>
                     </Col>
                     <Image width={156} height={157}  alt='payment-success' src='/assets/images/svg/failed.svg'/>
-                    <Button className='py-4 px-8 bg-blue-1 font-semibold text-base rounded-lg'>Try Again</Button>
+                    <Button onClick={resetPayment} className='py-4 px-8 bg-blue-1 font-semibold text-base rounded-lg'>Try Again</Button>
                 </Col>
                 :<Col className='w-full h-full items-center gap-6 lg:gap-24'>
                     <span className='text-3xl font-semibold w-full md:w-auto'>Checkout</span>
@@ -278,16 +287,16 @@ const Checkout = () => {
                                         {paymentFrequency===EnumPricing.yearly?'Yearly Subscription':'Monthly Subscription'}
                                     </span>
                                     <Col className=' text-base text-right'>
-                                        <span>{paymentFrequency===EnumPricing.yearly?'$144.99':'19.99'}</span>
+                                        <span>{paymentFrequency===EnumPricing.yearly?'€179.99':'€19.99'}</span>
                                         {paymentFrequency===EnumPricing.yearly&&<span>Billed yearly</span>}
                                     </Col>
                                 </Row>
                                 <Row className='justify-between'>
                                     <span>Total</span>
-                                    <span>{paymentFrequency===EnumPricing.yearly?'$144.99':'19.99'}</span>
+                                    <span>{paymentFrequency===EnumPricing.yearly?'€179.99':'€19.99'}</span>
                                 </Row>
                                 <Button disabled={loading} type='submit' className='bg-green-1 rounded w-full h-14 flex justify-center items-center'>
-                                    {!loading?<ProcessingSpinner/>:'Pay USD 144.99'}
+                                    {loading?<ProcessingSpinner/>:`Pay €${paymentFrequency===EnumPricing.yearly ?'179.99':'19.99'}`}
                                 </Button>
                                 <span className='text-[#ACACAC] text-sm font-normal'>
                                     Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.
