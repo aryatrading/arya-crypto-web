@@ -1,111 +1,155 @@
+import { useTranslation } from "next-i18next";
+import { useCallback, useMemo } from "react";
+import Lottie from "lottie-react";
 import Image from "next/image";
-import clsx from "clsx";
 
-import { Col, Row } from "../../shared/layout/flex";
-
+import PricingSection from "../../shared/pricing-section/pricing-section";
+import Button from "../../shared/buttons/button";
+import { Col } from "../../shared/layout/flex";
 import styles from './salesPage.module.scss';
 
+import logoWithCryptoLogos from "./logoWithCryptoLogos.json";
+
 export const PortfolioSalesPage = () => {
-    return (
-        <Col className="items-center justify-center w-full md:-mt-10 gap-32">
-            <Col className="gap-8 items-center">
-                <h2 className="font-bold text-white text-4xl text-center leading-snug">Manage Your Crypto Portfolios <br /> In One Place</h2>
-                <p className="font-medium text-white text-center">Securely connect the portfolio you’re using to start.</p>
 
-                <Col className="relative items-center justify-center">
-                    <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/portfolioMainImg.png')} className={clsx(styles.animateImg, "w-full md:mx-60 absolute h-full")} />
-                    <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/portfolioMainImg.png')} className={clsx("w-full md:mx-60 opacity-[0]")} />
-                </Col>
-                <button className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm md:-mt-10")}>
-                    Get Started
-                </button>
-            </Col>
+    const { t } = useTranslation(["dashboard"]);
 
-            <Col className="gap-8 items-center">
-                <h2 className="font-bold text-white text-4xl text-center leading-snug">All-In-One Platform For Managing<br /> All your Crypto and DeFi Assets</h2>
-                <p className="font-medium text-white text-center">ARYA Crypto supports the post popular cryptocurrency platforms, including <br /> Binance, coinable, and 25 others.</p>
-
-                <Row className="gap-10 items-center justify-center mt-8 flex-col-reverse md:flex-row">
-                    <Col className="flex-1 gap-6">
-                        <Col className="gap-2">
-                            <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/1.png')} className="w-14 h-14" />
-                            <h3 className="font-extrabold text-2xl text-white">One Dashboard for Everything</h3>
-                            <p className="text-white font-medium">Track Every asset you have from one dashboard, and stay on top of your game.</p>
-                        </Col>
-
-                        <Col className="gap-2">
-                            <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/2.png')} className="w-14 h-14" />
-                            <h3 className="font-extrabold text-2xl text-white">One Dashboard for Everything</h3>
-                            <p className="text-white font-medium">Track Every asset you have from one dashboard, and stay on top of your game.</p>
-                        </Col>
-
-                        <Col className="gap-2">
-                            <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/3.png')} className="w-14 h-14" />
-                            <h3 className="font-extrabold text-2xl text-white">One Dashboard for Everything</h3>
-                            <p className="text-white font-medium">Track Every asset you have from one dashboard, and stay on top of your game.</p>
-                        </Col>
-
-                    </Col>
+    const mainBanner = useMemo(() => {
+        return (
+            <Col className={`${styles.mainBanner} min-h-screen justify-center`}>
+                <Col className={`md:flex-row-reverse container text-center md:text-start gap-5`}>
                     <Col className="flex-1">
-                        <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/portfolioSecondImg.png')} className="w-full md:w-[80%]" />
+                        <Image src={require('../../../../public/assets/images/publicPages/portfolio/portfolioMainImg.png')} alt="portfolio image" />
                     </Col>
-                </Row>
+                    <Col className="flex-1 gap-10 items-center md:items-start">
+                        <h2 className="text-4xl md:text-5xl font-bold flex flex-col items-center md:block">{t("salesPage.trackYourCryptoPortfoliosIn")} <span className="block md:inline w-fit highlighted-text">{t("salesPage.onePlace")}</span></h2>
+                        <p className="text-xl max-w-[500px]">{t("salesPage.monitorYourCryptosAcrossDifferentExchangesOnUnifiedDashboard")}</p>
+                        <Button className={`${styles.startBtn} text-xl font-bold w-fit rounded-full`}>{t("salesPage.connectPortfolioNow")}</Button>
+                    </Col>
+                </Col>
             </Col>
+        )
+    }, [t]);
 
-            <Col className="md:w-[100vw] w-full bg-grey-6 py-14 items-center overflow-hidden rounded-lg">
-                <h2 className="font-bold text-white text-4xl text-center leading-snug">Get started in a few minutes</h2>
-                <p className="font-medium text-white text-center">ARYA Crypto supports the post popular cryptocurrency platforms, including <br /> Binance, coinable, and 25 others.</p>
+    const firstSection = useMemo(() => {
+        return (
+            <Col className="py-10 w-full bg-[#111827]">
+                <Col className="container items-center">
+                    <Col className="items-center text-center gap-3">
+                        <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">{t("salesPage.allInOnePlatformForTrackingAllYourAssets")}</h2>
+                        <p className="text-xl max-w-[700px]">{t("salesPage.ARYACryptoSupportsTheMostPopularCryptocurrencyPlatforms")}</p>
+                    </Col>
+                    <Lottie className="max-w-[750px]" animationData={logoWithCryptoLogos} />
+                    <Col className="w-full md:flex-row gap-6 text-center justify-center items-center md:items-start">
+                        <Col className="gap-5 items-center w-[350px]">
+                            <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/1.png')} className="w-20 h-20" width={128} height={128} />
+                            <h3 className="font-extrabold text-3xl text-white">{t("salesPage.oneDashboardForEverything")}</h3>
+                            <p className="text-white font-medium max-w-[260px]">{t("salesPage.trackEveryAssetYouHaveFromOneDashboard")}</p>
+                        </Col>
+                        <Col className="gap-5 items-center w-[350px]">
+                            <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/2.png')} className="w-20 h-20" width={128} height={128} />
+                            <h3 className="font-extrabold text-3xl text-white">{t("salesPage.globalPerspective")}</h3>
+                            <p className="text-white font-medium max-w-[260px]">{t("salesPage.haveGlobalVisionOnYourCryptoWealthAndStartTakeStepsToImproveIt")}</p>
+                        </Col>
 
-                <div className="flex flex-col lg:flex-row gap-8 px-72 items-center justify-center mt-8 shrink-0">
-                    <Row className="rounded-lg border p-2 border-blue-1 items-center  gap-4 pr-4 shrink-0 w-[80vw] md:w-auto hover:bg-gradient-to-br hover:from-blue-1">
-                        <Col className="w-10 h-10 rounded-md bg-blue-1 items-center justify-center">
-                            <span className="font-bold text-xl">1</span>
+                        <Col className="gap-5 items-center w-[350px]">
+                            <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/3.png')} className="w-20 h-20" width={128} height={128} />
+                            <h3 className="font-extrabold text-3xl text-white">{t("salesPage.quick&Secure")}</h3>
+                            <p className="text-white font-medium max-w-[260px]">{t("salesPage.gettingStartedWithARYACryptoOnlyTakesFewMinutes")}</p>
                         </Col>
-                        <p className="font-bold text-white text-lg">Create an account</p>
-                    </Row>
-                    <Row className="rounded-lg border p-2 border-blue-1 items-center gap-4 pr-4 shrink-0 w-[80vw] md:w-auto hover:bg-gradient-to-br hover:from-blue-1">
-                        <Col className="w-10 h-10 rounded-md bg-blue-1 items-center justify-center">
-                            <span className="font-bold text-xl">2</span>
-                        </Col>
-                        <p className="font-bold text-white text-lg">Link your Account</p>
-                    </Row>
-                    <Row className="rounded-lg border p-2 border-blue-1 items-center  gap-4 pr-4 shrink-0 w-[80vw] md:w-auto hover:bg-gradient-to-br hover:from-blue-1">
-                        <Col className="w-10 h-10 rounded-md bg-blue-1 items-center justify-center">
-                            <span className="font-bold text-xl">3</span>
-                        </Col>
-                        <p className="font-bold text-white text-lg flex-1">Manage your cryptos In one place</p>
-                    </Row>
-                </div>
 
-                <button className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm mt-10 self-center")}>
-                    Start Now
-                </button>
+                    </Col>
+                </Col>
             </Col>
+        )
+    }, [t]);
 
-            <Col className="w-full items-center justify-center">
-                <h2 className="font-bold text-white text-4xl text-center leading-snug">The Ultimate Security for<br /> Your Digital Assets</h2>
-                <p className="font-medium text-white text-center max-w-[50%]">ARYA Crypto is equipped with top-quality infrastructure designed to ensure maximum protection of assets at all times. Since we ask for read-only access only, your holdings are perfectly safe under all conditions.</p>
 
-                <div className="items-center justify-center gap-8 flex mt-10 flex-col md:flex-row">
-                    <Col className="p-8 items-center justify-center border border-blue-1 rounded-lg gap-4 flex-1 hover:bg-gradient-to-bl hover:from-blue-1 text-center">
-                        <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/4.png')} className="w-14 h-14" />
-                        <h3 className="font-extrabold text-xl text-white">Military-grade Encryption</h3>
-                        <h3 className="text-sm text-white">We use the most advanced military-grade encryption to securely transfer and store data.</h3>
+    const secondSection = useMemo(() => {
+        return (
+            <Col className="py-20 w-full">
+                <Col className="container items-center gap-14">
+                    <Col className="items-center text-center gap-3">
+                        <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">{t("salesPage.getStartedInFewMinutes")}</h2>
+                        <p className="text-xl max-w-[700px]">{t("salesPage.seamlesslyConnectYourEntireCryptoPortfolioInJustFewSteps")}</p>
                     </Col>
-                    <Col className="p-8 items-center justify-center border border-blue-1 rounded-lg gap-4 flex-1 hover:bg-gradient-to-bl hover:from-blue-1 text-center">
-                        <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/5.png')} className="w-14 h-14" />
-                        <h3 className="font-extrabold text-xl text-white">Secured by Alex</h3>
-                        <h3 className="text-sm text-white">We’re defending agains external threats and guarding misuse of insider access</h3>
-                    </Col>
-                    <Col className="p-8 items-center justify-center border border-blue-1 rounded-lg gap-4 flex-1 hover:bg-gradient-to-bl hover:from-blue-1 text-center">
-                        <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/6.png')} className="w-14 h-14" />
-                        <h3 className="font-extrabold text-xl text-white">Best Practices</h3>
-                        <h3 className="text-sm text-white">We follow the most advanced security procedures to ensure that your account is safe as possible</h3>
-                    </Col>
-                </div>
+                    <Col className="w-full md:flex-row gap-6 text-center justify-center items-center md:items-end">
+                        <Col className="gap-2 items-center justify-end w-[350px]">
+                            <Image alt="" src="/assets/images/publicPages/portfolio/getStarted1.png" width={300} height={500} />
+                            <Col className="relative border border-blue-1 rounded-lg p-5 w-full max-w-[300px]">
+                                <p className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2/3 bg-blue-1 w-10 h-10 flex items-center justify-center rounded-lg text-2xl font-bold">1</p>
+                                <p className="font-extrabold text-xl md:text-2xl text-white">{t("salesPage.createAnAccount")}</p>
+                            </Col>
+                        </Col>
+                        <Col className="gap-2 items-center justify-end w-[350px]">
+                            <Image alt="" src="/assets/images/publicPages/portfolio/getStarted2.png" width={300} height={500} />
+                            <Col className="relative border border-blue-1 rounded-lg p-5 w-full max-w-[300px]">
+                                <p className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2/3 bg-blue-1 w-10 h-10 flex items-center justify-center rounded-lg text-2xl font-bold">2</p>
+                                <p className="font-extrabold text-xl md:text-2xl text-white">{t("salesPage.linkYourAccount")}</p>
+                            </Col>
+                        </Col>
+                        <Col className="gap-2 items-center justify-end w-[350px]">
+                            <Image alt="Step 3" src="/assets/images/publicPages/portfolio/getStarted3.png" width={300} height={500} />
 
+                            <Col className="relative border border-blue-1 rounded-lg p-5 w-full max-w-[300px]">
+                                <p className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2/3 bg-blue-1 w-10 h-10 flex items-center justify-center rounded-lg text-2xl font-bold">3</p>
+                                <p className="font-extrabold text-xl md:text-2xl text-white">{t("salesPage.manageYourCryptos")}</p>
+                            </Col>
+                        </Col>
+                    </Col>
+                    <Button className={`${styles.startBtn} text-xl font-bold w-fit rounded-full`}>{t("salesPage.connectYourExchange")}</Button>
+                </Col>
             </Col>
+        )
+    }, [t]);
 
+    const thirdSectionFeature = useCallback(({ title, description, imgSrc }: { title: string, description: string, imgSrc: string }) => {
+        return (
+            <Col className="p-8 items-center justify-center border-2 border-blue-1 rounded-3xl gap-4 hover:bg-gradient-to-bl hover:from-blue-1 text-center aspect-square w-[350px] bg-black-2">
+                <Image alt="" src={imgSrc} className="w-32 h-32" width={128} height={128} />
+                <h3 className="font-extrabold text-2xl text-white">{title}</h3>
+                <h3 className="text-white">{description}</h3>
+            </Col>
+        )
+    }, []);
+
+    const thirdSection = useMemo(() => {
+        return (
+            <Col className={`py-20 w-full bg-[#111827] ${styles.securityBanner}`}>
+                <Col className="container items-center gap-14">
+                    <Col className="items-center text-center gap-3">
+                        <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">{t("salesPage.theUltimateSecurityForYourDigitalAssets")}</h2>
+                        <p className="text-xl max-w-[700px]">{t("salesPage.ARYACryptoIsEquippedWithTopQualityInfrastructure")}</p>
+                    </Col>
+                    <Col className="w-full md:flex-row gap-6 text-center justify-center items-center">
+                        {thirdSectionFeature({
+                            title: t("salesPage.encrypted"),
+                            description: t("salesPage.weUseAdvancedEncryptionToSecurelyTransferAndStoreData"),
+                            imgSrc: "/assets/images/publicPages/portfolio/4.png",
+                        })}
+                        {thirdSectionFeature({
+                            title: t("salesPage.secured"),
+                            description: t("salesPage.weProtectYouAndYourCryptoAssetsFromExternalThreats"),
+                            imgSrc: "/assets/images/publicPages/portfolio/5.png",
+                        })}
+                        {thirdSectionFeature({
+                            title: t("salesPage.bestPractices"),
+                            description: t("salesPage.weFollowTheMostAdvancedSecurityProcedures"),
+                            imgSrc: "/assets/images/publicPages/portfolio/6.png",
+                        })}
+                    </Col>
+                </Col>
+            </Col>
+        )
+    }, [t, thirdSectionFeature]);
+
+    return (
+        <Col className="items-center justify-center w-full">
+            {mainBanner}
+            {firstSection}
+            {secondSection}
+            {thirdSection}
+            <PricingSection />
         </Col>
     );
 }
