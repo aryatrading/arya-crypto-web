@@ -1,9 +1,27 @@
-import { axiosShopInstance } from "../api/axiosConfig"
+import { axiosShopInstance } from "../api/axiosConfig";
 
 export const getCheckoutDetails = async () => {
-    return await axiosShopInstance.get(`/checkouts/slug/${process.env.NEXT_PUBLIC_CHECKOUT_SLUG}`)
-}
+  return await axiosShopInstance.get(
+    `/checkouts/slug/${process.env.NEXT_PUBLIC_CHECKOUT_SLUG}`
+  );
+};
 
-export const createSubscription = async () =>{
-    return await axiosShopInstance.post('/order',)
-}
+export const createSubscription = async (
+  checkoutId: number,
+  priceId: string,
+  paymentMethodId: string
+) => {
+  return await axiosShopInstance.post("/order", {
+    paymentMethodId,
+    priceId,
+    checkout_id: checkoutId,
+    visitor: null,
+    affiliate: null,
+    campaign_id: null,
+    fromWallet: false,
+    bumps: [],
+  });
+};
+
+
+

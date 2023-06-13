@@ -5,6 +5,7 @@ import { axiosInstance } from "../api/axiosConfig";
 import { setAllProviders } from "../redux/exchangeSlice";
 import { storeMrkAssets } from "../redux/marketSlice";
 import { store } from "../redux/store";
+import { MODE_DEBUG } from "../../utils/constants/config";
 
 // FETCH REQUEST TO GET ASSETS FROM TWELEVE DATA AND RETURN A STRING OF SYMBOLS
 export const fetchSymbolsList = async (assets?: AssetType[]) => {
@@ -59,6 +60,9 @@ export const fetchAssets = async (search?: string, limit: number = 20) => {
         change7D: data[i].asset_data.price_change_percentage_7d_in_currency,
       });
     }
+  }
+  if(MODE_DEBUG){
+    console.log(_assets.length);
   }
   store?.dispatch(storeMrkAssets(_assets));
 

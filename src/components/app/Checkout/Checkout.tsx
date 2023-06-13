@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Col, Row } from '../../shared/layout/flex'
 import { ArrowLongLeftIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
@@ -9,11 +9,11 @@ import Button from '../../shared/buttons/button'
 import { EnumPricing } from '../../../utils/constants/payment'
 import { useFormik } from 'formik'
 import { MODE_DEBUG } from '../../../utils/constants/config'
-import Lottie from 'lottie-react'
-import paymentSpinner from './payment-spinner.json'
-import { getCheckoutDetails } from '../../../services/controllers/checkout'
+import { createSubscription, getCheckoutDetails } from '../../../services/controllers/checkout'
 import { Subscription } from '../../../types/checkout.types'
 import { AxiosResponse } from 'axios'
+import { getPaymentIntent } from '../../../utils/helpers/checkout'
+import ProcessingSpinner from '../../shared/ProcessingSpinner/ProcessingSpinner'
  
 
 const Checkout = () => {
@@ -25,33 +25,115 @@ const Checkout = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false)
     const [paymentFailed, setPaymentFailed] = useState<boolean>(false)
+    const [checkoutId,setCheckoutId] = useState<number>()
 
-    const [monthlyPriceId, setMonthlyPriceId] = useState<string|null>(null)
-    const [yearlyPriceId, setYearlyPriceId] = useState<string|null>(null)
+    const [priceId, setPriceId] = useState<string|null>(null)
+    const [paymentError, setPaymentError] = useState<string>('Try again, or change card payment details.')
 
-    const fetchPriceData = ()=>{
-        getCheckoutDetails().then((res:AxiosResponse<Subscription>)=>{
-            const {data} = res
-            const {prices} = data
-
-            prices.forEach((priceSingle)=>{
-                if(priceSingle.price.recurring === 'month'){
-                    setMonthlyPriceId(priceSingle.price.stripe_id)
-                }
-                if(priceSingle.price.recurring === 'year'){
-                    setYearlyPriceId(priceSingle.price.stripe_id)
-                }
+    const fetchPriceData = useCallback(
+        ()=>{
+            getCheckoutDetails().then((res:AxiosResponse<Subscription>)=>{
+                const {data} = res
+                const {prices} = data
+                setCheckoutId(data.id)
+                prices.forEach((priceSingle)=>{
+                    if(priceSingle.price.recurring === 'month'&&paymentFrequency===EnumPricing.monthly){
+                        setPriceId(priceSingle.price.stripe_id)
+                    }
+                    else if(priceSingle.price.recurring === 'year'&&paymentFrequency === EnumPricing.yearly){
+                        setPriceId(priceSingle.price.stripe_id)
+                    }
+                })
             })
+        },
+      [paymentFrequency],
+    )
 
-        })
+    const handlePaymentThatRequiresCustomerAction = async ({
+        subscription,
+        invoice,
+        priceId,
+        paymentMethodId,
+        isRetry,
+      }:any) => {
+        if (subscription && subscription.status === "active") {
+          // subscription is active, no customer actions required.
+          return { subscription, priceId, paymentMethodId };
+        }
+      
+        // If it's a first payment attempt, the payment intent is on the subscription latest invoice.
+        // If it's a retry, the payment intent will be on the invoice itself.
+        const paymentIntent = invoice
+          ? invoice.payment_intent
+          : getPaymentIntent(subscription);
+      
+        if (
+          paymentIntent &&
+          (paymentIntent.status === "requires_action" ||
+            paymentIntent.status === "requires_confirmation" ||
+            (isRetry === true && paymentIntent.status === "requires_payment_method"))
+        ) {
+          return stripe?.confirmCardPayment(paymentIntent.client_secret, {
+              payment_method: paymentMethodId,
+              setup_future_usage: "off_session",
+            })
+            .then((result) => {
+              if (result.error) {
+                // start code flow to handle updating the payment details
+                // Display error message in your UI.
+                // The card was declined (i.e. insufficient funds, card has expired, etc)
+                throw result;
+              } else {
+                if (
+                  result.paymentIntent.status === "succeeded"
+                ) {
+                  // There's a risk of the customer closing the window before callback
+                  // execution. To handle this case, set up a webhook endpoint and
+                  // listen to invoice.payment_succeeded. This webhook endpoint
+                  // returns an Invoice.
+                  return {
+                    priceId: priceId,
+                    subscription: subscription,
+                    invoice: invoice,
+                    paymentMethodId: paymentMethodId,
+                  };
+                }
+              }
+            });
+        } else {
+          // No customer action needed
+          return { subscription, priceId, paymentMethodId };
+        }
+    };
+    
+    const handleRequiresPaymentMethod = ({ subscription, paymentMethodId, priceId, invoice }:any) => {
+
+        if ((subscription && subscription.status === 'active') || invoice) {
+          // subscription is active, no customer actions required.
+          return { subscription, priceId, paymentMethodId }
+        } else if (
+          subscription &&
+          subscription.latest_invoice.payment_intent.status === 'requires_payment_method'
+        ) {
+          throw new Error('Your card was declined.')
+        } else {
+          return { subscription, priceId, paymentMethodId }
+        }
     }
 
+    const onSubscriptionComplete = (result:any) => {
+        // Payment was successful. Provision access to your service.
+        if (result) {
+        //   TODO:Call subscription api
+          setPaymentSuccess(true)
+        }
+      }
+    
     const formik = useFormik({
         initialValues:{
             name:''
         },
         onSubmit: async (values) =>{
-            setLoading(true)
             if(!stripe||!elements){
                 return
             }
@@ -60,6 +142,7 @@ const Checkout = () => {
             if(submitError){
                 return
             }
+            setLoading(true)
             await stripe?.createPaymentMethod({
                 elements,
                 params:{
@@ -83,9 +166,55 @@ const Checkout = () => {
                     throw(result.error)
                 }
             })
-            // .then((paymentID)=>{
-                
-            // })
+            .then((paymentId)=>{
+                if(!checkoutId || !priceId || !paymentId){
+                    if(MODE_DEBUG){
+                        console.log(`create subscription parmeters missing! checkoutId:${checkoutId} priceId:${priceId} paymentID:${paymentId} is falsy`)
+                    }
+                    return
+                }
+                return createSubscription(checkoutId,priceId,paymentId).then((res)=>{
+                    const {data} = res
+                    if(MODE_DEBUG){
+                        console.log(data)
+                    }
+                    if(data){
+                        let object:any = {
+                            // Use the Stripe 'object' property on the
+                            // returned result to understand what object is returned.
+                            paymentMethodId: paymentId,
+                            priceId: priceId,
+                        }
+                        if (data.object === 'invoice') {
+                            object.invoice = data
+                        } else {
+                            object.subscription = data
+                        }
+                        return object
+                    }
+                })
+            })
+            // Some payment methods require a customer to do additional
+            // authentication with their financial institution.
+            // Eg: 2FA for cards.
+            .then(handlePaymentThatRequiresCustomerAction)
+            // If attaching this card to a Customer object succeeds,
+            // but attempts to charge the customer fail. You will
+            // get a requires_payment_method error.
+            .then(handleRequiresPaymentMethod)
+            // No more actions required. Provision your service for the user.
+            .then(onSubscriptionComplete)
+            .catch((error)=>{
+                if(MODE_DEBUG){
+                    console.error(error)
+                }
+                if(error.type === 'card_error'){
+                    if(error.decline_code ==='card_not_supported'){
+                        setPaymentError('Your card is not supported. Please use a different card')
+                    }
+                }
+                setPaymentFailed(true)
+            })
             .finally(()=>{
                 setLoading(false)
             })
@@ -94,7 +223,8 @@ const Checkout = () => {
 
     useEffect(()=>{
         fetchPriceData()
-    })
+    },[fetchPriceData])
+
 
   return (
     <Col className='lg:w-[1320px] gap-6 lg:gap-3 p-[2rem] lg:p-0'>
@@ -104,14 +234,6 @@ const Checkout = () => {
         </Row>
         <Col className='lg:bg-black-2 lg:py-14 lg:px-40 min-h-[650px]'>
             {
-                loading?
-                <Col className=' justify-center items-center w-full lg:h-[500px]'>
-                    <span className='text-3xl font-semibold'>Processing payment</span>
-                    <Lottie
-                        animationData={paymentSpinner}
-                        className='scale-50'
-                    />
-                </Col>:
                 paymentSuccess?
                 <Col className=' justify-center items-center w-full lg:h-[500px] gap-11'>
                     <Col className='gap-4 text-center'>
@@ -119,13 +241,13 @@ const Checkout = () => {
                         <span className='text-white opacity-60 text-base font-medium'>Thank you, you are now subscribed to ARYA Premium</span>
                     </Col>
                     <Image width={256} height={157}  alt='payment-success' src='/assets/images/svg/success.svg'/>
-                    <Button className='py-4 px-8 bg-blue-1 font-semibold text-base rounded-lg'>Back to ARYA Crypto</Button>
+                    <Button  className='py-4 px-8 bg-blue-1 font-semibold text-base rounded-lg'>Back to ARYA Crypto</Button>
                 </Col>:
                 paymentFailed?
                 <Col className=' justify-center items-center w-full lg:h-[500px] gap-11'>
                     <Col className='gap-4 text-center'>
                         <span className='text-3xl font-semibold'>Payment Failed!</span>
-                        <span className='text-white opacity-60 text-base font-medium'>Try again, or change card payment details. </span>
+                        <span className='text-white opacity-60 text-base font-medium'>{paymentError}</span>
                     </Col>
                     <Image width={156} height={157}  alt='payment-success' src='/assets/images/svg/failed.svg'/>
                     <Button className='py-4 px-8 bg-blue-1 font-semibold text-base rounded-lg'>Try Again</Button>
@@ -164,8 +286,8 @@ const Checkout = () => {
                                     <span>Total</span>
                                     <span>{paymentFrequency===EnumPricing.yearly?'$144.99':'19.99'}</span>
                                 </Row>
-                                <Button type='submit' className='bg-green-1 rounded py-5 w-full'>
-                                    Pay USD 144.99
+                                <Button disabled={loading} type='submit' className='bg-green-1 rounded w-full h-14 flex justify-center items-center'>
+                                    {!loading?<ProcessingSpinner/>:'Pay USD 144.99'}
                                 </Button>
                                 <span className='text-[#ACACAC] text-sm font-normal'>
                                     Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.
