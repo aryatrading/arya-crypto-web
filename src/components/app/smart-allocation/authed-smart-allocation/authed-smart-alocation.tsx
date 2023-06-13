@@ -134,7 +134,7 @@ const AuthedSmartAllocation: FC = () => {
         } else {
             return (
                 <Col className="w-full md:items-center justify-center col-span-full gap-10">
-                    {/* <ExchangeSwitcher canSelectOverall={false} /> */}
+                    <ExchangeSwitcher canSelectOverall={false} />
                     <Row className="justify-center  mt-40">
                         <Col className="items-center gap-5">
                             <Col className="items-center gap-5">
