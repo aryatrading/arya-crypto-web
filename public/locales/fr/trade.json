@@ -28,5 +28,6 @@
     "openorderclosed": "Ordre annulé",
     "usdtamountreq": "Veuillez ajouter le montant en USDT",
     "premium": "Il s'agit d'une fonctionnalité premium",
-    "tp3": "Vous ne pouvez définir que 3 TP par actif."
+    "tp3": "Vous ne pouvez définir que 3 TP par actif.",
+    "currenttrailing": "Trailing:"
 }
