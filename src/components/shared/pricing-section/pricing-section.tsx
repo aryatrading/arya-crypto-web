@@ -4,8 +4,11 @@ import Button from "../buttons/button";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleIconSolid } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import { useTranslation } from "next-i18next";
 
 const PricingSection: FC = () => {
+
+    const { t } = useTranslation(["pricing-plans"]);
 
     const freeFeature = useCallback((text: string) => {
         return (
@@ -19,20 +22,20 @@ const PricingSection: FC = () => {
     const freePlan = useMemo(() => {
         return (
             <Col className="border-4 border-[#1F2F4D] rounded-2xl py-14 px-14 gap-5 relative">
-                <Button className="border border-[#1F2F4D] rounded-full py-1 px-5 w-fit">Basic</Button>
-                <h2 className="text-6xl font-extrabold">FREE</h2>
+                <Button className="border border-[#1F2F4D] rounded-full py-1 px-5 w-fit">{t("Basic")}</Button>
+                <h2 className="text-6xl font-extrabold">{t("FREE")}</h2>
                 <hr />
                 <Col className="gap-5">
-                    {freeFeature("Single Exchange Tracking")}
-                    {freeFeature("Market Order Trading")}
-                    {freeFeature("Portfolio Backtesting")}
+                    {freeFeature(t("singleExchangeTracking"))}
+                    {freeFeature(t("marketOrderTrading"))}
+                    {freeFeature(t("portfolioBacktesting"))}
                 </Col>
                 <Button className="bg-[#1F2F4D] rounded-full py-3 px-10 w-fit absolute bottom-0 left-1/2 translate-y-1/2 -translate-x-1/2 font-bold">
-                    Get Started
+                    {t("common:getStarted")}
                 </Button>
             </Col>
         )
-    }, [freeFeature]);
+    }, [freeFeature, t]);
 
     const premiumFeature = useCallback((text: string) => {
         return (
@@ -46,33 +49,33 @@ const PricingSection: FC = () => {
     const premiumPlan = useMemo(() => {
         return (
             <Col className="border-4 border-blue-1 rounded-2xl py-14 px-14 gap-5 relative bg-[#152445]">
-                <Button className="border border-[#668EF1] bg-[#3c5eb1] rounded-full py-1 px-5 w-fit">Premium</Button>
+                <Button className="border border-[#668EF1] bg-[#3c5eb1] rounded-full py-1 px-5 w-fit">{t("premium")}</Button>
                 <Col>
                     <p className="text-4xl font-bold text-green-1">$14.99 <span className="text-base text-white">/mo</span></p>
-                    <p className="text-bold">Billed <span className="text-blue-1">$144.99</span> per year</p>
+                    <p className="text-bold">{t("Billed")} <span className="text-blue-1">$144.99</span> {t("perYear")}</p>
                 </Col>
                 <hr className="bg-grey-1" />
                 <Col className="gap-5 md:flex-row">
                     <Col className="gap-5">
-                        {premiumFeature("Multi Exchange Tracking")}
-                        {premiumFeature("Smart Allocation")}
-                        {premiumFeature("Auto-Rebalancing")}
-                        {premiumFeature("Portfolio Backtesting")}
-                        {premiumFeature("Advanced Trading")}
+                        {premiumFeature(t("multiExchangeTracking"))}
+                        {premiumFeature(t("smartAllocation"))}
+                        {premiumFeature(t("autoRebalancing"))}
+                        {premiumFeature(t("portfolioBacktesting"))}
+                        {premiumFeature(t("advancedTrading"))}
                     </Col>
                     <Col className="gap-5">
-                        {premiumFeature("5 Take Profits")}
-                        {premiumFeature("Stop Loss")}
-                        {premiumFeature("Trailling Mode")}
-                        {premiumFeature("Exit Strategy")}
+                        {premiumFeature(t("5TakeProfits"))}
+                        {premiumFeature(t("stopLoss"))}
+                        {premiumFeature(t("traillingMode"))}
+                        {premiumFeature(t("exitStrategy"))}
                     </Col>
                 </Col>
                 <Button className="bg-blue-1 rounded-full py-3 px-10 w-fit absolute bottom-0 left-1/2 translate-y-1/2 -translate-x-1/2 font-bold">
-                    Get Started
+                    {t("common:getStarted")}
                 </Button>
             </Col>
         )
-    }, [premiumFeature]);
+    }, [premiumFeature, t]);
 
     const subscriptionPromise = useCallback(({ mainImage, title, description, images }: { mainImage: string, title: string, description?: string, images?: string[] }) => {
         return (
@@ -94,28 +97,28 @@ const PricingSection: FC = () => {
     return (
         <Col className="py-20 w-full bg-[#111827]">
             <Col className="container items-center gap-14">
-                <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">Pricing Plans</h2>
-                <p className="text-xl max-w-[700px] text-center">Automate your cryptocurrency strategy with a plan that works for you.</p>
+                <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">{t("pricingPlans")}</h2>
+                <p className="text-xl max-w-[700px] text-center">{t("automateYourCryptocurrencyStrategy")}</p>
                 <Col className="md:flex-row gap-10">
                     {freePlan}
                     {premiumPlan}
                 </Col>
-                <p className="text-xl text-center mt-5">Your subscription will renew automatically unless it is cancelled at least 24 hours before the end of the current period, by upgrading your account, you agree to the Terms of Use & Privacy Policy.</p>
+                <p className="text-xl text-center mt-5">{t("yourSubscriptionWillRenewAutomatically")}</p>
                 <Col className="md:flex-row justify-center gap-10">
                     {subscriptionPromise({
                         mainImage: "/assets/images/publicPages/satisfactionGuaranteedImg.png",
-                        title: "Satisfaction guaranteed",
-                        description: "Change your mind within 14 days and get a full refund."
+                        title: t("satisfactionGuaranteed"),
+                        description: t<string>("changeYourMindWithin14DaysAndGetFullRefund")
                     })}
                     {subscriptionPromise({
                         mainImage: "/assets/images/publicPages/securePaymentImg.png",
-                        title: "Secure payment",
+                        title: t("securePayment"),
                         images: []
                     })}
                     {subscriptionPromise({
                         mainImage: "/assets/images/publicPages/technicalSupportImg.png",
-                        title: "Technical support",
-                        description: "We have a support team ready to answer any questions."
+                        title: t("technicalSupport"),
+                        description: t<string>("weHaveSupportTeamReadyToAnswerAnyQuestions")
                     })}
                 </Col>
             </Col>

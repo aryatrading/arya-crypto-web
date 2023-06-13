@@ -58,5 +58,6 @@
     "FULFILLED": "Fulfilled",
     "BROKER_ERROR": "Broker Error",
     "DATA_ERROR": "Data Error",
-    "preview": "Preview"
+    "preview": "Preview",
+    "getStarted":"Get Started"
 }

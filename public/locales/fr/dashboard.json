@@ -1,5 +1,33 @@
 {
     "yourHoldings": "Vos avoirs",
     "addAssets": "Ajouter des actifs",
-    "portfolioValue": "Valeur du portefeuille"
+    "portfolioValue": "Valeur du portefeuille",
+    "salesPage": {
+        "trackYourCryptoPortfoliosIn": "Suivez vos portefeuilles de crypto-monnaies en un ",
+        "onePlace":"seul endroit",
+        "monitorYourCryptosAcrossDifferentExchangesOnUnifiedDashboard":"Surveillez vos cryptomonnaies, sur différentes bourses, à l'aide d'un tableau de bord unifié.",
+        "connectPortfolioNow":"Connecter le portefeuille maintenant",
+        "allInOnePlatformForTrackingAllYourAssets":"Plateforme tout-en-un pour le suivi de tous vos actifs cryptographiques",
+        "ARYACryptoSupportsTheMostPopularCryptocurrencyPlatforms":"ARYA Crypto prend en charge les plateformes de crypto-monnaies les plus populaires, y compris Binance, Coinbase, et bien d'autres encore à venir.",
+        "oneDashboardForEverything":"Un tableau de bord pour tout",
+        "trackEveryAssetYouHaveFromOneDashboard":"Suivez chacun de vos actifs à partir d'un seul tableau de bord et restez maître de la situation.",
+        "globalPerspective":"Perspective globale",
+        "haveGlobalVisionOnYourCryptoWealthAndStartTakeStepsToImproveIt":"Ayez une vision globale de votre patrimoine cryptographique et commencez à prendre des mesures pour l'améliorer.",
+        "quick&Secure":"Rapide et sûr",
+        "gettingStartedWithARYACryptoOnlyTakesFewMinutes":"Démarrer avec ARYA Crypto ne prend que quelques minutes, et c'est entièrement gratuit et sûr.",
+        "getStartedInFewMinutes":"Commencez en quelques minutes",
+        "seamlesslyConnectYourEntireCryptoPortfolioInJustFewSteps":"Connectez de manière transparente l'ensemble de votre portefeuille de crypto-monnaies en quelques étapes seulement.",
+        "createAnAccount":"Créer un compte",
+        "linkYourAccount":"lier votre compte",
+        "manageYourCryptos":"Gérez vos cryptomonnaies",
+        "connectYourExchange":"Connectez votre bourse",
+        "theUltimateSecurityForYourDigitalAssets":"La sécurité ultime pour vos actifs numériques",
+        "ARYACryptoIsEquippedWithTopQualityInfrastructure":"ARYA Crypto est équipé d'une infrastructure de première qualité conçue pour assurer une protection maximale des actifs à tout moment. Comme nous demandons un accès en lecture seule, vos avoirs sont parfaitement sécurisés dans toutes les conditions.",
+        "encrypted":"Chiffré",
+        "weUseAdvancedEncryptionToSecurelyTransferAndStoreData":"Nous utilisons un cryptage avancé pour transférer et stocker les données en toute sécurité.",
+        "secured":"Sécurisé",
+        "weProtectYouAndYourCryptoAssetsFromExternalThreats":"Nous vous protégeons, vous et vos actifs cryptographiques, contre les menaces extérieures.",
+        "bestPractices":"Meilleures pratiques",
+        "weFollowTheMostAdvancedSecurityProcedures":"Nous suivons les procédures de sécurité les plus avancées pour garantir que votre compte est aussi sûr que possible."
+    }
 }
