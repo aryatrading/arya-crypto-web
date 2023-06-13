@@ -107,7 +107,7 @@ export const OpenOrders: FC = () => {
                     <Row className="justify-start">
                       <button
                         className="bg-transparent"
-                        onClick={() => console.log("close")}
+                        onClick={() => {}}
                       >
                         <XMarkIcon width={20} height={20} />
                       </button>

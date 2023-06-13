@@ -47,7 +47,6 @@ export const TrailingTrade: FC = () => {
       ) : null}
       <Button
         className="bg-blue-3 rounded-md py-3"
-        onClick={() => console.log(".")}
       >
         <p>{t("addtrailing")}</p>
       </Button>
@@ -58,7 +57,7 @@ export const TrailingTrade: FC = () => {
         symbol={trade.asset_name}
         quantity="3"
         base="USD"
-        action={() => console.log(",")}
+        action={() => {}}
       />
     </>
   );

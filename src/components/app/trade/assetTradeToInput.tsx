@@ -35,7 +35,6 @@ const AssetTradeToInput: FC = () => {
     let _value =
       (value * _assetprice[asset?.symbol?.toLowerCase() ?? "btc"]) /
       _assetprice[fromAsset?.symbol?.toLowerCase() ?? "btc"];
-    console.log(_value);
     dispatch(setFrom({ ...fromAsset, quantity: _value }));
   };
 

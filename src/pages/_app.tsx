@@ -52,7 +52,6 @@ try {
   fetchAndActivate(remoteConfig);
 
 } catch (err) {
-  console.log({ err });
   console.error(err);
 }
 
