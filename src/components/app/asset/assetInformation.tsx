@@ -4,7 +4,7 @@ import { assetTimeseries } from "../../../utils/constants/assetTimeseries";
 import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
+import clsx from "clsx";
 
 import {
   getAsset,
@@ -25,7 +25,7 @@ import CandleStickGraphFilled from "../../svg/candleStickGraphFilled";
 import LineGraphIcon from "../../svg/LineGraphIcon";
 import AssetStatistics from "../../shared/containers/asset/assetStatistics";
 import Button from "../../shared/buttons/button";
-import clsx from "clsx";
+import { PremiumIcon } from "../../svg/premiumIcon";
 
 type seriesInterface = {
   title: string;
@@ -153,9 +153,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
               </Row>
 
               {coinstats?.premium && <Row className="top-0 right-0 bottom-0 left-0 absolute items-center justify-center gap-4 px-5">
-                <svg width="19" height="14" viewBox="0 0 19 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12.9391 5.53333L10.1904 0.560852C9.7823 -0.18679 8.71145 -0.186954 8.30307 0.560379L5.54681 5.53273L1.65117 3.08802L1.6466 3.08519C0.835375 2.58549 -0.221885 3.30958 0.0409489 4.27744L0.0412243 4.27845L2.18223 12.2227L2.18269 12.2244C2.36327 12.8872 2.96454 13.3372 3.63922 13.3372H14.8626C15.5497 13.3372 16.1395 12.8835 16.3191 12.2244L16.3196 12.2227L18.4608 4.27767C18.7153 3.34106 17.6794 2.55101 16.8464 3.09073L12.9391 5.53333Z" fill="#F7931A" />
-                </svg>
+                <PremiumIcon />
 
                 <p className="text-white font-bold">{t('common:premiumMsg')}</p>
 
@@ -182,9 +180,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
               </Row>
 
               {coinstats?.premium && <Row className="top-0 right-0 bottom-0 left-0 absolute items-center justify-center gap-4 px-5">
-                <svg width="19" height="14" viewBox="0 0 19 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12.9391 5.53333L10.1904 0.560852C9.7823 -0.18679 8.71145 -0.186954 8.30307 0.560379L5.54681 5.53273L1.65117 3.08802L1.6466 3.08519C0.835375 2.58549 -0.221885 3.30958 0.0409489 4.27744L0.0412243 4.27845L2.18223 12.2227L2.18269 12.2244C2.36327 12.8872 2.96454 13.3372 3.63922 13.3372H14.8626C15.5497 13.3372 16.1395 12.8835 16.3191 12.2244L16.3196 12.2227L18.4608 4.27767C18.7153 3.34106 17.6794 2.55101 16.8464 3.09073L12.9391 5.53333Z" fill="#F7931A" />
-                </svg>
+                <PremiumIcon />
 
                 <p className="text-white font-bold">{t('common:premiumMsg')}</p>
 
