@@ -16,7 +16,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state: UserType, action) => {
-      console.log("action >>> ", action.payload.firebase_id);
       state.firebaseId = action.payload.data?.firebase_id ?? null;
       state.subscription = action.payload.data?.subscription ?? false;
     },
