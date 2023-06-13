@@ -155,10 +155,10 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
               {coinstats?.premium && <Row className="top-0 right-0 bottom-0 left-0 absolute items-center justify-center gap-4 px-5">
                 <PremiumIcon />
 
-                <p className="text-white font-bold">{t('common:premiumMsg')}</p>
+                <p className="text-white font-bold">{t('common:premiumusersfeature')}</p>
 
                 <Button className="bg-orange-1 h-12 md:px-4 rounded-lg text-bold text-white font-bold text-sm">
-                  {t('common:upgrade')}
+                  {t('common:upgradenow')}
                 </Button>
               </Row>}
             </Col>
@@ -182,10 +182,10 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
               {coinstats?.premium && <Row className="top-0 right-0 bottom-0 left-0 absolute items-center justify-center gap-4 px-5">
                 <PremiumIcon />
 
-                <p className="text-white font-bold">{t('common:premiumMsg')}</p>
+                <p className="text-white font-bold">{t('common:premiumusersfeature')}</p>
 
                 <Button className="bg-orange-1 h-12 md:px-4 rounded-lg text-bold text-white font-bold text-sm">
-                  {t('common:upgrade')}
+                  {t('common:upgradenow')}
                 </Button>
               </Row>}
             </Col>
