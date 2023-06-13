@@ -79,7 +79,7 @@ const PricingSection: FC = () => {
 
     const subscriptionPromise = useCallback(({ mainImage, title, description, images }: { mainImage: string, title: string, description?: string, images?: string[] }) => {
         return (
-            <Col className="items-center gap-5 w-[350px] text-center">
+            <Col className="items-center gap-5 flex-1 text-center max-w-[33.333%]">
                 <Image src={mainImage} alt="" width={56} height={56} />
                 <p className="text-2xl font-bold">{title}</p>
                 {description && <p className="max-w-[250px] text-xl">{description}</p>}
@@ -104,7 +104,7 @@ const PricingSection: FC = () => {
                     {premiumPlan}
                 </Col>
                 <p className="text-xl text-center mt-5">{t("yourSubscriptionWillRenewAutomatically")}</p>
-                <Col className="md:flex-row justify-center gap-10">
+                <Col className="md:flex-row w-full justify-around gap-10 md:gap-0">
                     {subscriptionPromise({
                         mainImage: "/assets/images/publicPages/satisfactionGuaranteedImg.png",
                         title: t("satisfactionGuaranteed"),
