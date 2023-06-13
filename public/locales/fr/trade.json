@@ -1,7 +1,7 @@
 {
     "entry": "Entrée",
     "stoploss": "Stop loss",
-    "takeprofit": "Prendre des bénéfices",
+    "takeprofit": "Take profit",
     "trailing": "Trailing",
     "placeorder": "Éxecuter",
     "openorders": "Ordre ouvert",
