@@ -16,7 +16,7 @@ const PaymentModal = ({triggerButton}:IPaymentModal) => {
         </Dialog.Trigger>
         <Dialog.Portal>
             <Dialog.Overlay className="dialog-overlay data-[state=open]:animate-overlayShow bg-white" />
-            <Dialog.Content className="fixed left-0 right-0 overflow-y-scroll md:w-[700px] xl:w-[1000px] lg:overflow-auto bottom-0 top-[60px] md:right-0 md:top-[50%] md:left-1/2 md:translate-x-[-50%] md:translate-y-[-50%] md:h-[600px] xl:h-[750px] md:rounded-lg bg-black-1 z-10 flex flex-col data-[state=open]:animate-contentShow focus:outline-none justify-between rounded-lg">
+            <Dialog.Content className="fixed left-0 right-0 overflow-y-scroll md:w-[700px] xl:w-[1000px] lg:overflow-auto bottom-0 top-[60px] md:right-0 md:top-[50%] md:left-1/2 md:translate-x-[-50%] md:translate-y-[-50%] md:h-[700px] xl:h-[850px] md:rounded-lg bg-black-1 z-10 flex flex-col data-[state=open]:animate-contentShow focus:outline-none justify-between rounded-lg">
                 <PaymentCard/>
                 <Dialog.Close asChild>
                     <button
