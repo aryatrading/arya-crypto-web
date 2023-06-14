@@ -2,9 +2,14 @@ import { useTranslation } from 'next-i18next';
 
 import { Col, Row } from '../../shared/layout/flex';
 import Button from '../../shared/buttons/button';
+import PaymentModal from '../Subscription/PaymentCard/PaymentModal';
 
 const SubcriptionTab = () => {
     const { t } = useTranslation(['settings', 'common']);
+
+    const paymentModalTrigger = <Button className='focus:outline-none text-white bg-yellow-1 hover:bg-yellow-1 hover:bg-opacity-95 focus:ring-2 font-medium rounded-lg text-sm px-5 py-3 max-w-[300px]'>
+            {t('subscribeToPro')}
+        </Button>
 
     return (
         <>
@@ -13,10 +18,7 @@ const SubcriptionTab = () => {
                     <h1 className='font-bold text-md mt-6'>{t('subscription')}</h1>
                     <h1 className='font-medium text-sm '>{t('subscriptionHint')}</h1>
                 </Col>
-
-                <Button className='focus:outline-none text-white bg-yellow-1 hover:bg-yellow-1 hover:bg-opacity-95 focus:ring-2 font-medium rounded-lg text-sm px-5 py-3 max-w-[300px]'>
-                    {t('subscribeToPro')}
-                </Button>
+                <PaymentModal triggerButton={paymentModalTrigger}/>
 
                 <h1 className='font-bold text-md mt-6'>{t('subscriptionHistory')}</h1>
 

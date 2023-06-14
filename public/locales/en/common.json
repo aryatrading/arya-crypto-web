@@ -63,5 +63,11 @@
     "getStarted": "Get Started",
     "premiumusersfeature": "Continue with ARYA Prenium",
     "upgradenow": "Upgrade now",
-    "editSmartAllocation": "Edit Smart Allocation"
+    "editSmartAllocation": "Edit Smart Allocation",
+    "yourSubscriptionWillRenewAutomatically": "Your subscription will renew automatically unless it is cancelled at least 24 hours before the end of the current period, by upgrading your account, you agree to the Terms of Use & Privacy Policy.",
+    "takeProfit": "Take Profit",
+    "trailing": "Trailing",
+    "stopLoss": "Stop Loss",
+    "autoRebalancing": "Auto-Rebalancing",
+    "premium": "Premium"
 }
