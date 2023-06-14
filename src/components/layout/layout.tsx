@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Poppins } from "next/font/google";
 
 import Nav from "./Nav/Nav";
 import Footer from "./Footer/Footer";
+import { initStoreData } from "../../common/hooks/initStore";
+import { useAuthUser } from "next-firebase-auth";
+import { getNotifications } from "../../services/controllers/notifications";
 
 const poppins = Poppins({
   variable: "--poppins-font",
@@ -25,6 +28,16 @@ export function SalesPagesLayout({ children }: any) {
 
 
 export default function Layout({ children }: any) {
+
+  const authUser = useAuthUser();
+
+  useEffect(() => {
+    if (authUser.id) {
+      initStoreData();
+      getNotifications(0, 100, "desc");
+    }
+  }, [authUser.id]);
+
   return (
     <div className={poppins.className + " min-h-screen flex flex-col justify-between"}>
       <Nav />

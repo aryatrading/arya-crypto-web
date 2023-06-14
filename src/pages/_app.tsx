@@ -22,7 +22,6 @@ import initAuth from "../initFirebaseAuth";
 import { axiosInstance } from "../services/api/axiosConfig";
 import "../styles/globals.css";
 import { FAVORITES_LIST } from "../utils/constants/config";
-import { initStoreData } from "../common/hooks/initStore";
 import "../services/api/socketConfig";
 import ResponsiveProvider from "../context/responsive.context";
 import { getUserLanguage } from "../services/controllers/utils";
@@ -69,8 +68,6 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
         push({ pathname, query }, asPath, { locale: lang });
       }
 
-      getNotifications(0, 100, "desc");
-
       // Create the inital favorites list in localstorage
       localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
 
@@ -91,7 +88,6 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
 
   const { store, props } = wrapper.useWrappedStore(rest);
 
-  initStoreData();
 
   return getLayout(
     <Provider store={store}>
