@@ -10,10 +10,11 @@ import Lottie from 'lottie-react';
 import { SalesPagesLayout } from '../../components/layout/layout'
 import { Col, Row } from '../../components/shared/layout/flex';
 import Button from '../../components/shared/buttons/button';
+import PricingSection from '../../components/shared/pricing-section/pricing-section';
+import { Testimonials } from '../../components/shared/Testimonials';
 
 
 import styles from './index.module.scss';
-import PricingSection from '../../components/shared/pricing-section/pricing-section';
 
 const RowItem = ({ content }: any) => {
     return (
@@ -147,6 +148,7 @@ const HomePage = () => {
             </Col>
 
             <PricingSection />
+            <Testimonials />
 
             <Col className='py-10 gap-6 items-center justify-center'>
                 <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug mb-10">{t('faq')}</h2>
