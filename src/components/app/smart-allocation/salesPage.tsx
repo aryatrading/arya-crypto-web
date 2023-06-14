@@ -1,75 +1,141 @@
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 import clsx from "clsx";
 import Image from "next/image";
+import { useTranslation } from "next-i18next";
+import { CheckIcon } from "@heroicons/react/24/solid";
+import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
 import { Col, Row } from "../../shared/layout/flex";
 import PricingSection from "../../shared/pricing-section/pricing-section";
 import { Testimonials } from "../../shared/Testimonials";
+import LottieData from '../../../../public/assets/images/publicPages/smart-allocation/smart-allocation.json';
+import { useAuthModal } from "../../../context/authModal.context";
 
 import styles from './index.module.scss';
 
-const SmartAllocationSalesPage: FC = () => {
+const RowItem = ({ content }: any) => {
     return (
-        <Col className="items-center justify-center w-full h-full gap-10 mt-16">
-            <Row className=" gap-10 flex-col-reverse lg:flex-row items-center">
-                <Col className="flex-1 w-full h-full gap-8">
-                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">Transform the way you invest with  <span className="text-blue-1">Smart Allocation</span></h2>
-                    <p className="font-medium text-white text-left">Smart Allocation give you granular control over your portfolio strategy. You can create custom asset allocations with unique weighting methods, set minimum and maximum allocation amounts, perform custom periodic or threshold rebalancing strategies, set your own stop-losses, and so much more.</p>
+        <Row className='gap-4 items-center'>
+            <Col className='w-5 h-5 rounded-md bg-blue-1 justify-center items-center'>
+                <CheckIcon className='w-3 h-3 fill-white stroke-white' />
+            </Col>
 
-                    <button className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit")}>
-                        Build my portfolio
+            <p className='font-medium text-base text-white'>{content}</p>
+        </Row>
+    );
+}
+
+const SmartAllocationSalesPage: FC = () => {
+    const { setVisibleSection, modalTrigger } = useAuthModal();
+    const { t } = useTranslation(['smart-allocation']);
+    const lottieRef = useRef<LottieRefCurrentProps>(null);
+
+    useEffect(() => {
+        if (lottieRef.current) {
+            lottieRef.current.pause();
+            setTimeout(() => {
+                lottieRef.current?.play();
+            }, 1000);
+        }
+    }, []);
+
+    const onClick = () => {
+        setVisibleSection('signup');
+        modalTrigger.show();
+    }
+
+    return (
+        <Col className=" w-full h-full">
+            <Row className={clsx("gap-10 flex-col-reverse lg:flex-row items-center px-4 md:px-12 lg:px-20 xl:px-60 py-20 justify-center min-h-[calc(100vh-65px)]", styles.bgImage)}>
+                <Col className="flex-1 w-full h-full gap-8 justify-center">
+                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.title')}  <span className="text-blue-1">{t('salesPage.smartAllocation')}</span></h2>
+                    <p className="font-medium text-white text-left">{t('salesPage.sub')}</p>
+
+                    <Col className='gap-4'>
+                        {[t('salesPage.points.1'), t('salesPage.points.2'), t('salesPage.points.3')].map(e => {
+                            return (
+                                <RowItem content={e} />
+                            );
+                        })}
+                    </Col>
+
+                    <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit")}>
+                        {t('salesPage.buildPortfolio')}
                     </button>
                 </Col>
-                <Col className="flex-1 w-full h-full gap-4 relative">
-                    <Image alt="" src={require('../../../../public/assets/images/publicPages/smart-allocation/firstSectionImg.png')} className={clsx("w-[80%] self-end h-full")} />
-                    <Image alt="" src={require('../../../../public/assets/images/publicPages/smart-allocation/coinsCircle.png')} className={clsx(styles.rotate, styles.hightlight, "w-[40%] rounded-full absolute -z-20 -top-16 left-10 p-4")} />
+                <Col className="flex-[1.5] w-full h-full gap-4 relative">
+                    <Lottie animationData={LottieData} lottieRef={lottieRef} className={clsx(styles.animateImg, "w-full absolute scale-125 h-full")} />
+                    <Lottie animationData={LottieData} className={clsx("w-full opacity-0 h-full")} />
                 </Col>
             </Row>
 
-            <Row className=" gap-10 flex-col lg:flex-row items-center mt-10 w-full lg:w-[100vw] bg-grey-6 px-4 lg:px-72 py-14 rounded-lg lg:rounded-none">
-                <Col className="flex-1 w-full h-full gap-4 relative">
-                    <Image alt="" src={require('../../../../public/assets/images/publicPages/smart-allocation/secondSectionImg.png')} className={clsx("w-full self-end h-full")} />
-                </Col>
-                <Col className="flex-1 w-full h-full gap-4">
-                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">Your Cryptocurrency ETF</h2>
-                    <h2 className="font-bold text-white text-3xl md:text-2xl text-left leading-snug">Diversify Across the Entire Market with Once Click</h2>
-                    <p className="font-medium text-white text-left">Diversify mitigates risk and improves returns. Studies found that 95% of active traders fail to beat the market. With ARYA Crypto, you can build your own pool of crypto, adapted to your risk profile, in a few clicks.</p>
+            <Col className="pb-20">
+                <Row className="gap-16 flex-col lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-72 py-14">
+                    <Col className="flex-1 w-full h-full gap-4 items-center justify-center">
+                        <Image alt="" src={require('../../../../public/assets/images/publicPages/smart-allocation/1.png')} className={clsx(styles.hightlight, "w-full self-end h-full")} />
+                    </Col>
+                    <Col className="flex-1 w-full h-full gap-4 justify-center">
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.sections.1.title')}</h2>
+                        <h2 className="font-bold text-white text-xl md:text-2xl text-left leading-snug">{t('salesPage.sections.1.sub')}</h2>
 
-                    <button className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit")}>
-                        Get Started
-                    </button>
-                </Col>
-            </Row>
+                        <p className="font-medium text-white text-left">{t('salesPage.sections.1.content')}</p>
 
-            <Row className=" gap-10 flex-col lg:flex-row items-center mt-10 w-full">
-                <Col className="flex-1 w-full h-full gap-4">
-                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">Automatic Rebalancing</h2>
-                    <h2 className="font-bold text-white text-3xl md:text-2xl text-left leading-snug">Rebalance Keep Your Portfolio on Track</h2>
-                    <p className="font-medium text-white text-left">When the market shifts, a portfolio will drift away from its target allocation. ARYA crypto automatically rebalances your portfolio to keep it on track, saving you time. Portfolio rebalances generally lead to risk mitigation and improved returns</p>
+                        <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                            {t('salesPage.getStarted')}
+                        </button>
+                    </Col>
+                </Row>
 
-                    <button className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit")}>
-                        Get Started
-                    </button>
-                </Col>
-                <Col className="flex-1 w-full h-full gap-4 relative">
-                    <Image alt="" src={require('../../../../public/assets/images/publicPages/smart-allocation/rebalanceImg.png')} className={clsx(styles.hightlight, "w-full self-end h-full")} />
-                </Col>
-            </Row>
+                <Row className="gap-14 flex-col-reverse lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-72 py-14">
+                    <Col className="flex-1 w-full h-full gap-4 justify-center">
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.sections.2.title')}</h2>
+                        <h2 className="font-bold text-white text-xl md:text-2xl text-left leading-snug">{t('salesPage.sections.2.sub')}</h2>
 
-            <Row className=" gap-10 flex-col lg:flex-row items-center mt-10 w-full lg:w-[100vw] bg-grey-6 px-4 lg:px-72 py-14 rounded-lg lg:rounded-none">
-                <Col className="flex-1 w-full h-full gap-4 relative">
-                    <Image alt="" src={require('../../../../public/assets/images/publicPages/smart-allocation/fourthSectionImg.png')} className={clsx("w-full self-end h-full")} />
-                </Col>
-                <Col className="flex-1 w-full h-full gap-4">
-                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">Tailored to Your Needs</h2>
-                    <h2 className="font-bold text-white text-3xl md:text-2xl text-left leading-snug">Customize ARYA Crypto to fit your Preferences.</h2>
-                    <p className="font-medium text-white text-left">Change your rebalancing frequency, add stop losses, take profits, trailing modes, or liquidate your assets anytime. ARYA Crypto is highly customizable. On top of that, we provide 24/7 customer support.</p>
+                        <p className="font-medium text-white text-left">{t('salesPage.sections.2.content')}</p>
 
-                    <button className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit")}>
-                        Get Started
-                    </button>
-                </Col>
-            </Row>
+                        <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                            {t('salesPage.getStarted')}
+                        </button>
+                    </Col>
+                    <Col className="flex-1 w-full h-full gap-4">
+                        <Image alt="" src={require('../../../../public/assets/images/publicPages/smart-allocation/2.png')} className={clsx(styles.hightlight, "w-full self-end h-full")} />
+                    </Col>
+                </Row>
+
+                <Row className="gap-16 flex-col lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-72 py-14">
+                    <Col className="flex-1 w-full h-full gap-4 items-center justify-center">
+                        <Image alt="" src={require('../../../../public/assets/images/publicPages/smart-allocation/3.png')} className={clsx(styles.hightlight, "w-full self-end h-full")} />
+                    </Col>
+                    <Col className="flex-1 w-full h-full gap-4 justify-center">
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.sections.3.title')}</h2>
+                        <h2 className="font-bold text-white text-xl md:text-2xl text-left leading-snug">{t('salesPage.sections.3.sub')}</h2>
+
+                        <p className="font-medium text-white text-left">{t('salesPage.sections.3.content')}</p>
+
+                        <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                            {t('salesPage.getStarted')}
+                        </button>
+                    </Col>
+                </Row>
+
+                <Row className="gap-14 flex-col-reverse lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-72 py-14">
+                    <Col className="flex-1 w-full h-full gap-4 justify-center">
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.sections.4.title')}</h2>
+                        <h2 className="font-bold text-white text-xl md:text-2xl text-left leading-snug">{t('salesPage.sections.4.sub')}</h2>
+
+                        <p className="font-medium text-white text-left">{t('salesPage.sections.4.content')}</p>
+
+                        <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                            {t('salesPage.getStarted')}
+                        </button>
+                    </Col>
+                    <Col className="flex-1 w-full h-full gap-4">
+                        <Image alt="" src={require('../../../../public/assets/images/publicPages/smart-allocation/4.png')} className={clsx(styles.hightlight, "w-full self-end h-full")} />
+                    </Col>
+                </Row>
+            </Col>
+
+
             <PricingSection />
             <Testimonials />
         </Col>

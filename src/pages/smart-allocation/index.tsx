@@ -1,16 +1,31 @@
-import { withAuthUser } from 'next-firebase-auth'
-import Layout from '../../components/layout/layout'
+import { useAuthUser, withAuthUser } from 'next-firebase-auth'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { GetStaticProps } from 'next';
+
+import Layout, { SalesPagesLayout } from '../../components/layout/layout'
 import SmartAllocation from '../../components/app/smart-allocation/smart-allocation';
+import SmartAllocationSalesPage from '../../components/app/smart-allocation/salesPage';
+import PageLoader from '../../components/shared/pageLoader/pageLoader';
 
-const SmartAllocationPage = (props: any) => {
-
-    return (
-        <Layout>
-            <SmartAllocation/>
-        </Layout>
-    )
+const SmartAllocationPage = () => {
+    const { id, clientInitialized } = useAuthUser();
+    if (clientInitialized) {
+        if (id != null) {
+            return (
+                <Layout>
+                    <SmartAllocation />
+                </Layout>
+            )
+        } else {
+            return (
+                <SalesPagesLayout>
+                    <SmartAllocationSalesPage />
+                </SalesPagesLayout>
+            );
+        }
+    } else {
+        return <PageLoader />
+    }
 }
 
 export default withAuthUser({
