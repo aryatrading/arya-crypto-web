@@ -75,11 +75,13 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
   const renderFavoritesSvg = (asset: AssetType) => {
     let _list = localStorage.getItem(FAVORITES_LIST);
 
-    let _parsed = JSON.parse(_list ?? "");
+    if (_list && _list.length) {
+      let _parsed = JSON.parse(_list ?? "");
 
-    if (_parsed?.includes(asset.id ?? ""))
-      return `w-4 h-4 fill-yellow-1 stroke-0`;
-    else return `w-4 h-4 stroke-1`;
+      if (_parsed?.includes(asset.id ?? ""))
+        return `w-4 h-4 fill-yellow-1 stroke-0`;
+      else return `w-4 h-4 stroke-1`;
+    }
   };
 
   const handleFavoritesToggle = async (asset: AssetType) => {
