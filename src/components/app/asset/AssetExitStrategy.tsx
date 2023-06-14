@@ -18,14 +18,15 @@ import { toast } from "react-toastify";
 import Button from "../../shared/buttons/button";
 import { Order } from "../../../types/trade";
 import { getAsset } from "../../../services/redux/assetSlice";
-import { getOpenOrders } from "../../../services/redux/tradeSlice";
 import { getOpenOrdersApi } from "../../../services/controllers/asset";
 import { useTranslation } from "react-i18next";
+import { useResponsive } from "../../../context/responsive.context";
+import { formatNumber } from "../../../utils/helpers/prices";
 
 const AssetExitStrategy = () => {
   const { t } = useTranslation(["trade"]);
   const selectedExchange = useSelector(selectSelectedExchange);
-  const _orders = useSelector(getOpenOrders);
+  const { isTabletOrMobileScreen } = useResponsive();
   const asset = useSelector(getAsset);
   const [orders, setOrders] = useState<Order[]>([]);
 
@@ -145,13 +146,13 @@ const AssetExitStrategy = () => {
                     {values.map((order: any, index: any) => {
                       return (
                         <tr className="font-medium text-base">
-                          <td className="py-4">
-                            {option.name === "Trailing"
-                              ? order.order_data.trailing_delta
+                          {option.name === "Trailing" ? (
+                            <td>
+                              {order?.order_delta?.trailing_delta
                                 ? "Percentage"
-                                : "Breakeven"
-                              : `${option.name} ${index + 1}`}
-                          </td>
+                                : "Breakeven"}
+                            </td>
+                          ) : null}
                           <td className="py-4">
                             {option.name === "Trailing"
                               ? order.order_data.activation_price
@@ -171,14 +172,9 @@ const AssetExitStrategy = () => {
                               ? `${
                                   !!order.order_data?.trailing_delta
                                     ? order.order_data.trailing_delta * 100
-                                    : ""
+                                    : 0
                                 }`
-                              : order?.order_value}
-                          </td>
-                          <td className="py-4">
-                            {order?.order_status === "PENDING_ENTRY"
-                              ? "Pending"
-                              : "Active"}
+                              : formatNumber(order?.order_value, true)}
                           </td>
                           <td className="py-4">
                             <Button
