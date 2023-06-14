@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { Col, Row } from "../../shared/layout/flex";
 import ExchangeSwitcher from "../../shared/exchange-switcher/exchange-switcher";
 import TradingViewWidget from "../../shared/charts/tradingView/tradingView";
@@ -17,19 +17,57 @@ import { useTranslation } from "next-i18next";
 import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
 import {
   createTrade,
+  getAssetCurrentPrice,
+  getAssetOpenOrders,
+  getHistoryOrders,
   initiateTrade,
 } from "../../../services/controllers/trade";
 import { toast } from "react-toastify";
 import { ShadowButton } from "../../shared/buttons/shadow_button";
 import { twMerge } from "tailwind-merge";
+import { useRouter } from "next/router";
 
 const Trade: FC = () => {
+
   const dispatch = useDispatch();
-  const { t } = useTranslation(["trade"]);
-  const [activeTab, setActiveTab] = useState("entry");
-  let trade = useSelector(getTrade);
-  const [laoding, setLoading] = useState(false);
   const selectedExchange = useSelector(selectSelectedExchange);
+  let trade = useSelector(getTrade);
+
+  const { t } = useTranslation(["trade"]);
+  const router = useRouter();
+  const { s } = router.query;
+
+  const [activeTab, setActiveTab] = useState("entry");
+  const [laoding, setLoading] = useState(false);
+
+  useEffect(() => {
+    initiateTrade((s as string) ?? "BTC", selectedExchange?.provider_id ?? 1);
+
+    (async () => {
+      setLoading(true);
+      try {
+        dispatch(clearTrade());
+        await initiateTrade(
+          (s as string) ?? "BTC",
+          selectedExchange?.provider_id ?? 1
+        );
+      } catch (error) {
+        toast.warn(t("somethingWentWrong"));
+      } finally {
+        setLoading(false);
+      }
+    })();
+    return () => {
+      dispatch(clearTrade());
+    };
+  }, [dispatch, s, selectedExchange, setLoading, t]);
+
+  useEffect(() => {
+    getAssetOpenOrders(trade.symbol_name, selectedExchange?.provider_id ?? 1);
+    getHistoryOrders(trade.asset_name, selectedExchange?.provider_id ?? 1);
+    getAssetCurrentPrice(trade.asset_name ?? "btc");
+  }, [selectedExchange?.provider_id, trade.asset_name, trade.symbol_name]);
+
 
   const tradetabs = useMemo(() => {
     return [
@@ -133,8 +171,8 @@ const Trade: FC = () => {
                 index === 0
                   ? "rounded-l-md"
                   : index === tradetabs.length - 1
-                  ? "rounded-r-md"
-                  : ""
+                    ? "rounded-r-md"
+                    : ""
               }
               bgColor={activeTab === elm.key ? "bg-blue-3" : "bg-grey-2"}
               textColor={activeTab === elm.key ? "text-blue-2" : "text-grey-1"}

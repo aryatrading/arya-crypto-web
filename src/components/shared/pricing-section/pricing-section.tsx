@@ -1,10 +1,11 @@
 import { FC, useCallback, useMemo } from "react";
-import { Col, Row } from "../layout/flex";
-import Button from "../buttons/button";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleIconSolid } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
+
+import { Col, Row } from "../layout/flex";
+import Button from "../buttons/button";
 
 const PricingSection: FC = () => {
 
@@ -95,7 +96,7 @@ const PricingSection: FC = () => {
     }, [])
 
     return (
-        <Col className="py-20 w-full bg-[#111827]">
+        <Col className="py-20 w-full bg-[#111827] gap-14">
             <Col className="container items-center gap-14">
                 <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">{t("pricingPlans")}</h2>
                 <p className="text-xl max-w-[700px] text-center">{t("automateYourCryptocurrencyStrategy")}</p>

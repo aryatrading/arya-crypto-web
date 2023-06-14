@@ -21,6 +21,7 @@ import AssetVote from "../../shared/containers/asset/assetVote";
 import CandleStickGraphFilled from "../../svg/candleStickGraphFilled";
 import LineGraphIcon from "../../svg/LineGraphIcon";
 import AssetStatistics from "../../shared/containers/asset/assetStatistics";
+import { PostSkeleton } from "../../shared/skeletons/skeletons";
 
 type seriesInterface = {
   title: string;
@@ -94,7 +95,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
           </Row>
 
           {view === "price" ? (
-            <LineChart primaryLineData={timeseries} className="w-full h-80" tooltip={{show: true, title: t("common:price"), showValue: true}}/>
+            <LineChart primaryLineData={timeseries} className="w-full h-80" tooltip={{ show: true, title: t("common:price"), showValue: true }} />
           ) : (
             <div className="h-[500px] w-full">
               <TradingViewWidget
@@ -149,25 +150,35 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats }) => {
           <AssetTrade />
         </Col>
         <Col className="gap-5">
-          <h3 className="asset-header">
-            {t("communityTitle", { coin: asset.name })}
-          </h3>
-          {posts.length > 0 && (
-            <Col className="w-full min-h-[300px] bg-grey-6 rounded-md px-6 py-3">
-              {posts?.slice(0, 2)?.map((post: PostTypes) => {
-                return <Post post={post} key={post._id} />;
-              })}
+          {posts ? posts?.length > 0 ? (
+            <>
+              <h3 className="asset-header">
+                {t("communityTitle", { coin: asset.name })}
+              </h3>
+              <Col className="w-full min-h-[300px] bg-grey-6 rounded-md px-6 py-3">
+                {posts?.slice(0, 2)?.map((post: PostTypes) => {
+                  return <Post post={post} key={post._id} />;
+                })}
 
-              <a
-                href={`https://arya-web-app.vercel.app/asset/?s=${asset.symbol}&m=crypto&t=USD&n=${asset.name}/US%20Dollar`}
-                className="text-white text-base font-bold underline text-center"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {t("seeMore")} +
-              </a>
-            </Col>
-          )}
+                <a
+                  href={`https://arya-web-app.vercel.app/asset/?s=${asset.symbol}&m=crypto&t=USD&n=${asset.name}/US%20Dollar`}
+                  className="text-white text-base font-bold underline text-center"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t("seeMore")} +
+                </a>
+              </Col>
+            </>
+          )
+            : (<></>)
+            : (<>
+              <h3 className="asset-header">
+                {t("communityTitle", { coin: asset.name })}
+              </h3>
+              <PostSkeleton />
+            </>
+            )}
         </Col>
       </Col>
     </Col>

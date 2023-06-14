@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import Layout from "../../components/layout/layout";
@@ -14,8 +16,7 @@ import { clearAsset } from "../../services/redux/assetSlice";
 import { clearSwap } from "../../services/redux/swapSlice";
 import { getPosts } from "../../services/firebase/community/posts";
 import PageLoader from "../../components/shared/pageLoader/pageLoader";
-import { toast } from "react-toastify";
-import { useTranslation } from "next-i18next";
+import { withAuthUser } from "next-firebase-auth";
 
 const AssetPage = () => {
   const { t } = useTranslation(["common"]);
@@ -43,12 +44,13 @@ const AssetPage = () => {
       dispatch(clearAsset());
       dispatch(clearSwap());
     };
-  }, [s]);
+  }, [dispatch, s, t]);
 
   return <Layout>{loading ? <PageLoader /> : <Asset />}</Layout>;
 };
 
-export default AssetPage;
+export default withAuthUser({
+})(AssetPage)
 
 export const getStaticProps: GetStaticProps<any> = async ({ locale }) => ({
   props: {
