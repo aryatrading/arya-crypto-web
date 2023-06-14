@@ -17,6 +17,7 @@ import {
 } from "../../../services/controllers/market";
 import { FAVORITES_LIST } from "../../../utils/constants/config";
 import useDebounce from "../../../utils/useDebounce";
+import { firebaseId } from "../../../services/redux/userSlice";
 
 const Market: FC = () => {
   const { t } = useTranslation(["market"]);
@@ -25,6 +26,7 @@ const Market: FC = () => {
   const _assets = useSelector(selectMarketAssets);
   const [count, setCount] = useState(100);
   const [marketCapDetails, setMarketCapDetails] = useState<any>({});
+  const fId = useSelector(firebaseId);
 
   const handleScroll = () => {
     const bottom =
@@ -35,7 +37,7 @@ const Market: FC = () => {
   };
 
   useEffect(() => {
-    fetchAssets(search, count);
+    fetchAssets(search, count, fId);
   }, [count]);
 
   useEffect(() => {
@@ -58,7 +60,7 @@ const Market: FC = () => {
   }, []);
   useDebounce(
     () => {
-      fetchAssets(search, count);
+      fetchAssets(search, count, fId);
     },
     [search],
     400

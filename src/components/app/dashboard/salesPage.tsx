@@ -7,6 +7,7 @@ import PricingSection from "../../shared/pricing-section/pricing-section";
 import Button from "../../shared/buttons/button";
 import { Col } from "../../shared/layout/flex";
 import styles from './salesPage.module.scss';
+import { Testimonials } from "../../shared/Testimonials";
 
 import logoWithCryptoLogos from "./logoWithCryptoLogos.json";
 
@@ -150,6 +151,7 @@ export const PortfolioSalesPage = () => {
             {secondSection}
             {thirdSection}
             <PricingSection />
+            <Testimonials />
         </Col>
     );
 }

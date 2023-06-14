@@ -54,7 +54,6 @@ try {
   remoteConfig.settings.minimumFetchIntervalMillis = 1000;
   fetchAndActivate(remoteConfig);
 } catch (err) {
-  console.log({ err });
   console.error(err);
 }
 

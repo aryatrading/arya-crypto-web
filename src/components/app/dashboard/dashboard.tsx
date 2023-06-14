@@ -214,7 +214,7 @@ const Dashboard: FC = () => {
               : <ShadowButton
                 onClick={() => { setSelectedChart('doughnut') }}
                 iconSvg={
-                  <PieChartIcon stroke={"#558AF2"}/>
+                  <PieChartIcon stroke={"#558AF2"} />
                 }
                 border="rounded-r-md"
                 bgColor={"bg-black-2"}
@@ -426,7 +426,7 @@ const Dashboard: FC = () => {
           <h3 className="text-2xl font-semibold">{t("yourHoldings")}</h3>
           <Link href="/trade" className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1">
             <PlusIcon width={15} />
-            <p className="font-bold">
+            <p className="font-bold me-1">
               {t('addAssets')}
             </p>
           </Link>
