@@ -14,6 +14,7 @@ import PricingSection from '../../components/shared/pricing-section/pricing-sect
 import { Testimonials } from '../../components/shared/Testimonials';
 import SEO from '../../components/seo';
 import LottieData from '../../../public/assets/images/publicPages/home/home.json';
+import { useAuthModal } from '../../context/authModal.context';
 
 import styles from './index.module.scss';
 
@@ -63,11 +64,13 @@ const TradingImg = () => (
 )
 
 const HomePage = () => {
+    const { setVisibleSection, modalTrigger } = useAuthModal();
     const [t] = useTranslation(["home"]);
     const lottieRef = useRef<LottieRefCurrentProps>(null);
 
     useEffect(() => {
         if (lottieRef.current) {
+            lottieRef.current.setSpeed(0.5);
             lottieRef.current.pause();
             setTimeout(() => {
                 lottieRef.current?.play();

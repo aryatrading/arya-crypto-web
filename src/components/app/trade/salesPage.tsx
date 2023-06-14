@@ -32,6 +32,7 @@ export const TradingSalesPage = () => {
 
     useEffect(() => {
         if (lottieRef.current) {
+            lottieRef.current.setSpeed(0.5);
             lottieRef.current.pause();
             setTimeout(() => {
                 lottieRef.current?.play();

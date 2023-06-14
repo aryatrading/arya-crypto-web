@@ -32,6 +32,7 @@ const SmartAllocationSalesPage: FC = () => {
 
     useEffect(() => {
         if (lottieRef.current) {
+            lottieRef.current.setSpeed(0.2);
             lottieRef.current.pause();
             setTimeout(() => {
                 lottieRef.current?.play();
