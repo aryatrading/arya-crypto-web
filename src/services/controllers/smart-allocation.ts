@@ -1,4 +1,4 @@
-import { SaveSmartAllocationAssetType, SmartAllocationAssetDetails, SmartAllocationResponseType, SmartAllocationSaveRequestType } from "../../types/smart-allocation.types";
+import { SmartAllocationAssetDetails, SmartAllocationResponseType, SmartAllocationSaveRequestType } from "../../types/smart-allocation.types";
 import { EnumExitStrategyTrigger, EnumPredefinedSmartAllocationPortfolio, EnumReBalancingFrequency } from "../../utils/constants/smartAllocation";
 import { axiosInstance } from "../api/axiosConfig";
 

@@ -1,0 +1,47 @@
+{
+    "title": "Making Crypto Investing <blueText>Easy</blueText>, <curveText>for <blueText>Everyone</blueText> </curveText>",
+    "description": "Track all your wallets and exchanges on a unified dashboard and effectively manage and automate your entire portfolio.",
+    "points": {
+        "1": "Connect to 15+ wallets & exchanges",
+        "2": "Diversify and automate your allocation",
+        "3": "Get access to advanced trading features"
+    },
+    "tryForFree": "Try for Free",
+    "secondSection": {
+        "1": {
+            "title": "A Multi-portfolio Tracker",
+            "sub": "Track every asset you have from one dashboard.",
+            "content": "Arya Crypto is a one-stop-shop to track the prices and performance of your all your crypto assets, across your different wallets and exchanges."
+        },
+        "2": {
+            "title": "Smart Allocation: One-click investing",
+            "sub": "Buy a basket of your favourite crypto currencies in one click.",
+            "content": "Create the perfect portfolio, buy it in one-click, and enhance your strategy through backtesting and setting performance-based exits."
+        },
+        "3": {
+            "title": "Maximise your Trading Profits",
+            "sub": "Transform your manual work into automated actions.",
+            "content": "With the Trading feature, taking positions, placing your stop losses and taking profits has never been easier. Control and automate your trading profits while securing your capital."
+        }
+    },
+    "learnMore": "Learn More",
+    "faq": "Frequently asked questions",
+    "questions": {
+        "1": {
+            "Q": "Is ARYA Crypto suitable for all levels of expertise?",
+            "A": "Yes, all levels from beginner onwards."
+        },
+        "2": {
+            "Q": "Can I use an existing cryptocurrency wallet?",
+            "A": "Yes, as long as your wallet is on Binance or Coinbase. ARYA Crypto will track your wallet and allow you to manage your wallet with ease."
+        },
+        "3": {
+            "Q": "Which broker(s) is ARYA Crypto compatible with?",
+            "A": "ARYA Crypto is compatible with Binance and Coinbase."
+        },
+        "4": {
+            "Q": "What is the choice of cryptocurrencies available on the platform?",
+            "A": "Find all the cryptocurrencies available at Binance on the ARYA Crypto platform."
+        }
+    }
+}

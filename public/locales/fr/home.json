@@ -1,0 +1,47 @@
+{
+    "title": "Faire de l'investissement crypto <blueText>Facile</blueText>, <curveText>pour <blueText>Tout le monde</blueText> </curveText>",
+    "description": "Suivez tous vos portefeuilles et échanges sur un tableau de bord unifié et gérez et automatisez efficacement l'ensemble de votre portefeuille.",
+    "points": {
+        "1": "Connectez-vous à 15 portefeuilles",
+        "2": "Diversifiez et automatisez votre allocation",
+        "3": "Accédez à des fonctionnalités de trading avancées"
+    },
+    "tryForFree": "Essayer gratuitement",
+    "secondSection": {
+        "1": {
+            "title": "Un tracker multi-portefeuilles",
+            "sub": "Suivez chaque actif dont vous disposez à partir d'un tableau de bord.",
+            "content": "Arya Crypto est un guichet unique pour suivre les prix et les performances de tous vos actifs cryptographiques, sur vos différents portefeuilles et échanges."
+        },
+        "2": {
+            "title": "Allocation intelligente : investissement en un clic",
+            "sub": "Achetez un panier de vos crypto-monnaies préférées en un clic.",
+            "content": "Créez le portefeuille parfait, achetez-le en un clic et améliorez votre stratégie grâce à des backtests et à la définition de sorties basées sur les performances."
+        },
+        "3": {
+            "title": "Maximisez vos profits commerciaux",
+            "sub": "Transformez votre travail manuel en actions automatisées.",
+            "content": "Avec la fonction Trading, prendre des positions, placer vos stop loss et prendre des bénéfices n'a jamais été aussi simple. "
+        }
+    },
+    "learnMore": "Apprendre encore plus",
+    "faq": "Questions fréquemment posées",
+    "questions": {
+        "1": {
+            "Q": "ARYA Crypto est-il adapté à tous les niveaux d'expertise ?",
+            "A": "Oui, tous niveaux à partir du niveau débutant."
+        },
+        "2": {
+            "Q": "Puis-je utiliser un portefeuille de crypto-monnaie existant ?",
+            "A": "Oui, tant que votre portefeuille est sur Binance ou Coinbase. "
+        },
+        "3": {
+            "Q": "Avec quel(s) courtier(s) ARYA Crypto est-il compatible ?",
+            "A": "ARYA Crypto est compatible avec Binance et Coinbase."
+        },
+        "4": {
+            "Q": "Quel est le choix de crypto-monnaies disponibles sur la plateforme ?",
+            "A": "Retrouvez toutes les cryptomonnaies disponibles chez Binance sur la plateforme ARYA Crypto."
+        }
+    }
+}
