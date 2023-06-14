@@ -10,6 +10,7 @@ import AccountTab from '../../components/app/settings/AccountTab';
 import SubcriptionTab from '../../components/app/settings/SubcriptionTab';
 import ExchangeTab from '../../components/app/settings/ExchangeTab';
 import { useRouter } from 'next/router';
+import SEO from '../../components/seo';
 
 
 const SettingsScreen = () => {
@@ -18,6 +19,7 @@ const SettingsScreen = () => {
 
     return (
         <Layout>
+            <SEO title={t<string>("settings")} />
             <Col className="w-full">
                 <h1 className='font-bold text-3xl mb-10'>{t('settings')}</h1>
 
