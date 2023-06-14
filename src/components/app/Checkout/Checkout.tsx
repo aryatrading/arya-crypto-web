@@ -14,6 +14,8 @@ import { Subscription } from '../../../types/checkout.types'
 import { AxiosResponse } from 'axios'
 import { getPaymentIntent } from '../../../utils/helpers/checkout'
 import ProcessingSpinner from '../../shared/ProcessingSpinner/ProcessingSpinner'
+import { getUserData } from '../../../services/controllers/user'
+import { useTranslation } from 'react-i18next'
  
 
 const Checkout = () => {
@@ -21,7 +23,8 @@ const Checkout = () => {
     const paymentFrequency:any = searchParams.get('payment')
     const elements = useElements()
     const stripe = useStripe();
-    const router = useRouter()
+    const router = useRouter();
+    const {t} = useTranslation(['payment','common'])
 
     const [loading, setLoading] = useState<boolean>(false)
     const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false)
@@ -133,8 +136,8 @@ const Checkout = () => {
     const onSubscriptionComplete = (result:any) => {
         // Payment was successful. Provision access to your service.
         if (result) {
-        //   TODO:Call subscription api
-          setPaymentSuccess(true)
+            getUserData()
+            setPaymentSuccess(true)
         }
       }
     
@@ -239,67 +242,67 @@ const Checkout = () => {
     <Col className='lg:w-[1320px] gap-6 lg:gap-3 p-[2rem] lg:p-0'>
         <Button onClick={()=>router.back()} className='flex gap-4'>
             <ArrowLongLeftIcon className='w-[18px]'/>
-            <span>Go back</span>
+            <span>{t('return')}</span>
         </Button>
         <Col className='lg:bg-black-2 lg:py-14 lg:px-40 min-h-[650px]'>
             {
                 paymentSuccess?
                 <Col className=' justify-center items-center w-full lg:h-[500px] gap-11'>
                     <Col className='gap-4 text-center'>
-                        <span className='text-3xl font-semibold'>Payment Success!</span>
-                        <span className='text-white opacity-60 text-base font-medium'>Thank you, you are now subscribed to ARYA Premium</span>
+                        <span className='text-3xl font-semibold'>{t('paymentSuccess')}</span>
+                        <span className='text-white opacity-60 text-base font-medium'>{t('thankYou')}</span>
                     </Col>
                     <Image width={256} height={157}  alt='payment-success' src='/assets/images/svg/success.svg'/>
-                    <Button onClick={()=>(router.back())} className='py-4 px-8 bg-blue-1 font-semibold text-base rounded-lg'>Back to ARYA Crypto</Button>
+                    <Button onClick={()=>(router.back())} className='py-4 px-8 bg-blue-1 font-semibold text-base rounded-lg'>{t('goBack')}</Button>
                 </Col>:
                 paymentFailed?
                 <Col className=' justify-center items-center w-full lg:h-[500px] gap-11'>
                     <Col className='gap-4 text-center'>
-                        <span className='text-3xl font-semibold'>Payment Failed!</span>
+                        <span className='text-3xl font-semibold'>{t('paymentFailed')}</span>
                         <span className='text-white opacity-60 text-base font-medium'>{paymentError}</span>
                     </Col>
                     <Image width={156} height={157}  alt='payment-success' src='/assets/images/svg/failed.svg'/>
-                    <Button onClick={resetPayment} className='py-4 px-8 bg-blue-1 font-semibold text-base rounded-lg'>Try Again</Button>
+                    <Button onClick={resetPayment} className='py-4 px-8 bg-blue-1 font-semibold text-base rounded-lg'>{t('tryAgain')}</Button>
                 </Col>
                 :<Col className='w-full h-full items-center gap-6 lg:gap-24'>
-                    <span className='text-3xl font-semibold w-full md:w-auto'>Checkout</span>
+                    <span className='text-3xl font-semibold w-full md:w-auto'>{t('checkout')}</span>
                     <form onSubmit={formik.handleSubmit} className='flex flex-col lg:flex-row w-full gap-16'>
                         <Col className='lg:w-1/2 gap-9 w-full'>
                             <Row className='w-full justify-between items-center pb-4 border-b border-grey-1'>
                                 <span className='font-semibold'>
-                                    Payment details
+                                    {t('paymentDetails')}
                                 </span>
                                 <Image width={120} height={30} className='w-auto h-auto' src='/assets/images/svg/poweredByStripe.svg' alt='stripe-badge'/>
                             </Row>
                             <Col className=' gap-3'>
                                 <Col>
-                                    <label htmlFor="name">Name</label>
+                                    <label htmlFor="name">{t('common:name')}</label>
                                     <Input value={formik.values.name} onChange={formik.handleChange} id='name' className='bg-grey-3 p-4 rounded-md text-base placeholder:text-[#ACACAC]' placeholder='Alice'/>
                                 </Col>
                                 <PaymentElement/>
                             </Col>
                         </Col>
                         <Col className='gap-14 lg:w-1/2 font-semibold w-full'>
-                            <span className='text-2xl'>ARYA Crypto Premium</span>
+                            <span className='text-2xl'>{t('aryaPremium')}</span>
                             <Col className='w-full gap-4'>
                                 <Row className='w-full justify-between pb-10 border-b-2 border-grey-1'>
                                     <span className=' text-lg'>
                                         {paymentFrequency===EnumPricing.yearly?'Yearly Subscription':'Monthly Subscription'}
                                     </span>
                                     <Col className=' text-base text-right'>
-                                        <span>{paymentFrequency===EnumPricing.yearly?'€179.99':'€19.99'}</span>
-                                        {paymentFrequency===EnumPricing.yearly&&<span>Billed yearly</span>}
+                                        <span>{paymentFrequency===EnumPricing.yearly?'€179.88':'€19.99'}</span>
+                                        {paymentFrequency===EnumPricing.yearly&&<span>{t('billedYearly')}</span>}
                                     </Col>
                                 </Row>
                                 <Row className='justify-between'>
-                                    <span>Total</span>
+                                    <span>{t('common:total')}</span>
                                     <span>{paymentFrequency===EnumPricing.yearly?'€179.99':'€19.99'}</span>
                                 </Row>
                                 <Button disabled={loading} type='submit' className='bg-green-1 rounded w-full h-14 flex justify-center items-center'>
-                                    {loading?<ProcessingSpinner/>:`Pay €${paymentFrequency===EnumPricing.yearly ?'179.99':'19.99'}`}
+                                    {loading?<ProcessingSpinner/>:`Pay €${paymentFrequency===EnumPricing.yearly ?'179.88':'19.99'}`}
                                 </Button>
                                 <span className='text-[#ACACAC] text-sm font-normal'>
-                                    Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.
+                                    {t('privacyWarning')}
                                 </span>
                             </Col>
                         </Col>

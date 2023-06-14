@@ -6,6 +6,7 @@ import { twMerge } from 'tailwind-merge'
 import Switch from '../../../shared/Switch/Switch'
 import Link from 'next/link'
 import { EnumPricing } from '../../../../utils/constants/payment'
+import { Trans, useTranslation } from 'react-i18next'
 
 
 const PaymentCard = () => {
@@ -16,44 +17,46 @@ const PaymentCard = () => {
         setYearlyPayment(checked)
     }
 
+    const {t} = useTranslation(['payment','common'])
+
     const benefits = [
         {
-            name:'Take profits',
+            name:t('common:takeProfit'),
             basic:true,
             premium:true
         },
         {
-            name:'Trailing',
+            name:t('common:trailing'),
             basic:true,
             premium:true
         },
         {
-            name:'Stop Loss',
+            name:t('common:stopLoss'),
             basic:true,
             premium:true
         },
         {
-            name:'Exit Strategies',
+            name:t('exitStrategies'),
             basic:false,
             premium:true
         },
         {
-            name:'Unlimited trades',
+            name:t('unlimitedTrades'),
             basic:false,
             premium:true
         },
         {
-            name:'Auto rebalancing',
+            name:t('common:autoRebalancing'),
             basic:false,
             premium:true
         },
         {
-            name:'Custom allocation',
+            name:t('customAllocation'),
             basic:false,
             premium:true
         },
         {
-            name:'Customer Support',
+            name:t('customerSupport'),
             basic:false,
             premium:true
         }
@@ -66,10 +69,10 @@ const PaymentCard = () => {
   return (
         <Col className='items-center w-full gap-6 h-full p-7'>
             <span className='font-semibold md:text-3xl text-2xl text-center'>
-                Upgrade to Arya Crypto Premium  
+                {t('upgradeCryptoPremium')}  
             </span>
             <span className='text-center opacity-60'>
-            Unlock the full potential of ARYA Crypto with our cutting-edge tools Designed for both novice and experienced crypto enthusiasts,  to help you navigate the dynamic world of digital assets with confidence and ease.
+                {t('upgradeText')}
             </span>
             <Row className='gap-5 items-center'>
                 <Switch beforeLabel='Monthly' afterLabel='Yearly'
@@ -77,20 +80,20 @@ const PaymentCard = () => {
                     onCheckedChange={onFrequencyChange}
                 />
                 <span className='py-1 px-4 rounded-md bg-yellow-1 font-semibold'>
-                    Save 50%
+                    {t('save50')}
                 </span>
             </Row>
             <Col className='flex-col-reverse md:flex-row gap-11'>
                 <Col className='rounded-xl border-2 border-grey-1 w-[300px] md:min-h-[300px]'>
                     <Row className='w-full gap-3 py-3 px-9 items-center border-b-2 border-grey-1 font-semibold h-[60px]'>
-                        <span className='text-xl'>Basic</span>
+                        <span className='text-xl'>{t("basic")}</span>
                         <span className='py-1 px-4 bg-grey-1 rounded-md'>
-                            Current plan
+                            {t('currentPlan')}
                         </span>
                     </Row>
                     <Col className='px-9 py-4 gap-6 justify-between h-full'>
                         <Col className='gap-3 font-semibold text-3xl md:min-h-[60px]'>
-                            FREE
+                            {t('FREE')}
                         </Col>
                         <Col className='gap-2 pb-10'>
                             {
@@ -108,17 +111,20 @@ const PaymentCard = () => {
                 </Col>
                 <Col className='rounded-xl border-2 border-blue-1 w-[300px] md:min-h-[300px] relative'>
                     <Row className='w-full gap-3 py-3 px-9 items-center border-b-2 border-blue-1 font-semibold bg-blue-3 rounded-t-xl h-[60px]'>
-                        <span className='text-xl'>Premium</span>
+                        <span className='text-xl'>{t('common:premium')}</span>
                         
                     </Row>
                     <Col className='px-9 py-4 gap-6 justify-between h-full'>
                         <Col className='gap-3 font-semibold min-h-[60px]'>
                             <Row className='items-center gap-1'>
-                                <span className='text-3xl text-green-1'>{`$ ${yearlyPayment?'14.99':'19.99'}`}</span>
-                                <span>/mo</span>
+                                <span className='text-3xl text-green-1'>{`€ ${yearlyPayment?'14.99':'19.99'}`}</span>
+                                <span>{t('/mo')}</span>
                             </Row>
                             {yearlyPayment&&<span>
-                                Billed <span className='text-blue-1'>$144.99</span> per year
+                                <Trans
+                                    i18nKey={'payment:billedYear'}
+                                    components={{ blueText: <span className='text-blue-1' /> }}
+                                />
                             </span>}
                         </Col>
                         <Col className='gap-2 pb-10'>
@@ -141,12 +147,12 @@ const PaymentCard = () => {
                             query:{payment:yearlyPayment?EnumPricing.yearly:EnumPricing.monthly}
                         }}
                     >
-                        Upgrade to Premium
+                        {t('upgradeToPremium')}
                     </Link>
                 </Col>
             </Col>
             <span className='text-center opacity-60 py-6'>
-                Your subscription will renew automatically unless it is cancelled at least 24 hours before the end of the current period <br></br> by upgrading your account, you agree to the Terms of Use & Privacy Policy.
+                {t('common:yourSubscriptionWillRenewAutomatically')}
             </span>
         </Col>
   )
