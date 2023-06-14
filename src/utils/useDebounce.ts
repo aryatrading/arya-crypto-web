@@ -5,7 +5,7 @@ export default function useDebounce(
   dependencies: string[],
   delay: number
 ) {
-  const callback = useCallback(effect, dependencies);
+  const callback = useCallback(effect, [...dependencies, effect]);
 
   useEffect(() => {
     const timeout = setTimeout(callback, delay);
