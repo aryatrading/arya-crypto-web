@@ -12,7 +12,7 @@ const Portfolio: FC = () => {
     const authUser = useAuthUser();
 
     if (authUser.clientInitialized) {
-        if (!authUser.id) {
+        if (!authUser.id !== null) {
             return (
                 <SalesPagesLayout>
                     <PortfolioSalesPage />
