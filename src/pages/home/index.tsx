@@ -28,13 +28,13 @@ const RowItem = ({ content }: any) => {
     );
 }
 
-const SmartAllocationImg = ({ activeIndex }: any) => (
+const SmartAllocationImg = () => (
     <Col className='w-full h-full justify-center items-center'>
         <Image alt='' src={require('../../../public/assets/images/publicPages/home/smart-allocation/smartallocation.png')} className='w-1/2 -mt-10 md:-mt-20 z-20 self-center md:self-end -me-20 md:me-10' />
         <Image alt='' src={require('../../../public/assets/images/publicPages/home/smart-allocation/coinsCircle.png')} className={clsx(styles.rotate, 'w-1/2 absolute left-10 md:left-24 -top-6')} />
     </Col>
 )
-const PortfolioImg = ({ activeIndex }: any) => (
+const PortfolioImg = () => (
     <Col className='flex-1 w-full h-full justify-center items-center'>
         <Image alt='' src={require('../../../public/assets/images/publicPages/home/portfolio/portfolio.png')} className='w-1/2 -mt-10 sm:-mt-20 z-20 self-center md:self-end -me-40 md:me-10' />
         <Image alt='' src={require('../../../public/assets/images/publicPages/home/portfolio/1.png')} className={clsx(styles['animation-1'], 'absolute left-[42%] md:left-[40%] -top-[6%] w-[7%]')} />
@@ -91,7 +91,7 @@ const HomePage = () => {
                     </Button>
                 </Col>
 
-                <Col className={'flex-[1.4] w-full h-full relative justify-center items-center'}>
+                <Col className={'flex-1 w-full h-full relative justify-center items-center'}>
                     <Image alt='' src={require('../../../public/assets/images/publicPages/home/homeMainImg.png')} className={clsx(styles.animateImg, 'w-full absolute')} />
                     <Image alt='' src={require('../../../public/assets/images/publicPages/home/homeMainImg.png')} className='w-full opacity-0' />
                 </Col>
