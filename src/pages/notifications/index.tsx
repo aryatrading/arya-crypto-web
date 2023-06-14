@@ -1,4 +1,4 @@
-import { withAuthUser } from "next-firebase-auth";
+import { AuthAction, withAuthUser } from "next-firebase-auth";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
@@ -13,6 +13,7 @@ import { NotificationType } from "../../types/notifications";
 import LoadingSpinner from "../../components/shared/loading-spinner/loading-spinner";
 import { EmptyIcon } from "../../components/svg/emptyNotification";
 import NotificationCard from "../../components/layout/Notifications/NotificationCard";
+import SEO from "../../components/seo";
 
 
 const NotificationPage = () => {
@@ -53,6 +54,7 @@ const NotificationPage = () => {
 
     return (
         <Layout>
+            <SEO title={t<string>("notification:title")} />
             <Col className="w-full gap-4 md:w-[55%] p-2 min-h-[300px] bg-black-1 lg:bg-black-2 md:p-6">
                 <h3 className="font-bold text-white header-label mb-4 tracking-[2px]">{t('title')}</h3>
 
@@ -82,7 +84,11 @@ const NotificationPage = () => {
     );
 };
 
-export default withAuthUser({ LoaderComponent: PageLoader })(NotificationPage);
+export default withAuthUser({
+    LoaderComponent: PageLoader,
+    whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+    authPageURL: '/login/',
+})(NotificationPage);
 
 export const getStaticProps: GetStaticProps<any> = async ({ locale }) => ({
     props: {

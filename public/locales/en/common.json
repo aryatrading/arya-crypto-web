@@ -60,7 +60,8 @@
     "BROKER_ERROR": "Broker Error",
     "DATA_ERROR": "Data Error",
     "preview": "Preview",
-    "getStarted":"Get Started",
+    "getStarted": "Get Started",
     "premiumusersfeature": "Continue with ARYA Prenium",
-    "upgradenow": "Upgrade now"
+    "upgradenow": "Upgrade now",
+    "editSmartAllocation": "Edit Smart Allocation"
 }
