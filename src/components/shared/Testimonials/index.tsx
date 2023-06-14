@@ -49,9 +49,13 @@ export const Testimonials = () => {
                 slidesPerView={isTabletOrMobileScreen ? 1 : 3}
                 spaceBetween={30}
                 loop={true}
+                pagination={{
+                    clickable: true,
+                }}
                 autoplay={{
                     delay: 2500,
                     disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
                 }}
                 navigation={true}
                 modules={[Autoplay, Pagination, Navigation]}
