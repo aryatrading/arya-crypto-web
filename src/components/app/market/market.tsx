@@ -17,6 +17,8 @@ import {
 } from "../../../services/controllers/market";
 import { FAVORITES_LIST } from "../../../utils/constants/config";
 import useDebounce from "../../../utils/useDebounce";
+import { firebaseId } from "../../../services/redux/userSlice";
+import { formatNumber } from "../../../utils/helpers/prices";
 
 const Market: FC = () => {
   const { t } = useTranslation(["market"]);
@@ -25,6 +27,7 @@ const Market: FC = () => {
   const _assets = useSelector(selectMarketAssets);
   const [count, setCount] = useState(100);
   const [marketCapDetails, setMarketCapDetails] = useState<any>({});
+  const fId = useSelector(firebaseId);
 
   const handleScroll = () => {
     const bottom =
@@ -35,7 +38,7 @@ const Market: FC = () => {
   };
 
   useEffect(() => {
-    fetchAssets(search, count);
+    fetchAssets(search, count, fId);
   }, [count]);
 
   useEffect(() => {
@@ -58,7 +61,7 @@ const Market: FC = () => {
   }, []);
   useDebounce(
     () => {
-      fetchAssets(search, count);
+      fetchAssets(search, count, fId);
     },
     [search],
     400
@@ -93,7 +96,7 @@ const Market: FC = () => {
                   "w-full lg:w-64"
                 )}
                 percent={marketCapDetails?.marketCapPercentage || "0"}
-                amount={marketCapDetails?.marketCap || "0"}
+                amount={formatNumber(parseFloat(marketCapDetails?.marketCap))}
                 title={t("marketcap")}
               />
               <MarketStats
@@ -106,7 +109,7 @@ const Market: FC = () => {
                   "w-full lg:w-64"
                 )}
                 percent={marketCapDetails?.vol24Percentage || "0"}
-                amount={marketCapDetails?.vol24 || "0"}
+                amount={formatNumber(parseFloat(marketCapDetails.vol24))}
                 title={t("volume")}
               />
               <MarketStats
@@ -119,7 +122,9 @@ const Market: FC = () => {
                   "w-full lg:w-64"
                 )}
                 percent={marketCapDetails.BTCDominancePercentage}
-                amount={marketCapDetails.BTCDominance}
+                amount={`${formatNumber(
+                  parseFloat(marketCapDetails.BTCDominance)
+                )}%`}
                 title={t("btcDominance")}
               />
             </Row>

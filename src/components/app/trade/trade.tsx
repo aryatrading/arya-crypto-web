@@ -155,7 +155,7 @@ const Trade: FC = () => {
         />
       </div>
     );
-  }, [trade.asset_name]);
+  }, [trade.asset_name, trade.symbol_name]);
 
   return (
     <Col className="flex justify-start w-full gap-6">

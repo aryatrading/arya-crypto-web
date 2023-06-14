@@ -72,8 +72,10 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
 
       getNotifications(0, 100, "desc");
 
-      // Create the inital favorites list in localstorage
-      localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
+      if (!localStorage.getItem(FAVORITES_LIST)?.length) {
+        // Create the inital favorites list in localstorage
+        localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
+      }
 
       // Forcing dark mode
       localStorage?.setItem("theme", "dark");
