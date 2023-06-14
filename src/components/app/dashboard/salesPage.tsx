@@ -10,10 +10,18 @@ import styles from './salesPage.module.scss';
 import { Testimonials } from "../../shared/Testimonials";
 
 import logoWithCryptoLogos from "./logoWithCryptoLogos.json";
+import { useAuthModal } from "../../../context/authModal.context";
 
 export const PortfolioSalesPage = () => {
 
+    const { setVisibleSection, modalTrigger } = useAuthModal();
+
     const { t } = useTranslation(["dashboard"]);
+
+    const onOpenSignUpClick = useCallback(() => {
+        setVisibleSection('signup');
+        modalTrigger.show();
+    }, [modalTrigger, setVisibleSection])
 
     const mainBanner = useMemo(() => {
         return (
@@ -24,13 +32,13 @@ export const PortfolioSalesPage = () => {
                     </Col>
                     <Col className="flex-1 gap-10 items-center md:items-start">
                         <h2 className="text-4xl md:text-5xl font-bold flex flex-col items-center md:block">{t("salesPage.trackYourCryptoPortfoliosIn")} <span className="block md:inline w-fit highlighted-text">{t("salesPage.onePlace")}</span></h2>
-                        <p className="text-xl max-w-[500px]">{t("salesPage.monitorYourCryptosAcrossDifferentExchangesOnUnifiedDashboard")}</p>
-                        <Button className={`${styles.startBtn} text-xl font-bold w-fit rounded-full`}>{t("salesPage.connectPortfolioNow")}</Button>
+                        <p className="max-w-[500px]">{t("salesPage.monitorYourCryptosAcrossDifferentExchangesOnUnifiedDashboard")}</p>
+                        <Button onClick={onOpenSignUpClick} className={`${styles.startBtn} font-bold w-fit rounded-full`}>{t("salesPage.connectPortfolioNow")}</Button>
                     </Col>
                 </Col>
             </Col>
         )
-    }, [t]);
+    }, [onOpenSignUpClick, t]);
 
     const firstSection = useMemo(() => {
         return (
@@ -38,7 +46,7 @@ export const PortfolioSalesPage = () => {
                 <Col className="container items-center">
                     <Col className="items-center text-center gap-3">
                         <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">{t("salesPage.allInOnePlatformForTrackingAllYourAssets")}</h2>
-                        <p className="text-xl max-w-[700px]">{t("salesPage.ARYACryptoSupportsTheMostPopularCryptocurrencyPlatforms")}</p>
+                        <p className="max-w-[700px]">{t("salesPage.ARYACryptoSupportsTheMostPopularCryptocurrencyPlatforms")}</p>
                     </Col>
                     <Lottie className="max-w-[750px]" animationData={logoWithCryptoLogos} />
                     <Col className="w-full md:flex-row gap-6 text-center justify-center items-center md:items-start">
@@ -72,21 +80,21 @@ export const PortfolioSalesPage = () => {
                 <Col className="container items-center gap-14">
                     <Col className="items-center text-center gap-3">
                         <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">{t("salesPage.getStartedInFewMinutes")}</h2>
-                        <p className="text-xl max-w-[700px]">{t("salesPage.seamlesslyConnectYourEntireCryptoPortfolioInJustFewSteps")}</p>
+                        <p className="max-w-[700px]">{t("salesPage.seamlesslyConnectYourEntireCryptoPortfolioInJustFewSteps")}</p>
                     </Col>
                     <Col className="w-full md:flex-row gap-6 text-center justify-center items-center md:items-end">
                         <Col className="gap-2 items-center justify-end w-[350px]">
                             <Image alt="" src="/assets/images/publicPages/portfolio/getStarted1.png" width={300} height={500} />
                             <Col className="relative border border-blue-1 rounded-lg p-5 w-full max-w-[300px]">
                                 <p className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2/3 bg-blue-1 w-10 h-10 flex items-center justify-center rounded-lg text-2xl font-bold">1</p>
-                                <p className="font-extrabold text-xl md:text-2xl text-white">{t("salesPage.createAnAccount")}</p>
+                                <p className="font-extrabold md:text-2xl text-white">{t("salesPage.createAnAccount")}</p>
                             </Col>
                         </Col>
                         <Col className="gap-2 items-center justify-end w-[350px]">
                             <Image alt="" src="/assets/images/publicPages/portfolio/getStarted2.png" width={300} height={500} />
                             <Col className="relative border border-blue-1 rounded-lg p-5 w-full max-w-[300px]">
                                 <p className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2/3 bg-blue-1 w-10 h-10 flex items-center justify-center rounded-lg text-2xl font-bold">2</p>
-                                <p className="font-extrabold text-xl md:text-2xl text-white">{t("salesPage.linkYourAccount")}</p>
+                                <p className="font-extrabold md:text-2xl text-white">{t("salesPage.linkYourAccount")}</p>
                             </Col>
                         </Col>
                         <Col className="gap-2 items-center justify-end w-[350px]">
@@ -94,15 +102,15 @@ export const PortfolioSalesPage = () => {
 
                             <Col className="relative border border-blue-1 rounded-lg p-5 w-full max-w-[300px]">
                                 <p className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2/3 bg-blue-1 w-10 h-10 flex items-center justify-center rounded-lg text-2xl font-bold">3</p>
-                                <p className="font-extrabold text-xl md:text-2xl text-white">{t("salesPage.manageYourCryptos")}</p>
+                                <p className="font-extrabold md:text-2xl text-white">{t("salesPage.manageYourCryptos")}</p>
                             </Col>
                         </Col>
                     </Col>
-                    <Button className={`${styles.startBtn} text-xl font-bold w-fit rounded-full`}>{t("salesPage.connectYourExchange")}</Button>
+                    <Button onClick={onOpenSignUpClick} className={`${styles.startBtn} font-bold w-fit rounded-full`}>{t("salesPage.connectYourExchange")}</Button>
                 </Col>
             </Col>
         )
-    }, [t]);
+    }, [onOpenSignUpClick, t]);
 
     const thirdSectionFeature = useCallback(({ title, description, imgSrc }: { title: string, description: string, imgSrc: string }) => {
         return (
@@ -120,7 +128,7 @@ export const PortfolioSalesPage = () => {
                 <Col className="container items-center gap-14">
                     <Col className="items-center text-center gap-3">
                         <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">{t("salesPage.theUltimateSecurityForYourDigitalAssets")}</h2>
-                        <p className="text-xl max-w-[700px]">{t("salesPage.ARYACryptoIsEquippedWithTopQualityInfrastructure")}</p>
+                        <p className="max-w-[700px]">{t("salesPage.ARYACryptoIsEquippedWithTopQualityInfrastructure")}</p>
                     </Col>
                     <Col className="w-full md:flex-row gap-6 text-center justify-center items-center">
                         {thirdSectionFeature({
