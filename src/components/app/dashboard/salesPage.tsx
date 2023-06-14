@@ -1,22 +1,32 @@
 import { useTranslation } from "next-i18next";
-import { useCallback, useMemo } from "react";
-import Lottie from "lottie-react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
+import clsx from "clsx";
+import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
 import PricingSection from "../../shared/pricing-section/pricing-section";
 import Button from "../../shared/buttons/button";
-import { Col } from "../../shared/layout/flex";
-import styles from './salesPage.module.scss';
+import { Col, Row } from "../../shared/layout/flex";
 import { Testimonials } from "../../shared/Testimonials";
-
-import logoWithCryptoLogos from "./logoWithCryptoLogos.json";
 import { useAuthModal } from "../../../context/authModal.context";
+import LottieData from "../../../../public/assets/images/publicPages/portfolio/dashboard.json";
+import logoWithCryptoLogos from "../../../../public/assets/images/publicPages/portfolio/logoWithCryptoLogos.json";
+
+import styles from './salesPage.module.scss';
 
 export const PortfolioSalesPage = () => {
-
     const { setVisibleSection, modalTrigger } = useAuthModal();
-
     const { t } = useTranslation(["dashboard"]);
+    const lottieRef = useRef<LottieRefCurrentProps>(null);
+
+    useEffect(() => {
+        if (lottieRef.current) {
+            lottieRef.current.pause();
+            setTimeout(() => {
+                lottieRef.current?.play();
+            }, 1000);
+        }
+    }, []);
 
     const onOpenSignUpClick = useCallback(() => {
         setVisibleSection('signup');
@@ -25,18 +35,20 @@ export const PortfolioSalesPage = () => {
 
     const mainBanner = useMemo(() => {
         return (
-            <Col className={`${styles.mainBanner} min-h-[calc(100vh-65px)] justify-center`}>
-                <Col className={`md:flex-row-reverse container text-center md:text-start gap-5`}>
-                    <Col className="flex-1">
-                        <Image src={require('../../../../public/assets/images/publicPages/portfolio/portfolioMainImg.png')} alt="portfolio image" />
-                    </Col>
-                    <Col className="flex-1 gap-10 items-center md:items-start">
-                        <h2 className="text-4xl md:text-5xl font-bold flex flex-col items-center md:block">{t("salesPage.trackYourCryptoPortfoliosIn")} <span className="block md:inline w-fit highlighted-text">{t("salesPage.onePlace")}</span></h2>
-                        <p className="max-w-[500px]">{t("salesPage.monitorYourCryptosAcrossDifferentExchangesOnUnifiedDashboard")}</p>
-                        <Button onClick={onOpenSignUpClick} className={`${styles.startBtn} font-bold w-fit rounded-full`}>{t("salesPage.connectPortfolioNow")}</Button>
-                    </Col>
+            <Row className={clsx("gap-10 flex-col-reverse lg:flex-row items-center px-4 md:px-12 lg:px-20 xl:px-60 py-20 justify-center min-h-[calc(100vh-65px)]", styles.mainBanner)}>
+                <Col className="flex-1 w-full h-full gap-8 justify-center">
+                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t("salesPage.trackYourCryptoPortfoliosIn")} <span className="block md:inline w-fit highlighted-text">{t("salesPage.onePlace")}</span></h2>
+                    <p className="font-medium text-white text-left">{t("salesPage.monitorYourCryptosAcrossDifferentExchangesOnUnifiedDashboard")}</p>
+                    <button onClick={onOpenSignUpClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white rounded-full font-bold text-sm w-fit")}>
+                        {t('salesPage.connectPortfolioNow')}
+                    </button>
                 </Col>
-            </Col>
+
+                <Col className="flex-1 w-full h-full gap-4 relative">
+                    <Lottie animationData={LottieData} lottieRef={lottieRef} className={clsx(styles.animateImg, "w-full scale-150 lg:scale-[1.65] absolute h-full")} />
+                    <Lottie animationData={LottieData} className={clsx("w-full scale-125 opacity-[0]")} />
+                </Col>
+            </Row>
         )
     }, [onOpenSignUpClick, t]);
 
@@ -153,7 +165,7 @@ export const PortfolioSalesPage = () => {
     }, [t, thirdSectionFeature]);
 
     return (
-        <Col className="items-center justify-center w-full">
+        <Col className="w-full h-full">
             {mainBanner}
             {firstSection}
             {secondSection}
