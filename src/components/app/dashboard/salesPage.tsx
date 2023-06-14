@@ -165,7 +165,7 @@ export const PortfolioSalesPage = () => {
     }, [t, thirdSectionFeature]);
 
     return (
-        <Col className="w-full h-full">
+        <Col className="w-full h-full text-white">
             {mainBanner}
             {firstSection}
             {secondSection}

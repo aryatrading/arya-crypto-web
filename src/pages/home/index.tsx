@@ -86,7 +86,7 @@ const HomePage = () => {
     return (
         <SalesPagesLayout>
             <SEO />
-            <Col className="w-full h-full pt-14 lg:pt-0">
+            <Col className="w-full h-full pt-14 lg:pt-0 text-white">
                 <Row className={clsx("gap-10 flex-col-reverse lg:flex-row items-center px-4 md:px-12 lg:px-20 xl:px-60 py-20 justify-center min-h-[calc(100vh-65px)]", styles.mainBanner)}>
                     <Col className='flex-1 w-full h-full gap-4 justify-center'>
                         <p className='top-0 left-0 text-left w-full text-2xl font-bold md:leading-snug md:text-5xl'>
