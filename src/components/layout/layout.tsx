@@ -32,7 +32,7 @@ export default function Layout({ children }: any) {
   const authUser = useAuthUser();
 
   useEffect(() => {
-    if (authUser.id) {
+    if (authUser.id !== null) {
       initStoreData();
       getNotifications(0, 100, "desc");
     }
