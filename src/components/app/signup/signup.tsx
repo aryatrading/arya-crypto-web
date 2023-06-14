@@ -110,48 +110,46 @@ const Signup: FC<any> = (props: any) => {
     }, [back, errorForm, hideModal, signupValidationScheme, t])
 
     return (
-        <Row className='h-full w-full items-center justify-center'>
-            <Col className="justify-start w-full max-w-[500px] gap-8 flex-1">
-                <Row className="items-center gap-4">
-                    <Image src={logoIcon} alt="Arya_Crypto" />
-                    <h3 className="font-extrabold text-white header-label">{t('signupHeader')}</h3>
+        <Col className="justify-start w-full max-w-[400px] gap-8 flex-1">
+            <Row className="items-center gap-4">
+                <Image src={logoIcon} alt="Arya_Crypto" />
+                <h3 className="font-extrabold text-white header-label">{t('signupHeader')}</h3>
+            </Row>
+            {signupForm}
+            <Row className="gap-1 font-semibold text-sm self-center">
+                <h5 className="">{t('haveAccount')}</h5>
+                {props.changeSection ?
+                    <Button onClick={() => props.changeSection('login')} className='text-blue-1'><h5>{t('common:signin')}</h5></Button>
+                    :
+                    <Link href={'/login'} className='text-blue-1'><h5>{t('common:signin')}</h5></Link>
+                }
+            </Row>
+            <Col className='gap-6 items-center justify-center'>
+                <Row className="w-full items-center gap-3">
+                    <Col className='flex-1 h-px bg-white' />
+                    <h6 className="font-semibold text-lg">{t('or')}</h6>
+                    <Col className='flex-1 h-px bg-white' />
                 </Row>
-                {signupForm}
-                <Row className="gap-1 font-semibold text-sm self-center">
-                    <h5 className="">{t('haveAccount')}</h5>
-                    {props.changeSection ?
-                        <Button onClick={() => props.changeSection('login')} className='text-blue-1'><h5>{t('common:signin')}</h5></Button>
-                        :
-                        <Link href={'/login'} className='text-blue-1'><h5>{t('common:signin')}</h5></Link>
-                    }
+                <Row className="gap-8">
+                    <Button className='' onClick={onGoogleAuth}
+                        disabled={is2FALoading}>
+                        <Image src={google} alt="Google_Icon" />
+                    </Button>
+                    <Button className='' onClick={onAppleAuth}
+                        disabled={is2FALoading}>
+                        <Image src={apple} alt="Apple_Icon" />
+                    </Button>
                 </Row>
-                <Col className='gap-6 items-center justify-center'>
-                    <Row className="w-full items-center gap-3">
-                        <Col className='flex-1 h-px bg-white' />
-                        <h6 className="font-semibold text-lg">{t('or')}</h6>
-                        <Col className='flex-1 h-px bg-white' />
+                <Col className="font-semibold text-sm items-center">
+                    <h5 className="">{t('ByProceedingYouAgreeToARYACryptos')}</h5>
+                    <Row className="gap-1">
+                        <Button className='text-blue-1'><h5>{t('TU')}</h5></Button>
+                        &
+                        <Button className='text-blue-1'><h5>{t('Pp')}</h5></Button>
                     </Row>
-                    <Row className="gap-8">
-                        <Button className='' onClick={onGoogleAuth}
-                            disabled={is2FALoading}>
-                            <Image src={google} alt="Google_Icon" />
-                        </Button>
-                        <Button className='' onClick={onAppleAuth}
-                            disabled={is2FALoading}>
-                            <Image src={apple} alt="Apple_Icon" />
-                        </Button>
-                    </Row>
-                    <Col className="font-semibold text-sm items-center">
-                        <h5 className="">{t('ByProceedingYouAgreeToARYACryptos')}</h5>
-                        <Row className="gap-1">
-                            <Button className='text-blue-1'><h5>{t('TU')}</h5></Button>
-                            &
-                            <Button className='text-blue-1'><h5>{t('Pp')}</h5></Button>
-                        </Row>
-                    </Col>
                 </Col>
             </Col>
-        </Row>
+        </Col>
     )
 }
 
