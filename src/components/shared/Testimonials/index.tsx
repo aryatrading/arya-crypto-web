@@ -15,13 +15,13 @@ import styles from './index.module.scss';
 
 export const Testimonials = () => {
     const { t } = useTranslation(["pricing-plans"]);
-    const { isTabletOrMobileScreen } = useResponsive();
+    const { isTabletOrMobileScreen, isMobileOnly } = useResponsive();
 
     return (
-        <Col className="my-10 gap-10 max-w-full px-10 md:px-40 lg:px-80">
+        <Col className="my-10 gap-10 max-w-full px-10 lg:px-20 xl:px-80">
             <h2 className="font-bold text-white text-3xl md:text-5xl leading-snug text-center">{t('testimonials')}</h2>
             <Swiper
-                slidesPerView={isTabletOrMobileScreen ? 1 : 3}
+                slidesPerView={isMobileOnly ? 1 : isTabletOrMobileScreen ? 2 : 3}
                 spaceBetween={30}
                 loop={true}
                 pagination={{
