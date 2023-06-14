@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import { CheckIcon } from '@heroicons/react/24/solid';
@@ -10,11 +10,10 @@ import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
 import { SalesPagesLayout } from '../../components/layout/layout'
 import { Col, Row } from '../../components/shared/layout/flex';
-import Button from '../../components/shared/buttons/button';
 import PricingSection from '../../components/shared/pricing-section/pricing-section';
 import { Testimonials } from '../../components/shared/Testimonials';
 import SEO from '../../components/seo';
-import LottieData from '../../../public/assets/images/publicPages/smart-allocation/smart-allocation.json';
+import LottieData from '../../../public/assets/images/publicPages/home/home.json';
 
 import styles from './index.module.scss';
 
@@ -67,6 +66,20 @@ const HomePage = () => {
     const [t] = useTranslation(["home"]);
     const lottieRef = useRef<LottieRefCurrentProps>(null);
 
+    useEffect(() => {
+        if (lottieRef.current) {
+            lottieRef.current.pause();
+            setTimeout(() => {
+                lottieRef.current?.play();
+            }, 1000);
+        }
+    }, []);
+
+    const onClick = () => {
+        setVisibleSection('signup');
+        modalTrigger.show();
+    }
+
     return (
         <SalesPagesLayout>
             <SEO />
@@ -90,9 +103,9 @@ const HomePage = () => {
                             })}
                         </Col>
 
-                        <Button className={clsx('h-[44px] bg-blue-1 rounded-lg max-w-[220px] font-bold mt-4 mb-10', styles.boxShadow)}>
+                        <button onClick={onClick} className={clsx('h-[44px] bg-blue-1 rounded-lg max-w-[220px] font-bold mt-4 mb-10', styles.boxShadow)}>
                             {t('tryForFree')}
-                        </Button>
+                        </button>
                     </Col>
 
                     <Col className="flex-1 w-full h-full gap-4 relative">
@@ -108,7 +121,7 @@ const HomePage = () => {
                             <h2 className="font-bold text-white text-3xl md:text-2xl text-left leading-snug">{t('secondSection.1.sub')}</h2>
                             <p className="font-medium text-white text-left">{t('secondSection.1.content')}</p>
 
-                            <button className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                            <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
                                 {t('learnMore')}
                             </button>
                         </Col>
@@ -128,7 +141,7 @@ const HomePage = () => {
                             <h2 className="font-bold text-white text-3xl md:text-2xl text-left leading-snug">{t('secondSection.2.sub')}</h2>
                             <p className="font-medium text-white text-left">{t('secondSection.2.content')}</p>
 
-                            <button className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                            <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
                                 {t('learnMore')}
                             </button>
                         </Col>
@@ -140,7 +153,7 @@ const HomePage = () => {
                             <h2 className="font-bold text-white text-3xl md:text-2xl text-left leading-snug">{t('secondSection.3.sub')}</h2>
                             <p className="font-medium text-white text-left">{t('secondSection.3.content')}</p>
 
-                            <button className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                            <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
                                 {t('learnMore')}
                             </button>
                         </Col>
