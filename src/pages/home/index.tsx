@@ -5,8 +5,9 @@ import { CheckIcon } from '@heroicons/react/24/solid';
 import { withAuthUser } from 'next-firebase-auth'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 
-import Layout from '../../components/layout/layout'
+import { SalesPagesLayout } from '../../components/layout/layout'
 import { Col, Row } from '../../components/shared/layout/flex';
 import Button from '../../components/shared/buttons/button';
 import { AccordionCard } from '../../components/app/home/accordionCard';
@@ -16,6 +17,7 @@ import { formatNumber } from '../../utils/helpers/prices';
 import { useResponsive } from '../../context/responsive.context';
 
 import styles from './index.module.scss';
+import SEO from '../../components/seo';
 
 const RowItem = ({ content }: any) => {
     return (
@@ -66,6 +68,7 @@ const HomePage = () => {
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const { filteredAssets, setSearchTerm, assetLivePrice } = useAssetSearch({ fullModal: true });
     const { isTabletOrMobileScreen } = useResponsive();
+    const { t } = useTranslation();
 
 
     useEffect(() => {
@@ -73,8 +76,9 @@ const HomePage = () => {
     }, [setSearchTerm]);
 
     return (
-        <Layout>
-            <Row className='items-center justify-center gap-10 flex-col-reverse lg:flex-row -mt-20 md:-mt-40'>
+        <SalesPagesLayout>
+            <SEO />
+            <Row className='items-center justify-center gap-10 flex-col-reverse lg:flex-row container'>
                 <Col className='flex-1 w-full h-full gap-4'>
                     <p className='top-0 left-0 text-left w-full text-2xl font-bold md:leading-snug md:text-5xl'>Your Crypto control tower: Navigation
                         <span className={clsx(styles.underlined, "text-blue-1")}> moon-bound</span>
@@ -103,7 +107,7 @@ const HomePage = () => {
                 </Col>
             </Row>
 
-            <Row className={clsx(styles.stats, "w-full min-h-[120px] flex-col md:mt-0 md:flex-row items-center py-10 md:py-0 gap-10 md:gap-0 px-4 self-center")}>
+            <Row className={clsx(styles.stats, "w-full min-h-[120px] flex-col md:mt-0 md:flex-row items-center py-10 md:py-0 gap-10 md:gap-0 px-4 self-center container")}>
                 <p className='flex-1 text-center text-2xl font-bold'>Stats Speak for Themselves</p>
                 <Col className='flex-1 items-center justify-center gap-2'>
                     <p className='text-white text-4xl font-bold'>00 %</p>
@@ -123,7 +127,7 @@ const HomePage = () => {
                 </Col>
             </Row>
 
-            <Row className=' flex-col lg:flex-row mt-32 h-[450px]'>
+            <Row className=' flex-col lg:flex-row mt-32 h-[450px] container'>
                 <Col className='flex-1 relative justify-center items-center'>
                     <SmartAllocationImg activeIndex={activeIndex} />
                     <PortfolioImg activeIndex={activeIndex} />
@@ -151,36 +155,37 @@ const HomePage = () => {
                 </Col>
             </Row>
 
-            <Col className='w-full md:w-[100vw] bg-grey-3 mt-40 md:mt-96 lg:mt-20 items-center py-10 px-0 md:px-20 lg:px-80 gap-12 rounded-lg px-4 md:rounded-none'>
-                <h2 className='font-bold text-white text-2xl text-center'>Popular cryptocurrencies</h2>
-
-                <table className={styles.table}>
-                    <thead>
-                        <tr>
-                            {(isTabletOrMobileScreen ? ["Rank", "Name", "24h Change", "Current Price"] : ["Rank", "Name", "24h Change", "Current Price", "Market Cap", "Volume 24H"]).map(title => {
+            <Col className='w-full bg-grey-3'>
+                <Col className='container'>
+                    <h2 className='font-bold text-white text-2xl text-center'>Popular cryptocurrencies</h2>
+                    <table className={styles.table}>
+                        <thead>
+                            <tr>
+                                {(isTabletOrMobileScreen ? ["Rank", "Name", "24h Change", "Current Price"] : ["Rank", "Name", "24h Change", "Current Price", "Market Cap", "Volume 24H"]).map(title => {
+                                    return (
+                                        <th className='text-center md:text-left'>{title}</th>
+                                    );
+                                })}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredAssets?.map(asset => {
                                 return (
-                                    <th className='text-center md:text-left'>{title}</th>
+                                    <tr>
+                                        <td className='font-bold text-sm'>{asset.rank}</td>
+                                        <td><AssetRow icon={asset.iconUrl} name={asset.name} symbol={asset.symbol} /></td>
+                                        <td className={clsx(asset.change24H && asset.change24H > 0 ? "text-green-1" : "text-red-1", "font-bold text-sm")}>{asset.change24H}</td>
+                                        <td className='font-bold text-sm'>{formatNumber(assetLivePrice?.[asset.symbol || ''] || asset.currentPrice || 0, true)}</td>
+                                        {!isTabletOrMobileScreen && <td className='font-bold text-sm'>{formatNumber(asset.mrkCap || 0, false)}</td>}
+                                        {!isTabletOrMobileScreen && <td className='font-bold text-sm'>{formatNumber(asset.volume || 0, false)}</td>}
+                                    </tr>
                                 );
                             })}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredAssets?.map(asset => {
-                            return (
-                                <tr>
-                                    <td className='font-bold text-sm'>{asset.rank}</td>
-                                    <td><AssetRow icon={asset.iconUrl} name={asset.name} symbol={asset.symbol} /></td>
-                                    <td className={clsx(asset.change24H && asset.change24H > 0 ? "text-green-1" : "text-red-1", "font-bold text-sm")}>{asset.change24H}</td>
-                                    <td className='font-bold text-sm'>{formatNumber(assetLivePrice?.[asset.symbol || ''] || asset.currentPrice || 0, true)}</td>
-                                    {!isTabletOrMobileScreen && <td className='font-bold text-sm'>{formatNumber(asset.mrkCap || 0, false)}</td>}
-                                    {!isTabletOrMobileScreen && <td className='font-bold text-sm'>{formatNumber(asset.volume || 0, false)}</td>}
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </Col>
             </Col>
-        </Layout>
+        </SalesPagesLayout>
     )
 }
 
