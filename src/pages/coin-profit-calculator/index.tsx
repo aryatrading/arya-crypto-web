@@ -3,6 +3,7 @@ import { GetStaticProps } from 'next';
 
 import Layout from '../../components/layout/layout'
 import CoinProfitCalcu from '../../components/shared/coinProfitCalculator';
+import { withAuthUser } from 'next-firebase-auth';
 
 const CoinProfitCalculator = () => {
 
@@ -13,7 +14,9 @@ const CoinProfitCalculator = () => {
     )
 }
 
-export default CoinProfitCalculator;
+
+export default withAuthUser({
+})(CoinProfitCalculator)
 
 
 export const getStaticProps: GetStaticProps<any> = async ({

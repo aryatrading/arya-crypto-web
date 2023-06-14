@@ -29,5 +29,25 @@
     "openorderclosed": "Open Order Closed",
     "usdtamountreq": "Please add USDT amount",
     "premium": "This is a premium feature",
-    "tp3": "You can only set 3 TP's per asset"
+    "tp3": "You can only set 3 TP's per asset",
+    "salesPage": {
+        "mainTitle": "Trade for Optimal",
+        "results": "results",
+        "ourGoal": "Our platform helps you better control your trading by transforming manual work into automated actions.",
+        "points": {
+            "1": "Set a stop loss to protect your capital",
+            "2": "Up to 5 take profits to maximise your exit strategy",
+            "3": "Trailing modes to move with the market"
+        },
+        "getStarted": "Get Started",
+        "watchVideo": "Watch Video Presentation",
+        "protectCapital": "Protect your capital",
+        "protectCapitalDesc": "With our stop-loss, you can avoid selling at a panic-driven low price, which can help you preserve your capital. The stop-loss order will automatically sell your position when the price reaches a certain level, ensuring you don’t suffer large losses while away from your screen.",
+        "setStopLoss": "Set a Stop Loss",
+        "scheduleYourProfits": "Schedule your profits",
+        "scheduleYourProfitsDesc": "With our 5 take profits, you can gradually cash out of your winning position as your crypto skyrockets to the moon.",
+        "pickYourLevels": "Pick your levels",
+        "avoidLoss": "Avoid turning winners into losers",
+        "avoidLossDesc": "With our trailing mode, you can secure your trade as the market goes your way. If the trade turns around, you will exit before it goes against you."
+    }
 }

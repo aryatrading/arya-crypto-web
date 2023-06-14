@@ -1,7 +1,7 @@
 
 import Head from 'next/head'
 
-export default function SEO({ description, title }: { description: string, title: string }) {
+export default function SEO({ description, title }: { description?: string, title?: string }) {
 
     const siteTitle = 'ARYA Crypto'
     return (

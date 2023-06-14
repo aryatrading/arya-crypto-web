@@ -11,7 +11,6 @@ export const getSmartAllocation = async (providerId?: number) => {
 };
 
 export function updateSmartAllocation({ providerId, data, smartAllocationAlreadyExists }: { providerId?: number, data: SmartAllocationSaveRequestType, smartAllocationAlreadyExists: boolean }) {
-    console.log({ providerId, data, smartAllocationAlreadyExists });
     if (smartAllocationAlreadyExists) {
         return axiosInstance.put(
             `/trade-engine/smart-allocation`,

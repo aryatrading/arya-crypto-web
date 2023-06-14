@@ -15,8 +15,9 @@ import {
   fetchAssets,
   getMarketCap,
 } from "../../../services/controllers/market";
-import { FAVORITES_LIST } from "../../../utils/constants/config";
+import { FAVORITES_LIST, MODE_DEBUG } from "../../../utils/constants/config";
 import useDebounce from "../../../utils/useDebounce";
+import { firebaseId } from "../../../services/redux/userSlice";
 
 const Market: FC = () => {
   const { t } = useTranslation(["market"]);
@@ -25,6 +26,7 @@ const Market: FC = () => {
   const _assets = useSelector(selectMarketAssets);
   const [count, setCount] = useState(100);
   const [marketCapDetails, setMarketCapDetails] = useState<any>({});
+  const fId = useSelector(firebaseId);
 
   const handleScroll = () => {
     const bottom =
@@ -35,7 +37,7 @@ const Market: FC = () => {
   };
 
   useEffect(() => {
-    fetchAssets(search, count);
+    fetchAssets(search, count, fId);
   }, [count]);
 
   useEffect(() => {
@@ -54,11 +56,15 @@ const Market: FC = () => {
         BTCDominance: data.btc_dominance,
         BTCDominancePercentage: data.btc_dominance_24h_percentage_change,
       });
+    }).catch((error) => {
+      if (MODE_DEBUG) {
+        console.error(error)
+      }
     });
   }, []);
   useDebounce(
     () => {
-      fetchAssets(search, count);
+      fetchAssets(search, count, fId);
     },
     [search],
     400

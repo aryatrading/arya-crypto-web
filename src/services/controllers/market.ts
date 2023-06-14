@@ -5,6 +5,8 @@ import { axiosInstance } from "../api/axiosConfig";
 import { setAllProviders } from "../redux/exchangeSlice";
 import { storeMrkAssets } from "../redux/marketSlice";
 import { store } from "../redux/store";
+import { USDTSymbol } from "../../utils/constants/market";
+import { TradableAssetType } from "../../types/smart-allocation.types";
 
 // FETCH REQUEST TO GET ASSETS FROM TWELEVE DATA AND RETURN A STRING OF SYMBOLS
 export const fetchSymbolsList = async (assets?: AssetType[]) => {
@@ -28,10 +30,15 @@ export const fetchSymbolsList = async (assets?: AssetType[]) => {
 };
 
 // GET ASSETS LIST FROM OUT BACKEND
-export const fetchAssets = async (search?: string, limit: number = 20) => {
-  console.log(">>> ", limit);
+export const fetchAssets = async (
+  search?: string,
+  limit: number = 20,
+  firebaseId?: string
+) => {
   const { data } = await axiosInstance.get(
-    `utils/assets?limit=${limit}&offset=0${search ? `&search=${search}` : ""}`
+    `utils/assets?limit=${limit}&offset=0${search ? `&search=${search}` : ""}${
+      firebaseId ? `&firebase_id=${firebaseId}` : ""
+    }`
   );
 
   let _assets: AssetType[] = [];
@@ -54,13 +61,12 @@ export const fetchAssets = async (search?: string, limit: number = 20) => {
         mrkCap: data[i].asset_data.market_cap,
         mrkCapYesterday: mrkCapYesterday,
         symbol: data[i].asset_data.symbol.toLowerCase(),
-        isFavorite: i % 2 === 0,
+        isFavorite: data[i]?.is_favorite ?? false,
         change24H: data[i].asset_data.price_change_percentage_24h,
         change7D: data[i].asset_data.price_change_percentage_7d_in_currency,
       });
     }
   }
-  console.log(_assets.length);
   store?.dispatch(storeMrkAssets(_assets));
 
   return _assets;
@@ -122,4 +128,13 @@ export const addAssetToWatchlist = async (asset_id: number) => {
 
 export const removeAssetFromWatchlist = async (asset_id: number) => {
   return await axiosInstance.delete(`/watchlist/assetpair/${asset_id}`);
+};
+
+export const getTradableAssets = async (providerId: number) => {
+  return await axiosInstance.get<TradableAssetType[]>(`/trade-engine/tradable/symbols/`, {
+    params: {
+      provider: providerId,
+      asset: USDTSymbol,
+    }
+  });
 };

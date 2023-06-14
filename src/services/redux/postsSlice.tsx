@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface initialStateType {
-    posts: any[];
+    posts: any[] | null;
 }
 
 const initialState: initialStateType = {
-    posts: [],
+    posts: null,
 };
 
 
