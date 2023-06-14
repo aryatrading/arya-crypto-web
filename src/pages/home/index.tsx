@@ -6,6 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation, Trans } from 'next-i18next';
 import clsx from 'clsx';
 import Lottie from 'lottie-react';
+import { useTranslation } from 'next-i18next';
 
 import { SalesPagesLayout } from '../../components/layout/layout'
 import { Col, Row } from '../../components/shared/layout/flex';
@@ -15,6 +16,7 @@ import { Testimonials } from '../../components/shared/Testimonials';
 
 
 import styles from './index.module.scss';
+import SEO from '../../components/seo';
 
 const RowItem = ({ content }: any) => {
     return (

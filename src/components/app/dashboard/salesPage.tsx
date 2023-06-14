@@ -17,7 +17,7 @@ export const PortfolioSalesPage = () => {
 
     const mainBanner = useMemo(() => {
         return (
-            <Col className={`${styles.mainBanner} min-h-screen justify-center`}>
+            <Col className={`${styles.mainBanner} min-h-[calc(100vh-65px)] justify-center`}>
                 <Col className={`md:flex-row-reverse container text-center md:text-start gap-5`}>
                     <Col className="flex-1">
                         <Image src={require('../../../../public/assets/images/publicPages/portfolio/portfolioMainImg.png')} alt="portfolio image" />
