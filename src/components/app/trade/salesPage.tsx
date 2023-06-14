@@ -48,7 +48,7 @@ export const TradingSalesPage = () => {
         <Col className="w-full h-full pt-14 lg:pt-0">
             <Row className={clsx("gap-10 flex-col-reverse lg:flex-row items-center px-4 md:px-12 lg:px-20 xl:px-60 py-20 justify-center min-h-[calc(100vh-65px)]", styles.bgImage)}>
                 <Col className="flex-1 w-full h-full gap-8 justify-center">
-                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.mainTitle')} <span className={styles.underlined}>{t('salesPage.results')}</span></h2>
+                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.mainTitle')} <span className={styles.underlined}>{t('salesPage.results')}</span></h2>
                     <p className="font-medium text-white text-left">{t('salesPage.ourGoal')}</p>
 
                     <Col className='gap-4'>
@@ -77,7 +77,7 @@ export const TradingSalesPage = () => {
             <Col className="w-full h-full items-center justify-center bg-[#111827] px-4">
                 <Row className="gap-10 flex-col-reverse lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-20 xl:px-72 py-14">
                     <Col className="flex-1 w-full h-full gap-8 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.protectCapital')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.protectCapital')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.protectCapitalDesc')}</p>
 
@@ -95,7 +95,7 @@ export const TradingSalesPage = () => {
                         <Image alt="" src={require('../../../../public/assets/images/publicPages/trading/2.png')} className={clsx("w-full self-end h-full")} />
                     </Col>
                     <Col className="flex-1 w-full h-full gap-8 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.scheduleYourProfits')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.scheduleYourProfits')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.scheduleYourProfitsDesc')}</p>
 
@@ -107,7 +107,7 @@ export const TradingSalesPage = () => {
 
                 <Row className="gap-10 flex-col-reverse lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-20 xl:px-72 py-14">
                     <Col className="flex-1 w-full h-full gap-8 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.avoidLoss')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.avoidLoss')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.avoidLossDesc')}</p>
 

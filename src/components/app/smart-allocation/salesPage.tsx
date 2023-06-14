@@ -48,7 +48,7 @@ const SmartAllocationSalesPage: FC = () => {
         <Col className="w-full h-full pt-14 lg:pt-0">
             <Row className={clsx("gap-10 flex-col-reverse lg:flex-row items-center px-4 md:px-12 lg:px-20 xl:px-60 py-20 justify-center min-h-[calc(100vh-65px)]", styles.bgImage)}>
                 <Col className="flex-1 w-full h-full gap-8 justify-center">
-                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.title')}  <span className="text-blue-1">{t('salesPage.smartAllocation')}</span></h2>
+                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.title')}  <span className="text-blue-1">{t('salesPage.smartAllocation')}</span></h2>
                     <p className="font-medium text-white text-left">{t('salesPage.sub')}</p>
 
                     <Col className='gap-4'>
@@ -75,8 +75,8 @@ const SmartAllocationSalesPage: FC = () => {
                         <Image alt="" src={require('../../../../public/assets/images/publicPages/smart-allocation/1.png')} className={clsx(styles.hightlight, "w-full self-end h-full")} />
                     </Col>
                     <Col className="flex-1 w-full h-full gap-4 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.sections.1.title')}</h2>
-                        <h2 className="font-bold text-white text-xl md:text-2xl text-left leading-snug">{t('salesPage.sections.1.sub')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.sections.1.title')}</h2>
+                        <h2 className="font-bold text-white text-xl md:text-2xl text-left md:leading-snug">{t('salesPage.sections.1.sub')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.sections.1.content')}</p>
 
@@ -88,8 +88,8 @@ const SmartAllocationSalesPage: FC = () => {
 
                 <Row className="gap-14 flex-col-reverse lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-20 xl:px-72 py-14">
                     <Col className="flex-1 w-full h-full gap-4 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.sections.2.title')}</h2>
-                        <h2 className="font-bold text-white text-xl md:text-2xl text-left leading-snug">{t('salesPage.sections.2.sub')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.sections.2.title')}</h2>
+                        <h2 className="font-bold text-white text-xl md:text-2xl text-left md:leading-snug">{t('salesPage.sections.2.sub')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.sections.2.content')}</p>
 
@@ -107,8 +107,8 @@ const SmartAllocationSalesPage: FC = () => {
                         <Image alt="" src={require('../../../../public/assets/images/publicPages/smart-allocation/3.png')} className={clsx(styles.hightlight, "w-full self-end h-full")} />
                     </Col>
                     <Col className="flex-1 w-full h-full gap-4 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.sections.3.title')}</h2>
-                        <h2 className="font-bold text-white text-xl md:text-2xl text-left leading-snug">{t('salesPage.sections.3.sub')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.sections.3.title')}</h2>
+                        <h2 className="font-bold text-white text-xl md:text-2xl text-left md:leading-snug">{t('salesPage.sections.3.sub')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.sections.3.content')}</p>
 
@@ -120,8 +120,8 @@ const SmartAllocationSalesPage: FC = () => {
 
                 <Row className="gap-14 flex-col-reverse lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-20 xl:px-72 py-14">
                     <Col className="flex-1 w-full h-full gap-4 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.sections.4.title')}</h2>
-                        <h2 className="font-bold text-white text-xl md:text-2xl text-left leading-snug">{t('salesPage.sections.4.sub')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.sections.4.title')}</h2>
+                        <h2 className="font-bold text-white text-xl md:text-2xl text-left md:leading-snug">{t('salesPage.sections.4.sub')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.sections.4.content')}</p>
 
