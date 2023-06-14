@@ -159,7 +159,7 @@ export const getAssetOpenOrders = async (symbol: string, provider: number) => {
 
 export const getHistoryOrders = async (symbol: string, provider: number) => {
   const { data }: { data: Order[] } = await axiosInstance.get(
-    `trade-engine/orders?provider=${provider}&symbol=${symbol}usdt&skip=0&limit=100&order_status=200&order_status=-100&order_status=-200&order_status=-300&order_origin=manual_order`
+    `trade-engine/orders?provider=${provider}&symbol=${symbol}usdt&skip=0&limit=100&order_status=200&order_origin=manual_order`
   );
 
   let _history: TradeOrder[] = [];

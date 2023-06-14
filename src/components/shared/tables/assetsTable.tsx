@@ -28,6 +28,8 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
   const { t } = useTranslation(["market"]);
   const _assetprice = useSelector(selectAssetLivePrice);
   const authUser = useAuthUser();
+  const _btc = _assetprice["btc"] * _assetprice["usdt"];
+  console.log(_btc);
   const isTabletOrMobileScreen = useMediaQuery({
     query: `(max-width:950px)`,
   });
@@ -182,7 +184,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
                   {!isTabletOrMobileScreen ? (
                     <>
                       {/* <td className="font-medium leading-6 text-white text-right">
-                        {elm.currentPrice ?? 0 / _assetprice["btc"]}
+                        {elm.currentPrice ?? 0 / _btc}
                       </td> */}
                       <td className="font-medium leading-6 text-white text-right">
                         {formatNumber(elm.mrkCap ?? 0, true)}

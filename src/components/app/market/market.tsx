@@ -18,6 +18,7 @@ import {
 import { FAVORITES_LIST } from "../../../utils/constants/config";
 import useDebounce from "../../../utils/useDebounce";
 import { firebaseId } from "../../../services/redux/userSlice";
+import { formatNumber } from "../../../utils/helpers/prices";
 
 const Market: FC = () => {
   const { t } = useTranslation(["market"]);
@@ -95,7 +96,7 @@ const Market: FC = () => {
                   "w-full lg:w-64"
                 )}
                 percent={marketCapDetails?.marketCapPercentage || "0"}
-                amount={marketCapDetails?.marketCap || "0"}
+                amount={formatNumber(parseFloat(marketCapDetails?.marketCap))}
                 title={t("marketcap")}
               />
               <MarketStats
@@ -108,7 +109,7 @@ const Market: FC = () => {
                   "w-full lg:w-64"
                 )}
                 percent={marketCapDetails?.vol24Percentage || "0"}
-                amount={marketCapDetails?.vol24 || "0"}
+                amount={formatNumber(parseFloat(marketCapDetails.vol24))}
                 title={t("volume")}
               />
               <MarketStats
@@ -121,7 +122,9 @@ const Market: FC = () => {
                   "w-full lg:w-64"
                 )}
                 percent={marketCapDetails.BTCDominancePercentage}
-                amount={marketCapDetails.BTCDominance}
+                amount={`${formatNumber(
+                  parseFloat(marketCapDetails.BTCDominance)
+                )}%`}
                 title={t("btcDominance")}
               />
             </Row>

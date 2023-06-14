@@ -13,7 +13,7 @@ type TimeseriesProps = {
   }[];
   active: string;
   onclick: Function;
-  buttonClassName?:string;
+  buttonClassName?: string;
 };
 
 export const TimeseriesPicker: FC<TimeseriesProps> = ({
@@ -29,8 +29,9 @@ export const TimeseriesPicker: FC<TimeseriesProps> = ({
           <ShadowButton
             className={twMerge(
               "px-3 py-2 gap-0",
-              elm.title === "3M" ? "hidden md:flex" : ""
-            ,buttonClassName)}
+              elm.title === "3M" ? "hidden md:flex" : "",
+              buttonClassName
+            )}
             key={index}
             title={elm.title}
             onClick={() => onclick(elm)}
