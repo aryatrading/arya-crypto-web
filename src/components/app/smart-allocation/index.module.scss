@@ -1,0 +1,30 @@
+.startBtn {
+    background: transparent linear-gradient(90deg, #668EF1 0%, #3C5EB1 100%) 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+    height: 44px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-bottom: 20px;
+}
+
+.boxShadow:hover {
+    box-shadow: 0px 0px 22px #84ADFF;
+}
+
+.hightlight {
+    box-shadow: 0px 0px 22px #84ADFF85;
+}
+
+.rotate {
+    animation: rotation 40s infinite linear;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(359deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+}

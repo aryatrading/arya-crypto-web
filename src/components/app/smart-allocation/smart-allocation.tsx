@@ -2,23 +2,27 @@ import { FC } from "react";
 import AuthedSmartAllocation from "./authed-smart-allocation/authed-smart-alocation";
 import { useAuthUser } from "next-firebase-auth";
 import PageLoader from "../../shared/pageLoader/pageLoader";
+import SmartAllocationSalesPage from "./salesPage";
 
 const SmartAllocation: FC = () => {
 
     const authUser = useAuthUser();
 
-    if (authUser.clientInitialized) {
-        if (!authUser.id) {
+    if (authUser) {
+        if (authUser.id != null) {
             return (
-                <>Login please</>
-            );
+                <AuthedSmartAllocation />
+            )
         } else {
-            return <AuthedSmartAllocation />
+            return (
+                <SmartAllocationSalesPage />
+            );
         }
+
     } else {
         return <PageLoader />
     }
-    
+
 }
 
 
