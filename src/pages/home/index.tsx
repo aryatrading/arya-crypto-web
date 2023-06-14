@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import { CheckIcon } from '@heroicons/react/24/solid';
@@ -5,18 +6,17 @@ import { withAuthUser } from 'next-firebase-auth'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation, Trans } from 'next-i18next';
 import clsx from 'clsx';
-import Lottie from 'lottie-react';
-import { useTranslation } from 'next-i18next';
+import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
 import { SalesPagesLayout } from '../../components/layout/layout'
 import { Col, Row } from '../../components/shared/layout/flex';
 import Button from '../../components/shared/buttons/button';
 import PricingSection from '../../components/shared/pricing-section/pricing-section';
 import { Testimonials } from '../../components/shared/Testimonials';
-
+import SEO from '../../components/seo';
+import LottieData from '../../../public/assets/images/publicPages/smart-allocation/smart-allocation.json';
 
 import styles from './index.module.scss';
-import SEO from '../../components/seo';
 
 const RowItem = ({ content }: any) => {
     return (
@@ -65,10 +65,12 @@ const TradingImg = () => (
 
 const HomePage = () => {
     const [t] = useTranslation(["home"]);
+    const lottieRef = useRef<LottieRefCurrentProps>(null);
 
     return (
         <SalesPagesLayout>
-            <Row className={clsx(styles.mainBanner, 'items-center h-[100vh] justify-center gap-10 flex-col-reverse pt-52 lg:pt-0 lg:flex-row px-4 md:px-14 lg:px-20 xl:px-80')}>
+            <SEO />
+            <Row className={clsx("gap-10 flex-col-reverse lg:flex-row items-center px-4 md:px-12 lg:px-20 xl:px-60 py-20 justify-center min-h-[calc(100vh-65px)]", styles.bgImage)}>
                 <Col className='flex-1 w-full h-full gap-4 justify-center'>
 
                     <p className='top-0 left-0 text-left w-full text-2xl font-bold md:leading-snug md:text-5xl'>
@@ -93,9 +95,9 @@ const HomePage = () => {
                     </Button>
                 </Col>
 
-                <Col className={'flex-1 w-full h-full relative justify-center items-center'}>
-                    <Image alt='' src={require('../../../public/assets/images/publicPages/home/homeMainImg.png')} className={clsx(styles.animateImg, 'w-full absolute')} />
-                    <Image alt='' src={require('../../../public/assets/images/publicPages/home/homeMainImg.png')} className='w-full opacity-0' />
+                <Col className="flex-1 w-full h-full gap-4 relative">
+                    <Lottie animationData={LottieData} lottieRef={lottieRef} className={clsx(styles.animateImg, "w-full absolute scale-[1.3] h-full")} />
+                    <Lottie animationData={LottieData} className={clsx("w-full opacity-0 h-full")} />
                 </Col>
             </Row>
 
