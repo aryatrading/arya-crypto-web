@@ -30,7 +30,7 @@
     "save": "Sauvegarder",
     "deleteTitle": "Déconnecter l'exchange",
     "deleteFirstHint": "Voulez-vous vraiment déconnecter cet exchange ?",
-    "deleteHint": "En déconnectant cet exchange ARYA Crypto n'aura plus le contrôle de vos actifs, y compris les actifs de votre allocation intelligente",
+    "deleteHint": "En déconnectant cet exchange ARYA Crypto n'aura plus le contrôle de vos actifs, y compris les actifs de votre smart allocation",
     "connected": "Connecté",
     "connectedNote": "Vous avez connecté votre compte avec succès ! ",
     "startTrade": "Commencer à trader",
