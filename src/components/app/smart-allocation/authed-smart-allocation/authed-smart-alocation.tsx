@@ -39,7 +39,7 @@ const AuthedSmartAllocation: FC = () => {
     const router = useRouter()
 
     const [isLoadingExitStrategy, setIsLoadingExitStrategy] = useState<boolean>(false);
-    const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(true);
+    const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
     const [smartAllocationHoldings, setSmartAllocationHoldings] = useState<SmartAllocationAssetType[]>([]);
     const [smartAllocationExists, setSmartAllocationExists] = useState<boolean>();
     const [fetchingHoldingsError, setFetchingHoldingsError] = useState<string>();

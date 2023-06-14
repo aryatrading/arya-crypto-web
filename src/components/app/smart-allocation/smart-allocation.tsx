@@ -8,7 +8,7 @@ const SmartAllocation: FC = () => {
     const authUser = useAuthUser();
 
     if (authUser.clientInitialized) {
-        if (!authUser.id !== null) {
+        if (authUser.id === null) {
             return (
                 <>Login please</>
             );
@@ -18,7 +18,7 @@ const SmartAllocation: FC = () => {
     } else {
         return <PageLoader />
     }
-    
+
 }
 
 
