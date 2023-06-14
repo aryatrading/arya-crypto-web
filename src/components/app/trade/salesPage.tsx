@@ -7,6 +7,7 @@ import Lottie from 'lottie-react';
 import { Col, Row } from "../../shared/layout/flex";
 import PricingSection from "../../shared/pricing-section/pricing-section";
 import TradingImg from "../../../../public/assets/images/publicPages/trading/trading.json";
+import { Testimonials } from "../../shared/Testimonials";
 
 import styles from './index.module.scss';
 
@@ -102,6 +103,7 @@ export const TradingSalesPage = () => {
                 </Row>
 
                 <PricingSection />
+                <Testimonials />
 
             </Col>
         </Col>

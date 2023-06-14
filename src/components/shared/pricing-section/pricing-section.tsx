@@ -1,22 +1,11 @@
 import { FC, useCallback, useMemo } from "react";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
-import { CheckCircleIcon as CheckCircleIconSolid, StarIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon as CheckCircleIconSolid } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
 
 import { Col, Row } from "../layout/flex";
 import Button from "../buttons/button";
-
-const Arr = [{
-    name: "Arnaud B",
-    contnet: "Good evening Fabien! It’s been a year since I started using ARYA following your USD/JPY signal for my first trade (It was a win of course). A big thank you!",
-}, {
-    name: "Arnaud B",
-    contnet: "Good evening Fabien! It’s been a year since I started using ARYA following your USD/JPY signal for my first trade (It was a win of course). A big thank you!",
-}, {
-    name: "Arnaud B",
-    contnet: "Good evening Fabien! It’s been a year since I started using ARYA following your USD/JPY signal for my first trade (It was a win of course). A big thank you!",
-}];
 
 const PricingSection: FC = () => {
 
@@ -133,29 +122,6 @@ const PricingSection: FC = () => {
                         description: t<string>("weHaveSupportTeamReadyToAnswerAnyQuestions")
                     })}
                 </Col>
-            </Col>
-
-            <Col className="gap-10 w-full mb-10">
-                <h2 className="font-bold text-white text-3xl md:text-5xl leading-snug text-center">{t('testimonials')}</h2>
-
-                <Row className="gap-2 overflow-hidden w-full lg:justify-center px-4 md:px-12 lg:px-80">
-                    {Arr.map((item, index) => {
-                        return (
-                            <Col key={index} className="w-[calc(95vw-1rem)] md:w-[calc(50%-1rem)] xl:w-[calc(33.3333%-1rem)] shrink-0 aspect-video items-center bg-[#E2EAFF] rounded-2xl py-12 px-10 border-4 border-[#3C5EB1]">
-                                <h4 className="font-bold text-blue-5 text-xl mb-4">{item.name}</h4>
-                                <p className="font-light text-blue-5 text-sm text-center">{item.contnet}</p>
-
-                                <Row className="mt-4">
-                                    <StarIcon className="stroke-yellow-1 fill-yellow-1 w-8 h-8" />
-                                    <StarIcon className="stroke-yellow-1 fill-yellow-1 w-8 h-8" />
-                                    <StarIcon className="stroke-yellow-1 fill-yellow-1 w-8 h-8" />
-                                    <StarIcon className="stroke-yellow-1 fill-yellow-1 w-8 h-8" />
-                                    <StarIcon className="stroke-yellow-1 fill-yellow-1 w-8 h-8" />
-                                </Row>
-                            </Col>
-                        );
-                    })}
-                </Row>
             </Col>
         </Col>
     )
