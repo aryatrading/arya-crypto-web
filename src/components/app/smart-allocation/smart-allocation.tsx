@@ -5,7 +5,6 @@ const SmartAllocation: FC = () => {
     return (
         <AuthedSmartAllocation />
     )
-
 }
 
 

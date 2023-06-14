@@ -16,6 +16,7 @@ import { clearAsset } from "../../services/redux/assetSlice";
 import { clearSwap } from "../../services/redux/swapSlice";
 import { getPosts } from "../../services/firebase/community/posts";
 import PageLoader from "../../components/shared/pageLoader/pageLoader";
+import { withAuthUser } from "next-firebase-auth";
 
 const AssetPage = () => {
   const { t } = useTranslation(["common"]);
@@ -48,7 +49,8 @@ const AssetPage = () => {
   return <Layout>{loading ? <PageLoader /> : <Asset />}</Layout>;
 };
 
-export default AssetPage;
+export default withAuthUser({
+})(AssetPage)
 
 export const getStaticProps: GetStaticProps<any> = async ({ locale }) => ({
   props: {
