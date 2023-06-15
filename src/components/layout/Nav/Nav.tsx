@@ -240,14 +240,14 @@ const Nav = () => {
   return (
     <Col className="w-full bg-black-2 border-b border-gray-800 shadow-md  fixed lg:relative z-40">
       <Row className="container w-full py-3 justify-between">
-        <Row className="xl:gap-20 md:gap-16 items-center">
+        <Row className="xl:gap-16 md:gap-10 items-center">
           <Link href={"/home"}>
             <Image
               src={logoIcon}
               alt='Arya Logo'
             />
           </Link>
-          {navLinks("gap-10 h-full hidden lg:flex")}
+          {navLinks("gap-6 h-full hidden lg:flex")}
         </Row>
         <Row className="gap-3 justify-center items-center">
           <SearchAssetInput t={t} />

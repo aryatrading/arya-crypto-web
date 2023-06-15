@@ -1,40 +1,16 @@
-.table {
-
+.mainBanner {
     width: 100%;
-    table-layout: auto;
-
-    thead {
-        @apply text-white;
-    }
-
-    tbody {
-        tr {
-
-            &:first-child {
-                td {
-                    height: 50px;
-                }
-            }
-        }
-    }
-
-    th {
-        height: 50px;
-        @apply uppercase text-sm;
-        padding-left: 8px;
-        text-align: left;
-    }
-
-    td {
-        padding: 0 8px;
-        height: 50px;
-
-        &:only-child {
-            text-align: center;
-        }
-    }
+    background-image: url('/assets/images/publicPages/portfolio/mainBannerBG.png');
+    background-size: cover;
 }
 
+.startBtn {
+    background: transparent linear-gradient(90deg, #668EF1 0%, #3C5EB1 100%) 0% 0% no-repeat padding-box;
+    height: 44px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-bottom: 20px;
+}
 
 .underlined {
     position: relative;
@@ -52,7 +28,6 @@
     border-color: #558AF2 transparent transparent transparent;
     border-radius: 60%;
 }
-
 
 
 .boxShadow:hover {
@@ -142,7 +117,7 @@
 
 
 .animateImg {
-    animation: slide 800ms linear;
+    animation: slide 1s linear;
 }
 
 @keyframes slide {

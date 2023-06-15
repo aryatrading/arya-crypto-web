@@ -1,13 +1,15 @@
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 import { CheckIcon } from "@heroicons/react/24/solid";
 import { useTranslation } from "next-i18next";
-import Lottie from 'lottie-react';
+import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
 import { Col, Row } from "../../shared/layout/flex";
 import PricingSection from "../../shared/pricing-section/pricing-section";
 import TradingImg from "../../../../public/assets/images/publicPages/trading/trading.json";
 import { Testimonials } from "../../shared/Testimonials";
+import { useAuthModal } from "../../../context/authModal.context";
 
 import styles from './index.module.scss';
 
@@ -24,13 +26,30 @@ const RowItem = ({ content }: any) => {
 }
 
 export const TradingSalesPage = () => {
+    const { setVisibleSection, modalTrigger } = useAuthModal();
     const { t } = useTranslation(["trade"]);
+    const lottieRef = useRef<LottieRefCurrentProps>(null);
+
+    useEffect(() => {
+        if (lottieRef.current) {
+            lottieRef.current.setSpeed(0.5);
+            lottieRef.current.pause();
+            setTimeout(() => {
+                lottieRef.current?.play();
+            }, 1000);
+        }
+    }, []);
+
+    const onClick = () => {
+        setVisibleSection('signup');
+        modalTrigger.show();
+    }
 
     return (
-        <Col className=" w-full h-full">
-            <Row className={clsx("gap-10 flex-col-reverse lg:flex-row items-center px-4 md:px-12 lg:px-60 py-20 justify-center h-[100vh]", styles.bgImage)}>
+        <Col className="w-full h-full pt-14 lg:pt-0">
+            <Row className={clsx("gap-10 flex-col-reverse lg:flex-row items-center px-4 md:px-12 lg:px-20 xl:px-60 py-20 justify-center min-h-[calc(100vh-65px)]", styles.bgImage)}>
                 <Col className="flex-1 w-full h-full gap-8 justify-center">
-                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.mainTitle')} <span className={styles.underlined}>{t('salesPage.results')}</span></h2>
+                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.mainTitle')} <span className={styles.underlined}>{t('salesPage.results')}</span></h2>
                     <p className="font-medium text-white text-left">{t('salesPage.ourGoal')}</p>
 
                     <Col className='gap-4'>
@@ -41,29 +60,29 @@ export const TradingSalesPage = () => {
                         })}
                     </Col>
                     <Row className="md:gap-8 gap-2 flex-col md:flex-row">
-                        <button className={clsx(styles.startBtn, styles.boxShadow, "text-white rounded-full font-bold text-sm")}>
+                        <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white rounded-full font-bold text-sm")}>
                             {t('salesPage.getStarted')}
                         </button>
 
-                        <button className={clsx(styles.secondBtn, styles.boxShadow, "text-white rounded-full font-bold text-sm")}>
+                        {/* <button className={clsx(styles.secondBtn, styles.boxShadow, "text-white rounded-full font-bold text-sm")}>
                             {t('salesPage.watchVideo')}
-                        </button>
+                        </button> */}
                     </Row>
                 </Col>
                 <Col className="flex-1 w-full h-full gap-4 relative">
-                    <Lottie animationData={TradingImg} className={clsx(styles.animateImg, "w-full scale-125 absolute h-full")} />
+                    <Lottie animationData={TradingImg} lottieRef={lottieRef} className={clsx(styles.animateImg, "w-full scale-125 md:scale-150 lg:scale-[1.65] absolute h-full")} />
                     <Lottie animationData={TradingImg} className={clsx("w-full scale-125 opacity-[0]")} />
                 </Col>
             </Row>
 
-            <Col className="w-full h-full items-center justify-center bg-[#111827]">
-                <Row className="gap-10 flex-col-reverse lg:flex-row items-center md:mt-10 w-full lg:w-[100vw] px-4 lg:px-72 py-14">
+            <Col className="w-full h-full items-center justify-center bg-[#111827] px-4">
+                <Row className="gap-10 flex-col-reverse lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-20 xl:px-72 py-14">
                     <Col className="flex-1 w-full h-full gap-8 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.protectCapital')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.protectCapital')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.protectCapitalDesc')}</p>
 
-                        <button className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                        <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
                             {t('salesPage.setStopLoss')}
                         </button>
                     </Col>
@@ -72,28 +91,28 @@ export const TradingSalesPage = () => {
                     </Col>
                 </Row>
 
-                <Row className="gap-10 flex-col lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-72 py-14">
+                <Row className="gap-10 flex-col lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-20 xl:px-72 py-14 ">
                     <Col className="flex-1 w-full h-full gap-4 items-center justify-center">
                         <Image alt="" src={require('../../../../public/assets/images/publicPages/trading/2.png')} className={clsx("w-full self-end h-full")} />
                     </Col>
                     <Col className="flex-1 w-full h-full gap-8 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.scheduleYourProfits')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.scheduleYourProfits')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.scheduleYourProfitsDesc')}</p>
 
-                        <button className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                        <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
                             {t('salesPage.pickYourLevels')}
                         </button>
                     </Col>
                 </Row>
 
-                <Row className="gap-10 flex-col-reverse lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-72 py-14">
+                <Row className="gap-10 flex-col-reverse lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-20 xl:px-72 py-14">
                     <Col className="flex-1 w-full h-full gap-8 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.avoidLoss')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.avoidLoss')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.avoidLossDesc')}</p>
 
-                        <button className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                        <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
                             {t('salesPage.getStarted')}
                         </button>
                     </Col>

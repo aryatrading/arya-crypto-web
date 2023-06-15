@@ -67,7 +67,6 @@ export const fetchAssets = async (
       });
     }
   }
-
   store?.dispatch(storeMrkAssets(_assets));
 
   return _assets;

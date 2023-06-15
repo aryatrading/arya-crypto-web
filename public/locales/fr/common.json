@@ -13,7 +13,7 @@
     "settings": "Paramètres",
     "portfolio": "Mon portfolio",
     "smartAllocation": "Smart allocation",
-    "trade": "trade",
+    "trade": "Trade",
     "market": "Marché",
     "addExchange": "Ajouter un échange",
     "portfolioComposition": "Composition du portefeuille",
@@ -63,5 +63,6 @@
     "getStarted": "Commencer",
     "premiumusersfeature": "Continuer avec ARYA Prenium",
     "upgradenow": "Découvrir",
-    "preview": "Visualiser"
+    "preview": "Visualiser",
+    "editSmartAllocation": "Edit Smart Allocation"
 }
