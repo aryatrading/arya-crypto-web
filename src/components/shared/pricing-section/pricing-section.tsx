@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useTranslation } from "next-i18next";
 import { useAuthUser } from "next-firebase-auth";
 import { useRouter } from "next/router";
+import clsx from "clsx";
 
 import { Col, Row } from "../layout/flex";
 import Button from "../buttons/button";
@@ -85,7 +86,7 @@ const PricingSection: FC = () => {
                 <Button disabled className="border border-[#668EF1] bg-[#3c5eb1] rounded-full py-1 px-5 w-fit">{t("premium")}</Button>
                 <Col>
                     <p className="text-4xl font-bold text-green-1">${paymentPeriod === EnumPricing.yearly ? '14.99' : '19.99'} <span className="text-base text-white">/mo</span></p>
-                    {paymentPeriod === EnumPricing.yearly && <p className="text-bold">{t("Billed")} <span className="text-blue-1">$179.88</span> {t("perYear")}</p>}
+                    <p className={clsx({ "opacity-0": paymentPeriod === EnumPricing.monthly }, "text-bold")}>{t("Billed")} <span className="text-blue-1">$179.88</span> {t("perYear")}</p>
                 </Col>
                 <hr className="bg-grey-1" />
                 <Col className="gap-5 md:flex-row">
