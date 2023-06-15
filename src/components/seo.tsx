@@ -1,21 +1,23 @@
 
 import Head from 'next/head'
 
-export default function SEO({ description, title }: { description?: string, title?: string }) {
+export default function SEO({ title }: { description?: string, title?: string }) {
 
-    const siteTitle = 'ARYA Crypto'
     return (
         <Head>
-            <title>{title ? `${title} |` : ''} {siteTitle}</title>
-            <meta name="description" content={description} />
+            <title>{title ? `${title} |` : ''} ARYA Crypto</title>
+            <meta name="description" content="Track all your wallets and exchanges on a unified dashboard and effectively manage and automate your entire portfolio." />
+
+            {/* Facebook Meta Tags*/}
+            <meta property="og:site_name" content="ARYA Crypto" />
+            <meta property="og:title" content="ARYA Crypto" />
             <meta property="og:type" content="website" />
-            <meta property="og:title" content={title} />
-            <meta property="og:description" content={description} />
-            <meta property="og:site_name" content={siteTitle} />
-            <meta property="twitter:card" content="summary" />
-            <meta property="twitter:creator" content={""} />
-            <meta property="twitter:title" content={title} />
-            <meta property="twitter:description" content={description} />
+            <meta property="og:description" content="Track all your wallets and exchanges on a unified dashboard and effectively manage and automate your entire portfolio." />
+
+            {/* Twitter Meta Tags*/}
+            <meta name="twitter:title" content="ARYA Crypto" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:description" content="Track all your wallets and exchanges on a unified dashboard and effectively manage and automate your entire portfolio." />
         </Head>
     )
 }
