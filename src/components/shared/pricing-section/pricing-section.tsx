@@ -118,9 +118,9 @@ const PricingSection: FC = () => {
                 {description && <p className="max-w-[250px] ">{description}</p>}
                 {images &&
                     <Row className="gap-2">
-                        <Image src="/assets/images/publicPages/visaImg.png" alt="" width={70} height={25} />
-                        <Image src="/assets/images/publicPages/mastercardImg.png" alt="" width={50} height={20} />
-                        <Image src="/assets/images/publicPages/bankImg.png" alt="" width={40} height={40} />
+                        <Image src="/assets/images/publicPages/visaLogo.png" alt="" width={70} height={25} className="object-contain" />
+                        <Image src="/assets/images/publicPages/mastercardImg.png" alt="" width={50} height={20} className="object-contain" />
+                        <Image src="/assets/images/publicPages/bankImg.png" alt="" width={40} height={40} className="object-contain" />
                     </Row>
                 }
             </Col>
