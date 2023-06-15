@@ -1,6 +1,6 @@
 import axios from "axios";
 import { chartDataType } from "../../components/shared/charts/graph/graph.type";
-import { AssetType } from "../../types/asset";
+import { AssetType, StatisticsResponseType } from "../../types/asset";
 import { CapitalizeString } from "../../utils/format_string";
 import { axiosInstance } from "../api/axiosConfig";
 import {
@@ -224,4 +224,13 @@ export async function getAssetsHistoricalData(symbols: string[], period: EnumSma
     process.env.NEXT_PUBLIC_TWELEVE_API_URL ?? "", {
     params
   });
+}
+
+
+export const getStats = async (symbol: string) => {
+  let { data } = await axiosInstance.get<StatisticsResponseType>(
+    `trade-engine/assets/statistics?asset=${symbol}`
+  );
+
+  return data;
 }

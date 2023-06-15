@@ -141,3 +141,20 @@ export interface PostTypes {
   Audio?: string;
   RestrictedTo?: string;
 }
+
+type tradeState = {
+  day: string,
+  orders_count: number
+}
+
+type portfolioHoldingType = {
+  day: string,
+  holding_count: number,
+  holding_percentage: number
+}
+
+export type StatisticsResponseType = {
+  trades: tradeState[],
+  portfolio_holdings: portfolioHoldingType[],
+  premium: boolean
+}

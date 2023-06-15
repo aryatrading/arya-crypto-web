@@ -13,6 +13,8 @@ import { AppProps } from "next/app";
 import { SkeletonTheme } from "react-loading-skeleton";
 
 import "react-toastify/dist/ReactToastify.css";
+import 'react-loading-skeleton/dist/skeleton.css';
+import 'react-circular-progressbar/dist/styles.css';
 import "react-loading-skeleton/dist/skeleton.css";
 
 import AuthModalProvider from "../context/authModal.context";
