@@ -93,24 +93,24 @@
     "STABLE_COIN": "STABLE COIN",
     "salesPage": {
         "title": "Transformez votre façon d'investir avec",
-        "smartAllocation": "Allocation intelligente",
-        "sub": "L'allocation intelligente vous donne un contrôle granulaire sur votre stratégie de portefeuille.",
+        "smartAllocation": "Smart allocation",
+        "sub": "Smart allocation vous permet d'avoir un contrôle détaillé sur votre stratégie d'investissement",
         "points": {
-            "1": "Acheter un panier de crypto-monnaies en un clic",
+            "1": "Acheter un ensemble de crypto en un seul clic",
             "2": "Effectuer un rééquilibrage périodique personnalisé",
-            "3": "Comparez les allocations et trouvez les plus performants"
+            "3": "Comparez les allocations et trouvez les plus performantes"
         },
         "buildPortfolio": "Construire mon portefeuille",
         "sections": {
             "1": {
-                "title": "Votre ETF personnel de crypto-monnaie",
-                "sub": "Diversifiez-vous sur l'ensemble du marché de la cryptographie en un seul clic",
-                "content": "Avec Arya Crypto, un clic vous permet de créer sans effort un portefeuille diversifié de crypto-monnaies, offrant une exposition à l'ensemble du marché de la crypto sans avoir besoin de calculs d'allocation complexes."
+                "title": "Votre ETF personnel de crypto",
+                "sub": "Diversifiez-vous sur l'ensemble du marché de la crypto en un seul clic",
+                "content": "Avec Arya Crypto, un clic vous permet de créer sans effort un portefeuille diversifié de crypto, offrant une exposition à l'ensemble du marché de la crypto sans avoir besoin de calculs d'allocation complexes."
             },
             "2": {
                 "title": "Rééquilibrage automatique",
                 "sub": "Gardez votre portefeuille sur la bonne voie",
-                "content": "Lorsque le marché change, un portefeuille s'éloigne de son allocation cible. "
+                "content": "Lorsque le marché change, un portefeuille s'éloigne de son allocation cible.ARYA crypto gère automatiquement la répartition de votre portefeuille pour le maintenir sur la bonne voie, vous offrant ainsi un gain de temps."
             },
             "3": {
                 "title": "Testez et comparez",
@@ -120,7 +120,7 @@
             "4": {
                 "title": "Personnalisez votre stratégie",
                 "sub": "Personnalisez ARYA Crypto en fonction de vos préférences.",
-                "content": "Modifiez votre fréquence de rééquilibrage, ajoutez des stop loss, plusieurs prises de bénéfices, des modes de suivi ou liquidez vos actifs à tout moment avec une stratégie de sortie."
+                "content": "Modifiez votre fréquence de rééquilibrage, ajoutez des stop loss, plusieurs prises de bénéfices, des trades ou liquidez vos cryptos à tout moment avec une stratégie de sortie."
             }
         },
         "getStarted": "Commencer"

@@ -31,23 +31,23 @@
     "tp3": "Vous ne pouvez définir que 3 TP par actif.",
     "currenttrailing": "Trailing:",
     "salesPage": {
-        "mainTitle": "Échangez pour Optimal",
-        "results": "résultats",
-        "ourGoal": "Notre plateforme vous aide à mieux contrôler votre trading en transformant le travail manuel en actions automatisées.",
+        "mainTitle": "Trade pour des résultats",
+        "results": "optimaux",
+        "ourGoal": "Notre plateforme vous aide à mieux contrôler vos trades en transformant le travail manuel en actions automatisées.",
         "points": {
             "1": "Fixez un stop loss pour protéger votre capital",
             "2": "Jusqu'à 5 prises de bénéfices pour maximiser votre stratégie de sortie",
-            "3": "Modes de fuite pour suivre le marché"
+            "3": "Trailing pour suivre le marché"
         },
         "getStarted": "Commencer",
-        "watchVideo": "Regarder la présentation vidéo",
+        "watchVideo": "Regarder la vidéo de présentation ",
         "protectCapital": "Protégez votre capital",
-        "protectCapitalDesc": "Avec notre stop-loss, vous pouvez éviter de vendre à un prix bas provoqué par la panique, ce qui peut vous aider à préserver votre capital. ",
+        "protectCapitalDesc": "Avec notre stop-loss, vous pouvez éviter de vendre à un prix bas provoqué par la panique. ",
         "setStopLoss": "Définir un Stop Loss",
-        "scheduleYourProfits": "Programmez vos bénéfices",
-        "scheduleYourProfitsDesc": "Avec nos 5 prises de bénéfices, vous pouvez progressivement retirer votre position gagnante au fur et à mesure que votre crypto monte en flèche sur la lune.",
+        "scheduleYourProfits": "Planifiez vos profits",
+        "scheduleYourProfitsDesc": "Avec nos 5 prises de bénéfices, vous pouvez progressivement retirer votre position gagnante á mesure que votre crypto monte en flèche.",
         "pickYourLevels": "Choisissez vos niveaux",
         "avoidLoss": "Évitez de transformer les gagnants en perdants",
-        "avoidLossDesc": "Avec notre mode de suivi, vous pouvez sécuriser votre transaction au fur et à mesure que le marché évolue. "
+        "avoidLossDesc": "Avec notre trailing, vous pouvez sécuriser votre transaction au fur et à mesure que le marché évolue. "
     }
 }
