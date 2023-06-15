@@ -11,9 +11,9 @@ import { Col, Row } from "../../shared/layout/flex";
 import { MODE_DEBUG } from "../../../utils/constants/config";
 import { registerUser, appleAuth, googleAuth } from "../../../services/firebase/auth/auth";
 import TextInput from "../../shared/form/inputs/textInput/input";
-import { logoIcon } from "../../../../public/assets/images/svg";
-import { apple, google } from "../../../../public/assets/images/svg/auth";
 import { useAuthModal } from "../../../context/authModal.context";
+import { apple, google } from "../../../../public/assets/images/svg/auth";
+import { logoIcon } from "../../../../public/assets/images/svg";
 
 
 const Signup: FC<any> = (props: any) => {

@@ -58,7 +58,7 @@ const AuthModalProvider: FC<any> = (props: any) => {
               <CloseIcon className='stroke-current text-[#89939F] w-3 h-3' />
             </Button>
             {visibleSection === "login" ? (
-              <Login changeSection={setVisibleSection} isModal={true} />
+              <Login changeSection={setVisibleSection} isModal={true} navigateTo={navigateTo} />
             ) : (
               <Signup changeSection={setVisibleSection} isModal={true} navigateTo={navigateTo} />
             )}
