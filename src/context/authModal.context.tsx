@@ -17,6 +17,7 @@ export const AuthModal = createContext({
   modalTrigger: { show: () => null, hide: () => null },
   setVisibleSection: (x: string) => null,
   hideModal: () => null,
+  setNavigateTo: (x: { route: string, queryParam: string }) => null,
 });
 
 const AuthModalProvider: FC<any> = (props: any) => {
@@ -24,6 +25,7 @@ const AuthModalProvider: FC<any> = (props: any) => {
   const [visibleSection, setVisibleSection] = useState<"login" | "signup">(
     "login"
   );
+  const [navigateTo, setNavigateTo] = useState<{ route: string, queryParam: string }>();
 
   useEffect(() => {
     const $targetEl = document.getElementById("authentication-modal");
@@ -39,7 +41,7 @@ const AuthModalProvider: FC<any> = (props: any) => {
   }, []);
   const hideModal = useCallback(() => modalTrigger.hide(), [modalTrigger]);
 
-  const contextValue: any = { modalTrigger, setVisibleSection, hideModal };
+  const contextValue: any = { modalTrigger, setVisibleSection, hideModal, setNavigateTo };
 
   return (
     <AuthModal.Provider value={contextValue}>
@@ -58,7 +60,7 @@ const AuthModalProvider: FC<any> = (props: any) => {
             {visibleSection === "login" ? (
               <Login changeSection={setVisibleSection} isModal={true} />
             ) : (
-              <Signup changeSection={setVisibleSection} isModal={true} />
+              <Signup changeSection={setVisibleSection} isModal={true} navigateTo={navigateTo} />
             )}
           </Col>
         </Col>
