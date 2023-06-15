@@ -1,0 +1,16 @@
+{
+    "cryptocurrencies": "Cryptocurrencies",
+    "favorites": "Favorites",
+    "search": "Search a coin",
+    "all": "All",
+    "rank": "Rank",
+    "name": "Name",
+    "pnl": "Change (24Hr)",
+    "currentprice": "Current Price",
+    "priceinbtc": "Price in BTC",
+    "marketcap": "Market Cap.",
+    "volume": "volume 24H",
+    "no_assets": "Your watchlist is empty",
+    "no_assets_sub": "Start building your watchlist by adding assets to your favorites list",
+    "btcDominance": "BTC Dominance"
+}

@@ -1,0 +1,15 @@
+{
+    "coin": "Crypto",
+    "investment": "Investissement",
+    "buyPrice": "Prix ​​d'achat",
+    "sellPrice": "Prix ​​de vente",
+    "investmentResult": "Résultat d'investissement",
+    "profit/loss": "Perte de profit",
+    "totalInvestmentAmount": "Montant d'entrée",
+    "totalExitAmount": "Montant de sortie",
+    "cryptoConverter": "Convertisseur de crypto",
+    "selectAsset": "Sélectionnez une crypto",
+    "searchAsset": "Rechercher une crypto",
+    "emptySearch": "Recherche vide",
+    "coins": "Cryptos"
+}

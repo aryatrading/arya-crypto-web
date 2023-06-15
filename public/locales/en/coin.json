@@ -1,0 +1,15 @@
+{
+    "coin": "Coin",
+    "investment": "Investment",
+    "buyPrice": "Buy price",
+    "sellPrice": "Sell price",
+    "investmentResult": "Investment Result",
+    "profit/loss": "Profit / Loss",
+    "totalInvestmentAmount": "Entry amount",
+    "totalExitAmount": "Exit amount",
+    "cryptoConverter": "Crypto Converter",
+    "selectAsset": "Select Asset",
+    "searchAsset": "Search asset",
+    "emptySearch": "Empty Search",
+    "coins": "Coins"
+}

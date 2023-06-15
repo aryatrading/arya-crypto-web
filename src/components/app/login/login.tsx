@@ -1,42 +1,51 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { FC, useCallback, useMemo, useState } from "react";
+import { ErrorMessage, Form, Formik } from "formik";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, useCallback, useMemo, useState } from "react";
 import * as Yup from 'yup';
 
-
 import Button from "../../shared/buttons/button";
-import { LoginFormValues } from "./login.types";
 import { Col, Row } from "../../shared/layout/flex";
 import { MODE_DEBUG } from "../../../utils/constants/config";
-import { images } from "../../../assets/images/images";
-import { loginUserEmailPassword } from "../../../services/firebase/auth/auth";
+import { loginUserEmailPassword, appleAuth, googleAuth } from "../../../services/firebase/auth/auth";
+import TextInput from "../../shared/form/inputs/textInput/input";
+import { useAuthModal } from "../../../context/authModal.context";
+import { apple, google } from "../../../../public/assets/images/svg/auth";
+import { logoIcon } from "../../../../public/assets/images/svg";
 
-
-
-
-const Login: FC = () => {
+const Login: FC<any> = (props: any) => {
+    const { t } = useTranslation(['auth', 'common']);
+    const { hideModal } = useAuthModal();
+    const { push, back } = useRouter();
     const [is2FALoading, setIs2FALoading] = useState<boolean>(false)
-    const [isLoginLoading, setIsLoginLoading] = useState<boolean>(false)
     const [errorForm, setError] = useState<string | null>()
-
-
-    const disabledBtn = isLoginLoading || is2FALoading;
-
-
 
     const loginFormSchema = useCallback(() => {
         return Yup.object().shape({
-            email: Yup.string().email().required(),
-            password: Yup.string().min(2).required(),
+            email: Yup.string().email().required(t('common:required').toString()),
+            password: Yup.string().min(2, t('common:min', { number: 2 }).toString()).required(),
         });
-    }, [])
+    }, [t])
+
+    const afterAuthSuccess = useCallback(() => {
+        if (props.isModal) {
+            hideModal()
+        } else {
+            back()
+        }
+        if (props.navigateTo?.route != null) {
+            push(`/${props.navigateTo.route}?${props.navigateTo.queryParam}`);
+        }
+    }, [back, hideModal, props, push]);
 
 
     const onGoogleAuth = async () => {
         setIs2FALoading(true)
         try {
-            // await googleAuth()
+            await googleAuth()
+            afterAuthSuccess()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -49,7 +58,8 @@ const Login: FC = () => {
     const onAppleAuth = async () => {
         setIs2FALoading(true)
         try {
-            // await appleAuth()
+            await appleAuth()
+            afterAuthSuccess()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -66,69 +76,81 @@ const Login: FC = () => {
                 initialValues={{ email: '', password: '' }}
                 validationSchema={loginFormSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                    loginUserEmailPassword(values).then((res) => {
-                        console.log({res})
-                    })
+                    loginUserEmailPassword(values)
+                        .then(() => {
+                            afterAuthSuccess()
+                        })
+                        .catch(err => {
+                            setError(err.message);
+                        })
                         .finally(() => {
                             setSubmitting(false);
                         })
                 }}
             >
                 {({ isSubmitting }) => (
-                    <Form className="flex flex-col w-full gap-10">
-                        <Col className="gap-1">
-                            <Field className="w-full h-12 p-3 rounded-md bg-white text-black" type="email" name="email" />
+                    <Form className="flex flex-col w-full gap-4">
+                        <Col>
+                            <TextInput type="email" name="email" label={t('common:email')} />
                             <ErrorMessage name="email" component="p" className="text-red-400" />
                         </Col>
-                        <Col className="gap-1">
-                            <Field className="w-full h-12 p-3 rounded-md bg-white text-black" type="password" name="password" />
+                        <Col>
+                            <TextInput type="password" name="password" label={t('common:password')} />
                             <ErrorMessage name="password" component="p" className="text-red-400" />
                         </Col>
-                        <div className='wb-100 aife'>
-                            <Link href={'/forgot-password'} className="description-text">
-                                <p>Forgot Password?</p>
-                            </Link>
+                        <div className='wb-100 aife self-end font-semibold text-sm'>
+                            <Button className="description-text" onClick={() => {
+                                hideModal();
+                                push('/forgot-password');
+                            }}>
+                                <p>{t('forgetPassword')}</p>
+                            </Button>
                         </div>
-                        <Button className='bw-btn btn' type="submit" disabled={disabledBtn} isLoading={isSubmitting}>
-                            <h5>
-                                Login
-                            </h5>
-                        </Button>
-                        {errorForm && <span className='input-error'>{(errorForm)}</span>}
+                        <Col className="items-center gap-4">
+                            {errorForm && <span className='text-red-600'>{(errorForm || 'Invalid email or password!')}</span>}
+                            <Button className='text-white focus:ring-4 font-medium rounded-lg text-sm py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800 w-full' type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
+                                <h5>{t('common:signin')}</h5>
+                            </Button>
+                        </Col>
 
                     </Form>
                 )}
             </Formik>
         )
-    }, [])
-
+    }, [afterAuthSuccess, errorForm, hideModal, loginFormSchema, push, t])
 
     return (
-        <Row className='h-full items-center justify-center'>
-            <Col className='flex items-center justify-center flex-1 gap-10'>
-                <Image src={images.logo} alt="logo"></Image>
-                <h3>The app to trade and invest your cryptos on Binance</h3>
-                <Image alt="" src={images.login} />
-            </Col>
-            <Col className='flex flex-1 items-start justify-center'>
-                <Col className="justify-start w-full max-w-[400px] gap-10">
-                    <h1>ARYA login</h1>
+        <Row className='h-full w-full items-center justify-center'>
+            <Col className='flex flex-1 items-center justify-center'>
+                <Col className="justify-start w-full max-w-[400px] gap-8">
+                    <Row className="items-center gap-4">
+                        <Image src={logoIcon} alt="Arya_Crypto" />
+                        <h3 className="font-extrabold text-white header-label">{t('loginHeader')}</h3>
+                    </Row>
                     {loginForm}
-                    <Col className='gap-10 items-center justify-center'>
-                        <h6 className="">Or</h6>
-                        <Row className="gap-10">
+                    <Col className='gap-6 items-center justify-center'>
+                        <Row className="w-full items-center gap-3">
+                            <Col className='flex-1 h-px bg-white' />
+                            <h6 className="font-semibold text-lg">{t('or')}</h6>
+                            <Col className='flex-1 h-px bg-white' />
+                        </Row>
+                        <Row className="gap-8">
                             <Button className='' onClick={onGoogleAuth}
                                 disabled={is2FALoading}>
-                                googleIcon
+                                <Image src={google} alt="Google_Icon" />
                             </Button>
                             <Button className='' onClick={onAppleAuth}
                                 disabled={is2FALoading}>
-                                appleIcon
+                                <Image src={apple} alt="Apple_Icon" />
                             </Button>
                         </Row>
-                        <Row className="gap-2">
-                            <h5 className="">New to Arya crypto?</h5>
-                            <Link href={'/signup'} className="la-signup-link"><h5>Signup</h5></Link>
+                        <Row className="gap-1 font-semibold text-sm">
+                            <h5 className="">{t('newToCrypto')}</h5>
+                            {props.changeSection ?
+                                <Button onClick={() => props.changeSection('signup')} className='text-blue-1'><h5>{t('common:signup')}</h5></Button>
+                                :
+                                <Link href={'/signup'} className='text-blue-1'><h5>{t('common:signup')}</h5></Link>
+                            }
                         </Row>
                     </Col>
                 </Col>

@@ -1,0 +1,109 @@
+.table {
+    @apply md:min-w-[1250px];
+    width: 100%;
+    table-layout: fixed;
+
+    thead {
+        @apply text-grey-1;
+
+        tr {
+            @apply bg-black-2;
+
+
+            th {
+                height: 55px;
+                @apply font-bold text-sm;
+                text-align: left;
+                padding: 0 10px;
+            }
+
+            th:first-child {
+                @apply rounded-l-lg w-[100px] md:w-[200px];
+                padding-left: 20px;
+            }
+
+            th:nth-child(2) {
+                @apply md:w-[100px];
+            }
+
+            th:nth-child(3),
+            th:nth-child(4),
+            th:nth-child(5),
+            th:nth-child(6) {
+                @apply w-[100px] md:w-[135px];
+            }
+
+            th:last-child {
+                width: 65px;
+                vertical-align: middle;
+                @apply rounded-r-lg;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            border-bottom: 1px solid theme('colors.grey.5');
+
+            &:first-child {
+                td {
+                    height: 80px;
+                    vertical-align: middle;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                }
+            }
+
+            td {
+                @apply font-normal;
+                text-align: left;
+                padding: 0 10px;
+                height: 70px;
+                vertical-align: middle;
+        
+        
+                &:only-child {
+                    text-align: center;
+                }
+        
+                &:first-child {
+                    padding-left: 20px;
+                }
+        
+                &:last-child {
+                    width: 65px;
+                }
+            }
+        }
+    }
+
+
+    tfoot {
+        @apply text-grey-1;
+
+        tr {
+            @apply bg-black-2;
+
+            td {
+                @apply font-normal text-sm;
+                text-align: left;
+                padding: 0 20px;
+                height: 70px;
+        
+        
+                &:only-child {
+                    text-align: center;
+                }
+        
+                &:first-child {
+                    padding-left: 20px;
+                }
+        
+                &:last-child {
+                    width: 65px;
+                }
+            }
+        }
+    }
+
+}

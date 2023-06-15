@@ -1,5 +1,7 @@
 import { FC } from "react";
 import HomePage from "./home/index";
+import { GetStaticProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const App: FC = () => {
     return (
@@ -8,3 +10,11 @@ const App: FC = () => {
 };
 
 export default App;
+
+export const getStaticProps: GetStaticProps<any> = async ({
+    locale,
+}) => ({
+    props: {
+        ...(await serverSideTranslations(locale ?? 'en')),
+    },
+})

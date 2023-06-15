@@ -1,10 +1,18 @@
 import { FC } from "react";
-import Layout from "../../layout/layout";
+import Lottie from "lottie-react";
+
+import { Col } from "../layout/flex";
+import LoadingSpinner from "../loading-spinner/loading-spinner";
+
+import loadingLottie from "./loading-lottie.json";
 
 const PageLoader: FC = () => (
-    <Layout>
-        <div>Loading ...</div>
-    </Layout>
+    <Col className="w-full h-[calc(100vh_-_7rem)] md:h-[calc(100vh_-_7rem_-_60px)] items-center justify-center">
+            <Lottie
+                className="w-96"
+                animationData={loadingLottie}
+            />
+    </Col>
 )
 
 export default PageLoader;

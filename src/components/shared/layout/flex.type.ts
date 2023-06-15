@@ -1,6 +1,5 @@
-import { LegacyRef } from "react";
+import { HTMLAttributes, LegacyRef, DetailedHTMLProps } from "react";
 
-export type FlexComponentType = {
-    children?: any;
-    className?: string;
+export interface FlexComponentType extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+    reference?:LegacyRef<HTMLDivElement> | undefined;
 }

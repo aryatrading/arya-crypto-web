@@ -1,21 +1,31 @@
-import { withAuthUser, AuthAction } from 'next-firebase-auth'
+import { GetStaticProps } from 'next'
+import { AuthAction, withAuthUser } from 'next-firebase-auth'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 import Login from '../../components/app/login/login'
 import Layout from '../../components/layout/layout'
-import PageLoader from '../../components/shared/pageLoader/pageLoader'
+import SEO from '../../components/seo'
 
 
-const LoginPage = () => {
+const LoginPage = (props: any) => {
+  const {t} = useTranslation();
+
   return (
-    <Layout >
-      <Login/>
+    <Layout>
+      <SEO title={t<string>("login")} />
+      <Login />
     </Layout>
   )
 }
 
-
 export default withAuthUser({
-  // whenAuthed: AuthAction.REDIRECT_TO_APP,
-  // whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
-  // whenUnauthedAfterInit: AuthAction.RENDER,
-  LoaderComponent: PageLoader,
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
 })(LoginPage)
+
+export const getStaticProps: GetStaticProps<any> = async ({
+  locale,
+}) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en')),
+  },
+})

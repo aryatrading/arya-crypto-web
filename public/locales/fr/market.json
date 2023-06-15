@@ -1,0 +1,16 @@
+{
+    "cryptocurrencies": "Cryptomonnaies",
+    "favorites": "Favoris",
+    "search": "Rechercher une crypto",
+    "all": "Tous",
+    "rank": "Rang",
+    "name": "Nom",
+    "pnl": "24h P/L",
+    "currentprice": "Prix actuel",
+    "priceinbtc": "Prix en BTC",
+    "marketcap": "Capitalisation boursière.",
+    "volume": "volume 24H",
+    "no_assets": "Votre liste de favori est vide",
+    "no_assets_sub": "Ajouté une crypto a votre liste de favoris.",
+    "btcDominance": "Dominance BTC"
+}
