@@ -40,7 +40,7 @@ const Signup: FC<any> = (props: any) => {
         if (props.navigateTo?.route != null) {
             push(`/${props.navigateTo.route}?${props.navigateTo.queryParam}`);
         }
-    }, [back, hideModal, props.isModal, props.navigateTo.queryParam, props.navigateTo.route, push]);
+    }, [back, hideModal, props, push]);
 
     const onGoogleAuth = async () => {
         setIs2FALoading(true)
@@ -114,7 +114,7 @@ const Signup: FC<any> = (props: any) => {
                 )}
             </Formik>
         )
-    }, [back, errorForm, hideModal, props.isModal, signupValidationScheme, t])
+    }, [afterAuthSuccess, errorForm, signupValidationScheme, t])
 
     return (
         <Col className="justify-start w-full max-w-[400px] gap-8 flex-1">
