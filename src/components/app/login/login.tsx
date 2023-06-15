@@ -101,7 +101,7 @@ const Login: FC<any> = (props: any) => {
                         <div className='wb-100 aife self-end font-semibold text-sm'>
                             <Button className="description-text" onClick={() => {
                                 hideModal();
-                                router.push('/forgot-password');
+                                push('/forgot-password');
                             }}>
                                 <p>{t('forgetPassword')}</p>
                             </Button>
