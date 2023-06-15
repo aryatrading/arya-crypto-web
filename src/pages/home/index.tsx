@@ -1,12 +1,13 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import { CheckIcon } from '@heroicons/react/24/solid';
-import { withAuthUser } from 'next-firebase-auth'
+import { useAuthUser, withAuthUser } from 'next-firebase-auth'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation, Trans } from 'next-i18next';
 import clsx from 'clsx';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
+import { useRouter } from 'next/router';
 
 import { SalesPagesLayout } from '../../components/layout/layout'
 import { Col, Row } from '../../components/shared/layout/flex';
@@ -66,6 +67,8 @@ const TradingImg = () => (
 const HomePage = () => {
     const { setVisibleSection, modalTrigger } = useAuthModal();
     const [t] = useTranslation(["home"]);
+    const { clientInitialized, id } = useAuthUser();
+    const { push } = useRouter();
     const lottieRef = useRef<LottieRefCurrentProps>(null);
 
     useEffect(() => {
@@ -78,10 +81,18 @@ const HomePage = () => {
         }
     }, []);
 
-    const onClick = () => {
-        setVisibleSection('signup');
-        modalTrigger.show();
-    }
+    const onClick = useCallback((route: string) => {
+        if (clientInitialized) {
+            if (id == null) {
+                setVisibleSection('signup');
+                modalTrigger.show();
+            } else {
+                if (route) {
+                    push(route)
+                }
+            }
+        }
+    }, [clientInitialized, id, modalTrigger, push, setVisibleSection]);
 
     return (
         <SalesPagesLayout>
@@ -106,7 +117,7 @@ const HomePage = () => {
                             })}
                         </Col>
 
-                        <button onClick={onClick} className={clsx('h-[44px] bg-blue-1 rounded-lg max-w-[220px] font-bold mt-4 mb-10', styles.boxShadow)}>
+                        <button onClick={() => onClick('/dashboard')} className={clsx('h-[44px] bg-blue-1 rounded-lg max-w-[220px] font-bold mt-4 mb-10', styles.boxShadow)}>
                             {t('tryForFree')}
                         </button>
                     </Col>
@@ -124,7 +135,7 @@ const HomePage = () => {
                             <h2 className="font-bold text-white text-3xl md:text-2xl text-left leading-snug">{t('secondSection.1.sub')}</h2>
                             <p className="font-medium text-white text-left">{t('secondSection.1.content')}</p>
 
-                            <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                            <button onClick={() => onClick('/dashboard')} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
                                 {t('learnMore')}
                             </button>
                         </Col>
@@ -144,7 +155,7 @@ const HomePage = () => {
                             <h2 className="font-bold text-white text-3xl md:text-2xl text-left leading-snug">{t('secondSection.2.sub')}</h2>
                             <p className="font-medium text-white text-left">{t('secondSection.2.content')}</p>
 
-                            <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                            <button onClick={() => onClick('/smart-allocation')} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
                                 {t('learnMore')}
                             </button>
                         </Col>
@@ -156,7 +167,7 @@ const HomePage = () => {
                             <h2 className="font-bold text-white text-3xl md:text-2xl text-left leading-snug">{t('secondSection.3.sub')}</h2>
                             <p className="font-medium text-white text-left">{t('secondSection.3.content')}</p>
 
-                            <button onClick={onClick} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
+                            <button onClick={() => onClick('/trade')} className={clsx(styles.startBtn, styles.boxShadow, "text-white font-bold text-sm w-fit rounded-full")}>
                                 {t('learnMore')}
                             </button>
                         </Col>

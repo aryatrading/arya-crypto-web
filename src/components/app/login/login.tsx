@@ -1,10 +1,10 @@
 import { FC, useCallback, useMemo, useState } from "react";
 import { ErrorMessage, Form, Formik } from "formik";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import * as Yup from 'yup';
-import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
 
 import Button from "../../shared/buttons/button";
 import { Col, Row } from "../../shared/layout/flex";
@@ -18,7 +18,7 @@ import { logoIcon } from "../../../../public/assets/images/svg";
 const Login: FC<any> = (props: any) => {
     const { t } = useTranslation(['auth', 'common']);
     const { hideModal } = useAuthModal();
-    const router = useRouter();
+    const { push, back } = useRouter();
     const [is2FALoading, setIs2FALoading] = useState<boolean>(false)
     const [errorForm, setError] = useState<string | null>()
 
@@ -29,15 +29,23 @@ const Login: FC<any> = (props: any) => {
         });
     }, [t])
 
+    const afterAuthSuccess = useCallback(() => {
+        if (props.isModal) {
+            hideModal()
+        } else {
+            back()
+        }
+        if (props.navigateTo?.route != null) {
+            push(`/${props.navigateTo.route}?${props.navigateTo.queryParam}`);
+        }
+    }, [back, hideModal, props, push]);
+
 
     const onGoogleAuth = async () => {
         setIs2FALoading(true)
         try {
             await googleAuth()
-            hideModal()
-            if (!props.isModal) {
-                router.back();
-            }
+            afterAuthSuccess()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -51,10 +59,7 @@ const Login: FC<any> = (props: any) => {
         setIs2FALoading(true)
         try {
             await appleAuth()
-            hideModal()
-            if (!props.isModal) {
-                router.back();
-            }
+            afterAuthSuccess()
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -73,10 +78,7 @@ const Login: FC<any> = (props: any) => {
                 onSubmit={(values, { setSubmitting }) => {
                     loginUserEmailPassword(values)
                         .then(() => {
-                            hideModal()
-                            if (!props.isModal) {
-                                router.back();
-                            }
+                            afterAuthSuccess()
                         })
                         .catch(err => {
                             setError(err.message);
@@ -99,7 +101,7 @@ const Login: FC<any> = (props: any) => {
                         <div className='wb-100 aife self-end font-semibold text-sm'>
                             <Button className="description-text" onClick={() => {
                                 hideModal();
-                                router.push('/forgot-password');
+                                push('/forgot-password');
                             }}>
                                 <p>{t('forgetPassword')}</p>
                             </Button>
@@ -115,7 +117,7 @@ const Login: FC<any> = (props: any) => {
                 )}
             </Formik>
         )
-    }, [errorForm, hideModal, loginFormSchema, router, t])
+    }, [afterAuthSuccess, errorForm, hideModal, loginFormSchema, push, t])
 
     return (
         <Row className='h-full w-full items-center justify-center'>
