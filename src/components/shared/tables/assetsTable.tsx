@@ -29,7 +29,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
   const _assetprice = useSelector(selectAssetLivePrice);
   const authUser = useAuthUser();
   const _btc = _assetprice["btc"] * _assetprice["usdt"];
-  console.log(_btc);
+
   const isTabletOrMobileScreen = useMediaQuery({
     query: `(max-width:950px)`,
   });

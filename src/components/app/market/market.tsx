@@ -78,7 +78,7 @@ const Market: FC = () => {
   }, [_assets, tab]);
 
   return (
-    <div className="h-full w-full ">
+    <div className="h-full w-full " onScroll={handleScroll}>
       <Col className="flex items-center justify-center flex-1">
         <Col className="h-32 mb-40 mt-36 md:mt-0 lg:mb-20 flex justify-center w-full">
           <p className="text-center  text-[#F9FAFB] font-medium text-4xl mb-10">
