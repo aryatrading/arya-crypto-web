@@ -38,7 +38,7 @@ const Login: FC<any> = (props: any) => {
         if (props.navigateTo?.route != null) {
             push(`/${props.navigateTo.route}?${props.navigateTo.queryParam}`);
         }
-    }, [back, hideModal, props.isModal, props.navigateTo.queryParam, props.navigateTo.route, push]);
+    }, [back, hideModal, props, push]);
 
 
     const onGoogleAuth = async () => {
@@ -117,7 +117,7 @@ const Login: FC<any> = (props: any) => {
                 )}
             </Formik>
         )
-    }, [errorForm, hideModal, loginFormSchema, router, t])
+    }, [afterAuthSuccess, errorForm, hideModal, loginFormSchema, push, t])
 
     return (
         <Row className='h-full w-full items-center justify-center'>
