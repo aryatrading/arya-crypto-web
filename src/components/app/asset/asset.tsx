@@ -15,11 +15,12 @@ import AssetExitStrategy from "./AssetExitStrategy";
 import AssetSparkLine from "../../shared/containers/asset/AssetSparkLine";
 import { getStats } from "../../../services/controllers/asset";
 import { TextSkeleton } from "../../shared/skeletons/skeletons";
+import { StatisticsResponseType } from "../../../types/asset";
 
 const Asset: FC = () => {
   const { t } = useTranslation(["asset", "common"]);
   const asset = useSelector(getAsset);
-  const [coinstats, setCoinStats] = useState();
+  const [coinstats, setCoinStats] = useState<StatisticsResponseType>();
 
   useEffect(() => {
     if (asset?.symbol) {

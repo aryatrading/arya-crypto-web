@@ -68,5 +68,8 @@
     "insights": "Insights",
     "statsHolding": "{{coin}} holders in ARYA Crypto",
     "todayTrades": "{{coin}} trades today",
-    "todayVolume": "Volume (24h)"
+    "todayVolume": "Volume (24h)",
+    "usersWhoHoldAssetOnARYACrypto":"Users who hold {{assetSymbol}} on ARYA Crypto",
+    "assetTradesToday": "{{assetSymbol}} trades today",
+    "viewMore" :"View more"
 }

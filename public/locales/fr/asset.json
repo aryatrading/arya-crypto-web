@@ -67,5 +67,8 @@
     "insights": "Connaissances",
     "statsHolding": "Détenteurs de {{coing}} dans ARYA Crypto",
     "todayTrades": "{{coin}} se négocie aujourd'hui",
-    "todayVolume": "Volume (24h)"
+    "todayVolume": "Volume (24h)",
+    "usersWhoHoldAssetOnARYACrypto":"Utilisateurs qui détiennent des {{assetSymbol}} sur ARYA Crypto",
+    "assetTradesToday": "Les transactions en {{assetSymbol}} aujourd'hui",
+    "viewMore" :"Voir plus"
 }
