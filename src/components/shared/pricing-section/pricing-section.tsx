@@ -1,24 +1,36 @@
-import { FC, useCallback, useMemo } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleIconSolid } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
+import { useAuthUser } from "next-firebase-auth";
+import { useRouter } from "next/router";
 
 import { Col, Row } from "../layout/flex";
 import Button from "../buttons/button";
 import { useAuthModal } from "../../../context/authModal.context";
+import { EnumPricing } from "../../../utils/constants/payment";
+import SwitchInput from "../form/inputs/switch/switch";
 
 const PricingSection: FC = () => {
-
-    const { setVisibleSection, modalTrigger } = useAuthModal();
-
+    const { setVisibleSection, modalTrigger, setNavigateTo } = useAuthModal();
     const { t } = useTranslation(["pricing-plans"]);
+    const [paymentPeriod, setPaymentPeriod] = useState<EnumPricing>(EnumPricing.yearly);
+    const { push } = useRouter();
+    const { clientInitialized, id } = useAuthUser();
 
-
-    const onOpenSignUpClick = useCallback(() => {
-        setVisibleSection('signup');
-        modalTrigger.show();
-    }, [modalTrigger, setVisibleSection])
+    const onOpenSignUpClick = useCallback((route?: string) => {
+        if (clientInitialized) {
+            if (id == null) {
+                setVisibleSection('signup');
+                modalTrigger.show();
+            } else {
+                if (route) {
+                    push(route)
+                }
+            }
+        }
+    }, [clientInitialized, id, modalTrigger, push, setVisibleSection])
 
     const freeFeature = useCallback((text: string) => {
         return (
@@ -40,7 +52,7 @@ const PricingSection: FC = () => {
                     {freeFeature(t("marketOrderTrading"))}
                     {freeFeature(t("portfolioBacktesting"))}
                 </Col>
-                <Button  onClick={onOpenSignUpClick} className="bg-[#1F2F4D] rounded-full py-3 px-10 w-fit absolute bottom-0 left-1/2 translate-y-1/2 -translate-x-1/2 font-bold">
+                <Button onClick={() => onOpenSignUpClick('/dashboard')} className="bg-[#1F2F4D] rounded-full py-3 px-10 w-fit absolute bottom-0 left-1/2 translate-y-1/2 -translate-x-1/2 font-bold">
                     {t("common:getStarted")}
                 </Button>
             </Col>
@@ -57,6 +69,17 @@ const PricingSection: FC = () => {
     }, [])
 
     const premiumPlan = useMemo(() => {
+        const onPress = () => {
+            if (id == null) {
+                onOpenSignUpClick();
+                setNavigateTo({
+                    route: 'checkout',
+                    queryParam: `payment=${paymentPeriod}`
+                });
+            } else {
+                onOpenSignUpClick(`/checkout?payment=${paymentPeriod}`);
+            }
+        }
         return (
             <Col className="border-4 border-blue-1 rounded-2xl py-14 px-14 gap-5 relative bg-[#152445]">
                 <Button disabled className="border border-[#668EF1] bg-[#3c5eb1] rounded-full py-1 px-5 w-fit">{t("premium")}</Button>
@@ -80,12 +103,12 @@ const PricingSection: FC = () => {
                         {premiumFeature(t("exitStrategy"))}
                     </Col>
                 </Col>
-                <Button  onClick={onOpenSignUpClick} className="bg-blue-1 rounded-full py-3 px-10 w-fit absolute bottom-0 left-1/2 translate-y-1/2 -translate-x-1/2 font-bold">
+                <Button onClick={onPress} className="bg-blue-1 rounded-full py-3 px-10 w-fit absolute bottom-0 left-1/2 translate-y-1/2 -translate-x-1/2 font-bold">
                     {t("common:getStarted")}
                 </Button>
             </Col>
         )
-    }, [onOpenSignUpClick, premiumFeature, t]);
+    }, [id, onOpenSignUpClick, paymentPeriod, premiumFeature, setNavigateTo, t]);
 
     const subscriptionPromise = useCallback(({ mainImage, title, description, images }: { mainImage: string, title: string, description?: string, images?: string[] }) => {
         return (
@@ -109,6 +132,16 @@ const PricingSection: FC = () => {
             <Col className="container items-center gap-14">
                 <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">{t("pricingPlans")}</h2>
                 <p className="max-w-[700px] text-center">{t("automateYourCryptocurrencyStrategy")}</p>
+                <Row className="items-center gap-8">
+                    <p className="max-w-[700px] text-center font-bold text-lg">{t(paymentPeriod === EnumPricing.monthly ? "monthlyPay" : "yearlyPay")}</p>
+                    <SwitchInput bigSize checked={paymentPeriod === EnumPricing.yearly} onClick={() => {
+                        if (paymentPeriod === EnumPricing.yearly) {
+                            setPaymentPeriod(EnumPricing.monthly);
+                        } else {
+                            setPaymentPeriod(EnumPricing.yearly);
+                        }
+                    }} />
+                </Row>
                 <Col className="md:flex-row gap-10">
                     {freePlan}
                     {premiumPlan}
