@@ -136,7 +136,7 @@ export const PortfolioSalesPage = () => {
                             </Col>
                         </Col>
                         <Col className="gap-2 items-center justify-end w-[350px]">
-                            <Image alt="Step 3" src="/assets/images/publicPages/portfolio/getStarted3.png" width={300} height={500} />
+                            <Image alt="Step 3" src="/assets/images/publicPages/portfolio/getStarted4.png" width={300} height={500} />
 
                             <Col className="relative border border-blue-1 rounded-lg p-5 w-full max-w-[300px]">
                                 <p className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2/3 bg-blue-1 w-10 h-10 flex items-center justify-center rounded-lg text-2xl font-bold">3</p>
