@@ -47,6 +47,11 @@ const Dashboard: FC = () => {
   const { isTabletOrMobileScreen } = useResponsive();
   const { t } = useTranslation(["dashboard", "common"]);
 
+  function applyLocalTimezoneOffset(timestamp: number) {
+    const localTimezoneOffset = new Date().getTimezoneOffset();
+    const timestampOffset = localTimezoneOffset * 60 * 1000;
+    return timestamp - timestampOffset;
+  }
 
   const initPortfolioSnapshots = useCallback(() => {
     if (!portfolioSnapshots.length)
@@ -151,7 +156,8 @@ const Dashboard: FC = () => {
 
     const chartData: chartDataType[] = portfolioSnapshots?.map((snapshot) => {
 
-      const time = new Date(snapshot.created_at).getTime();
+      const time = applyLocalTimezoneOffset(new Date(snapshot.created_at).getTime());
+
       return {
         time: Math.floor((time / 1000)) as chartDataType["time"],
         value: snapshot.total_evaluation ?? 0,
