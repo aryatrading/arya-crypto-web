@@ -37,7 +37,6 @@ export default function TradingViewWidget({ height, asset }) {
 
 
     function createWidget() {
-      console.log('> asset >> ', asset)
       if (
         document.getElementById(graphId) &&
         "TradingView" in window

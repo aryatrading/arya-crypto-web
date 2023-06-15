@@ -34,7 +34,6 @@ export const fetchAssets = async (
   limit: number = 20,
   firebaseId?: string
 ) => {
-  console.log(">>> ", limit);
   const { data } = await axiosInstance.get(
     `utils/assets?limit=${limit}&offset=0${search ? `&search=${search}` : ""}${
       firebaseId ? `&firebase_id=${firebaseId}` : ""
