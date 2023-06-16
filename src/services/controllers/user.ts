@@ -5,5 +5,5 @@ import { setUser } from "../redux/userSlice";
 export const getUserData = async () => {
   const { data } = await axiosInstance.get("/user/");
 
-  store.dispatch(setUser(data));
+  store?.dispatch(setUser(data));
 };
