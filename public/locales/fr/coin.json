@@ -12,5 +12,6 @@
     "searchAsset": "Rechercher une crypto",
     "emptySearch": "Recherche vide",
     "coins": "Cryptos",
-    "preSelect": "Sélectionnez une pièce et voyez combien vous obtiendrez de retour."
+    "preSelect": "Sélectionnez une pièce et voyez combien vous obtiendrez de retour.",
+    "preSelectConv": "Sélectionnez une pièce et voyez la conversion."
 }
