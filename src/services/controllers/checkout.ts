@@ -2,7 +2,7 @@ import { axiosShopInstance } from "../api/axiosConfig";
 
 export const getCheckoutDetails = async () => {
   return await axiosShopInstance.get(
-    `/checkouts/slug/${process.env.NEXT_PUBLIC_CHECKOUT_SLUG}`
+    `/checkouts/slug/${process.env.NEXT_PUBLIC_CHECKOUT_SLUG||'arya-crypto-2023'}`
   );
 };
 

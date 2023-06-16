@@ -58,13 +58,20 @@ export const getAssetDetails = async (symbol?: any) => {
   );
 };
 
+
+function applyLocalTimezoneOffset(timestamp: number) {
+  const localTimezoneOffset = new Date().getTimezoneOffset();
+  const timestampOffset = localTimezoneOffset * 60 * 1000;
+  return timestamp - 2 * timestampOffset;
+}
+
 export const getAssetTimeseriesPrice = async (
   symbol: string | string[],
   interval: string,
   output: number
 ) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=${interval}&outputsize=${output}&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}`
+    `${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=${interval}&outputsize=${output}&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}&timezone=UTC`
   );
 
   const { values } = await response.json();
@@ -75,7 +82,7 @@ export const getAssetTimeseriesPrice = async (
     let item: chartDataType = {
       value: parseFloat(values[i].open),
       close: parseFloat(values[i].close),
-      time: (new Date(values[i].datetime).getTime() /
+      time: (applyLocalTimezoneOffset(new Date(values[i].datetime).getTime()) /
         1000) as chartDataType["time"],
       high: parseFloat(values[i].high),
       low: parseFloat(values[i].low),
@@ -91,8 +98,8 @@ export const getAssetTimeseriesPrice = async (
   );
 };
 
-export const getAssetSparkLineData = async (symbol:string)=>{
-  return await axios.get(`${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=1h&outputsize=168&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}`)
+export const getAssetSparkLineData = async (symbol: string) => {
+  return await axios.get(`${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=1h&outputsize=168&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}&timezone=UTC`)
 }
 
 export const getAssetVotes = async (assetId: number) => {
@@ -182,7 +189,7 @@ function getCustomPeriodIntervalsAndOutputSize(startDate: number, endDate: numbe
       interval: "1day",
       outputsize: diffDays,
     }
-  }  else {
+  } else {
     return {
       interval: "1week",
       outputsize: Math.round(diffDays / 7),
@@ -193,7 +200,8 @@ function getCustomPeriodIntervalsAndOutputSize(startDate: number, endDate: numbe
 export async function getAssetsHistoricalData(symbols: string[], period: EnumSmartAllocationSimulationPeriod, startDate?: Date, endDate?: Date) {
   const params: { [k: string]: any } = {
     symbol: symbols.join(","),
-    apikey: process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY
+    apikey: process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY,
+    timezone: "UTC"
   }
 
   if (period === EnumSmartAllocationSimulationPeriod.custom) {

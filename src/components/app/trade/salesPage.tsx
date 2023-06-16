@@ -32,6 +32,7 @@ export const TradingSalesPage = () => {
 
     useEffect(() => {
         if (lottieRef.current) {
+            lottieRef.current.setSpeed(0.5);
             lottieRef.current.pause();
             setTimeout(() => {
                 lottieRef.current?.play();
@@ -45,10 +46,10 @@ export const TradingSalesPage = () => {
     }
 
     return (
-        <Col className=" w-full h-full">
+        <Col className="w-full h-full pt-14 lg:pt-0">
             <Row className={clsx("gap-10 flex-col-reverse lg:flex-row items-center px-4 md:px-12 lg:px-20 xl:px-60 py-20 justify-center min-h-[calc(100vh-65px)]", styles.bgImage)}>
                 <Col className="flex-1 w-full h-full gap-8 justify-center">
-                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.mainTitle')} <span className={styles.underlined}>{t('salesPage.results')}</span></h2>
+                    <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.mainTitle')} <span className={styles.underlined}>{t('salesPage.results')}</span></h2>
                     <p className="font-medium text-white text-left">{t('salesPage.ourGoal')}</p>
 
                     <Col className='gap-4'>
@@ -69,15 +70,15 @@ export const TradingSalesPage = () => {
                     </Row>
                 </Col>
                 <Col className="flex-1 w-full h-full gap-4 relative">
-                    <Lottie animationData={TradingImg} lottieRef={lottieRef} className={clsx(styles.animateImg, "w-full scale-125 md:scale-150 absolute h-full")} />
+                    <Lottie animationData={TradingImg} lottieRef={lottieRef} className={clsx(styles.animateImg, "w-full scale-125 md:scale-150 lg:scale-[1.65] absolute h-full")} />
                     <Lottie animationData={TradingImg} className={clsx("w-full scale-125 opacity-[0]")} />
                 </Col>
             </Row>
 
-            <Col className="w-full h-full items-center justify-center bg-[#111827]">
-                <Row className="gap-10 flex-col-reverse lg:flex-row items-center md:mt-10 w-full lg:w-[100vw] px-4 lg:px-72 py-14">
+            <Col className="w-full h-full items-center justify-center bg-[#111827] px-4">
+                <Row className="gap-10 flex-col-reverse lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-20 xl:px-72 py-14">
                     <Col className="flex-1 w-full h-full gap-8 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.protectCapital')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.protectCapital')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.protectCapitalDesc')}</p>
 
@@ -90,12 +91,12 @@ export const TradingSalesPage = () => {
                     </Col>
                 </Row>
 
-                <Row className="gap-10 flex-col lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-72 py-14">
+                <Row className="gap-10 flex-col lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-20 xl:px-72 py-14 ">
                     <Col className="flex-1 w-full h-full gap-4 items-center justify-center">
                         <Image alt="" src={require('../../../../public/assets/images/publicPages/trading/2.png')} className={clsx("w-full self-end h-full")} />
                     </Col>
                     <Col className="flex-1 w-full h-full gap-8 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.scheduleYourProfits')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.scheduleYourProfits')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.scheduleYourProfitsDesc')}</p>
 
@@ -105,9 +106,9 @@ export const TradingSalesPage = () => {
                     </Col>
                 </Row>
 
-                <Row className="gap-10 flex-col-reverse lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-72 py-14">
+                <Row className="gap-10 flex-col-reverse lg:flex-row items-center w-full lg:w-[100vw] px-4 lg:px-20 xl:px-72 py-14">
                     <Col className="flex-1 w-full h-full gap-8 justify-center">
-                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left leading-snug">{t('salesPage.avoidLoss')}</h2>
+                        <h2 className="font-bold text-white text-3xl md:text-5xl text-left md:leading-snug">{t('salesPage.avoidLoss')}</h2>
 
                         <p className="font-medium text-white text-left">{t('salesPage.avoidLossDesc')}</p>
 

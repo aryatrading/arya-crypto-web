@@ -1,4 +1,3 @@
-import { TradeOrder } from "../../types/trade";
 
 export const dummyMarket = [
   {

@@ -2,6 +2,8 @@ import { FC } from "react";
 import { Row } from "../layout/flex";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 import { useTranslation } from "react-i18next";
+import PaymentModal from "../../app/Subscription/PaymentCard/PaymentModal";
+import Button from "../buttons/button";
 
 export const PremiumBanner: FC = () => {
   const { t } = useTranslation(["common"]);
@@ -15,9 +17,11 @@ export const PremiumBanner: FC = () => {
           {t("premiumusersfeature")}
         </p>
       </Row>
-      <div className="bg-orange-1 w-28 flex items-center justify-center cursor-pointer">
-        <p className="text-sm">{t("upgradenow")}</p>
-      </div>
+      <PaymentModal triggerButton={
+        <Button className="bg-orange-1 w-28 flex items-center justify-center cursor-pointer">
+          <p className="text-sm">{t("upgradenow")}</p>
+        </Button>
+      } />
     </div>
   );
 };

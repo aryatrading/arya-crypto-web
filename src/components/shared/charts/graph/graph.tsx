@@ -68,7 +68,7 @@ const LineChart: FC<GraphChartType> = ({
             tooltipContainerRef.current.style.display = 'block';
 
             const primaryLine: LineData = param.seriesData.get(primarySeries) as LineData;
-            const dateStr = moment(new Date((param.time as number) * 1000)).utcOffset(-(new Date()).getTimezoneOffset()).format("DD-MM-YYYY HH:mm");
+            const dateStr = moment(new Date((param.time as number) * 1000)).utcOffset(0).format("DD-MM-YYYY HH:mm");
 
             const secondaryLine: LineData = param.seriesData.get(secondarySeries) as LineData;
             const primaryPrice = primaryLine?.value ?? 0;

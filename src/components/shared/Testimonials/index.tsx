@@ -42,7 +42,7 @@ export const Testimonials = () => {
                             <SwiperSlide key={slide.name}>
                                 <Col className="items-center bg-offWhite-1 rounded-2xl py-12 px-10 border-4 border-blue-4 min-h-[250px]">
                                     <h4 className="font-bold text-blue-5 text-xl mb-4">{slide.name}</h4>
-                                    <p className="font-light text-blue-5 text-sm text-center">{slide.contnet}</p>
+                                    <p className="font-light text-blue-5 text-sm text-center mb-10">{slide.contnet}</p>
 
                                     <Row className="absolute bottom-10">
                                         <StarIcon className="stroke-yellow-1 fill-yellow-1 w-8 h-8" />
