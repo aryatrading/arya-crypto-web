@@ -1,0 +1,8 @@
+service: 'default'
+runtime: nodejs16
+env: standard
+
+handlers:
+  - url: /.*
+    secure: always
+    script: auto
