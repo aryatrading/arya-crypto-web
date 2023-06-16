@@ -40,12 +40,12 @@ const Footer = () => {
           }
           <Col className='gap-4'>
             <h3 className='text-white text-base font-medium'>Contact</h3>
-            <Col className='gap-3'>
+            <Row className='gap-3'>
               <Row>
-                <Link href={'mailto:aryacrypto@gmail.com'}><EmailIcon className='w-4 h-4 fill-current text-white' /></Link>
+                <Link href={'mailto:support@aryatrading.com'}><EmailIcon className='w-4 h-4 fill-current text-white' /></Link>
               </Row>
-              <Link className='text-grey-1 text-sm font-medium' href={'mailto:aryacrypto@gmail.com'}>Aryacrypto@gmail.com</Link>
-            </Col>
+              <Link className='text-grey-1 text-sm font-medium' href={'mailto:support@aryatrading.com'}>support@aryatrading.com</Link>
+            </Row>
           </Col>
         </div>
 
