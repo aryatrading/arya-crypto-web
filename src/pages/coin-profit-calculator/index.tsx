@@ -51,7 +51,7 @@ const TradingImg = () => (
 )
 
 const CoinProfitCalculator = () => {
-    const { t } = useTranslation([""]);
+    const { t } = useTranslation();
     const { setVisibleSection, modalTrigger } = useAuthModal();
     const { clientInitialized, id } = useAuthUser();
     const { push } = useRouter();
@@ -92,7 +92,7 @@ const CoinProfitCalculator = () => {
 
     const thirdSection = useMemo(() => {
         return (
-            <Col className="py-10 w-full bg-[#111827]">
+            <Col className="py-10 w-full bg-black-1">
                 <Col className="container items-center">
                     <Col className="items-center text-center gap-3">
                         <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">{t("dashboard:salesPage.allInOnePlatformForTrackingAllYourAssets")}</h2>
@@ -179,7 +179,7 @@ const CoinProfitCalculator = () => {
                 </Col>
             </Row>
         </Col>)
-    }, [t]);
+    }, [onClick, t]);
 
 
     const firstSection = useMemo(() => {
@@ -220,7 +220,7 @@ const CoinProfitCalculator = () => {
                 </Col>
             </Col>
         )
-    }, [t]);
+    }, [onClick, t]);
 
     return (
         <SalesPagesLayout>

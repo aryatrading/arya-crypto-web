@@ -1,0 +1,154 @@
+.startBtn {
+    background: transparent linear-gradient(90deg, #668EF1 0%, #3C5EB1 100%) 0% 0% no-repeat padding-box;
+    height: 44px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-bottom: 20px;
+}
+
+.boxShadow:hover {
+    box-shadow: 0px 0px 22px #84ADFF;
+}
+
+.stats {
+    background: transparent linear-gradient(180deg, rgba(82, 125, 229, 0.43) 0%, rgba(13, 57, 163, 0.43) 100%) 0% 0% no-repeat padding-box;
+    border-radius: 25px;
+}
+
+@media (max-width: 768px) {
+    .stats {
+        background: rgb(82, 125, 229);
+    }
+
+    .underlined:after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        height: 13px;
+        width: 100%;
+        border: solid 2px #558AF2;
+        border-color: #558AF2 transparent transparent transparent;
+        border-radius: 60%;
+    }
+
+    .table {
+        th {
+            &:nth-child(2) {
+                padding-left: 14px;
+            }
+        }
+
+        td {
+            &:nth-child(2) {
+                padding-left: 14px;
+            }
+
+            text-align: center;
+        }
+    }
+}
+
+.dotted-spaced {
+    background-image: linear-gradient(to right, #fff 10%, rgba(255, 255, 255, 0) 0%);
+    background-position: top;
+    background-size: 10px 1px;
+    background-repeat: repeat-x;
+}
+
+.rotate {
+    animation: rotation 40s infinite linear;
+}
+
+.animation-1 {
+    --translateY: -20px;
+    animation: MoveUpDown 9s 500ms linear infinite;
+}
+
+.animation-2 {
+    --translateY: 10px;
+    animation: MoveUpDown 4s 500ms linear infinite;
+}
+
+.animation-3 {
+    --translateY: -40px;
+    animation: MoveUpDown 10s 500ms linear infinite;
+}
+
+.animation-4 {
+    --translateY: 15px;
+    animation: MoveUpDown 6s 500ms linear infinite;
+}
+
+.fadeIn {
+    animation: fadeIn 400ms linear;
+    opacity: 1;
+}
+
+.fadeOut {
+    animation: fadeOut 300ms linear;
+    opacity: 0;
+}
+
+
+.animateImg {
+    animation: slide 1s linear;
+}
+
+@keyframes slide {
+    from {
+        opacity: 0;
+        top: -100px;
+    }
+
+    to {
+        opacity: 1;
+        top: 0;
+    }
+}
+
+@keyframes MoveUpDown {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(var(--translateY));
+    }
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(359deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        top: 100px;
+    }
+
+    to {
+        opacity: 1;
+        top: 0;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        top: 0;
+    }
+
+    to {
+        opacity: 0;
+        top: -100px;
+    }
+}
