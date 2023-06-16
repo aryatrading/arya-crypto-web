@@ -150,10 +150,15 @@ const RebalancePreviewDialog = ({ holdingData }: { holdingData: SmartAllocationA
                             <Button className=" bg-blue-1 rounded-md py-4 px-12 w-full md:w-auto" onClick={rebalanceNow}>{t('rebalanceNow')}</Button>
                         </AlertDialog.Action>
                     </div>
-                        : <Row className='justify-between items-center'>
+                        : <Col className='md:flex-row justify-between items-center gap-10'>
                             <PremiumBanner />
-                            <Button className=" bg-grey-1 rounded-md py-2 px-5 w-full md:w-auto flex gap-2" disabled><LockClosedIcon width={20} height={20} /> {t('rebalanceNow')}</Button>
-                        </Row>
+                            <Row className='flex-col-reverse md:flex-row gap-5'>
+                                <AlertDialog.Cancel asChild>
+                                    <Button className="alert-dialog-cancel-btn">{t('cancel')}</Button>
+                                </AlertDialog.Cancel>
+                                <Button className=" bg-grey-1 rounded-md py-4 px-5 w-full md:w-auto flex gap-2" disabled><LockClosedIcon width={20} height={20} /> {t('rebalanceNow')}</Button>
+                            </Row>
+                        </Col>
                     }
                 </AlertDialog.Content>
             </AlertDialog.Portal>
