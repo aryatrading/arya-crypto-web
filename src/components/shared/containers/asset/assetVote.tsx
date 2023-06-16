@@ -30,7 +30,6 @@ const AssetVote: FC<{ className?: string }> = ({ className }) => {
 
   const initBearishAndBullishVoting = useCallback(() => {
     if (asset?.id && id != null) {
-      alert('xx');
       getAssetVotes(asset.id).then((response) => {
         setHasVoted(response.user_voted_last_24h ?? false);
         setVotingValues({
