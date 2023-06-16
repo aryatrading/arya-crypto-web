@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Col, Row } from "../layout/flex";
+import Input from "./Input";
 
 interface InputProps {
   title: string;
@@ -27,12 +28,12 @@ const TradeInput: FC<InputProps> = ({
       <Row className="flex justify-between bg-black-1 p-3 rounded-lg items-center h-12">
         <p className="font-bold text-grey-1">{title}</p>
         <Row className="gap-3 items-center">
-          <input
+          <Input
             disabled={disabled}
-            type="number"
-            className="bg-transparent text-right font-bold focus:border-black-1 focus:outline-none focus:border-transparent focus:ring-0 border-transparent"
+            className="bg-transparent text-right font-bold"
             value={amount ?? ""}
-            onChange={(e) => onchange(e.target.value ?? 0)}
+            onChange={(e:any) => onchange(e.target.value ?? 0)}
+            type="number"
           />
           <p className="font-bold text-grey-1">{value}</p>
         </Row>

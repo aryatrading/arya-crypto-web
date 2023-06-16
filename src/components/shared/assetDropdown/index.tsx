@@ -61,13 +61,15 @@ export const AssetDropdown = ({
 
   useEffect(() => {
     fetchAssets(keyword, resultLimit)
-      .then((response: AssetType[]) => {
-        if (removeAsset) {
-          setCoins(
-            response.filter((elm) => elm.symbol?.toLowerCase() !== removeAsset)
-          );
-        } else {
-          setCoins(response);
+      .then((response) => {
+        if (response){
+          if (removeAsset) {
+            setCoins(
+              response.filter((elm) => elm.symbol?.toLowerCase() !== removeAsset)
+            );
+          } else {
+            setCoins(response);
+          }
         }
         setLoading(false);
       })

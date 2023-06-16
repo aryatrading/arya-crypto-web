@@ -107,7 +107,10 @@ const AssetTrade: FC = () => {
             </p>
           )}
         </Button>
-        <Button className="rounded-md bg-transparent text-white w-full">
+        <Button
+          className="rounded-md bg-transparent text-white w-full"
+          onClick={() => router.push(`/trade?s=${s}`)}
+        >
           <p className="text-center font-semibold text-base">
             {t("advance_mode")}
           </p>

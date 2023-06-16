@@ -1,7 +1,5 @@
 import { FC } from "react";
 import { Row } from "../../layout/flex";
-import { useTranslation } from "next-i18next";
-import LoadingSpinner from "../../loading-spinner/loading-spinner";
 import { TextSkeleton } from "../../skeletons/skeletons";
 type AssetNameProps = {
   iconUrl?: string;
@@ -10,7 +8,6 @@ type AssetNameProps = {
 };
 
 export const AssetName: FC<AssetNameProps> = ({ iconUrl, name, symbol }) => {
-  const { t } = useTranslation(["asset"]);
 
   return (
     <Row className="gap-3 align-center items-center">

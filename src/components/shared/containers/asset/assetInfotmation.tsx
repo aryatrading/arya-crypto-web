@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { selectAssetLivePrice } from "../../../../services/redux/marketSlice";
 import { useTranslation } from "next-i18next";
 import { formatNumber } from "../../../../utils/helpers/prices";
-import styles from "./assetInformation.module.scss";
 import { twMerge } from "tailwind-merge";
 import { TextSkeleton } from "../../skeletons/skeletons";
 
@@ -71,8 +70,7 @@ export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
           </p>
           <p
             className={twMerge(
-              "font-medium text-xs md:text-sm",
-              styles.description
+              "font-semibold text-xs md:text-sm"
             )}
           >
             {asset?.description.replace(/<\/?[^>]+(>|$)/g, "")}
