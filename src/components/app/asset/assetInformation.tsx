@@ -1,9 +1,11 @@
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { Col, Row } from "../../shared/layout/flex";
 import { assetTimeseries } from "../../../utils/constants/assetTimeseries";
 import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import { Time } from "lightweight-charts";
+import { useAuthUser } from "next-firebase-auth";
 import clsx from "clsx";
 
 import {
@@ -30,7 +32,6 @@ import { PostSkeleton } from "../../shared/skeletons/skeletons";
 import { percentageFormat } from "../../../utils/helpers/prices";
 import { Modal } from "../modal";
 import CloseIcon from "../../svg/Shared/CloseIcon";
-import { Time } from "lightweight-charts";
 
 type seriesInterface = {
   title: string;
@@ -52,6 +53,7 @@ interface IAssetInformationTab {
 const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => {
   const { t } = useTranslation(["asset"]);
   const asset = useSelector(getAsset);
+  const { clientInitialized, id } = useAuthUser();
   const timeseries = useSelector(getAssetTimeseries);
   const { posts } = useSelector(({ posts }: any) => posts);
   const [activeSeries, setActiveSeries] = useState("24H");
@@ -200,16 +202,24 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
   }, [coinstats, t, asset?.symbol, tradeStatisticsModal])
 
   const assetInsights = useMemo(() => {
-    return (
-      <Col className="justify-center gap-6">
-        <h3 className="asset-header">{t('insights')}</h3>
-        <Row className="gap-10 items-center flex-col xl:flex-row flex-1">
-          {holdingInsightsCard}
-          {assetTradesInsightsCard}
-        </Row>
-      </Col>
-    )
-  }, [assetTradesInsightsCard, holdingInsightsCard, t])
+    if (clientInitialized) {
+      if (id) {
+        return (
+          <Col className="justify-center gap-6">
+            <h3 className="asset-header">{t('insights')}</h3>
+            <Row className="gap-10 items-center flex-col xl:flex-row flex-1">
+              {holdingInsightsCard}
+              {assetTradesInsightsCard}
+            </Row>
+          </Col>
+        )
+      } else {
+        return <></>;
+      }
+    } else {
+      return <></>;
+    }
+  }, [assetTradesInsightsCard, clientInitialized, holdingInsightsCard, id, t])
 
   return (
     <Col className="lg:flex-row w-full gap-8 lg:gap-5">

@@ -1,6 +1,7 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
+import { useAuthUser } from "next-firebase-auth";
 
 import { AssetHeader } from "../../shared/containers/asset/assetDetailsHeader";
 import AssetStatistics from "../../shared/containers/asset/assetStatistics";
@@ -20,13 +21,14 @@ import { StatisticsResponseType } from "../../../types/asset";
 const Asset: FC = () => {
   const { t } = useTranslation(["asset", "common"]);
   const asset = useSelector(getAsset);
+  const { id } = useAuthUser();
   const [coinstats, setCoinStats] = useState<StatisticsResponseType>();
 
   useEffect(() => {
-    if (asset?.symbol) {
+    if (asset?.symbol && id != null) {
       getStats(asset?.symbol).then(setCoinStats);
     }
-  }, [asset?.symbol]);
+  }, [asset?.symbol, id]);
 
   const stats = useMemo(() => {
     return [
@@ -60,7 +62,7 @@ const Asset: FC = () => {
       <Row className="text-grey-1 gap-1">
         <span>{t("market")}</span>
         <span> / </span>
-        {asset.name ? <h1 className="inline">{t("pricelivedata", { asset })}</h1> : <TextSkeleton heightClassName="h-5" widthClassName="w-52"/>}
+        {asset.name ? <h1 className="inline">{t("pricelivedata", { asset })}</h1> : <TextSkeleton heightClassName="h-5" widthClassName="w-52" />}
       </Row>
       <Row className="justify-between gap-5">
         <Row className="items-end gap-5 justify-between w-full md:w-auto">
