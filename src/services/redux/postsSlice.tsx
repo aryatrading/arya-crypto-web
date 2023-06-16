@@ -13,7 +13,7 @@ export const postsSlice = createSlice({
     name: "market",
     initialState,
     reducers: {
-        setPosts: (state, action: { payload: any[] }) => {
+        setPosts: (state, action: { payload: any[] | null }) => {
             state.posts = action.payload;
         },
     },

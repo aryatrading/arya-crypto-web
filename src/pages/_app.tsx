@@ -27,7 +27,6 @@ import { FAVORITES_LIST } from "../utils/constants/config";
 import "../services/api/socketConfig";
 import ResponsiveProvider from "../context/responsive.context";
 import { getUserLanguage } from "../services/controllers/utils";
-import { getNotifications } from "../services/controllers/notifications";
 import PushNotificationLayout from "../components/layout/Notifications";
 import { getUserData } from "../services/controllers/user";
 

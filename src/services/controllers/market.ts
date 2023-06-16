@@ -7,6 +7,7 @@ import { storeMrkAssets } from "../redux/marketSlice";
 import { store } from "../redux/store";
 import { USDTSymbol } from "../../utils/constants/market";
 import { TradableAssetType } from "../../types/smart-allocation.types";
+import { FAVORITES_LIST } from "../../utils/constants/config";
 
 // FETCH REQUEST TO GET ASSETS FROM TWELEVE DATA AND RETURN A STRING OF SYMBOLS
 export const fetchSymbolsList = async (assets?: AssetType[]) => {
@@ -48,6 +49,22 @@ export const fetchAssets = async (
       const mrkCapYesterday =
         parseFloat(data[i].asset_data.market_cap) +
         parseFloat(data[i].asset_data.market_cap_change_24h);
+
+      if (data[i]?.is_favorite) {
+        const favoritesList = localStorage.getItem(FAVORITES_LIST);
+
+        if (!favoritesList) {
+          return;
+        }
+
+        let _list = JSON.parse(favoritesList);
+
+        if (_list.includes(data[i].id)) return;
+        else {
+          _list.push(data[i].id);
+          localStorage.setItem(FAVORITES_LIST, JSON.stringify(_list));
+        }
+      }
 
       _assets.push({
         id: data[i]?.id ?? 0,

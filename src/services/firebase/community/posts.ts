@@ -14,10 +14,7 @@ export const getPosts = async ({
 }) => {
   const functions = getFunctions(getApp(), "europe-west3");
   const searchHttpsCallable = httpsCallable(functions, "search", {});
-  const posts = store.getState().posts.posts;
-  if (Array.isArray(posts)) {
-    store.dispatch(setPosts([]));
-  }
+  setPosts(null);
   const options = {
     search: searchTerm,
     modules: modules,

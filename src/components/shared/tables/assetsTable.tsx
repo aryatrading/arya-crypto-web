@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { AssetType } from "../../../types/asset";
 import { Col, Row } from "../layout/flex";
 import { useSelector } from "react-redux";
@@ -28,6 +28,8 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
   const { t } = useTranslation(["market"]);
   const _assetprice = useSelector(selectAssetLivePrice);
   const authUser = useAuthUser();
+  const _btc = _assetprice["btc"] * _assetprice["usdt"];
+
   const isTabletOrMobileScreen = useMediaQuery({
     query: `(max-width:950px)`,
   });
@@ -75,11 +77,13 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
   const renderFavoritesSvg = (asset: AssetType) => {
     let _list = localStorage.getItem(FAVORITES_LIST);
 
-    let _parsed = JSON.parse(_list ?? "");
+    if (_list && _list.length) {
+      let _parsed = JSON.parse(_list ?? "");
 
-    if (_parsed?.includes(asset.id ?? ""))
-      return `w-4 h-4 fill-yellow-1 stroke-0`;
-    else return `w-4 h-4 stroke-1`;
+      if (_parsed?.includes(asset.id ?? ""))
+        return `w-4 h-4 fill-yellow-1 stroke-0`;
+      else return `w-4 h-4 stroke-1`;
+    }
   };
 
   const handleFavoritesToggle = async (asset: AssetType) => {
@@ -168,19 +172,17 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
                       />
                     </Row>
                   </td>
-
-                  <td className="leading-6 text-white text-right font-semibold text-xs md:text-base">
-                    {formatNumber(
-                      _assetprice[elm.symbol ?? ""] ?? elm.currentPrice,
-                      true
-                    )}
-                  </td>
+                  {!isTabletOrMobileScreen && !isMobileScreen ? (
+                    <td className="leading-6 text-white text-right font-semibold">
+                      {formatNumber(
+                        _assetprice[elm.symbol ?? ""] ?? elm.currentPrice,
+                        true
+                      )}
+                    </td>
+                  ) : null}
 
                   {!isTabletOrMobileScreen ? (
                     <>
-                      {/* <td className="font-medium leading-6 text-white text-right">
-                        {elm.currentPrice ?? 0 / _assetprice["btc"]}
-                      </td> */}
                       <td className="font-medium leading-6 text-white text-right">
                         {formatNumber(elm.mrkCap ?? 0, true)}
                       </td>

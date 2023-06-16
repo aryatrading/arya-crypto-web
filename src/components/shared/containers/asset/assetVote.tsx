@@ -1,24 +1,27 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { Col, Row } from "../../layout/flex";
-import { ShadowButton } from "../../buttons/shadow_button";
 import {
   ArrowTrendingUpIcon,
   ArrowTrendingDownIcon,
 } from "@heroicons/react/24/outline";
 import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { twMerge } from "tailwind-merge";
+import { useAuthUser } from "next-firebase-auth";
+
+import { Col, Row } from "../../layout/flex";
+import { ShadowButton } from "../../buttons/shadow_button";
 import { getAsset } from "../../../../services/redux/assetSlice";
 import {
   castVote,
   getAssetVotes,
 } from "../../../../services/controllers/asset";
 import { VotingComposition } from "../../asset-voting/voting-composition";
-import { toast } from "react-toastify";
-import { twMerge } from "tailwind-merge";
 
 const AssetVote: FC<{ className?: string }> = ({ className }) => {
   const asset = useSelector(getAsset);
   const { t } = useTranslation(["asset"]);
+  const { id } = useAuthUser();
   const [hasVoted, setHasVoted] = useState(false);
   const [votingValues, setVotingValues] = useState({
     bullish: 0,
@@ -26,7 +29,7 @@ const AssetVote: FC<{ className?: string }> = ({ className }) => {
   });
 
   const initBearishAndBullishVoting = useCallback(() => {
-    if (asset?.id) {
+    if (asset?.id && id != null) {
       getAssetVotes(asset.id).then((response) => {
         setHasVoted(response.user_voted_last_24h ?? false);
         setVotingValues({
@@ -35,7 +38,7 @@ const AssetVote: FC<{ className?: string }> = ({ className }) => {
         });
       });
     }
-  }, [asset.id]);
+  }, [asset.id, id]);
 
   useEffect(() => {
     initBearishAndBullishVoting();
@@ -75,6 +78,7 @@ const AssetVote: FC<{ className?: string }> = ({ className }) => {
               iconSvg={
                 <ArrowTrendingUpIcon className="h-6 w-6 stroke-green-1" />
               }
+              disabled={id == null}
             />
             <ShadowButton
               title="Bearish"
@@ -86,6 +90,7 @@ const AssetVote: FC<{ className?: string }> = ({ className }) => {
               iconSvg={
                 <ArrowTrendingDownIcon className="h-6 w-6 stroke-red-1" />
               }
+              disabled={id == null}
             />
           </Row>
           <p className="text-grey-1 text-xs">{t("vote")}</p>{" "}

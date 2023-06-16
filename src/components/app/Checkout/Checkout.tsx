@@ -237,7 +237,6 @@ const Checkout = () => {
         fetchPriceData()
     },[fetchPriceData])
 
-
   return (
     <Col className='lg:w-[1320px] gap-6 lg:gap-3 p-[2rem] lg:p-0'>
         <Button onClick={()=>router.back()} className='flex gap-4'>

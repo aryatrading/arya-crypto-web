@@ -35,7 +35,6 @@ export const PortfolioSalesPage = () => {
 
     useEffect(() => {
         observer.current.addEventListener('load', function () {
-            // 4. configure the interactivity library
             create({
                 mode: 'scroll',
                 player: '#firstLottie',
