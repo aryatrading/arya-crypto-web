@@ -53,13 +53,13 @@ interface ICheckoutPageQuery extends ParsedUrlQuery{
 }
 
 export const getServerSideProps: GetServerSideProps<any> = async (ctx) => {
-    const query = ctx.query as ICheckoutPageQuery
+    // const query = ctx.query as ICheckoutPageQuery
 
-    if (query.payment !== EnumPricing.monthly && query.payment!==EnumPricing.yearly) {
-        return {
-          notFound: true,
-        };
-      }
+    // if (query.payment !== EnumPricing.monthly && query.payment!==EnumPricing.yearly) {
+    //     return {
+    //       notFound: true,
+    //     };
+    //   }
     
     return {
         props: {
