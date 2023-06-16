@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
+import { create } from '@lottiefiles/lottie-interactivity';
 
 import PricingSection from "../../shared/pricing-section/pricing-section";
 import Button from "../../shared/buttons/button";
@@ -10,7 +11,6 @@ import { Col, Row } from "../../shared/layout/flex";
 import { Testimonials } from "../../shared/Testimonials";
 import { useAuthModal } from "../../../context/authModal.context";
 import LottieData from "../../../../public/assets/images/publicPages/portfolio/dashboard.json";
-import logoWithCryptoLogos from "../../../../public/assets/images/publicPages/portfolio/logoWithIcons.json";
 
 import styles from './salesPage.module.scss';
 
@@ -18,8 +18,11 @@ export const PortfolioSalesPage = () => {
     const { setVisibleSection, modalTrigger } = useAuthModal();
     const { t } = useTranslation(["dashboard"]);
     const lottieRef = useRef<LottieRefCurrentProps>(null);
-    const ref = useRef<LottieRefCurrentProps>(null);
     const observer = useRef<any>();
+
+    useEffect(() => {
+        import("@lottiefiles/lottie-player");
+    });
 
     useEffect(() => {
         if (lottieRef.current) {
@@ -30,27 +33,22 @@ export const PortfolioSalesPage = () => {
         }
     }, []);
 
-    const isOnView = useCallback(
-        (node: any) => {
-            if (observer.current) observer.current.disconnect();
-            observer.current = new IntersectionObserver((entries) => {
-                const el = document.getElementById('lottieHolder');
-                let rect = el?.getBoundingClientRect() ?? { y: 1 };
-                if (entries[0].isIntersecting) {
-                    if (rect?.y > 0) {
-                        ref.current?.play();
-                    } else {
-                        ref.current?.goToAndPlay(110, true);
-                        setTimeout(() => ref.current?.pause(), 1200);
-                        setTimeout(() => ref.current?.play(), 2000);
-                    }
-                } else {
-                    ref.current?.stop();
-                }
+    useEffect(() => {
+        observer.current.addEventListener('load', function () {
+            // 4. configure the interactivity library
+            create({
+                mode: 'scroll',
+                player: '#firstLottie',
+                actions: [
+                    {
+                        visibility: [0.1, 0.9],
+                        type: 'seek',
+                        frames: [0, 150],
+                    },
+                ],
             });
-            if (node) observer.current.observe(node);
-        }, []
-    )
+        });
+    }, []);
 
     const onOpenSignUpClick = useCallback(() => {
         setVisibleSection('signup');
@@ -84,9 +82,13 @@ export const PortfolioSalesPage = () => {
                         <h2 className="text-4xl md:text-5xl font-bold max-w-[700px]">{t("salesPage.allInOnePlatformForTrackingAllYourAssets")}</h2>
                         <p className="max-w-[700px]">{t("salesPage.ARYACryptoSupportsTheMostPopularCryptocurrencyPlatforms")}</p>
                     </Col>
-                    <span ref={isOnView} id="lottieHolder">
-                        <Lottie className="max-w-[750px]" lottieRef={ref} animationData={logoWithCryptoLogos} />
-                    </span>
+                    <lottie-player
+                        ref={observer}
+                        id="firstLottie"
+                        mode="scroll"
+                        src="/assets/images/publicPages/portfolio/logoWithIcons.json"
+                        style={{ width: '100%', height: 'auto', maxWidth: '850px', marginTop: 10, marginBottom: 10 }}
+                    ></lottie-player>
                     <Col className="w-full md:flex-row gap-6 text-center justify-center items-center md:items-start">
                         <Col className="gap-5 items-center w-[350px]">
                             <Image alt="" src={require('../../../../public/assets/images/publicPages/portfolio/1.png')} className="w-20 h-20" width={128} height={128} />
@@ -109,7 +111,7 @@ export const PortfolioSalesPage = () => {
                 </Col>
             </Col>
         )
-    }, [isOnView, t]);
+    }, [t]);
 
 
     const secondSection = useMemo(() => {

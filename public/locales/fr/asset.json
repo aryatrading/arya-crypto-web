@@ -63,5 +63,12 @@
     "select_provider": "Veuillez sélectionner un fournisseur à échanger",
     "select_base": "Veuillez sélectionner une crypto de base",
     "trade_error": "Erreur lors de la création d'un ordre  ",
-    "cryptoProfitCalculator":"Calculateur de profit "
+    "cryptoProfitCalculator": "Calculateur de profit ",
+    "insights": "Connaissances",
+    "statsHolding": "Détenteurs de {{coing}} dans ARYA Crypto",
+    "todayTrades": "{{coin}} se négocie aujourd'hui",
+    "todayVolume": "Volume (24h)",
+    "usersWhoHoldAssetOnARYACrypto":"Utilisateurs qui détiennent des {{assetSymbol}} sur ARYA Crypto",
+    "assetTradesToday": "Les transactions en {{assetSymbol}} aujourd'hui",
+    "viewMore" :"Voir plus"
 }

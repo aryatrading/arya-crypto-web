@@ -64,9 +64,9 @@ export const TradingSalesPage = () => {
                             {t('salesPage.getStarted')}
                         </button>
 
-                        <button className={clsx(styles.secondBtn, styles.boxShadow, "text-white rounded-full font-bold text-sm")}>
+                        {/* <button className={clsx(styles.secondBtn, styles.boxShadow, "text-white rounded-full font-bold text-sm")}>
                             {t('salesPage.watchVideo')}
-                        </button>
+                        </button> */}
                     </Row>
                 </Col>
                 <Col className="flex-1 w-full h-full gap-4 relative">

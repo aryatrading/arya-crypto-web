@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
 
@@ -13,11 +13,20 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import AssetHoldingTab from "./assetHolding";
 import AssetExitStrategy from "./AssetExitStrategy";
 import AssetSparkLine from "../../shared/containers/asset/AssetSparkLine";
+import { getStats } from "../../../services/controllers/asset";
 import { TextSkeleton } from "../../shared/skeletons/skeletons";
+import { StatisticsResponseType } from "../../../types/asset";
 
 const Asset: FC = () => {
   const { t } = useTranslation(["asset", "common"]);
   const asset = useSelector(getAsset);
+  const [coinstats, setCoinStats] = useState<StatisticsResponseType>();
+
+  useEffect(() => {
+    if (asset?.symbol) {
+      getStats(asset?.symbol).then(setCoinStats);
+    }
+  }, [asset?.symbol]);
 
   const stats = useMemo(() => {
     return [
@@ -86,7 +95,7 @@ const Asset: FC = () => {
           </Row>
         </TabList>
         <TabPanel>
-          <AssetInformationTab stats={stats} />
+          <AssetInformationTab stats={stats} coinstats={coinstats} />
         </TabPanel>
         {
           !!asset?.isHoldingAsset &&

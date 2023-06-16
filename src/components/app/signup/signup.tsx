@@ -11,9 +11,9 @@ import { Col, Row } from "../../shared/layout/flex";
 import { MODE_DEBUG } from "../../../utils/constants/config";
 import { registerUser, appleAuth, googleAuth } from "../../../services/firebase/auth/auth";
 import TextInput from "../../shared/form/inputs/textInput/input";
-import { logoIcon } from "../../../../public/assets/images/svg";
-import { apple, google } from "../../../../public/assets/images/svg/auth";
 import { useAuthModal } from "../../../context/authModal.context";
+import { apple, google } from "../../../../public/assets/images/svg/auth";
+import { logoIcon } from "../../../../public/assets/images/svg";
 
 
 const Signup: FC<any> = (props: any) => {
@@ -21,7 +21,7 @@ const Signup: FC<any> = (props: any) => {
     const { hideModal } = useAuthModal();
     const [is2FALoading, setIs2FALoading] = useState<boolean>(false)
     const [errorForm, setError] = useState<string | null>()
-    const { back } = useRouter()
+    const { back, push } = useRouter()
 
     const signupValidationScheme = useCallback(() => {
         return Yup.object().shape({
@@ -31,13 +31,22 @@ const Signup: FC<any> = (props: any) => {
         });
     }, [t])
 
+    const afterAuthSuccess = useCallback(() => {
+        if (props.isModal) {
+            hideModal()
+        } else {
+            back()
+        }
+        if (props.navigateTo?.route != null) {
+            push(`/${props.navigateTo.route}?${props.navigateTo.queryParam}`);
+        }
+    }, [back, hideModal, props, push]);
 
     const onGoogleAuth = async () => {
         setIs2FALoading(true)
         try {
             await googleAuth()
-            hideModal()
-            back()
+            afterAuthSuccess();
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -51,8 +60,7 @@ const Signup: FC<any> = (props: any) => {
         setIs2FALoading(true)
         try {
             await appleAuth()
-            hideModal()
-            back()
+            afterAuthSuccess();
         } catch (error) {
             if (MODE_DEBUG) {
                 console.log(error)
@@ -71,8 +79,7 @@ const Signup: FC<any> = (props: any) => {
                 onSubmit={(values, { setSubmitting }) => {
                     registerUser(values)
                         .then(() => {
-                            hideModal()
-                            back()
+                            afterAuthSuccess();
                         })
                         .catch(err => {
                             setError(err.message);
@@ -107,7 +114,7 @@ const Signup: FC<any> = (props: any) => {
                 )}
             </Formik>
         )
-    }, [back, errorForm, hideModal, signupValidationScheme, t])
+    }, [afterAuthSuccess, errorForm, signupValidationScheme, t])
 
     return (
         <Col className="justify-start w-full max-w-[400px] gap-8 flex-1">
