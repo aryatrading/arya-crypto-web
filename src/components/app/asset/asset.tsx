@@ -1,6 +1,7 @@
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
+import { useAuthUser } from "next-firebase-auth";
 
 import { AssetHeader } from "../../shared/containers/asset/assetDetailsHeader";
 import AssetStatistics from "../../shared/containers/asset/assetStatistics";
@@ -14,26 +15,37 @@ import AssetHoldingTab from "./assetHolding";
 import AssetExitStrategy from "./AssetExitStrategy";
 import AssetSparkLine from "../../shared/containers/asset/AssetSparkLine";
 import { useResponsive } from "../../../context/responsive.context";
+import { getStats } from "../../../services/controllers/asset";
+import { TextSkeleton } from "../../shared/skeletons/skeletons";
+import { StatisticsResponseType } from "../../../types/asset";
 
 const Asset: FC = () => {
-  const { t } = useTranslation(["asset","common"]);
+  const { t } = useTranslation(["asset", "common"]);
   const asset = useSelector(getAsset);
   const { isTabletOrMobileScreen } = useResponsive(); 
+  const { id } = useAuthUser();
+  const [coinstats, setCoinStats] = useState<StatisticsResponseType>();
+
+  useEffect(() => {
+    if (asset?.symbol && id != null) {
+      getStats(asset?.symbol).then(setCoinStats);
+    }
+  }, [asset?.symbol, id]);
 
   const stats = useMemo(() => {
     return [
-      { title: t("mrkCap"), value: formatNumber(asset.mrkCap ?? 0, true) },
+      { title: t("mrkCap"), value: asset.mrkCap ? formatNumber(asset.mrkCap ?? 0, true) : asset.mrkCap },
       {
         title: t("fullydiluted"),
-        value: formatNumber(asset.dilutedValuation ?? 0, true),
+        value: asset.dilutedValuation ? formatNumber(asset.dilutedValuation ?? 0, true) : asset.dilutedValuation,
       },
-      { title: t("circsupply"), value: formatNumber(asset.circlSupply) },
-      { title: t("volume"), value: formatNumber(asset.volume ?? 0, true) },
-      { title: t("totalsupply"), value: formatNumber(asset.supply) },
-      { title: t("dailylow"), value: formatNumber(asset.dailyLow ?? 0, true) },
+      { title: t("circsupply"), value: asset.circlSupply ? formatNumber(asset.circlSupply) : asset.circlSupply },
+      { title: t("volume"), value: asset.volume ? formatNumber(asset.volume ?? 0, true) : asset.volume },
+      { title: t("totalsupply"), value: asset.supply ? formatNumber(asset.supply) : asset.supply },
+      { title: t("dailylow"), value: asset.dailyLow ? formatNumber(asset.dailyLow ?? 0, true) : asset.dailyLow },
       {
         title: t("dailyhigh"),
-        value: formatNumber(asset.dailyHigh ?? 0, true),
+        value: asset.dailyHigh ? formatNumber(asset.dailyHigh ?? 0, true) : asset.dailyHigh,
       },
     ];
   }, [
@@ -52,14 +64,14 @@ const Asset: FC = () => {
       <Row className="text-grey-1 gap-1">
         <span>{t("market")}</span>
         <span> / </span>
-        <h1 className="">{t("pricelivedata", { asset })}</h1>
+        {asset.name ? <h1 className="inline">{t("pricelivedata", { asset })}</h1> : <TextSkeleton heightClassName="h-5" widthClassName="w-52" />}
       </Row>
       <Row className="justify-between gap-5">
         <Row className="items-end gap-5 justify-between w-full md:w-auto">
           <AssetHeader asset={asset} />
-          <AssetSparkLine symbol={asset.symbol}/>
+          <AssetSparkLine symbol={asset.symbol} />
         </Row>
-        <AssetVote className="hidden md:flex"/>
+        <AssetVote className="hidden md:flex w-full" />
       </Row>
       <Row className="mt-7 flex-wrap gap-5 xl:gap-16 xl:justify-start hidden md:flex">
         {stats.map((elm, index) => {
@@ -89,19 +101,17 @@ const Asset: FC = () => {
           </Row>
         </TabList>
         <TabPanel>
-          <AssetInformationTab stats={stats} />
+          <AssetInformationTab stats={stats} coinstats={coinstats} />
         </TabPanel>
         {
-          !!asset?.isHoldingAsset && 
+          !!asset?.isHoldingAsset &&
           <TabPanel>
             <AssetHoldingTab />
           </TabPanel>
         }
-        {!!asset?.isHoldingAsset &&       
-          <TabPanel>
-            <AssetExitStrategy/>
-          </TabPanel>
-        }
+        <TabPanel>
+          <AssetExitStrategy />
+        </TabPanel>
       </Tabs>
     </Col>
   );

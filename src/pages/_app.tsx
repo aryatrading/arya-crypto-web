@@ -13,6 +13,8 @@ import { AppProps } from "next/app";
 import { SkeletonTheme } from "react-loading-skeleton";
 
 import "react-toastify/dist/ReactToastify.css";
+import 'react-loading-skeleton/dist/skeleton.css';
+import 'react-circular-progressbar/dist/styles.css';
 import "react-loading-skeleton/dist/skeleton.css";
 
 import AuthModalProvider from "../context/authModal.context";
@@ -22,11 +24,9 @@ import initAuth from "../initFirebaseAuth";
 import { axiosInstance } from "../services/api/axiosConfig";
 import "../styles/globals.css";
 import { FAVORITES_LIST } from "../utils/constants/config";
-import { initStoreData } from "../common/hooks/initStore";
 import "../services/api/socketConfig";
 import ResponsiveProvider from "../context/responsive.context";
 import { getUserLanguage } from "../services/controllers/utils";
-import { getNotifications } from "../services/controllers/notifications";
 import PushNotificationLayout from "../components/layout/Notifications";
 import { getUserData } from "../services/controllers/user";
 
@@ -52,7 +52,6 @@ try {
   remoteConfig.settings.minimumFetchIntervalMillis = 1000;
   fetchAndActivate(remoteConfig);
 } catch (err) {
-  console.log({ err });
   console.error(err);
 }
 
@@ -70,12 +69,8 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
         push({ pathname, query }, asPath, { locale: lang });
       }
 
-      getNotifications(0, 100, "desc");
-
-      if (!localStorage.getItem(FAVORITES_LIST)?.length) {
-        // Create the inital favorites list in localstorage
-        localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
-      }
+      // Create the inital favorites list in localstorage
+      localStorage?.setItem(FAVORITES_LIST, JSON.stringify([]));
 
       // Forcing dark mode
       localStorage?.setItem("theme", "dark");
@@ -94,7 +89,6 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
 
   const { store, props } = wrapper.useWrappedStore(rest);
 
-  initStoreData();
 
   return getLayout(
     <Provider store={store}>

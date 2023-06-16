@@ -5,6 +5,8 @@ import { axiosInstance } from "../api/axiosConfig";
 import { setAllProviders } from "../redux/exchangeSlice";
 import { storeMrkAssets } from "../redux/marketSlice";
 import { store } from "../redux/store";
+import { USDTSymbol } from "../../utils/constants/market";
+import { TradableAssetType } from "../../types/smart-allocation.types";
 import { FAVORITES_LIST } from "../../utils/constants/config";
 
 // FETCH REQUEST TO GET ASSETS FROM TWELEVE DATA AND RETURN A STRING OF SYMBOLS
@@ -76,13 +78,12 @@ export const fetchAssets = async (
         mrkCap: data[i].asset_data.market_cap,
         mrkCapYesterday: mrkCapYesterday,
         symbol: data[i].asset_data.symbol.toLowerCase(),
-        isFavorite: data[i].is_favorite,
+        isFavorite: data[i]?.is_favorite ?? false,
         change24H: data[i].asset_data.price_change_percentage_24h,
         change7D: data[i].asset_data.price_change_percentage_7d_in_currency,
       });
     }
   }
-
   store?.dispatch(storeMrkAssets(_assets));
 
   return _assets;
@@ -144,4 +145,13 @@ export const addAssetToWatchlist = async (asset_id: number) => {
 
 export const removeAssetFromWatchlist = async (asset_id: number) => {
   return await axiosInstance.delete(`/watchlist/assetpair/${asset_id}`);
+};
+
+export const getTradableAssets = async (providerId: number) => {
+  return await axiosInstance.get<TradableAssetType[]>(`/trade-engine/tradable/symbols/`, {
+    params: {
+      provider: providerId,
+      asset: USDTSymbol,
+    }
+  });
 };

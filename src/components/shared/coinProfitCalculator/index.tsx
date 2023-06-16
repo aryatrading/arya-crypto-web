@@ -7,6 +7,22 @@ import CloseIcon from "../../svg/Shared/CloseIcon";
 import { SearchAssetInput } from "../assetSearchInputWithDropdown";
 import AssetPnl from "../containers/asset/assetPnl";
 import { twMerge } from "tailwind-merge";
+import { CalculatorIcon } from "../../svg/calculator";
+import { BTCIcon, ETHIcon, SOLIcon, XRPIcon } from "../../svg/coins";
+
+const coinsList = [{
+    name: 'Bitcoin',
+    icon: <BTCIcon className="w-7 h-7" />
+}, {
+    name: 'Ethereum',
+    icon: <ETHIcon className="w-7 h-7" />
+}, {
+    name: 'XRP',
+    icon: <XRPIcon className="w-7 h-7" />
+}, {
+    name: 'Solana',
+    icon: <SOLIcon className="w-7 h-7" />
+}];
 
 const Input = ({ icon, placeholder, value, onClear, type = "number", ...rest }: any) => (
     <Row className="bg-grey-3 w-full h-[50px] rounded-md px-4 gap-2 relative">
@@ -18,7 +34,7 @@ const Input = ({ icon, placeholder, value, onClear, type = "number", ...rest }: 
     </Row>
 );
 
-export const CoinProfitCalculator = () => {
+export const CoinProfitCalculator = ({ isFullPage = false }: { isFullPage?: boolean }) => {
     const { t } = useTranslation(["coin", "asset"]);
     const [buyPrice, setBuyPrice] = useState('');
     const [sellPrice, setSellPrice] = useState('');
@@ -100,42 +116,63 @@ export const CoinProfitCalculator = () => {
     }, []);
 
     return (
-        <Col className="gap-6 w-full items-center md:flex-row ">
-            <Col className="gap-6 flex-1 w-full">
-                <Row className="w-full gap-6">
-                    <Row className="w-full gap-6 md:flex-nowrap flex-wrap">
-                        <Col className="w-full md:w-1/2 gap-6">
-                            <SearchAssetInput trigger={customInput} t={t} onClick={onClick} />
+        <Col className={isFullPage ? "gap-10 items-center px-4 md:px-12 lg:px-20 xl:px-60 py-20 justify-center w-full" : "items-start w-full gap-6"}>
+            {isFullPage && <Col className='gap-4 items-center justify-center'>
+                <CalculatorIcon className="mb-6" />
+                <h2 className='font-bold text-white text-4xl md:leading-snug text-center'>{t("asset:cryptoProfitCalculator")}</h2>
+                <p className="font-bold text-grey-1 text-xl md:leading-snug text-center">{t('preSelect')}</p>
 
-                            <Input onChange={({ target: { value } }: any) => updateInputs(value, 'inv')} value={investment} placeholder={t('investment')} icon={<CurrencyDollarIcon width="24px" color="#6B7280" />} onClear={() => onClear('inv')} />
-                        </Col>
-                        <Col className="w-full md:w-1/2 gap-6">
-                            <Input onChange={({ target: { value } }: any) => updateInputs(value, 'buy')} value={buyPrice} placeholder={t('buyPrice')} icon={<ArrowDownCircleIcon width="24px" color="#6B7280" />} onClear={() => onClear('buy')} />
-                            <Input onChange={({ target: { value } }: any) => updateInputs(value, 'sell')} value={sellPrice} placeholder={t('sellPrice')} icon={<ArrowUpCircleIcon width="24px" color="#6B7280" />} onClear={() => onClear('sell')} />
-                        </Col>
+                <Row className="items-center justify-center md:flex-row flex-col gap-4 w-full my-6">
+                    {coinsList.map(coin => {
+                        const onPress = () => ref.current.value = coin.name;
+                        return (
+                            <button className="w-full md:w-[170px] bg-grey-2 rounded-md h-[50px] items-center justify-center hover:bg-grey-6" onClick={onPress}>
+                                <Row className="items-center justify-center gap-2">
+                                    {coin.icon}
+                                    <p className="font-medium text-white">{coin.name}</p>
+                                </Row>
+                            </button>
+                        );
+                    })}
+                </Row>
+            </Col>}
+            <Col className="gap-6 w-full items-center md:flex-row ">
+                <Col className="gap-6 flex-1 w-full">
+                    <Row className="w-full gap-6">
+                        <Row className="w-full gap-6 md:flex-nowrap flex-wrap">
+                            <Col className="w-full md:w-1/2 gap-6">
+                                <SearchAssetInput trigger={customInput} t={t} onClick={onClick} />
+
+                                <Input onChange={({ target: { value } }: any) => updateInputs(value, 'inv')} value={investment} placeholder={t('investment')} icon={<CurrencyDollarIcon width="24px" color="#6B7280" />} onClear={() => onClear('inv')} />
+                            </Col>
+                            <Col className="w-full md:w-1/2 gap-6">
+                                <Input onChange={({ target: { value } }: any) => updateInputs(value, 'buy')} value={buyPrice} placeholder={t('buyPrice')} icon={<ArrowDownCircleIcon width="24px" color="#6B7280" />} onClear={() => onClear('buy')} />
+                                <Input onChange={({ target: { value } }: any) => updateInputs(value, 'sell')} value={sellPrice} placeholder={t('sellPrice')} icon={<ArrowUpCircleIcon width="24px" color="#6B7280" />} onClear={() => onClear('sell')} />
+                            </Col>
+                        </Row>
                     </Row>
+                </Col>
+                <Row className="bg-grey-3 gap-20 md:gap-3 rounded-md p-4 text-sm font-semibold w-full  items-center md:w-auto md:flex-col sm:items-start">
+                    <Col className="gap-4 sm:flex-row">
+                        <Col className="gap-2">
+                            <label>{t('totalInvestmentAmount')}</label>
+                            <p className={profit < 0 ? "text-red-1" : "text-green-1"}>${investment !== '' ? parseFloat(investment).toFixed(2) : '0.00'}</p>
+                        </Col>
+                        <Col className="gap-2">
+                            <label>{t('totalExitAmount')}</label>
+                            <p className={profit < 0 ? "text-red-1" : "text-green-1"}>${totalExitAmount.toFixed(2)}</p>
+                        </Col>
+                    </Col>
+                    <Col className="gap-1 justify-start">
+                        <label>{t('profit/loss')}</label>
+                        <Row className="items-center gap-2 justify-start">
+                            <AssetPnl className={twMerge('px-0', profit < 0 ? " text-red-1" : " text-green-1")} value={Math.round(profit * 1e2) / 1e2 || 0} />
+                            <AssetPnl className={totalProfitPercentage < 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"} value={Math.round(totalProfitPercentage * 1e2) / 1e2 || 0} />
+                        </Row>
+                    </Col>
+
                 </Row>
             </Col>
-            <Row className="bg-grey-3 gap-20 md:gap-3 rounded-md p-4 text-sm font-semibold w-full  items-center md:w-auto md:flex-col sm:items-start">
-                <Col className="gap-4 sm:flex-row">
-                    <Col className="gap-2">
-                        <label>{t('totalInvestmentAmount')}</label>
-                        <p className={profit < 0 ? "text-red-1" : "text-green-1"}>${investment !== '' ? parseFloat(investment).toFixed(2) : '0.00'}</p>
-                    </Col>
-                    <Col className="gap-2">
-                        <label>{t('totalExitAmount')}</label>
-                        <p className={profit < 0 ? "text-red-1" : "text-green-1"}>${totalExitAmount.toFixed(2)}</p>
-                    </Col>
-                </Col>
-                <Col className="gap-1 justify-start">
-                    <label>{t('profit/loss')}</label>
-                    <Row className="items-center gap-2 justify-start">
-                        <AssetPnl className={twMerge('px-0', profit < 0 ? " text-red-1" : " text-green-1")} value={Math.round(profit * 1e2) / 1e2 || 0} />
-                        <AssetPnl className={totalProfitPercentage < 0 ? "bg-red-2 text-red-1" : "bg-green-2 text-green-1"} value={Math.round(totalProfitPercentage * 1e2) / 1e2 || 0} />
-                    </Row>
-                </Col>
-
-            </Row>
         </Col>
     );
 };

@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { NotificationType } from "../../types/notifications";
-import { number } from "yargs";
 
 interface initialStateType {
     notifications: {

@@ -15,6 +15,7 @@ import LoadingSpinner from "../../shared/loading-spinner/loading-spinner";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { useAuthUser } from "next-firebase-auth";
 
 const inputClasses =
   "font-medium text-white bg-transparent flex-1 h-5 w-5 border-transparent";
@@ -27,6 +28,7 @@ const AssetTradeFromInput: FC = () => {
   const asset = useSelector(getFrom);
   const provider = useSelector(getProvider);
   const [loading, setLoading] = useState(false);
+  const authUser = useAuthUser();
 
   useEffect(() => {
     if (asset?.symbol) {
@@ -36,20 +38,22 @@ const AssetTradeFromInput: FC = () => {
 
   const onFromSelect = async (elm: any) => {
     setLoading(true);
-    let { data } = await getFree(
-      elm?.symbol?.toUpperCase(0) ?? "btc",
-      provider
-    );
+    if(authUser.id){
+      let { data } = await getFree(
+        elm?.symbol?.toUpperCase(0) ?? "btc",
+        provider
+      );
 
-    dispatch(
-      setFrom({
-        symbol: elm.symbol.toUpperCase(),
-        price: elm.currentPrice,
-        quantity: 0,
-        iconUrl: elm.iconUrl,
-        availableBalance: data?.free ?? 0,
-      })
-    );
+      dispatch(
+        setFrom({
+          symbol: elm.symbol.toUpperCase(),
+          price: elm.currentPrice,
+          quantity: 0,
+          iconUrl: elm.iconUrl,
+          availableBalance: data?.free ?? 0,
+        })
+      );
+    }
     setLoading(false);
   };
 

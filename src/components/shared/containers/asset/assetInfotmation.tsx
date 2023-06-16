@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { Col } from "../../layout/flex";
 import { AssetType } from "../../../../types/asset";
 import { useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import { selectAssetLivePrice } from "../../../../services/redux/marketSlice";
 import { useTranslation } from "next-i18next";
 import { formatNumber } from "../../../../utils/helpers/prices";
 import { twMerge } from "tailwind-merge";
+import { TextSkeleton } from "../../skeletons/skeletons";
 
 type AssetInformationProps = {
   asset: AssetType;
@@ -14,15 +15,38 @@ type AssetInformationProps = {
 export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
   const { t } = useTranslation(["asset"]);
   const _assetprice = useSelector(selectAssetLivePrice);
+
+  const infoLoadingSkeleton = useMemo(() => {
+    return (
+      <Col className="gap-4">
+        <Col className="gap-2">
+          <TextSkeleton widthClassName="w-40" />
+          <TextSkeleton widthClassName="w-full" />
+          <TextSkeleton widthClassName="w-full" />
+        </Col>
+        <Col className="gap-2">
+          <TextSkeleton widthClassName="w-40" />
+          <TextSkeleton widthClassName="w-full" />
+          <TextSkeleton widthClassName="w-full" />
+          <TextSkeleton widthClassName="w-full" />
+          <TextSkeleton widthClassName="w-full" />
+          <TextSkeleton widthClassName="w-full" />
+          <TextSkeleton/>
+        </Col>
+      </Col>
+    )
+  }, [])
+
   return (
     <Col className="gap-11">
-      <Col className="gap-4">
-        <h2 className="asset-header">{t("pricelivedata", { asset })}</h2>
-        <p className="font-medium text-xs md:text-sm">
-          <strong>
-            {t("pricetday", { asset })}
-            {formatNumber(
-              _assetprice[asset.symbol?.toLowerCase() ?? ""] ??
+      {asset.name ?
+        <Col className="gap-4">
+          <h2 className="asset-header">{t("pricelivedata", { asset })}</h2>
+          <p className="font-medium text-xs md:text-sm">
+            <strong>
+              {t("pricetday", { asset })}
+              {formatNumber(
+                _assetprice[asset.symbol?.toLowerCase() ?? ""] ??
                 asset.currentPrice,
               true
             )}
@@ -38,6 +62,7 @@ export const AssetInformation: FC<AssetInformationProps> = ({ asset }) => {
           {asset.symbol?.toUpperCase()}.
         </p>
       </Col>
+      :infoLoadingSkeleton}
       {asset?.description && (
         <Col className="gap-4">
           <p className="font-medium text-base md:text-xl">

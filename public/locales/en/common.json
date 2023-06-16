@@ -61,7 +61,14 @@
     "DATA_ERROR": "Data Error",
     "preview": "Preview",
     "getStarted": "Get Started",
-    "premiumusersfeature": "Continue with ARYA Premium",
+    "footerdesc": "Your all-in-one solution for crypto enthusiasts. Track real-time market data, store securely, and trade seamlessly with our user-friendly app. Stay informed with personalized news alerts and gain insights with our portfolio management feature. Experience the future of cryptocurrency with AryCrypto today",
+    "premiumusersfeature": "Continue with ARYA Prenium",
     "upgradenow": "Upgrade now",
-    "footerdesc": "Your all-in-one solution for crypto enthusiasts. Track real-time market data, store securely, and trade seamlessly with our user-friendly app. Stay informed with personalized news alerts and gain insights with our portfolio management feature. Experience the future of cryptocurrency with AryCrypto today"
+    "editSmartAllocation": "Edit Smart Allocation",
+    "yourSubscriptionWillRenewAutomatically": "Your subscription will renew automatically unless it is cancelled at least 24 hours before the end of the current period, by upgrading your account, you agree to the Terms of Use & Privacy Policy.",
+    "takeProfit": "Take Profit",
+    "trailing": "Trailing",
+    "stopLoss": "Stop Loss",
+    "autoRebalancing": "Auto-Rebalancing",
+    "premium": "Premium"
 }

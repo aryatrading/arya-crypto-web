@@ -70,6 +70,12 @@ const Dashboard: FC = () => {
   const { isTabletOrMobileScreen } = useResponsive();
   const { t } = useTranslation(["dashboard", "common"]);
 
+  function applyLocalTimezoneOffset(timestamp: number) {
+    const localTimezoneOffset = new Date().getTimezoneOffset();
+    const timestampOffset = localTimezoneOffset * 60 * 1000;
+    return timestamp - timestampOffset;
+  }
+
   const initPortfolioSnapshots = useCallback(() => {
     if (!portfolioSnapshots.length) setIsLoadingPortfolioSnapshots(true);
 
@@ -174,7 +180,9 @@ const Dashboard: FC = () => {
 
   const portfolioLineChart = useMemo(() => {
     const chartData: chartDataType[] = portfolioSnapshots?.map((snapshot) => {
-      const time = new Date(snapshot.created_at).getTime();
+
+      const time = applyLocalTimezoneOffset(new Date(snapshot.created_at).getTime());
+
       return {
         time: Math.floor(time / 1000) as chartDataType["time"],
         value: snapshot.total_evaluation ?? 0,
@@ -248,16 +256,15 @@ const Dashboard: FC = () => {
                 bgColor={"bg-black-2"}
                 textColor={"text-blue-1"}
               />
-            ) : (
-              <ShadowButton
-                onClick={() => {
-                  setSelectedChart("doughnut");
-                }}
-                iconSvg={<PieChartIcon stroke={"#558AF2"} />}
-                border="rounded-r-md"
-                bgColor={"bg-black-2"}
-                textColor={"text-blue-1"}
-              />
+            ) : (<ShadowButton
+              onClick={() => { setSelectedChart('doughnut') }}
+              iconSvg={
+                <PieChartIcon stroke={"#558AF2"} />
+              }
+              border="rounded-r-md"
+              bgColor={"bg-black-2"}
+              textColor={"text-blue-1"}
+            />
             )}
           </Row>
         </Col>
@@ -412,7 +419,7 @@ const Dashboard: FC = () => {
                       $
                       {formatNumber(
                         (asset?.free ?? 0) *
-                          (asset?.asset_details?.current_price ?? 0)
+                        (asset?.asset_details?.current_price ?? 0)
                       )}
                     </p>
                   </Col>
@@ -484,7 +491,7 @@ const Dashboard: FC = () => {
                 $
                 {formatNumber(
                   (asset?.free ?? 0) *
-                    (asset?.asset_details?.current_price ?? 0)
+                  (asset?.asset_details?.current_price ?? 0)
                 )}
               </td>
               <td className="text-right">
@@ -550,11 +557,13 @@ const Dashboard: FC = () => {
             className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1"
           >
             <PlusIcon width={15} />
-            <p className="font-bold">{t("addAssets")}</p>
-          </Link>
-        </Row>
+            <p className="font-bold me-1">
+              {t('addAssets')}
+            </p>
+          </Link >
+        </Row >
         {table}
-      </Col>
+      </Col >
     );
   }, [t, table]);
 

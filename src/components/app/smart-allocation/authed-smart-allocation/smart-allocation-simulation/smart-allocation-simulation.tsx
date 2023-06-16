@@ -29,6 +29,12 @@ function getShiftedDayDate(prevDay: Date, shiftInDays: number) {
     return new Date(prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate() + shiftInDays);
 }
 
+function applyLocalTimezoneOffset(timestamp: number) {
+    const localTimezoneOffset = new Date().getTimezoneOffset();
+    const timestampOffset = localTimezoneOffset * 60 * 1000;
+    return timestamp - 2 * timestampOffset;
+}
+
 const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationAssetType[], isLoadingSmartAllocationHoldings: boolean }> = ({ smartAllocationHoldings, isLoadingSmartAllocationHoldings }) => {
 
     const [simulationPeriod, setSimulationPeriod] = useState<EnumSmartAllocationSimulationPeriod>(EnumSmartAllocationSimulationPeriod["1m"]);
@@ -75,7 +81,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                             const item: chartDataType = {
                                 value: parseFloat(value.open),
                                 close: parseFloat(value.close),
-                                time: (new Date(value.datetime).getTime() /
+                                time: (applyLocalTimezoneOffset(new Date(value.datetime).getTime()) /
                                     1000) as chartDataType["time"],
                                 high: parseFloat(value.high),
                                 low: parseFloat(value.low),
@@ -87,6 +93,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     });
 
                     setAssetsHistoricalData(assetsHistoricalData);
+                    console.log(assetsHistoricalData)
                 }
             }).finally(() => {
                 setIsLoading(false);
@@ -163,6 +170,8 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 setWeightsPoints.push({ time, value: setWeightValue });
 
             }
+
+            console.log({ currentWeightsPoints })
             setCurrentWeightsData(currentWeightsPoints);
             setSetWeightsData(setWeightsPoints);
 
@@ -196,16 +205,16 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     <Row className="gap-5 flex-wrap">
                         <Col>
                             <p className="text-sm font-bold">{t("drawdown")}</p>
-                            {isLoading ? <TextSkeleton widthClassName="w-full"/> : <p className={clsx("text-sm font-bold", { "text-green-1": drawdown >= initialValue, "text-red-1": drawdown < initialValue })}>{percentageFormat(riskPercentage * 100)}%</p>}
+                            {isLoading ? <TextSkeleton widthClassName="w-full" /> : <p className={clsx("text-sm font-bold", { "text-green-1": drawdown >= initialValue, "text-red-1": drawdown < initialValue })}>{percentageFormat(riskPercentage * 100)}%</p>}
                         </Col>
                         <Col>
                             <p className="text-sm font-bold">{t("profit")}</p>
-                            {isLoading ? <TextSkeleton widthClassName="w-full"/> : <p className={clsx("text-sm font-bold", { "text-green-1": maxProfit >= initialValue, "text-red-1": maxProfit < initialValue })}>{percentageFormat(returnPercentage * 100)}%</p>}
+                            {isLoading ? <TextSkeleton widthClassName="w-full" /> : <p className={clsx("text-sm font-bold", { "text-green-1": maxProfit >= initialValue, "text-red-1": maxProfit < initialValue })}>{percentageFormat(returnPercentage * 100)}%</p>}
                         </Col>
                     </Row>
                     <Col>
                         <p className="text-sm font-bold">{t("returnRisk")}</p>
-                        {isLoading ? <TextSkeleton widthClassName="w-full"/> : <p className={clsx("text-3xl font-bold", { "text-green-1": isLowRisk, "text-red-1": !isLowRisk })}>{formatNumber(returnRiskRatio)}</p>}
+                        {isLoading ? <TextSkeleton widthClassName="w-full" /> : <p className={clsx("text-3xl font-bold", { "text-green-1": isLowRisk, "text-red-1": !isLowRisk })}>{formatNumber(returnRiskRatio)}</p>}
                     </Col>
                 </Col>}
             </Col>
@@ -223,7 +232,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 })}
                 {weightsDoughnutCharts({
                     chartTitle: t("setWeight"),
-                    chartData: smartAllocationHoldings?.filter(stableCoinsFilter)?.map(asset => ({ label: asset?.name ?? "", value: (asset.current_value ?? 0)/(asset.current_weight ?? 0) * (asset.weight ?? 0), coinSymbol: asset.name ?? "" })) ?? [],
+                    chartData: smartAllocationHoldings?.filter(stableCoinsFilter)?.map(asset => ({ label: asset?.name ?? "", value: (asset.current_value ?? 0) / (asset.current_weight ?? 0) * (asset.weight ?? 0), coinSymbol: asset.name ?? "" })) ?? [],
                     drawdown: setWeightsDrawdown ?? initialValue,
                     maxProfit: setWeightsData[setWeightsData.length - 1]?.value ?? 0,
                 })}

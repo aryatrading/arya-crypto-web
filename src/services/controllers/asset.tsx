@@ -1,6 +1,6 @@
 import axios from "axios";
 import { chartDataType } from "../../components/shared/charts/graph/graph.type";
-import { AssetType } from "../../types/asset";
+import { AssetType, StatisticsResponseType } from "../../types/asset";
 import { CapitalizeString } from "../../utils/format_string";
 import { axiosInstance } from "../api/axiosConfig";
 import {
@@ -58,13 +58,20 @@ export const getAssetDetails = async (symbol?: any) => {
   );
 };
 
+
+function applyLocalTimezoneOffset(timestamp: number) {
+  const localTimezoneOffset = new Date().getTimezoneOffset();
+  const timestampOffset = localTimezoneOffset * 60 * 1000;
+  return timestamp - 2 * timestampOffset;
+}
+
 export const getAssetTimeseriesPrice = async (
   symbol: string | string[],
   interval: string,
   output: number
 ) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=${interval}&outputsize=${output}&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}`
+    `${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=${interval}&outputsize=${output}&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}&timezone=UTC`
   );
 
   const { values } = await response.json();
@@ -75,7 +82,7 @@ export const getAssetTimeseriesPrice = async (
     let item: chartDataType = {
       value: parseFloat(values[i].open),
       close: parseFloat(values[i].close),
-      time: (new Date(values[i].datetime).getTime() /
+      time: (applyLocalTimezoneOffset(new Date(values[i].datetime).getTime()) /
         1000) as chartDataType["time"],
       high: parseFloat(values[i].high),
       low: parseFloat(values[i].low),
@@ -92,10 +99,8 @@ export const getAssetTimeseriesPrice = async (
 };
 
 export const getAssetSparkLineData = async (symbol: string) => {
-  return await axios.get(
-    `${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=1h&outputsize=168&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}`
-  );
-};
+  return await axios.get(`${process.env.NEXT_PUBLIC_TWELEVE_API_URL}?symbol=${symbol}/usd&interval=1h&outputsize=168&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}&timezone=UTC`)
+}
 
 export const getAssetVotes = async (assetId: number) => {
   const { data } = await axiosInstance.get(
@@ -180,7 +185,6 @@ function getCustomPeriodIntervalsAndOutputSize(
 ) {
   const diffTime = Math.abs(startDate - endDate);
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  console.log({ diffDays });
   if (diffDays <= 7) {
     return {
       interval: "30min",
@@ -195,7 +199,7 @@ function getCustomPeriodIntervalsAndOutputSize(
     return {
       interval: "1day",
       outputsize: diffDays,
-    };
+    }
   } else {
     return {
       interval: "1week",
@@ -213,7 +217,8 @@ export async function getAssetsHistoricalData(
   const params: { [k: string]: any } = {
     symbol: symbols.join(","),
     apikey: process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY,
-  };
+    timezone: "UTC"
+  }
 
   if (period === EnumSmartAllocationSimulationPeriod.custom) {
     if (startDate && endDate) {
@@ -235,9 +240,16 @@ export async function getAssetsHistoricalData(
   }
 
   return axios.get<assetsHistoricalDataResponseType>(
-    process.env.NEXT_PUBLIC_TWELEVE_API_URL ?? "",
-    {
-      params,
-    }
+    process.env.NEXT_PUBLIC_TWELEVE_API_URL ?? "", {
+    params
+  });
+}
+
+
+export const getStats = async (symbol: string) => {
+  let { data } = await axiosInstance.get<StatisticsResponseType>(
+    `trade-engine/assets/statistics?asset=${symbol}`
   );
+
+  return data;
 }

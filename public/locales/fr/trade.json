@@ -36,5 +36,25 @@
     "whatissl": "Qu'est-ce qu'une Stop Loss ?",
     "sldescription": "Un ordre stop loss est une instruction prédéterminée de vendre un titre lorsqu'il atteint un certain niveau de prix, afin de limiter les pertes potentielles.",
     "whatistr": "Fixer la traîne ?",
-    "trdescription": "Un ordre de suivi en pourcentage ajuste un prix stop à un pourcentage fixe en dessous du prix actuel du marché afin de bloquer les profits et de protéger les gains."
+    "trdescription": "Un ordre de suivi en pourcentage ajuste un prix stop à un pourcentage fixe en dessous du prix actuel du marché afin de bloquer les profits et de protéger les gains.",
+    "salesPage": {
+        "mainTitle": "Trade pour des résultats",
+        "results": "optimaux",
+        "ourGoal": "Notre plateforme vous aide à mieux contrôler vos trades en transformant le travail manuel en actions automatisées.",
+        "points": {
+            "1": "Fixez un stop loss pour protéger votre capital",
+            "2": "Jusqu'à 5 prises de bénéfices pour maximiser votre stratégie de sortie",
+            "3": "Trailing pour suivre le marché"
+        },
+        "getStarted": "Commencer",
+        "watchVideo": "Regarder la vidéo de présentation ",
+        "protectCapital": "Protégez votre capital",
+        "protectCapitalDesc": "Avec notre stop-loss, vous pouvez éviter de vendre à un prix bas provoqué par la panique. ",
+        "setStopLoss": "Définir un Stop Loss",
+        "scheduleYourProfits": "Planifiez vos profits",
+        "scheduleYourProfitsDesc": "Avec nos 5 prises de bénéfices, vous pouvez progressivement retirer votre position gagnante á mesure que votre crypto monte en flèche.",
+        "pickYourLevels": "Choisissez vos niveaux",
+        "avoidLoss": "Évitez de transformer les gagnants en perdants",
+        "avoidLossDesc": "Avec notre trailing, vous pouvez sécuriser votre transaction au fur et à mesure que le marché évolue. "
+    }
 }

@@ -6,9 +6,10 @@ import clsx from "clsx";
 import { Col, Row } from "../layout/flex";
 import Button from "../buttons/button";
 import { AssetType } from "../../../types/asset";
-import LoadingSpinner from "../loading-spinner/loading-spinner";
 import { converterTop6Coins, usdt } from "../../../utils/constants/defaultConverterList";
 import { AssetDropdown } from "../assetDropdown";
+import { TextSkeleton } from "../skeletons/skeletons";
+import { ConverterIcon } from "../../svg/converter";
 
 const inputClasses = "font-bold text-white bg-transparent flex-1 h-[50px] pl-4 mr-12 border-transparent focus:ring-0 focus:border-0 focus:outline-none";
 
@@ -21,6 +22,7 @@ const numericInput = (value: string | number, onChange: ChangeEventHandler, disa
 interface CoinConverterTypes {
     preDefined?: boolean;
     staticCoin?: any;
+    isFullPage?: boolean;
 }
 
 export const CoinConverter = (props: CoinConverterTypes) => {
@@ -91,18 +93,82 @@ export const CoinConverter = (props: CoinConverterTypes) => {
         );
     }), [assetLivePrice, convertValues, firstCoin, firstCoinAmount, props.preDefined]);
 
+    const coinConverterSkeleton = useMemo(() => {
+        if (props.isFullPage) {
+            return (
+                <Col className="flex-col gap-5 bg-transparent rounded-md items-center justify-center w-full">
+                    <div className="flex flex-row gap-4 w-full justify-items-start h-full">
+                        <TextSkeleton widthClassName="w-full" />
+                        <TextSkeleton widthClassName="w-full" />
+                        <TextSkeleton widthClassName="w-full" />
+                        <TextSkeleton widthClassName="w-full" />
+                        <TextSkeleton widthClassName="w-full" />
+                        <TextSkeleton widthClassName="w-full" />
+                    </div>
+                    <Col className="justify-center gap-4 w-full lg:w-3/5">
+                        <Row className="gap-4 items-center rounded-md">
+                            <TextSkeleton widthClassName="w-20" />
+                            <TextSkeleton widthClassName="w-full" />
+                        </Row>
+                        <Row className="gap-4 items-center rounded-md">
+                            <TextSkeleton widthClassName="w-20" />
+                            <TextSkeleton widthClassName="w-full" />
+                        </Row>
+                    </Col>
+                </Col>
+            );
+        } else {
+            return (
+                <Col className="flex-col gap-5 bg-transparent rounded-md lg:flex-row items-start justify-start w-full">
+                    <Col className="justify-center gap-4 w-full lg:w-3/5">
+                        <Row className="gap-4 items-center rounded-md">
+                            <TextSkeleton widthClassName="w-20" />
+                            <TextSkeleton widthClassName="w-full" />
+                        </Row>
+                        <Row className="gap-4 items-center rounded-md">
+                            <TextSkeleton widthClassName="w-20" />
+                            <TextSkeleton widthClassName="w-full" />
+                        </Row>
+                    </Col>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full justify-items-start lg:w-2/5 h-full">
+                        <TextSkeleton widthClassName="w-full" />
+                        <TextSkeleton widthClassName="w-full" />
+                        <TextSkeleton widthClassName="w-full" />
+                        <TextSkeleton widthClassName="w-full" />
+                        <TextSkeleton widthClassName="w-full" />
+                        <TextSkeleton widthClassName="w-full" />
+                    </div>
+                </Col>
+            )
+        }
+    }, [])
+
     return (
-        <Col className="items-start w-full gap-6">
-            <h3 className="asset-header">{t('cryptoConverter')}</h3>
+        <Col className={props.isFullPage ? "gap-10 items-center px-4 md:px-12 lg:px-20 xl:px-60 py-20 justify-center w-full" : "items-start w-full gap-6"}>
+            {!props.isFullPage && <h3 className="asset-header">{t('cryptoConverter')}</h3>}
+            {props.isFullPage &&
+                <Col className='gap-4 items-center justify-center'>
+                    <ConverterIcon className="mb-4" />
+                    <h2 className='font-bold text-white text-4xl md:leading-snug text-center'>{t("coin:cryptoConverter")}</h2>
+                    <p className="font-bold text-grey-1 text-xl md:leading-snug text-center">{t('preSelectConv')}</p>
+
+                </Col>
+            }
             {assetLivePrice?.[usdt.symbol] != null ?
                 <>
-                    <Row className="flex-col gap-6 bg-transparent rounded-md lg:flex-row items-start justify-start w-full">
+                    <Row className={props.isFullPage ? "flex-col-reverse gap-6 bg-transparent rounded-md items-center justify-center w-full" : "flex-col gap-6 bg-transparent rounded-md lg:flex-row items-start justify-start w-full"}>
                         <Col className="justify-center gap-6 w-full lg:w-3/5">
+                            {props.isFullPage && <h3 className="asset-header">{t('cryptoConverter')}</h3>}
                             <Row className="gap-4 items-center bg-grey-3 px-4 rounded-md">
                                 <AssetDropdown
                                     onClick={(data: any) => {
                                         setFirstCoin(data);
-                                        setSecondCoinAmount(convertValues(parseFloat(firstCoinAmount.toString()), data?.currentPrice || 0, secondCoin?.currentPrice || 0));
+                                        if (data?.name === secondCoin?.name) {
+                                            setSecondCoinAmount(firstCoinAmount.toString());
+                                            return;
+                                        } else {
+                                            setSecondCoinAmount(convertValues(parseFloat(firstCoinAmount.toString()), data?.currentPrice || 0, secondCoin?.currentPrice || 0));
+                                        }
                                     }}
                                     t={t}
                                     disabled={props?.preDefined}
@@ -115,7 +181,12 @@ export const CoinConverter = (props: CoinConverterTypes) => {
                                 <AssetDropdown
                                     onClick={(data: any) => {
                                         setSecondCoin(data);
-                                        setSecondCoinAmount(convertValues(parseFloat(firstCoinAmount.toString()), firstCoin?.currentPrice || 0, data?.currentPrice || 0));
+                                        if (data?.name === firstCoin?.name) {
+                                            setSecondCoinAmount(firstCoinAmount.toString());
+                                            return;
+                                        } else {
+                                            setSecondCoinAmount(convertValues(parseFloat(firstCoinAmount.toString()), firstCoin?.currentPrice || 0, data?.currentPrice || 0));
+                                        }
                                     }}
                                     t={t}
                                     title={secondCoin?.symbol?.toUpperCase()}
@@ -124,12 +195,12 @@ export const CoinConverter = (props: CoinConverterTypes) => {
                                 {numericInput(secondCoinAmount, onChnageSecondCoinAmount, !secondCoin?.name || !secondCoin?.name)}
                             </Row>
                         </Col>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full justify-items-start lg:w-2/5 h-full">
+                        <div className={props.isFullPage ? "flex flex-row gap-4 w-full justify-items-start h-full mb-4" : "grid grid-cols-2 md:grid-cols-3 gap-6 w-full justify-items-start lg:w-2/5 h-full"}>
                             {defaultList}
                         </div>
                     </Row>
                 </>
-                : <LoadingSpinner />}
+                : coinConverterSkeleton}
         </Col>
     );
 };

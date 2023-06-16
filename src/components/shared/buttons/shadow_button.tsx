@@ -13,6 +13,7 @@ type ShadowButtonProps = {
   textSize?: string;
   className?: string;
   showBadge?: boolean;
+  disabled?: boolean;
 };
 
 export const ShadowButton: FC<ShadowButtonProps> = ({
@@ -27,18 +28,20 @@ export const ShadowButton: FC<ShadowButtonProps> = ({
   textSize = "text-base",
   className,
   showBadge = false,
+  disabled = false,
 }) => {
   return (
     <div
       className={twMerge(
-        "flex flex-row items-center gap-2 justify-center hover:cursor-pointer",
+        "flex flex-row items-center gap-2 justify-center",
         px,
         py,
         border ?? "",
         bgColor,
-        className
+        className,
+        disabled ? "cursor-not-allowed" : "hover:cursor-pointer",
       )}
-      onClick={() => onClick!()}
+      onClick={() => disabled ? null : onClick!()}
     >
       {iconSvg ?? null}
       {title && (

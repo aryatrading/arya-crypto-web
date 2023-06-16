@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { StarIcon } from "@heroicons/react/24/outline";
@@ -15,7 +15,7 @@ import {
   fetchAssets,
   getMarketCap,
 } from "../../../services/controllers/market";
-import { FAVORITES_LIST } from "../../../utils/constants/config";
+import { FAVORITES_LIST, MODE_DEBUG } from "../../../utils/constants/config";
 import useDebounce from "../../../utils/useDebounce";
 import { firebaseId } from "../../../services/redux/userSlice";
 import { formatNumber } from "../../../utils/helpers/prices";
@@ -57,6 +57,10 @@ const Market: FC = () => {
         BTCDominance: data.btc_dominance,
         BTCDominancePercentage: data.btc_dominance_24h_percentage_change,
       });
+    }).catch((error) => {
+      if (MODE_DEBUG) {
+        console.error(error)
+      }
     });
   }, []);
   useDebounce(

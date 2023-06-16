@@ -4,39 +4,42 @@
  * @type {import('next-i18next').UserConfig}
  */
 module.exports = {
-    // https://www.i18next.com/overview/configuration-options#logging
-    debug: false,
-    i18n: {
-      defaultLocale: 'en',
-      locales: ['en', 'fr'],
-    },
-    localeNamespaces:[
-      'common',
-      'auth',
-      'market',
-      "nav",
-      'dashboard',
-      "coin",
-      'smart-allocation',
-      "trade",
-      "asset",
-      'settings',
-      'notification',
-      'pricing-plans',
-    ],
-    /** To avoid issues when deploying to some paas (vercel...) */
-    localePath:
-      typeof window === 'undefined'
-        ? require('path').resolve('./public/locales')
-        : '/locales',
+  // https://www.i18next.com/overview/configuration-options#logging
+  debug: false,
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'fr'],
+  },
+  localeNamespaces: [
+    'common',
+    'auth',
+    'asset',
+    'settings',
+    'market',
+    "nav",
+    'dashboard',
+    "coin",
+    'smart-allocation',
+    'notification',
+    'trade',
+    'pricing-plans',
+    'home',
+    'payment',
+  ],
+  /** To avoid issues when deploying to some paas (vercel...) */
+  localePath:
+    typeof window === 'undefined'
+      ? require('path').resolve('./public/locales')
+      : '/locales',
+
+  reloadOnPrerender: process.env.NODE_ENV === 'development',
   
-    reloadOnPrerender: process.env.NODE_ENV === 'development',
-  
-    /**
-     * @link https://github.com/i18next/next-i18next#6-advanced-configuration
-     */
-    // saveMissing: false,
-    // strictMode: true,
-    // serializeConfig: false,
-    // react: { useSuspense: false }
-  }
+
+  /**
+   * @link https://github.com/i18next/next-i18next#6-advanced-configuration
+   */
+  // saveMissing: false,
+  // strictMode: true,
+  // serializeConfig: false,
+  // react: { useSuspense: false }
+}
