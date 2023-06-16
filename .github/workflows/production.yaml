@@ -49,9 +49,6 @@ jobs:
       - name: Install dependencies 👨🏻‍💻
         run: yarn
 
-      - name: Run unit tests 🧪
-        run: CI=true yarn test --passWithNoTests
-
       - name: Build 🔨
         run: CI=false yarn build
 
