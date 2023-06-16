@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { Col, Row } from "../../shared/layout/flex";
 import { assetTimeseries } from "../../../utils/constants/assetTimeseries";
 import { useTranslation } from "next-i18next";
@@ -56,10 +56,13 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
   const { clientInitialized, id } = useAuthUser();
   const timeseries = useSelector(getAssetTimeseries);
   const { posts } = useSelector(({ posts }: any) => posts);
+  const { subscription } = useSelector(({ user }: any) => user);
   const [activeSeries, setActiveSeries] = useState("24H");
   const [view, setView] = useState("price");
   const [viewHoldingsStatisticsModal, setViewHoldingsStatisticsModal] = useState<boolean>(false);
   const [viewTradesStatisticsModal, setViewTradesStatisticsModal] = useState<boolean>(false);
+
+  const closePremium = useMemo(() => coinstats?.premium && !subscription, [coinstats?.premium, subscription]);
 
   const assetGraphToggles = useMemo(() => {
     return [
@@ -140,16 +143,16 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
       const todaysHoldingsStatistics = coinstats.portfolio_holdings[coinstats.portfolio_holdings.length - 1];
       return (
         <Col className="relative flex-1 w-full">
-          <Row className={clsx({ "blur-md": coinstats?.premium }, "bg-grey-3 px-6 py-4 rounded-lg gap-4 flex-row items w-full")}>
+          <Row className={clsx({ "blur-md": closePremium }, "bg-grey-3 px-6 py-4 rounded-lg gap-4 flex-row items w-full")}>
             <Col>
-              <CircularProgressbar text="" value={coinstats?.premium ? 12.6 : todaysHoldingsStatistics?.holding_percentage || 0} className="max-w-28 h-28" strokeWidth={18} styles={buildStyles({
+              <CircularProgressbar text="" value={closePremium ? 12.6 : todaysHoldingsStatistics?.holding_percentage || 0} className="max-w-28 h-28" strokeWidth={18} styles={buildStyles({
                 pathColor: "#558AF2",
                 strokeLinecap: 'butt',
               })} />
             </Col>
             <Col className="flex-1 justify-center gap-2">
               <Row className="justify-between">
-                <p className="text-4xl font-bold text-blue-1 text-left">{coinstats?.premium ? '12.6' : percentageFormat(todaysHoldingsStatistics?.holding_percentage || 0)}%</p>
+                <p className="text-4xl font-bold text-blue-1 text-left">{closePremium ? '12.6' : percentageFormat(todaysHoldingsStatistics?.holding_percentage || 0)}%</p>
               </Row>
               <p className="text-sm font-bold text-white text-left">{t('statsHolding', { coin: asset?.symbol?.toUpperCase() || '' })}</p>
             </Col>
@@ -157,7 +160,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
             {holdingsStatisticsModal}
           </Row>
 
-          {coinstats?.premium && <Row className="top-0 right-0 bottom-0 left-0 absolute items-center justify-center gap-4 px-5">
+          {closePremium && <Row className="top-0 right-0 bottom-0 left-0 absolute items-center justify-center gap-4 px-5">
             <PremiumIcon />
             <p className="text-white font-bold">{t('common:premiumusersfeature')}</p>
             <Button className="bg-blue-1 h-12 px-4 rounded-lg text-bold text-white font-bold text-sm">
@@ -167,7 +170,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
         </Col>
       )
     }
-  }, [asset?.symbol, coinstats, holdingsStatisticsModal, t]);
+  }, [asset?.symbol, closePremium, coinstats, holdingsStatisticsModal, t]);
 
   const assetTradesInsightsCard = useMemo(() => {
     if (coinstats && coinstats.trades.length > 1) {
@@ -176,20 +179,20 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
 
       return (
         <Col className="relative flex-1 w-full">
-          <Row className={clsx({ "blur-md": coinstats?.premium }, "bg-grey-3 px-6 py-4 rounded-lg flex-1 gap-2 min-h-[126px] w-full relative")}>
+          <Row className={clsx({ "blur-md": closePremium }, "bg-grey-3 px-6 py-4 rounded-lg flex-1 gap-2 min-h-[126px] w-full relative")}>
             <Col className="justify-center gap-2">
-              <p className="text-4xl font-extrabold text-blue-1 text-left">{coinstats?.premium ? '1011' : todaysTradingsStatistics?.orders_count || 0}</p>
+              <p className="text-4xl font-extrabold text-blue-1 text-left">{closePremium ? '1011' : todaysTradingsStatistics?.orders_count || 0}</p>
               <p className="text-sm font-bold text-white text-left">{t('todayTrades', { coin: asset?.symbol?.toUpperCase() || '' })}</p>
             </Col>
             <Col className="justify-center gap-2">
-              <p className="text-4xl font-extrabold text-blue-1 text-left">{coinstats?.premium ? '+12' : coinstats?.trades.length < 2 ? "0" : ((todaysTradingsStatistics?.orders_count - yesterdaysTradingsStatistics?.orders_count) / (yesterdaysTradingsStatistics?.orders_count) * 100).toFixed(1)}%</p>
+              <p className="text-4xl font-extrabold text-blue-1 text-left">{closePremium ? '+12' : coinstats?.trades.length < 2 ? "0" : ((todaysTradingsStatistics?.orders_count - yesterdaysTradingsStatistics?.orders_count) / (yesterdaysTradingsStatistics?.orders_count) * 100).toFixed(1)}%</p>
               <p className="text-sm font-bold text-white text-left">{t('todayVolume')}</p>
             </Col>
             <Button className="text-sm font-bold bg-blue-3 px-5 py-1 absolute right-6 top-6 md:top-4 rounded-lg" onClick={() => { setViewTradesStatisticsModal(true) }}>{t("viewMore")}</Button>
             {tradeStatisticsModal}
           </Row>
 
-          {coinstats?.premium && <Row className="top-0 right-0 bottom-0 left-0 absolute items-center justify-center gap-4 px-5">
+          {closePremium && <Row className="top-0 right-0 bottom-0 left-0 absolute items-center justify-center gap-4 px-5">
             <PremiumIcon />
             <p className="text-white font-bold">{t('common:premiumusersfeature')}</p>
             <Button className="bg-blue-1 h-12 px-4 rounded-lg text-bold text-white font-bold text-sm">
@@ -199,7 +202,7 @@ const AssetInformationTab: FC<IAssetInformationTab> = ({ stats, coinstats }) => 
         </Col>
       )
     }
-  }, [coinstats, t, asset?.symbol, tradeStatisticsModal])
+  }, [coinstats, closePremium, t, asset?.symbol, tradeStatisticsModal])
 
   const assetInsights = useMemo(() => {
     if (clientInitialized) {
