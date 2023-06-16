@@ -1,0 +1,66 @@
+name: ci-production
+
+on: 
+  push:
+    branches:
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Production
+    env:
+      NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+      NEXT_PUBLIC_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_AUTH_DOMAIN }}
+      NEXT_PUBLIC_DATABASE_URL: ${{ secrets.NEXT_PUBLIC_DATABASE_URL }}
+      NEXT_PUBLIC_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_PROJECT_ID }}
+      NEXT_PUBLIC_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_STORAGE_BUCKET }}
+      NEXT_PUBLIC_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_MESSAGING_SENDER_ID }}
+      NEXT_PUBLIC_APP_ID: ${{ secrets.NEXT_PUBLIC_APP_ID }}
+      NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
+      NEXT_PUBLIC_TWELVE_DATA_API_KEY: ${{ secrets.NEXT_PUBLIC_TWELVE_DATA_API_KEY }}
+      NEXT_PUBLIC_TWELEVE_SOCKET: ${{ secrets.NEXT_PUBLIC_TWELEVE_SOCKET }}
+      NEXT_PUBLIC_TWELEVE_API_URL: ${{ secrets.NEXT_PUBLIC_TWELEVE_API_URL }}
+      NEXT_PUBLIC_TWELEVE_SYMBOLS_API: ${{ secrets.NEXT_PUBLIC_TWELEVE_SYMBOLS_API }}
+      NEXT_PUBLIC_NODE_ENV: ${{ secrets.NEXT_PUBLIC_NODE_ENV }}
+      NEXT_PUBLIC_SHOP_URL: ${{ secrets.NEXT_PUBLIC_SHOP_URL }}
+
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@master
+
+      - name: Setup node env 🏗
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: 16
+
+      - name: Get yarn cache directory path 🛠
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache node_modules 📦
+        uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install dependencies 👨🏻‍💻
+        run: yarn
+
+      - name: Run unit tests 🧪
+        run: CI=true yarn test --passWithNoTests
+
+      - name: Build 🔨
+        run: CI=false yarn build
+
+      - name: Authenticate with GCP 🔐
+        id: gcp-auth
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS_PRODUCTION }}
+
+      - name: Deploy on GCP App Engine 🚀
+        id: deploy-app
+        run: gcloud app deploy --quiet --promote --project ${{ steps.gcp-auth.outputs.project_id }}
