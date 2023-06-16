@@ -34,7 +34,7 @@ const Input = ({ icon, placeholder, value, onClear, type = "number", ...rest }: 
     </Row>
 );
 
-export const CoinProfitCalculator = () => {
+export const CoinProfitCalculator = ({ isFullPage = false }: { isFullPage?: boolean }) => {
     const { t } = useTranslation(["coin", "asset"]);
     const [buyPrice, setBuyPrice] = useState('');
     const [sellPrice, setSellPrice] = useState('');
@@ -116,8 +116,8 @@ export const CoinProfitCalculator = () => {
     }, []);
 
     return (
-        <Col className="gap-10 items-center px-4 md:px-12 lg:px-20 xl:px-60 py-20 justify-center w-full">
-            <Col className='gap-4 items-center justify-center'>
+        <Col className={isFullPage ? "gap-10 items-center px-4 md:px-12 lg:px-20 xl:px-60 py-20 justify-center w-full" : "items-start w-full gap-6"}>
+            {isFullPage && <Col className='gap-4 items-center justify-center'>
                 <CalculatorIcon className="mb-6" />
                 <h2 className='font-bold text-white text-4xl md:leading-snug text-center'>{t("asset:cryptoProfitCalculator")}</h2>
                 <p className="font-bold text-grey-1 text-xl md:leading-snug text-center">{t('preSelect')}</p>
@@ -135,7 +135,7 @@ export const CoinProfitCalculator = () => {
                         );
                     })}
                 </Row>
-            </Col>
+            </Col>}
             <Col className="gap-6 w-full items-center md:flex-row ">
                 <Col className="gap-6 flex-1 w-full">
                     <Row className="w-full gap-6">
