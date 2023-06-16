@@ -11,5 +11,6 @@
     "selectAsset": "Sélectionnez une crypto",
     "searchAsset": "Rechercher une crypto",
     "emptySearch": "Recherche vide",
-    "coins": "Cryptos"
+    "coins": "Cryptos",
+    "preSelect": "Sélectionnez une pièce et voyez combien vous obtiendrez de retour."
 }
