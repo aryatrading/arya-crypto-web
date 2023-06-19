@@ -61,9 +61,8 @@ const ExchangeSwitcher: FC<{
     closeConnection();
 
     // Load the new data with the selected exchange
-    let _exc = "binance";
+    let _exc = "binance"; // setting default exchange to binance
     if (selectedExchange?.provider_id === 2) _exc = "coinbase";
-    console.log("Selected exchange ", _exc);
     openConnection(_exc);
   }, [selectedExchange?.provider_id]);
 
