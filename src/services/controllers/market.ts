@@ -14,7 +14,6 @@ export const fetchSymbolsList = async (
   assets?: AssetType[],
   exchange?: string
 ) => {
-  let _symbols = "";
   let _s = [];
 
   if (!assets?.length) {
@@ -23,11 +22,13 @@ export const fetchSymbolsList = async (
     );
     const { data } = await response.json();
     for (let i = 0; i < data.length; i++) {
-      _symbols += data[i].symbol + ",";
+      _s.push({
+        symbol: data[i].symbol?.toUpperCae() + "/USD",
+        exchange: exchange ?? "binance",
+      });
     }
   } else {
     for (let i = 0; i < assets.length; i++) {
-      _symbols += assets[i].symbol?.toLocaleUpperCase() + "/USD,";
       _s.push({
         symbol: assets[i].symbol?.toLocaleUpperCase() + "/USD",
         exchange: exchange ?? "binance",
