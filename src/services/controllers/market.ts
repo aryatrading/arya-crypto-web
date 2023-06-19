@@ -10,8 +10,11 @@ import { TradableAssetType } from "../../types/smart-allocation.types";
 import { FAVORITES_LIST } from "../../utils/constants/config";
 
 // FETCH REQUEST TO GET ASSETS FROM TWELEVE DATA AND RETURN A STRING OF SYMBOLS
-export const fetchSymbolsList = async (assets?: AssetType[]) => {
-  let _symbols = "";
+export const fetchSymbolsList = async (
+  assets?: AssetType[],
+  exchange?: string
+) => {
+  let _s = [];
 
   if (!assets?.length) {
     const response = await fetch(
@@ -19,15 +22,21 @@ export const fetchSymbolsList = async (assets?: AssetType[]) => {
     );
     const { data } = await response.json();
     for (let i = 0; i < data.length; i++) {
-      _symbols += data[i].symbol + ",";
+      _s.push({
+        symbol: data[i].symbol?.toUpperCae() + "/USD",
+        exchange: exchange ?? "binance",
+      });
     }
   } else {
     for (let i = 0; i < assets.length; i++) {
-      _symbols += assets[i].symbol?.toLocaleUpperCase() + "/USD,";
+      _s.push({
+        symbol: assets[i].symbol?.toLocaleUpperCase() + "/USD",
+        exchange: exchange ?? "binance",
+      });
     }
   }
 
-  return _symbols;
+  return _s;
 };
 
 // GET ASSETS LIST FROM OUT BACKEND
@@ -148,10 +157,13 @@ export const removeAssetFromWatchlist = async (asset_id: number) => {
 };
 
 export const getTradableAssets = async (providerId: number) => {
-  return await axiosInstance.get<TradableAssetType[]>(`/trade-engine/tradable/symbols/`, {
-    params: {
-      provider: providerId,
-      asset: USDTSymbol,
+  return await axiosInstance.get<TradableAssetType[]>(
+    `/trade-engine/tradable/symbols/`,
+    {
+      params: {
+        provider: providerId,
+        asset: USDTSymbol,
+      },
     }
-  });
+  );
 };
