@@ -9,7 +9,7 @@ export const PremiumBanner: FC = () => {
   const { t } = useTranslation(["common"]);
 
   return (
-    <div className="bg-transparent rounded-md h-11 border-2 border-orange-1 item-center flex flex-row justify-between">
+    <div className="bg-transparent rounded-md h-11 border-2 border-orange-1 item-center flex flex-row justify-between gap-5">
       <Row className="gap-2 flex items-center mt-0.5">
         <div className="w-2" />
         <LockClosedIcon width={15} height={15} color="bg-orange-1" />

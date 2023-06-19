@@ -11,5 +11,7 @@
     "selectAsset": "Select Asset",
     "searchAsset": "Search asset",
     "emptySearch": "Empty Search",
-    "coins": "Coins"
+    "coins": "Coins",
+    "preSelect": "Select a coin and see how much return you’ll get.",
+    "preSelectConv": "Select a coin and see the conversion."
 }

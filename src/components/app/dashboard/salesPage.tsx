@@ -35,7 +35,6 @@ export const PortfolioSalesPage = () => {
 
     useEffect(() => {
         observer.current.addEventListener('load', function () {
-            // 4. configure the interactivity library
             create({
                 mode: 'scroll',
                 player: '#firstLottie',
@@ -49,28 +48,6 @@ export const PortfolioSalesPage = () => {
             });
         });
     }, []);
-
-    // const isOnView = useCallback(
-    //     (node: any) => {
-    //         if (observer.current) observer.current.disconnect();
-    //         observer.current = new IntersectionObserver((entries) => {
-    //             const el = document.getElementById('lottieHolder');
-    //             let rect = el?.getBoundingClientRect() ?? { y: 1 };
-    //             if (entries[0].isIntersecting) {
-    //                 if (rect?.y > 0) {
-    //                     ref.current?.play();
-    //                 } else {
-    //                     ref.current?.goToAndPlay(110, true);
-    //                     setTimeout(() => ref.current?.pause(), 1200);
-    //                     setTimeout(() => ref.current?.play(), 2000);
-    //                 }
-    //             } else {
-    //                 ref.current?.stop();
-    //             }
-    //         });
-    //         if (node) observer.current.observe(node);
-    //     }, []
-    // )
 
     const onOpenSignUpClick = useCallback(() => {
         setVisibleSection('signup');

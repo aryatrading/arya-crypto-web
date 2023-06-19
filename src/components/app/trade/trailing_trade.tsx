@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import {
   addTrailing,
   getAssetPrice,
@@ -12,11 +12,14 @@ import { Button } from "../../shared/buttons/button";
 import { ProfitSet } from "../../shared/containers/trade/profit_set";
 import { PremiumBanner } from "../../shared/containers/premiumBanner";
 import { useTranslation } from "next-i18next";
+import { Col } from "../../shared/layout/flex";
+import { twMerge } from "tailwind-merge";
 import { selectAssetLivePrice } from "../../../services/redux/marketSlice";
 import { toast } from "react-toastify";
-import { TrailingType } from "../../../types/trade";
+import { TradeType, TrailingType } from "../../../types/trade";
 import {
-  cancelOpenOrder,
+  cancelOrder,
+  createTrade,
   getAssetOpenOrders,
 } from "../../../services/controllers/trade";
 import { selectSelectedExchange } from "../../../services/redux/exchangeSlice";
@@ -24,7 +27,15 @@ import { isPremiumUser } from "../../../services/redux/userSlice";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 import { Row } from "../../shared/layout/flex";
 
-export const TrailingTrade: FC = () => {
+interface ITrailingTrade {
+  assetScreen?: boolean;
+  postCreation?: Function;
+}
+
+export const TrailingTrade: FC<ITrailingTrade> = ({
+  assetScreen = false,
+  postCreation,
+}) => {
   const { t } = useTranslation(["trade"]);
   const dispatch = useDispatch();
   const isPremium = useSelector(isPremiumUser);
@@ -38,6 +49,20 @@ export const TrailingTrade: FC = () => {
     price: _assetprice[trade?.asset_name?.toLowerCase() ?? "btc"] ?? _price,
     value: 0,
   });
+
+  const createTrailing = async (trailing: TrailingType) => {
+    const tradeData: TradeType = {
+      symbol_name: trade.symbol_name,
+      asset_name: trade.asset_name,
+      base_name: trade.base_name,
+      available_quantity: trade.available_quantity,
+      trailing_stop_loss: [trailing],
+    };
+
+    await createTrade(tradeData, selectedExchange?.provider_id ?? 1);
+    postCreation!();
+    toast.success(`${trade.symbol_name} trailing created`);
+  };
 
   const onAddTrailing = () => {
     if (values.price <= 0) {
@@ -64,7 +89,11 @@ export const TrailingTrade: FC = () => {
       _trailing.trailing_delta = values.value;
     }
 
-    dispatch(addTrailing(_trailing));
+    if (assetScreen) {
+      createTrailing(_trailing);
+    } else {
+      dispatch(addTrailing(_trailing));
+    }
   };
 
   const renderContent = () => {
@@ -73,10 +102,7 @@ export const TrailingTrade: FC = () => {
 
   const onremovetrailing = async (order: any) => {
     if (order?.order_id) {
-      await cancelOpenOrder(
-        order?.order_id,
-        selectedExchange?.provider_id ?? 1
-      );
+      await cancelOrder(order?.order_id, selectedExchange?.provider_id ?? 1);
       await getAssetOpenOrders(
         trade.symbol_name,
         selectedExchange?.provider_id ?? 1
@@ -117,7 +143,11 @@ export const TrailingTrade: FC = () => {
         />
       ) : null}
       <Button
-        className={`${isPremium ? "bg-blue-3" : "bg-grey-1"} rounded-md py-3`}
+        className={twMerge(
+          isPremium ? "bg-blue-3" : "bg-grey-1",
+          "rounded-md py-3",
+          assetScreen ? "mt-auto" : ""
+        )}
         onClick={() => onAddTrailing()}
       >
         <Row className="justify-center items-center gap-2">
@@ -127,22 +157,26 @@ export const TrailingTrade: FC = () => {
           <p>{t("addtrailing")}</p>
         </Row>
       </Button>
-      {trade?.trailing_stop_loss?.length > 0 ? (
-        <p className="font-bold text-base">{t("currenttrailing")}</p>
-      ) : null}
-      {trade?.trailing_stop_loss?.map((elm: any, index: number) => {
-        return (
-          <ProfitSet
-            key={index}
-            content={renderContent()}
-            profit={{ value: 3 }}
-            symbol={trade.asset_name}
-            quantity="3"
-            base="USD"
-            action={() => onremovetrailing(elm)}
-          />
-        );
-      })}
+      {!assetScreen && (
+        <Col className="gap-6">
+          {trade?.trailing_stop_loss?.length > 0 ? (
+            <p className="font-bold text-base">{t("currenttrailing")}</p>
+          ) : null}
+          {trade?.trailing_stop_loss?.map((elm: any, index: number) => {
+            return (
+              <ProfitSet
+                key={index}
+                content={renderContent()}
+                profit={{ value: 3 }}
+                symbol={trade.asset_name}
+                quantity="3"
+                base="USD"
+                action={() => onremovetrailing(elm)}
+              />
+            );
+          })}
+        </Col>
+      )}
     </>
   );
 };

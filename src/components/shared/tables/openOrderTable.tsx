@@ -13,7 +13,7 @@ import { formatNumber } from "../../../utils/helpers/prices";
 import { XMarkIcon, TrashIcon } from "@heroicons/react/24/outline";
 import moment from "moment";
 import {
-  cancelOpenOrder,
+  cancelOrder,
   getAssetOpenOrders,
 } from "../../../services/controllers/trade";
 import { toast } from "react-toastify";
@@ -50,7 +50,7 @@ export const OpenOrders: FC = () => {
 
   const onclosepress = async (order: any) => {
     try {
-      await cancelOpenOrder(order.id ?? 1, order.provider_id);
+      await cancelOrder(order.id ?? 1, order.provider_id);
       dispatch(clearOrder());
       await getAssetOpenOrders(trade.symbol_name, order.provider_id);
       toast.success(`${order.type} order closed`);

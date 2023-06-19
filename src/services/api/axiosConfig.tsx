@@ -14,10 +14,7 @@ export const axiosInstance = axios.create({
 
 export const axiosShopInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SHOP_URL,
-  timeout: 20000,
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-  },
+  timeout: 20000
 })
 
 // Intercept request

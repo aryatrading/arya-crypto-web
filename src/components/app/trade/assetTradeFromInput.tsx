@@ -77,7 +77,8 @@ const AssetTradeFromInput: FC = () => {
       <Row className="items-center">
         <input
           className={clsx(inputClasses)}
-          value={asset.quantity ?? 0}
+          value={asset.quantity}
+          type="number"
           placeholder={asset.quantity}
           onChange={(e) =>
             dispatch(setFrom({ ...asset, quantity: e.target.value }))

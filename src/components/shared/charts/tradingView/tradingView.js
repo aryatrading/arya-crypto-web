@@ -1,6 +1,6 @@
 // TradingViewWidget.jsx
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "next-i18next";
 
 let tvScriptLoadingPromise;
@@ -9,6 +9,10 @@ export default function TradingViewWidget({ height, asset }) {
 
   const onLoadScriptRef = useRef();
   const { i18n } = useTranslation();
+
+  const graphId = useMemo(() => {
+    return `asset-${asset}`
+  }, [asset])
 
   useEffect(() => {
     onLoadScriptRef.current = createWidget;
@@ -33,9 +37,8 @@ export default function TradingViewWidget({ height, asset }) {
 
 
     function createWidget() {
-      console.log('> asset >> ', asset)
       if (
-        document.getElementById("tradingview_d2d35") &&
+        document.getElementById(graphId) &&
         "TradingView" in window
       ) {
         new window.TradingView.widget({
@@ -49,15 +52,15 @@ export default function TradingViewWidget({ height, asset }) {
           locale: i18n.language,
           toolbar_bg: "#f1f3f6",
           enable_publishing: false,
-          container_id: "tradingview_d2d35",
+          container_id: graphId,
         });
       }
     }
-  }, []);
+  }, [asset]);
 
   return (
     <div className="h-3/5r">
-      <div id="tradingview_d2d35" />
+      <div id={graphId} />
     </div>
   );
 }
