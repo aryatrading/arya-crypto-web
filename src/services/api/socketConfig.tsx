@@ -14,7 +14,6 @@ export const openConnection = (exchange: string) => {
     let _assets = await fetchAssets("", 100);
 
     let _list = await fetchSymbolsList(_assets, exchange);
-    console.log(_list);
 
     socket.send(
       JSON.stringify({
