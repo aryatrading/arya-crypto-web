@@ -89,10 +89,9 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
 
   const { store, props } = wrapper.useWrappedStore(rest);
 
-  // useEffect(() => {
-  //   console.log("changing here");
-  //   openConnection();
-  // }, [store.getState().exchange]);
+  useEffect(() => {
+    openConnection("binance");
+  }, []);
 
   return getLayout(
     <Provider store={store}>
