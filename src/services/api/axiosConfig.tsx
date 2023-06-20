@@ -13,7 +13,7 @@ export const axiosInstance = axios.create({
 });
 
 export const axiosShopInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_SHOP_URL,
+  baseURL: process.env.NEXT_PUBLIC_SHOP_URL||'https://shop.mytechxapp.net',
   timeout: 20000
 })
 

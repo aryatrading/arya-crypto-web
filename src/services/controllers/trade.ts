@@ -74,6 +74,7 @@ export const getAssetCurrentPrice = async (asset_name: string) => {
   );
 
   store.dispatch(setAssetPrice({ price: data.asset_data?.current_price }));
+  return data.asset_data?.current_price;
 };
 
 export const getAssetValidation = async (symbol: string, provider: number) => {
