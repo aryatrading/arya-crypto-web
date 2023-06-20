@@ -34,9 +34,9 @@ export const EntryTrade: FC = () => {
   const { t } = useTranslation(["trade"]);
   const trade = useSelector(getTrade);
   const [tabIndex, setIndex] = useState(
-    trade?.entry_order && trade?.entry_order?.order_type === "MARKET"
-      ? 0
-      : 1 ?? 0
+    trade?.entry_order && trade?.entry_order?.order_type === "CONDITIONAL"
+      ? 1
+      : 0 ?? 0
   );
   const selectedExchange = useSelector(selectSelectedExchange);
 
@@ -174,10 +174,11 @@ export const EntryTrade: FC = () => {
         }}
       />
 
-      <div className="flex justify-center items-center">
+      <div className="flex !justify-center !items-center">
         <TimeseriesPicker
           series={percentTabs}
           active={percent}
+          buttonClassName="w-full"
           onclick={async (e: any) => {
             setPercent(e.key);
 
