@@ -1,0 +1,8 @@
+service: 'arya-crypto-web'
+runtime: nodejs16
+env: standard
+
+handlers:
+  - url: /.*
+    secure: always
+    script: auto
