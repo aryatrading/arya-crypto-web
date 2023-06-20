@@ -56,6 +56,7 @@ const AssetTradeToInput: FC = () => {
         <input
           className={clsx(inputClasses)}
           value={formatNumber(qty)}
+          type="number"
           placeholder={formatNumber(qty)}
           onChange={(e) => onchangeInput(parseInt(e.target.value))}
         />

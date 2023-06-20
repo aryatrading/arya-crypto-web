@@ -51,7 +51,7 @@ const TradingImg = () => (
 )
 
 const CoinProfitCalculator = () => {
-    const { t } = useTranslation([""]);
+    const { t } = useTranslation();
     const { setVisibleSection, modalTrigger } = useAuthModal();
     const { clientInitialized, id } = useAuthUser();
     const { push } = useRouter();

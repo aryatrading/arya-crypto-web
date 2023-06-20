@@ -71,7 +71,8 @@ const useAssetSearch = ({ fullModal, showShowOnlyTradableAssets }: { fullModal: 
             setFilteredAssets(null);
             fetchAssets(searchTerm, searchTerm.length <= 0 ? fullModal ? 20 : 5 : 100)
                 .then((res) => {
-                    setFilteredAssets(res);
+                    if (res)
+                        setFilteredAssets(res);
                 })
                 .catch((error) => {
                     setFetchingError(true);

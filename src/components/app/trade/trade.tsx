@@ -28,7 +28,6 @@ import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/router";
 
 const Trade: FC = () => {
-
   const dispatch = useDispatch();
   const selectedExchange = useSelector(selectSelectedExchange);
   let trade = useSelector(getTrade);
@@ -68,7 +67,6 @@ const Trade: FC = () => {
     getAssetCurrentPrice(trade.asset_name ?? "btc");
   }, [selectedExchange?.provider_id, trade.asset_name, trade.symbol_name]);
 
-
   const tradetabs = useMemo(() => {
     return [
       {
@@ -96,9 +94,10 @@ const Trade: FC = () => {
 
   const renderTradeContent = () => {
     if (activeTab === "entry") return <EntryTrade />;
-    if (activeTab === "stoploss") return <StoplossTrade />;
-    if (activeTab === "takeprofit") return <TakeprofitTrade />;
-    if (activeTab === "trailing") return <TrailingTrade />;
+    if (activeTab === "stoploss") return <StoplossTrade assetScreen={false} />;
+    if (activeTab === "takeprofit")
+      return <TakeprofitTrade assetScreen={false} />;
+    if (activeTab === "trailing") return <TrailingTrade assetScreen={false} />;
   };
 
   const onCreateTrade = async () => {
@@ -171,8 +170,8 @@ const Trade: FC = () => {
                 index === 0
                   ? "rounded-l-md"
                   : index === tradetabs.length - 1
-                    ? "rounded-r-md"
-                    : ""
+                  ? "rounded-r-md"
+                  : ""
               }
               bgColor={activeTab === elm.key ? "bg-blue-3" : "bg-grey-2"}
               textColor={activeTab === elm.key ? "text-blue-2" : "text-grey-1"}
@@ -192,10 +191,10 @@ const Trade: FC = () => {
         />
       </div>
     );
-  }, [trade.asset_name]);
+  }, [trade.asset_name, trade.symbol_name]);
 
   return (
-    <Col className="flex justify-start w-full gap-6">
+    <Col className="flex justify-center w-full gap-6">
       <ExchangeSwitcher hideExchangeStats={true} canSelectOverall={false} />
       <AssetTradeDropdown />
 
@@ -203,7 +202,7 @@ const Trade: FC = () => {
         <div className="lg:w-2/3 flex-none">{renderTradingView}</div>
 
         <div className="w-full">
-          <Col className=" bg-black-2 rounded-md gap-5 px-5 py-5">
+          <Col className=" bg-black-2 justify-center  rounded-md gap-5 px-5 py-5">
             <div className="w-full flex justify-center">{renderTabs()}</div>
             {renderTradeContent()}
           </Col>

@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { StarIcon } from "@heroicons/react/24/outline";
@@ -16,8 +16,8 @@ import {
   getMarketCap,
 } from "../../../services/controllers/market";
 import { FAVORITES_LIST, MODE_DEBUG } from "../../../utils/constants/config";
-import useDebounce from "../../../utils/useDebounce";
 import { firebaseId } from "../../../services/redux/userSlice";
+import { formatNumber } from "../../../utils/helpers/prices";
 
 const Market: FC = () => {
   const { t } = useTranslation(["market"]);
@@ -38,37 +38,32 @@ const Market: FC = () => {
 
   useEffect(() => {
     fetchAssets(search, count, fId);
-  }, [count]);
+  }, [count, search]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    getMarketCap().then(({ data: { data } }) => {
-      const USD = data.quote.USD;
-      setMarketCapDetails({
-        vol24: USD.total_volume_24h,
-        vol24Percentage: USD.total_volume_24h_yesterday_percentage_change,
-        marketCap: USD.total_market_cap,
-        marketCapPercentage: USD.total_market_cap_yesterday_percentage_change,
-        BTCDominance: data.btc_dominance,
-        BTCDominancePercentage: data.btc_dominance_24h_percentage_change,
-      });
-    }).catch((error) => {
-      if (MODE_DEBUG) {
-        console.error(error)
-      }
-    });
-  }, []);
-  useDebounce(
-    () => {
-      fetchAssets(search, count, fId);
-    },
-    [search],
-    400
-  );
+  // useEffect(() => {
+  //   getMarketCap()
+  //     .then(({ data: { data } }) => {
+  //       const USD = data.quote.USD;
+  //       setMarketCapDetails({
+  //         vol24: USD.total_volume_24h,
+  //         vol24Percentage: USD.total_volume_24h_yesterday_percentage_change,
+  //         marketCap: USD.total_market_cap,
+  //         marketCapPercentage: USD.total_market_cap_yesterday_percentage_change,
+  //         BTCDominance: data.btc_dominance,
+  //         BTCDominancePercentage: data.btc_dominance_24h_percentage_change,
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       if (MODE_DEBUG) {
+  //         console.error(error);
+  //       }
+  //     });
+  // }, []);
 
   const assets = useCallback(() => {
     if (typeof window !== "undefined") {
@@ -81,13 +76,13 @@ const Market: FC = () => {
   }, [_assets, tab]);
 
   return (
-    <div className="h-full w-full ">
+    <div className="h-full w-full " onScroll={handleScroll}>
       <Col className="flex items-center justify-center flex-1">
         <Col className="h-32 mb-40 mt-36 md:mt-0 lg:mb-20 flex justify-center w-full">
           <p className="text-center  text-[#F9FAFB] font-medium text-4xl mb-10">
             {tab === "all" ? t("cryptocurrencies") : t("favorites")}
           </p>
-          {tab === "all" ? (
+          {/* {tab === "all" ? (
             <Row className="w-full items-center justify-center gap-8 flex flex-col lg:flex-row">
               <MarketStats
                 bgColor={clsx(
@@ -99,7 +94,7 @@ const Market: FC = () => {
                   "w-full lg:w-64"
                 )}
                 percent={marketCapDetails?.marketCapPercentage || "0"}
-                amount={marketCapDetails?.marketCap || "0"}
+                amount={formatNumber(parseFloat(marketCapDetails?.marketCap))}
                 title={t("marketcap")}
               />
               <MarketStats
@@ -112,7 +107,7 @@ const Market: FC = () => {
                   "w-full lg:w-64"
                 )}
                 percent={marketCapDetails?.vol24Percentage || "0"}
-                amount={marketCapDetails?.vol24 || "0"}
+                amount={formatNumber(parseFloat(marketCapDetails.vol24))}
                 title={t("volume")}
               />
               <MarketStats
@@ -125,11 +120,13 @@ const Market: FC = () => {
                   "w-full lg:w-64"
                 )}
                 percent={marketCapDetails.BTCDominancePercentage}
-                amount={marketCapDetails.BTCDominance}
+                amount={`${formatNumber(
+                  parseFloat(marketCapDetails.BTCDominance)
+                )}%`}
                 title={t("btcDominance")}
               />
             </Row>
-          ) : null}
+          ) : null} */}
           <SearchInput
             onchange={(e: string) => setSearch(e)}
             placeholder={t("search")}

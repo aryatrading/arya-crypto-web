@@ -36,9 +36,13 @@ export const marketSlice = createSlice({
         [symbol]: price,
       };
     },
+    clearLiveData: (state) => {
+      state.assetLivePrice = {};
+    },
   },
 });
 
-export const { storeMrkAssets, pricechange } = marketSlice.actions;
+export const { storeMrkAssets, pricechange, clearLiveData } =
+  marketSlice.actions;
 
 export default marketSlice.reducer;
