@@ -1,10 +1,30 @@
-import { axiosShopInstance } from "../api/axiosConfig";
+import { MODE_DEBUG } from "../../utils/constants/config";
+import { axiosInstance, axiosShopInstance } from "../api/axiosConfig";
 
 export const getCheckoutDetails = async () => {
+  const checkoutSlug = process.env.NEXT_PUBLIC_CHECKOUT_SLUG||'arya-crypto-2023'
   return await axiosShopInstance.get(
-    `/checkouts/slug/${process.env.NEXT_PUBLIC_CHECKOUT_SLUG||'arya-crypto-2023'}`
+    `/checkouts/slug/${checkoutSlug}`
   );
 };
+
+export const getInvoices = async () =>{
+  const {data} = await axiosShopInstance.get(`/invoices`)
+  console.log(data)
+  return data
+}
+
+export const downloadInvoicePDF = async (invoiceId: string) => {
+  try {
+      const invoice: any = await axiosShopInstance.get(`/invoices/${invoiceId}`)
+      console.log(invoice)
+      window.open(invoice?.data.url, '_blank')
+  } catch (error) {
+    if(MODE_DEBUG){
+      console.error(error)
+    }
+  }
+}
 
 export const createSubscription = async (
   checkoutId: number,
@@ -22,6 +42,5 @@ export const createSubscription = async (
     bumps: [],
   });
 };
-
 
 
