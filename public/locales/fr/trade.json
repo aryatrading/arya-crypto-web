@@ -38,8 +38,8 @@
     "whatistr": "Fixer la traîne ?",
     "trdescription": "Un ordre de suivi en pourcentage ajuste un prix stop à un pourcentage fixe en dessous du prix actuel du marché afin de bloquer les profits et de protéger les gains.",
     "salesPage": {
-        "mainTitle": "Optimisez vos trades",
-        "results": "optimaux",
+        "mainTitle": "<curveText><blueText>Optimisez</blueText></curveText> vos trades",
+        "results": "",
         "ourGoal": "Transformer vos actions manuelles en actions automatisées. Pour une meilleure gestion et un plus grand contrôle de vos investissements.",
         "points": {
             "1": "Protéger votre capital en ajoutant un stop-loss à vos trades",

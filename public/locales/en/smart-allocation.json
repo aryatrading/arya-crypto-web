@@ -92,8 +92,8 @@
     "thisStableCoinWillNotBeUsedInSmartAllocation": "This stable coin will not be used in smart allocation",
     "STABLE_COIN": "STABLE\nCOIN",
     "salesPage": {
-        "title": "Transform the way you invest with",
-        "smartAllocation": "Smart Allocation",
+        "title": "Transform the way you invest with ",
+        "smartAllocation": "<blueText>Smart Allocation</blueText>",
         "sub": "Smart Allocation give you granular control over your portfolio strategy.",
         "points": {
             "1": "Buy a basket of cryptocurrencies in one click",

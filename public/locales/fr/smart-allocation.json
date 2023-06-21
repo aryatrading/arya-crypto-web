@@ -92,8 +92,8 @@
     "thisStableCoinWillNotBeUsedInSmartAllocation": "Les stable coin sont exclue de votre smart allocation.",
     "STABLE_COIN": "STABLE COIN",
     "salesPage": {
-        "title": "Smart allocation : Investissez ",
-        "smartAllocation": "plus intelligemment",
+        "title": "<blueText>Smart allocation:</blueText>  ",
+        "smartAllocation": "Investissez plus intelligemment",
         "sub": "Révolutionnez votre façon d'investir en ayant un contrôle détaillé de votre stratégie d’investissement.",
         "points": {
             "1": "Investissez en un clic sur un ensemble de différentes cryptomonnaies",
