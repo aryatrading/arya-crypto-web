@@ -1,8 +1,8 @@
 {
-    "title": "Faire de l'investissement crypto, <blueText>facilement</blueText>, <curveText>pour <blueText>tout le monde</blueText> </curveText>",
-    "description": "Suivez tous vos portefeuilles et échanges sur un dashboard, gérez et automatisez efficacement l'ensemble de votre portefeuille.",
+    "title": "Investissez dans les cryptomonnaies en toute simplicité, <curveText><blueText>lancez-vous !</blueText></curveText>",
+    "description": "Gérez et automatisez facilement l'ensemble de votre portefeuille en suivant tous vos comptes sur un seul dashboard.",
     "points": {
-        "1": "Connectez-vous à 15 portefeuilles",
+        "1": "Connectez jusqu’à 15 portefeuilles",
         "2": "Diversifiez et automatisez votre allocation",
         "3": "Accédez à des fonctionnalités de trading avancées"
     },
@@ -10,18 +10,18 @@
     "secondSection": {
         "1": {
             "title": "Un tracker multi-portefeuilles",
-            "sub": "Suivez chaque crypto dont vous disposez à partir d'un dashboard.",
-            "content": "Arya Crypto est un guichet unique pour suivre les prix et les performances de toutes vos cryptos, sur vos différents portefeuilles et échanges."
+            "sub": "Centralisez le suivi de toutes vos cryptomonnaies en un seul endroit.",
+            "content": "Avec ARYA Crypto, suivez facilement les prix et les performances de toutes vos cryptomonnaies, qu'elles soient sur différents portefeuilles ou exchanges."
         },
         "2": {
-            "title": "Smart allocation : investissement en un clic",
-            "sub": "Achetez un panier de vos cryptos préférées en un clic.",
-            "content": "Créez le portefeuille parfait, achetez-le en un clic et améliorez votre stratégie grâce à des backtests et à la définition de sorties basées sur les performances."
+            "title": "Smart Allocation: Investissez en un clic",
+            "sub": "Toutes vos cryptos sur un seul portefeuille, parfaitement équilibré.",
+            "content": "Testez vos stratégies, améliorez votre performance et créez le portefeuille parfait. Continuez à investir sur l’ensemble des cryptos de votre portefeuille en un clic seulement."
         },
         "3": {
-            "title": "Maximisez les profits de vos trade ",
-            "sub": "Transformez votre travail manuel en actions automatisées.",
-            "content": "Avec la fonction Trading, prendre des positions, placer vos stop loss et récolter des gains n'a jamais été aussi simple. "
+            "title": "Boostez la performance de vos trades ",
+            "sub": "Automatisez vos trades et libérez-vous des tâches manuelles.",
+            "content": "Grâce à la fonction trading, prendre des positions, placer vos stops loss et vos take profit n’a jamais été aussi simple. "
         }
     },
     "learnMore": "En savoir plus",
