@@ -92,35 +92,35 @@
     "thisStableCoinWillNotBeUsedInSmartAllocation": "Les stable coin sont exclue de votre smart allocation.",
     "STABLE_COIN": "STABLE COIN",
     "salesPage": {
-        "title": "Transformez votre façon d'investir avec",
+        "title": "Smart allocation : Investissez plus intelligemment",
         "smartAllocation": "Smart allocation",
-        "sub": "Smart allocation vous permet d'avoir un contrôle détaillé sur votre stratégie d'investissement",
+        "sub": "Révolutionnez votre façon d'investir en ayant un contrôle détaillé de votre stratégie d’investissement.",
         "points": {
-            "1": "Acheter un ensemble de crypto en un seul clic",
-            "2": "Effectuer un rééquilibrage périodique personnalisé",
-            "3": "Comparez les allocations et trouvez les plus performantes"
+            "1": "Investissez en un clic sur un ensemble de différentes cryptomonnaies",
+            "2": "Rééquilibrage automatique de votre portefeuille",
+            "3": "Trouvez la combinaison la plus performante en simulant et comparant vos allocations"
         },
         "buildPortfolio": "Construire mon portefeuille",
         "sections": {
             "1": {
-                "title": "Votre ETF personnel de crypto",
-                "sub": "Diversifiez-vous sur l'ensemble du marché de la crypto en un seul clic",
-                "content": "Avec Arya Crypto, un clic vous permet de créer sans effort un portefeuille diversifié de crypto, offrant une exposition à l'ensemble du marché de la crypto sans avoir besoin de calculs d'allocation complexes."
+                "title": "Créez votre ETF Cryptos",
+                "sub": "Le moyen le plus simple de créer un portefeuille diversifié",
+                "content": "Avec Arya Crypto, la création d'un portefeuille diversifié est désormais simple. Un clic suffit pour vous exposer à l'ensemble du marché des cryptos. Cela, sans à avoir à effectuer des calculs d'allocation compliqués."
             },
             "2": {
                 "title": "Rééquilibrage automatique",
-                "sub": "Gardez votre portefeuille sur la bonne voie",
-                "content": "Lorsque le marché change, un portefeuille s'éloigne de son allocation cible.ARYA crypto gère automatiquement la répartition de votre portefeuille pour le maintenir sur la bonne voie, vous offrant ainsi un gain de temps."
+                "sub": "Votre portefeuille toujours à jour",
+                "content": "Les changements de marché peut faire dévier votre portefeuille de son allocation cible. ARYA Crypto gère automatiquement la répartition de votre portefeuille pour qu’il reste fidèle à votre stratégie d’investissement. Offrant ainsi un gain de temps considérable."
             },
             "3": {
                 "title": "Testez et comparez",
                 "sub": "Simulez différentes allocations de portefeuille et comparez leurs résultats",
-                "content": "Avec des données de marché précises collectées à partir des échanges en temps réel, Arya Crypto vous permet de tester et de comparer différentes combinaisons de crypto. "
+                "content": "ARYA Crypto s’appuie sur des données de marché précises collectées en temps réel. Vous permettant de tester et de comparer différentes combinaisons de cryptos facilitant votre prise de décision."
             },
             "4": {
                 "title": "Personnalisez votre stratégie",
-                "sub": "Personnalisez ARYA Crypto en fonction de vos préférences.",
-                "content": "Modifiez votre fréquence de rééquilibrage, ajoutez des stop loss, plusieurs prises de bénéfices, des trades ou liquidez vos cryptos à tout moment avec une stratégie de sortie."
+                "sub": "ARYA Crypto s’adapte à votre style d’investisseur",
+                "content": "Vous pouvez ajuster votre stratégie de trading en modifiant la fréquence à laquelle vous rééquilibrez votre portefeuille, en mettant en place des stop loss, en prenant des bénéfices régulièrement ou en liquidant vos cryptomonnaies à tout moment selon votre stratégie de sortie."
             }
         },
         "getStarted": "Commencer"
