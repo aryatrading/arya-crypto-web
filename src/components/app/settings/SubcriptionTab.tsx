@@ -28,8 +28,8 @@ const SubcriptionTab = () => {
 
   useEffect(() => {
     getInvoices().then((invoices) => {
-      let _invoices = invoices.filter(
-        (elm: any) => elm.lines[0].price.product.name === "ARYA Suite +"
+      let _invoices = invoices.filter((elm: any) =>
+        elm.lines[0].price.product.name.toLowerCase().includes("crypto")
       );
 
       setInvoices(_invoices);
