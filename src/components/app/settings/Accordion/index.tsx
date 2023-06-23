@@ -354,7 +354,9 @@ const ExchangeAccordionCard = ({
               <Row className="justify-between items-center bg-yellow-1 rounded-md flex-col md:flex-row">
                 <Col className="p-4 gap-3">
                   <p className="text-white font-bold text-xl">
-                    {t("exchangeAccQ", { name: exchange.provider_name })}
+                    {t("exchangeAccQ", {
+                      name: exchange.provider_name ?? "Binance",
+                    })}
                   </p>
                   <p className="text-white font-bold text-sm">
                     {exchangeDetails?.signupDescription?.[i18n?.language] || ""}
