@@ -1,22 +1,19 @@
-import Link from "next/link";
 import { Col } from "../layout/flex";
-import { CustomizeAllocationIcon } from "../../svg/smart-allocation/customize-portfolio-icon";
 import { useTranslation } from "next-i18next";
-
+import AddExchange from "../../app/exchangeTab/AddExchange";
 
 const NoConnectedExchangePage = () => {
+  const { t } = useTranslation(["common"]);
 
-    const { t } = useTranslation(['common'])
-
-    return (
-        <Col className="w-full h-96 items-center justify-center">
-            <Col className="gap-5 items-center justify-center">
-                <CustomizeAllocationIcon />
-                <p className="font-bold">{t("connectYourExchanges")}</p>
-                <Link href="/settings" className="bg-blue-3 px-12 py-3 rounded-md">{t("goToSettings")}</Link>
-            </Col>
-        </Col>
-    )
-}
+  return (
+    <div className="flex flex-col w-full h-96 items-center justify-center">
+      <Col className="gap-5 items-center justify-center">
+        <AddExchange
+          onPressExchange={(data: any) => (window.location.href = "/settings")}
+        />
+      </Col>
+    </div>
+  );
+};
 
 export default NoConnectedExchangePage;

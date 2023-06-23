@@ -8,17 +8,31 @@ import { TradingSalesPage } from "../../components/app/trade/salesPage";
 import PageLoader from "../../components/shared/pageLoader/pageLoader";
 import { useTranslation } from "next-i18next";
 import SEO from "../../components/seo";
+import NoConnectedExchangePage from "../../components/shared/no-exchange-connected-page/no-exchange-connected-page";
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { selectConnectedExchanges } from "../../services/redux/exchangeSlice";
 
 const TradePage = () => {
   const { id, clientInitialized } = useAuthUser();
   const { t } = useTranslation();
+  const connectedExchanges = useSelector(selectConnectedExchanges);
+
+  const connectedExchangesWithProviders = useMemo(
+    () => connectedExchanges?.filter((exchange) => exchange.provider_id),
+    [connectedExchanges]
+  );
 
   if (clientInitialized) {
     if (id != null) {
       return (
         <Layout>
           <SEO title={t<string>("trade")} />
-          <Trade />
+          {connectedExchangesWithProviders?.length ? (
+            <Trade />
+          ) : (
+            <NoConnectedExchangePage />
+          )}
         </Layout>
       );
     } else {
@@ -37,7 +51,6 @@ const TradePage = () => {
       </Layout>
     );
   }
-
 };
 
 export default withAuthUser({})(TradePage);
