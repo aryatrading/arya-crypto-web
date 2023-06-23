@@ -39,9 +39,9 @@
   "addExchange": "Add Exchange",
   "discconectedSuccess": "Discconected successfully",
   "copied": "Copied!",
-  "copy": "Copy whitelist APIs",
+  "copy": "Copy IP whitelist",
   "settings": "Settings",
-  "whiteListText": "Copy your Whitelist API’s and paste in on your exchange",
+  "whiteListText": "Copy your IP Whitelist and paste in on your exchange",
   "exchangeAccQ": "Don’t have a {{name}} account?",
   "exchangeAccMsg": "Create your {{name}} account via the button bellow and get {{discount}}% discount on your {{name}} fees.",
   "createAccount": "Create account",
@@ -61,5 +61,6 @@
   "amount": "Amount",
   "reciept": "Reciept",
   "status": "Status",
-  "download": "Download"
+  "download": "Download",
+  "activesub": "Your Premium subscription is Active"
 }

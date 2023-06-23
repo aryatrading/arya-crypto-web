@@ -61,5 +61,6 @@
   "amount": "Montant",
   "reciept": "Reciept",
   "status": "Statut",
-  "download": "Télécharger"
+  "download": "Télécharger",
+  "activesub": "Votre abonnement Premium est actif"
 }
