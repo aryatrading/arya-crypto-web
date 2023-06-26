@@ -209,8 +209,23 @@ const AuthedSmartAllocation: FC = () => {
             </SmartAllocationContext.Provider>
         )
     } else {
+        const DummyView = () => (
+            <SmartAllocationContext.Provider value={{
+                rebalancingDate,
+                rebalancingFrequency,
+                isLoadingSmartAllocationData: isLoadingSmartAllocationHoldings,
+                fetchSmartAllocationData: initSmartAllocationHoldings,
+                exitStrategyData: exitStrategy,
+                isLoadingExitStrategy,
+                fetchExitStrategy
+            }}>
+                <Col className="w-full md:gap-10 lg:gap-16 md:items-center pb-20 items-start justify-start">
+                    {withAllocation}
+                </Col>
+            </SmartAllocationContext.Provider>
+        );
         return (
-            <NoConnectedExchangePage />
+            <NoConnectedExchangePage Component={DummyView} />
         )
     }
 }

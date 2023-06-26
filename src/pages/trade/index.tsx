@@ -31,7 +31,7 @@ const TradePage = () => {
           {connectedExchangesWithProviders?.length ? (
             <Trade />
           ) : (
-            <NoConnectedExchangePage />
+            <NoConnectedExchangePage Component={Trade} />
           )}
         </Layout>
       );
