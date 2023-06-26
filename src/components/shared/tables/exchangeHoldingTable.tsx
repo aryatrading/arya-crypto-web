@@ -24,7 +24,7 @@ export const ExhangeHoldingTable: FC = () => {
 
   return (
     <Col className="flex items-center justify-center flex-1 gap-10 w-full">
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <table className="w-full text-sm text-left text-gray-500">
         <thead className="text-xs text-gray-1">
           <tr>
             {header.map((elm, index) => {
@@ -36,8 +36,8 @@ export const ExhangeHoldingTable: FC = () => {
                     index === 0
                       ? "px-6 py-3 rounded-l-lg bg-black-2 font-medium"
                       : index === header.length - 1
-                      ? "rounded-r-lg bg-black-2 font-medium"
-                      : "bg-black-2 h-14 font-medium"
+                        ? "rounded-r-lg bg-black-2 font-medium"
+                        : "bg-black-2 h-14 font-medium"
                   }
                 >
                   {elm}
@@ -64,7 +64,7 @@ export const ExhangeHoldingTable: FC = () => {
                 </td>
                 <td className="font-medium leading-6 text-white flex flex-row mt-5">
                   <AssetPnl
-                    value={elm?.pnl?.percentage??0}
+                    value={elm?.pnl?.percentage ?? 0}
                   />
                   <AssetPnl
                     value={elm?.pnl?.value ?? 0}

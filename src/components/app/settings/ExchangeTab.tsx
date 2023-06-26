@@ -30,6 +30,15 @@ const ExchangeTab = () => {
         }
     }, [connectedExchanges, activeExchange]);
 
+    useEffect(() => {
+        const exchangeData = localStorage.getItem('exchange');
+        if (exchangeData != null) {
+            const obj = JSON.parse(exchangeData || "");
+            setExchanges((st: ExchangeType[]) => ([...st, obj]));
+            localStorage.removeItem("exchange");
+        }
+    }, []);
+
     const openModal = useCallback(() => setShowModal({ bool: true, type: 'add' }), []);
     const closeModal = useCallback(() => setShowModal({ bool: false, type: '' }), []);
 
