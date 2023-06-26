@@ -40,7 +40,7 @@ export const AssetOrdersTable: FC = () => {
         t("exchange"),
       ]);
     }
-  }, [isMobileScreen]);
+  }, [isMobileScreen, t]);
 
   const renderOrderColumn = (order: string) => {
     if (order === "PENDING_ENTRY" || order === "ACTIVE") return t("pending");
@@ -52,7 +52,7 @@ export const AssetOrdersTable: FC = () => {
 
   return (
     <Col className="flex items-center justify-center flex-1 gap-10 w-full">
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <table className="w-full text-sm text-left text-gray-500">
         <thead className="text-xs text-gray-1">
           <tr>
             {header.map((elm, index) => {
@@ -64,8 +64,8 @@ export const AssetOrdersTable: FC = () => {
                     index === 0
                       ? "px-6 py-3 rounded-l-lg bg-black-2 font-medium"
                       : index === header.length - 1
-                      ? "rounded-r-lg bg-black-2 font-medium"
-                      : "bg-black-2 h-14 font-medium"
+                        ? "rounded-r-lg bg-black-2 font-medium"
+                        : "bg-black-2 h-14 font-medium"
                   }
                 >
                   {elm}
