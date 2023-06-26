@@ -25,6 +25,7 @@ const NoConnectedExchangePage = ({ Component }: { Component?: any }) => {
       </Col>
       {Component &&
         <Col className="blur-md absolute w-full mb-32">
+          <Col className="absolute top-0 left-0 right-0 bottom-0" />
           <Component dummy />
         </Col>
       }
