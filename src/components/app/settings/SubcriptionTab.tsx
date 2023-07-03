@@ -13,11 +13,12 @@ import { capitalize } from "lodash";
 import { useResponsive } from "../../../context/responsive.context";
 import { isPremiumUser } from "../../../services/redux/userSlice";
 import { useSelector } from "react-redux";
+import { MODE_DEBUG } from "../../../utils/constants/config";
 
 const SubcriptionTab = () => {
   const { t } = useTranslation(["settings", "common"]);
   const [invoices, setInvoices] = useState([]);
-  const isPremium = useSelector(isPremiumUser);
+  const isPremium = useSelector(isPremiumUser)
   const { isTabletOrMobileScreen } = useResponsive();
 
   const paymentModalTrigger = (
@@ -28,6 +29,9 @@ const SubcriptionTab = () => {
 
   useEffect(() => {
     getInvoices().then((invoices) => {
+        if(MODE_DEBUG){
+            console.log(invoices)
+        }
       let _invoices = invoices.filter((elm: any) =>
         elm.lines[0].price.product.name.toLowerCase().includes("crypto")
       );
@@ -66,14 +70,14 @@ const SubcriptionTab = () => {
               alt="trade-demo"
             />
             <div className="flex flex-col items-center lg:items-start gap-5">
-              <div className="gap-2">
+              <Col className="gap-2">
                 <span className="font-semibold text-lg mt-6">
                   {"Subscribe to ARYA Crypto premium"}
                 </span>
                 <span className="font-medium text-base ">
                   {t("subscriptionHint")}
                 </span>
-              </div>
+              </Col>
               <div className="flex flex-col md:flex-row gap-3 text-sm font-semibold">
                 <PaymentModal triggerButton={paymentModalTrigger} />
                 <Button className="px-1 hover:underline hover:underline-offset-2">
@@ -123,8 +127,8 @@ const SubcriptionTab = () => {
           )}
         </>
       ) : (
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <span className="font-bold text-lg text-base">{t("activesub")}</span>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-2">
+          <span className="font-bold lg:text-2xl">{t("activesub")}</span>
           <Button
             onClick={() => console.log("/")}
             className="bg-orange-1 rounded w-44 h-10"
@@ -134,14 +138,14 @@ const SubcriptionTab = () => {
         </div>
       )}
       <Col className="gap-4">
-        <span> {t("subscriptionhistory")} </span>
+        <span className="text-base font-semibold"> {t("subscriptionhistory")} </span>
         <table className="table-auto">
-          <thead className="border-b border-grey-3 text-sm text-grey-1 font-normal">
-            <th className="py-2 font-normal">{t("refrence")}</th>
-            <th className="py-2 font-normal">{t("date")}</th>
-            <th className="py-2 font-normal">{t("amount")}</th>
-            <th className="py-2 font-normal">{t("reciept")}</th>
-            <th className="py-2 font-normal">{t("status")}</th>
+          <thead className="border-b border-grey-3 text-sm text-grey-1">
+            <th className="py-4 font-normal">{t("refrence")}</th>
+            <th className="py-4 font-normal">{t("date")}</th>
+            <th className="py-4 font-normal">{t("amount")}</th>
+            <th className="py-4 font-normal">{t("reciept")}</th>
+            <th className="py-4 font-normal">{t("status")}</th>
           </thead>
           <tbody>
             {invoices.map((invoice: any) => {
