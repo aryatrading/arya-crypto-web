@@ -170,8 +170,8 @@ const Trade: FC = () => {
                 index === 0
                   ? "rounded-l-md"
                   : index === tradetabs.length - 1
-                  ? "rounded-r-md"
-                  : ""
+                    ? "rounded-r-md"
+                    : ""
               }
               bgColor={activeTab === elm.key ? "bg-blue-3" : "bg-grey-2"}
               textColor={activeTab === elm.key ? "text-blue-2" : "text-grey-1"}
@@ -217,7 +217,7 @@ const Trade: FC = () => {
           </Button>
         </div>
       </div>
-      <Tabs className="text-blue-1 font-bold text-lg border-b-2 border-blue-1">
+      <Tabs className="text-blue-1 font-bold text-lg border-b-2 border-blue-1 mb-10">
         <TabList className="border-b-[1px] border-grey-3 mb-2">
           <Row className="gap-6">
             <Tab className="font-semibold text-sm outline-none cursor-pointer w-full text-center">

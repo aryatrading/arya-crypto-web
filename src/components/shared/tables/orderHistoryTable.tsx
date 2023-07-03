@@ -8,6 +8,7 @@ import { ThemedContainer } from "../containers/themedContainer";
 import { formatNumber } from "../../../utils/helpers/prices";
 import moment from "moment";
 import { useTranslation } from "next-i18next";
+import { ChartBarIcon } from "@heroicons/react/24/solid";
 
 export const OrderHistory: FC = () => {
   const history = useSelector(getHistoryOrders);
@@ -104,6 +105,10 @@ export const OrderHistory: FC = () => {
             })}
         </tbody>
       </table>
+      {history.length === 0 && <Col className="w-full h-40 items-center justify-center mb-10">
+        <ChartBarIcon className="stroke-white fill-white w-12 h-12" />
+        <h3 className="font-bold mt-4 text-white">{t('emptyTradeHistory')}</h3>
+      </Col>}
     </Col>
   );
 };

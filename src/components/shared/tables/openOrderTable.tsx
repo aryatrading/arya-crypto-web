@@ -18,6 +18,7 @@ import {
 } from "../../../services/controllers/trade";
 import { toast } from "react-toastify";
 import { useTranslation } from "next-i18next";
+import { ChartBarIcon } from "@heroicons/react/24/solid";
 
 export const OpenOrders: FC = () => {
   const dispatch = useDispatch();
@@ -147,6 +148,10 @@ export const OpenOrders: FC = () => {
             })}
         </tbody>
       </table>
+      {openOrders.length === 0 && <Col className="w-full h-40 items-center justify-center mb-10">
+        <ChartBarIcon className="stroke-white fill-white w-12 h-12" />
+        <h3 className="font-bold mt-4 text-white">{t('emptyTradeTable')}</h3>
+      </Col>}
     </Col>
   );
 };
