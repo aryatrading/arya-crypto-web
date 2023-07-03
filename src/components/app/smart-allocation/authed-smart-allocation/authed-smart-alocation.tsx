@@ -219,7 +219,7 @@ const AuthedSmartAllocation: FC = () => {
                 isLoadingExitStrategy,
                 fetchExitStrategy
             }}>
-                <Col className="w-full md:gap-10 lg:gap-16 md:items-center pb-20 items-start justify-start">
+                <Col className="w-full md:items-center pb-20 items-start justify-start">
                     {withAllocation}
                 </Col>
             </SmartAllocationContext.Provider>
