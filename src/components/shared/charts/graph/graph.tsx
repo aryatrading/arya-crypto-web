@@ -21,7 +21,7 @@ const LineChart: FC<GraphChartType> = ({
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const tooltipContainerRef = useRef<HTMLDivElement>(null);
 
-  const { isTabletOrMobileScreen } = useResponsive();
+  const { isMobileOnly } = useResponsive();
 
   const getTooltipUI = useCallback((pointValue: number, prevPointValue: number, textColor: string) => {
 
@@ -120,7 +120,7 @@ const LineChart: FC<GraphChartType> = ({
       height: chartContainerRef?.current?.clientHeight,
       layout: {
         background: { type: ColorType.Solid, color: "#00000000" },
-        textColor: isTabletOrMobileScreen ? "#050913" : "#6B7280",
+        textColor: isMobileOnly ? "#050913" : "#6B7280",
         fontSize: 12,
       },
       grid: {
@@ -128,7 +128,7 @@ const LineChart: FC<GraphChartType> = ({
           visible: false,
         },
         horzLines: {
-          visible: !isTabletOrMobileScreen,
+          visible: !isMobileOnly,
           color: "#1F2A41",
         },
       },
@@ -138,14 +138,14 @@ const LineChart: FC<GraphChartType> = ({
       leftPriceScale: {
         borderVisible: false,
         autoScale: true,
-        visible: !isTabletOrMobileScreen,
+        visible: !isMobileOnly,
         mode: PriceScaleMode.Normal,
       },
       rightPriceScale: {
         visible: false,
       },
       timeScale: {
-        borderColor: isTabletOrMobileScreen ? "transparent" : "#1F2A41",
+        borderColor: isMobileOnly ? "transparent" : "#1F2A41",
         visible: true,
         timeVisible: true,
         secondsVisible: false,
@@ -187,7 +187,7 @@ const LineChart: FC<GraphChartType> = ({
       window.removeEventListener("resize", handleResize);
       chart.remove();
     };
-  }, [fixed, isTabletOrMobileScreen, manageTooltip, primaryLineData, secondaryLineData]);
+  }, [fixed, isMobileOnly, manageTooltip, primaryLineData, secondaryLineData]);
 
   const loadingOverlay = useMemo(() => {
     if (isLoading) {
