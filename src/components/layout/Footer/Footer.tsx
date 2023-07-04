@@ -32,7 +32,7 @@ const Footer = () => {
                 <h3 className='dark:text-white text-black-1 text-base font-medium'>{section.name}</h3>
                 <Col className='gap-3'>
                   {section.links.map((link) => {
-                    return <Link key={_.uniqueId()} className='text-grey-1 hover:text-white' href={link.route}>{link.name}</Link>
+                    return <Link key={_.uniqueId()} className='text-grey-1 dark:hover:text-white hover:text-grey-1/50' href={link.route}>{link.name}</Link>
                   })}
                 </Col>
               </Col>
