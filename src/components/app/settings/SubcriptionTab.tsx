@@ -14,6 +14,7 @@ import { useResponsive } from "../../../context/responsive.context";
 import { isPremiumUser } from "../../../services/redux/userSlice";
 import { useSelector } from "react-redux";
 import { MODE_DEBUG } from "../../../utils/constants/config";
+import _ from "lodash";
 
 const SubcriptionTab = () => {
   const { t } = useTranslation(["settings", "common"]);
@@ -107,7 +108,7 @@ const SubcriptionTab = () => {
             <Row className=" gap-14">
               {features.map((feature) => {
                 return (
-                  <Col className="gap-5 items-center">
+                  <Col key={_.uniqueId()} className="gap-5 items-center">
                     <Image
                       src={feature.icon}
                       width={68}
@@ -150,7 +151,7 @@ const SubcriptionTab = () => {
           <tbody>
             {invoices.map((invoice: any) => {
               return (
-                <tr className="text-center">
+                <tr key={_.uniqueId()} className="text-center">
                   <td className="py-2">{invoice?.id}</td>
                   <td className="py-2">
                     {moment(invoice?.created_at).format("DD/MM/YY")}

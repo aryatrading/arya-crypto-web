@@ -12,6 +12,7 @@ import LottieData from "../../../../public/assets/images/publicPages/smart-alloc
 import { useAuthModal } from "../../../context/authModal.context";
 
 import styles from "./index.module.scss";
+import _ from "lodash";
 
 const RowItem = ({ content }: any) => {
   return (
@@ -81,7 +82,7 @@ const SmartAllocationSalesPage: FC = () => {
               t("salesPage.points.2"),
               t("salesPage.points.3"),
             ].map((e) => {
-              return <RowItem content={e} />;
+              return <RowItem key={_.uniqueId()} content={e} />;
             })}
           </Col>
 

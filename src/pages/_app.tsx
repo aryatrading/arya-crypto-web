@@ -87,12 +87,13 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
         await getUserData();
       }
     })();
-
-    openConnection("binance");
-
-    Hotjar.init(siteId, hotjarVersion,{debug:MODE_DEBUG})
-
+    
   }, []);
+  
+  useEffect(()=>{
+    Hotjar.init(siteId, hotjarVersion,{debug:MODE_DEBUG});
+    openConnection("binance");
+  },[])
 
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout || ((page: any) => page);
