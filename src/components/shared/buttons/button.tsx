@@ -6,7 +6,7 @@ export interface IButtonProps extends React.HTMLProps<HTMLButtonElement> {
   type?: "button" | "submit" | "reset" | undefined;
 }
 
-export const Button= React.forwardRef<IButtonProps,any> (({
+export const Button = React.forwardRef<IButtonProps,any> (({
   children,
   onClick,
   type = "button",
