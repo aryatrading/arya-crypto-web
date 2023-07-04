@@ -106,10 +106,10 @@ const ExchangeSwitcher: FC<{
           key={exchange.name}
           className={clsx(
             {
-              "bg-grey-4": isSelected,
+              "dark:bg-grey-4 bg-offWhite-1": isSelected,
               "cursor-pointer": !isNotSelectable,
             },
-            "h-20 py-3 px-9 rounded-md"
+            "h-20 py-3 px-9 dark:rounded-md"
           )}
           onClick={() => {
             if (!isNotSelectable) selectExchange(exchange);
@@ -122,11 +122,11 @@ const ExchangeSwitcher: FC<{
               height={37}
             />
             <Col className="font-bold text-sm gap-1">
-              <p className="capitalize">
+              <p className="capitalize dark:text-white text-black-1">
                 {exchange?.name?.toLocaleLowerCase()}
               </p>
               <Row className="gap-2 items-center">
-                <p>{formatNumber(exchange.last_5m_evaluation, true)} USD</p>
+                <p className="dark:text-white text-grey-1">{formatNumber(exchange.last_5m_evaluation, true)} USD</p>
                 {changePercentage(exchange)}
               </Row>
             </Col>
@@ -149,7 +149,7 @@ const ExchangeSwitcher: FC<{
           <button>
             <Row className="items-center justify-center gap-2 z-10">
               <ExchangeImage providerId={selectedExchange?.provider_id} />
-              <h3 className="text-xl md:text-3xl font-bold capitalize">
+              <h3 className="text-xl md:text-3xl font-bold capitalize dark:text-white text-black-1">
                 {selectedExchange?.name?.toLowerCase()}
               </h3>
               <PlayIcon
@@ -166,7 +166,7 @@ const ExchangeSwitcher: FC<{
             sideOffset={15}
             align="start"
             side={isMobileOnly ? "bottom" : "right"}
-            className="w-[400px] max-w-[calc(100%_-_28px)] bg-grey-3 rounded-md overflow-hidden z-10"
+            className="w-[400px] max-w-[calc(100%_-_28px)] dark:bg-grey-3 bg-offWhite-2 shadow-md dark:shadow-none shadow-grey-1/25 rounded-md overflow-hidden z-10"
           >
             {connectedExchanges?.map((exchange) => dropdownItem(exchange))}
 
@@ -174,11 +174,11 @@ const ExchangeSwitcher: FC<{
               <Row className="items-center gap-5 h-full">
                 <Link
                   href="settings?tab=exchange"
-                  className="w-full py-3 px-2 rounded-md bg-grey-2"
+                  className="w-full py-3 px-2 rounded-md dark:bg-grey-2 bg-offWhite-3"
                 >
                   <Row className="w-full font-bold justify-center gap-1">
-                    <PlusIcon width={20} />
-                    <p className="text-bold">{t("addExchange")}</p>
+                    <PlusIcon width={20} className="dar:fill-white dark:stroke-white fill-grey-1 stroke-grey-1" />
+                    <p className="text-bold dark:text-white text-grey-1">{t("addExchange")}</p>
                   </Row>
                 </Link>
               </Row>
@@ -193,6 +193,7 @@ const ExchangeSwitcher: FC<{
     selectedExchange?.name,
     selectedExchange?.provider_id,
     t,
+    isMobileOnly,
   ]);
 
   return (
@@ -206,7 +207,7 @@ const ExchangeSwitcher: FC<{
         {dropdown}
         {hideExchangeStats === false ? (
           <Row className="items-center gap-3">
-            <h3 className="text-3xl md:text-4xl font-bold">
+            <h3 className="text-3xl md:text-4xl font-bold dark:text-white text-black-1">
               {formatNumber(selectedExchange?.last_5m_evaluation ?? 0, true)}{" "}
             </h3>
             {changePercentage(selectedExchange)}

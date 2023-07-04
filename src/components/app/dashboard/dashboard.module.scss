@@ -4,10 +4,10 @@
     table-layout: auto;
 
     thead {
-        @apply text-grey-1;
+        @apply dark:text-grey-1 text-grey-1;
 
         tr {
-            @apply bg-black-2;
+            @apply dark:bg-black-2 bg-offWhite-3;
 
             th:first-child {
                 @apply rounded-l-lg;
@@ -21,7 +21,7 @@
 
     tbody {
         tr {
-            border-bottom: 1px solid theme('colors.grey.5');
+            @apply border border-[1px] dark:border-grey-5 border-offWhite-3;
 
             &:first-child {
                 td {
