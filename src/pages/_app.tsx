@@ -50,9 +50,11 @@ initAuth();
 
 try {
   initializeApp(firebaseConfig);
-  const remoteConfig = getRemoteConfig(getApp());
-  remoteConfig.settings.minimumFetchIntervalMillis = 1000;
-  fetchAndActivate(remoteConfig);
+  if (typeof window !== 'undefined') {
+    const remoteConfig = getRemoteConfig(getApp());
+    remoteConfig.settings.minimumFetchIntervalMillis = 1000;
+    fetchAndActivate(remoteConfig);
+  }
 } catch (err) {
   console.error(err);
 }
