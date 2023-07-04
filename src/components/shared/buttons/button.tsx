@@ -1,4 +1,3 @@
-import { FC } from "react";
 import React from "react";
 import LoadingSpinner from "../loading-spinner/loading-spinner";
 
