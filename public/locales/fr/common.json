@@ -65,5 +65,7 @@
     "upgradenow": "Découvrir",
     "preview": "Visualiser",
     "footerdesc": "Votre solution tout-en-un pour les amateurs de crypto-monnaies. Suivez les données du marché en temps réel, stockez-les en toute sécurité et négociez en toute transparence grâce à notre application conviviale. Restez informé grâce à des alertes personnalisées et gagnez en visibilité grâce à notre fonction de gestion de portefeuille. Découvrez l'avenir des crypto-monnaies avec AryCrypto dès aujourd'hui.",
-    "editSmartAllocation": "Edit Smart Allocation"
+    "editSmartAllocation": "Edit Smart Allocation",
+    "emptyTradeTable": "Vous n'avez aucune commande ouverte",
+    "emptyTradeHistory": "Vous n'avez pas d'historique de commandes"
 }
