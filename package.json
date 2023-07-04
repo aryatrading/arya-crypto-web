@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@heroicons/react": "^2.0.17",
+    "@hotjar/browser": "^1.0.9",
     "@lottiefiles/lottie-interactivity": "^1.6.2",
     "@lottiefiles/lottie-player": "^2.0.2",
     "@radix-ui/react-accordion": "^1.1.1",
@@ -59,6 +60,7 @@
     "react-spring": "^9.7.1",
     "react-tabs": "^6.0.1",
     "react-toastify": "^9.1.2",
+    "sharp": "^0.32.1",
     "swiper": "^9.4.1",
     "tailwind-merge": "^1.12.0",
     "typescript": "^4.9.5",

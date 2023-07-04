@@ -6,6 +6,7 @@ import Footer from "./Footer/Footer";
 import { initStoreData } from "../../common/hooks/initStore";
 import { useAuthUser } from "next-firebase-auth";
 import { getNotifications } from "../../services/controllers/notifications";
+import { twMerge } from "tailwind-merge";
 
 const poppins = Poppins({
   variable: "--poppins-font",
@@ -16,7 +17,7 @@ const poppins = Poppins({
 
 export function SalesPagesLayout({ children }: any) {
   return (
-    <div className={poppins.className + " min-h-screen flex flex-col justify-between"}>
+    <div className={twMerge(poppins.className ,"min-h-screen flex flex-col justify-between")}>
       <Nav />
       <div className="flex flex-col flex-1 sm:items-center">
         {children}

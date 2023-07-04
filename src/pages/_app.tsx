@@ -11,6 +11,8 @@ import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import { SkeletonTheme } from "react-loading-skeleton";
+import Hotjar from '@hotjar/browser';
+
 
 import "react-toastify/dist/ReactToastify.css";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -23,7 +25,7 @@ import { wrapper } from "../services/redux/store";
 import initAuth from "../initFirebaseAuth";
 import { axiosInstance } from "../services/api/axiosConfig";
 import "../styles/globals.css";
-import { FAVORITES_LIST } from "../utils/constants/config";
+import { FAVORITES_LIST, MODE_DEBUG } from "../utils/constants/config";
 import { openConnection } from "../services/api/socketConfig";
 import ResponsiveProvider from "../context/responsive.context";
 import { getUserLanguage } from "../services/controllers/utils";
@@ -48,15 +50,20 @@ initAuth();
 
 try {
   initializeApp(firebaseConfig);
-  const remoteConfig = getRemoteConfig(getApp());
-  remoteConfig.settings.minimumFetchIntervalMillis = 1000;
-  fetchAndActivate(remoteConfig);
+  if (typeof window !== 'undefined') {
+    const remoteConfig = getRemoteConfig(getApp());
+    remoteConfig.settings.minimumFetchIntervalMillis = 1000;
+    fetchAndActivate(remoteConfig);
+  }
 } catch (err) {
   console.error(err);
 }
 
 function App({ Component, ...rest }: AppPropsWithLayout) {
   const { pathname, push, asPath, query } = useRouter();
+  const siteId = 3557931;
+  const hotjarVersion = 6;
+  
   useEffect(() => {
     (async () => {
       const localStorageToken = localStorage?.getItem("idToken");
@@ -82,16 +89,18 @@ function App({ Component, ...rest }: AppPropsWithLayout) {
         await getUserData();
       }
     })();
+    
   }, []);
+  
+  useEffect(()=>{
+    Hotjar.init(siteId, hotjarVersion,{debug:MODE_DEBUG});
+    openConnection("binance");
+  },[])
 
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout || ((page: any) => page);
 
   const { store, props } = wrapper.useWrappedStore(rest);
-
-  useEffect(() => {
-    openConnection("binance");
-  }, []);
 
   return getLayout(
     <Provider store={store}>
