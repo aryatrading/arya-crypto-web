@@ -36,7 +36,7 @@ export function PortfolioHover(props: SVGProps<SVGSVGElement>) {
       />
       <path
         d="M15.833 17.361L9.5 10.5V1M9.5 10.5H19"
-        stroke="#111827"
+        className="dark:stroke-black-2 stroke-white"
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"

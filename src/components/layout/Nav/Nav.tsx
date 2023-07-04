@@ -98,7 +98,7 @@ const Nav = () => {
                   className={clsx(
                     {
                       "fill-blue-1 stroke-blue-1": isUserDropdownActive,
-                      "fill-current stroke-current": !isUserDropdownActive,
+                      "dark:fill-current dark:stroke-current fill-grey-1 stroke-grey-1": !isUserDropdownActive,
                     },
                     "w-6 h-6"
                   )}
@@ -108,26 +108,26 @@ const Nav = () => {
 
             <DropdownMenu.Portal>
               <DropdownMenu.Content
-                className="z-50 bg-grey-6 p-4 rounded-md w-[200px] mt-6"
+                className="w-[200px] dark:bg-black-2 bg-offWhite-2 mt-6 p-4 rounded-md shadow-md dark:shadow-black-1 shadow-grey-1/25 z-50"
                 sideOffset={5}
                 align="end"
               >
                 <Link href="/settings">
                   <Row className="gap-4 items-center">
-                    <Cog6ToothIcon className="stroke-current w-6 h-6" />
-                    <p className="text-white font-medium text-base">
+                    <Cog6ToothIcon className="dark:stroke-current stroke-grey-1 w-6 h-6" />
+                    <p className="dark:text-white text-grey-1 font-medium text-base">
                       {t("common:settings")}
                     </p>
                   </Row>
                 </Link>
-                <DropdownMenu.Separator className="h-[1px] bg-grey-7 m-3" />
+                <DropdownMenu.Separator className="h-[1px] dark:bg-grey-7 bg-offWhite-3 m-3" />
                 <DropdownMenu.Item
                   className="cursor-pointer hover:outline-none hover:border-0 hover:ring-0"
                   onClick={onLogout}
                 >
                   <Row className="gap-4 items-center">
-                    <ArrowLeftOnRectangleIcon width={20} height={20} />
-                    <p className="text-white font-medium text-base">
+                    <ArrowLeftOnRectangleIcon className="dark:fill-current fill-grey-1 w-6 h-6" />
+                    <p className="dark:text-white text-grey-1 font-medium text-base">
                       {t("auth:logout")}
                     </p>
                   </Row>
@@ -279,7 +279,7 @@ const Nav = () => {
                 className={clsx(
                   {
                     "fill-blue-1 stroke-blue-1": isNotificationActive,
-                    "fill-current stroke-current": !isNotificationActive,
+                    "dark:fill-current dark:stroke-current fill-grey-1 stroke-grey-1": !isNotificationActive,
                   },
                   "w-6 h-6"
                 )}
@@ -326,7 +326,7 @@ const Nav = () => {
                     className={clsx(
                       {
                         "fill-blue-1 stroke-blue-1": isNotificationsActive,
-                        "fill-current stroke-current": !isNotificationsActive,
+                        "dark:fill-current dark:stroke-current fill-grey-1 stroke-grey-1": !isNotificationsActive,
                       },
                       "w-6 h-6"
                     )}
@@ -336,10 +336,10 @@ const Nav = () => {
 
               <DropdownMenu.Portal>
                 <DropdownMenu.Content
-                  className="w-full bg-black-2 rounded-md p-6 md:w-[420px] shadow-md shadow-black-1 z-50"
+                  className="w-full dark:bg-black-2 bg-offWhite-2 rounded-md p-6 md:w-[420px] shadow-md dark:shadow-black-1 shadow-grey-1/25 z-50"
                   sideOffset={25}
                 >
-                  <h3 className="font-bold text-white header-label mb-4">
+                  <h3 className="font-bold dark:text-white text-black-1 header-label mb-4">
                     {t("notification:title")}
                   </h3>
 
@@ -365,10 +365,10 @@ const Nav = () => {
                   )}
 
                   <Button
-                    className="w-full h-[40px] bg-grey-3 rounded-md mt-6"
+                    className="w-full h-[40px] dark:bg-grey-3 bg-offWhite-3 rounded-md mt-6"
                     onClick={() => push("/notifications")}
                   >
-                    <h3 className="font-bold text-white">
+                    <h3 className="font-bold dark:text-white text-grey-1">
                       {t("notification:seeMore")}
                     </h3>
                   </Button>
@@ -394,7 +394,7 @@ const Nav = () => {
   );
 
   return (
-    <Col className="w-full bg-black-2 border-b border-gray-800 shadow-md  fixed lg:relative z-40">
+    <Col className="w-full dark:bg-black-2 bg-white border-b dark:border-gray-800 shadow-md  fixed lg:relative z-40">
       <Row className="container w-full py-3 justify-between">
         <Row className="xl:gap-16 md:gap-10 items-center">
           <Link href={"/home"}>
@@ -428,8 +428,7 @@ const Nav = () => {
             className="text-blue-1 p-4 rounded-md font-bold lg:hidden"
           >
             <HamburgerIcon
-              className="w-5.5 h-4"
-              color={collapse ? "#558AF2" : "white"}
+              className={clsx({"stroke-blue-1": collapse}, "w-5.5 h-4 dark:stroke-white stroke-grey-1")}
             />
           </Button>
         </Row>
@@ -441,13 +440,13 @@ const Nav = () => {
             {!!id ? (
               <Col className="gap-4">
                 <Button
-                  className="rounded-md bg-grey-3 w-full justify-center py-3 px-6"
+                  className="rounded-md dark:bg-grey-3 bg-offWhite-3 w-full justify-center py-3 px-6"
                   onClick={onLogout}
                 >
-                  <h3 className="text-white font-medium">{t("auth:logout")}</h3>
+                  <h3 className="dark:text-white text-grey-1 font-medium">{t("auth:logout")}</h3>
                 </Button>
                 <Row className="gap-4 items-center justify-center">
-                  <Col className="bg-grey-3 text-white text-sm rounded-md font-medium items-center flex-1 px-6">
+                  <Col className="dark:bg-grey-3 bg-offWhite-3 dark:text-white text-grey-1 text-sm rounded-md font-medium items-center flex-1 px-6">
                     {changeLanguageView(!isTabletOrMobileScreen)}
                   </Col>
 
@@ -455,7 +454,7 @@ const Nav = () => {
                     href="/settings"
                     NavIcon={Cog6ToothIcon}
                     navTitle="settings"
-                    className="rounded-md bg-grey-3 justify-center flex-1"
+                    className="rounded-md dark:bg-grey-3 bg-offWhite-3 dark:text-white text-grey-1 justify-center flex-1"
                   />
                 </Row>
               </Col>

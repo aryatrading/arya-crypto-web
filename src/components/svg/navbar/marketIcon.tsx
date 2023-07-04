@@ -40,7 +40,7 @@ export function MarketHover(props: SVGProps<SVGSVGElement>) {
         width="4.2"
         height="9.24"
         rx="2.1"
-        fill="#121212"
+        className="dark:fill-black-2 fill-white"
       />
     </svg>
   );
