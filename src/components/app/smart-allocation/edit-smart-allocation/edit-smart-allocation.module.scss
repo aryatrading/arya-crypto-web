@@ -1,7 +1,5 @@
 .table {
-    @apply md:min-w-[1250px];
-    width: 100%;
-    table-layout: fixed;
+    @apply w-full table-fixed;
 
     thead {
         @apply text-grey-1;
@@ -18,19 +16,19 @@
             }
 
             th:first-child {
-                @apply rounded-l-lg w-[100px] md:w-[200px];
+                @apply rounded-l-lg w-[100px] md:w-2/12 lg:w-[200px];
                 padding-left: 20px;
             }
 
             th:nth-child(2) {
-                @apply md:w-[100px];
+                @apply md:w-6/12 lg:w-[100px];
             }
 
             th:nth-child(3),
             th:nth-child(4),
             th:nth-child(5),
             th:nth-child(6) {
-                @apply w-[100px] md:w-[135px];
+                @apply w-[100px] md:w-2/12 lg:w-[135px];
             }
 
             th:last-child {
