@@ -389,11 +389,13 @@ const Nav = () => {
     ]
   );
 
+  const logoHref = useMemo(() => id != null ? "/dashboard" : "/", [id]);
+
   return (
     <Col className="w-full bg-black-2 border-b border-gray-800 shadow-md  fixed lg:relative z-40">
       <Row className="container w-full py-3 justify-between">
         <Row className="xl:gap-16 md:gap-10 items-center">
-          <Link href={"/home"}>
+          <Link href={logoHref}>
             <Image src={logoIcon} alt="Arya Logo" />
           </Link>
           {navLinks("gap-6 h-full hidden lg:flex")}
