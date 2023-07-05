@@ -6,6 +6,7 @@ import {
   UserIcon,
   BellIcon,
   Cog6ToothIcon,
+  MoonIcon,
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
@@ -406,6 +407,15 @@ const Nav = () => {
           <SearchAssetInput t={t} />
           <Row className="gap-5">
             {changeLanguageView(isTabletOrMobileScreen)}
+            <button onClick={() => {
+              if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+              } else {
+                document.documentElement.classList.add('dark');
+              }
+            }}>
+              <MoonIcon className="w-6 h-6 dark:fill-white fill-grey-1" />
+            </button>
             {notificationDropdown(isTabletOrMobileScreen)}
             {userOptions()}
           </Row>
