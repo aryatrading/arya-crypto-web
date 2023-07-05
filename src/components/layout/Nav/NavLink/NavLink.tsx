@@ -26,7 +26,7 @@ const NavLink = ({ NavIcon, navTitle, Hover, active = false, className, theme, .
     >
       {(!!Hover && (isHover || active)) ? <Hover className="transition-all w-5 h-5" /> : <NavIcon className={clsx({ "stroke-grey-1 fill-transparent": theme === "dark" , "stroke-transparent fill-black-1": navTitle === "trade" && theme === "light", "stroke-black-1 fill-transparent": theme === "light" && navTitle !== "trade" }, "transition-all w-5 h-5")} />}
       {!!navTitle && (
-        <h2 className={twMerge("transition-all dark:text-grey-1 text-black-1 font-semibold text-sm", theme == null && "dark:text-white", `${(!!Hover && (isHover || active)) && 'text-blue-1'}`)}>
+        <h2 className={twMerge("transition-all font-semibold text-sm", theme == null && "dark:text-white", `${(!!Hover && (isHover || active)) && 'text-blue-1'}`, (!active && !isHover) && "dark:text-grey-1 text-black-1")}>
           {t(navTitle)}
         </h2>
       )}
