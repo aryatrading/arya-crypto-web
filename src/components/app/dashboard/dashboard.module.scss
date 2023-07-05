@@ -4,10 +4,9 @@
     table-layout: auto;
 
     thead {
-        @apply dark:text-grey-1 text-grey-1;
+        @apply text-grey-1;
 
         tr {
-            @apply dark:bg-black-2 bg-offWhite-3;
 
             th:first-child {
                 @apply rounded-l-lg;
@@ -21,8 +20,6 @@
 
     tbody {
         tr {
-            @apply border border-[1px] dark:border-grey-5 border-offWhite-3;
-
             &:first-child {
                 td {
                     height: 50px;

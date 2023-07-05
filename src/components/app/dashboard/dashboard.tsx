@@ -134,7 +134,6 @@ const Dashboard: FC = () => {
 
   useEffect(() => {
     initPortfolioSnapshots();
-    // document.documentElement.classList.remove('dark');
   }, [initPortfolioSnapshots]);
 
   useEffect(() => {
@@ -314,7 +313,7 @@ const Dashboard: FC = () => {
     if (isTabletOrMobileScreen) {
       return (
         <thead>
-          <tr>
+          <tr className="bg-offWhite-3 dark:bg-black-2">
             <th className="text-left">{t("common:amount")}</th>
             <th className="text-right">{t("common:24hP/L")}</th>
             <th className="text-right">{t("common:price")}</th>
@@ -324,7 +323,7 @@ const Dashboard: FC = () => {
     } else {
       return (
         <thead>
-          <tr>
+          <tr className="bg-offWhite-3 dark:bg-black-2">
             <th className="text-left">{t("common:name")}</th>
             <th className="text-left">{t("common:weight")}</th>
             <th className="text-right">{t("common:amount")}</th>
@@ -398,7 +397,7 @@ const Dashboard: FC = () => {
         if (isTabletOrMobileScreen) {
           return (
             <tr
-              className="dark:hover:bg-black-2/25 hover:bg-offWhite-3/25 hover:bg-blend-darken cursor-pointer"
+              className="dark:hover:bg-black-2/25 hover:bg-offWhite-3/25 border hover:bg-blend-darken cursor-pointer dark:border-grey-5 border-offWhite-3"
               key={asset.name}
             >
               <td>
@@ -446,7 +445,7 @@ const Dashboard: FC = () => {
         } else {
           return (
             <tr
-              className="dark:hover:bg-black-2/25 hover:bg-grey-1/25 hover:bg-blend-darken cursor-pointer"
+              className="dark:hover:bg-black-2/25 hover:bg-grey-1/25 border hover:bg-blend-darken cursor-pointer dark:border-grey-5 border-offWhite-3"
               key={asset.name}
             >
               <td>
@@ -473,7 +472,7 @@ const Dashboard: FC = () => {
               <td>
                 <Row className="justify-between items-center w-[120px]">
                   <p className="dark:text-white text-black-1">{percentageFormat(asset.weight ?? 0)}%</p>
-                  <Row className="h-[5px] rounded-full w-[50px] bg-white">
+                  <Row className="h-[5px] rounded-full w-[50px] dark:bg-white bg-offWhite-3">
                     <Row
                       className={`h-full rounded-full`}
                       style={{
