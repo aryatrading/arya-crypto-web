@@ -29,10 +29,10 @@ const AssetRow = ({ icon, name, symbol, className, showIcon }: IAssetRowProps) =
                 />
             }
             <div className='flex flex-col md:flex-row justify-between items-start md:items-center gap-[2px] md:gap-2'>
-                <span className="text-white truncate max-w-[150px] md:text-base text-sm">
+                <span className="dark:text-white text-black-1 truncate max-w-[150px] md:text-base text-sm">
                     {name}
                 </span>
-                <span className="text-grey-1 text-xs md:text-sm ">
+                <span className="text-grey-1 text-xs md:text-sm">
                     {symbol?.toUpperCase()}
                 </span>
             </div>

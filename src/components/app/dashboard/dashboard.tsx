@@ -397,7 +397,7 @@ const Dashboard: FC = () => {
         if (isTabletOrMobileScreen) {
           return (
             <tr
-              className="dark:hover:bg-black-2/25 hover:bg-offWhite-3/25 border hover:bg-blend-darken cursor-pointer dark:border-grey-5 border-offWhite-3"
+              className="dark:hover:bg-black-2/25 hover:bg-offWhite-3/25 border-b-2 hover:bg-blend-darken cursor-pointer dark:border-grey-5 border-offWhite-3"
               key={asset.name}
             >
               <td>
@@ -445,7 +445,7 @@ const Dashboard: FC = () => {
         } else {
           return (
             <tr
-              className="dark:hover:bg-black-2/25 hover:bg-grey-1/25 border hover:bg-blend-darken cursor-pointer dark:border-grey-5 border-offWhite-3"
+              className="dark:hover:bg-black-2/25 hover:bg-grey-1/25 border-b-2 hover:bg-blend-darken cursor-pointer dark:border-grey-5 border-offWhite-3"
               key={asset.name}
             >
               <td>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {
   ArrowLeftOnRectangleIcon,
@@ -7,6 +7,7 @@ import {
   BellIcon,
   Cog6ToothIcon,
   MoonIcon,
+  SunIcon,
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
@@ -66,6 +67,22 @@ const Nav = () => {
   ]);
   const { pathname, push, locale, asPath, query } = useRouter();
   const { isTabletOrMobileScreen } = useResponsive();
+  const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    const theme = localStorage.getItem("theme");
+    if (theme != null) {
+      if (theme === "dark") {
+        setCurrentTheme("dark");
+        document.documentElement.classList.add("dark");
+      } else {
+        setCurrentTheme("light");
+        document.documentElement.classList.remove("dark");
+      }
+    } else {
+      localStorage.setItem("theme", "dark");
+    }
+  }, []);
 
   const onLogout = useCallback(() => {
     getAuth(getApp())
@@ -142,7 +159,7 @@ const Nav = () => {
       return (
         <Row className="gap-4 items-center">
           <Button
-            className="px-6 py-3 font-semibold text-white hidden md:block"
+            className="px-6 py-3 font-semibold dark:text-white text-black-1 hidden md:block"
             onClick={() => {
               if (isTabletOrMobileScreen) {
                 push("/login");
@@ -155,7 +172,7 @@ const Nav = () => {
             {t("common:login")}
           </Button>
           <Button
-            className="bg-blue-3 px-6 py-3 min-w-[100px] text-blue-1 text-sm rounded-md font-medium hidden md:block"
+            className="dark:bg-blue-3 bg-blue-1 px-6 py-3 min-w-[100px] dark:text-blue-1 text-white text-sm rounded-md font-medium hidden md:block"
             onClick={() => {
               if (isTabletOrMobileScreen) {
                 push("/signup");
@@ -193,6 +210,7 @@ const Nav = () => {
             navTitle={navLink.title}
             NavIcon={navLink.Icon}
             Hover={navLink.Hover}
+            theme={currentTheme}
           />
         ))}
       </div>
@@ -404,18 +422,27 @@ const Nav = () => {
           {navLinks("gap-6 h-full hidden lg:flex")}
         </Row>
         <Row className="gap-3 justify-center items-center">
+          <button onClick={() => {
+            if (document.documentElement.classList.contains('dark')) {
+              document.documentElement.classList.remove('dark');
+              setCurrentTheme("light")
+              localStorage.setItem("theme", "light");
+            } else {
+              document.documentElement.classList.add('dark');
+              setCurrentTheme("dark")
+              localStorage.setItem("theme", "dark");
+            }
+          }} className="me-2 md:flex hidden">
+            {
+              currentTheme === "light" ?
+                <MoonIcon className="w-6 h-6  fill-grey-1" />
+                :
+                <SunIcon className="w-8 h-8  fill-white" />
+            }
+          </button>
           <SearchAssetInput t={t} />
           <Row className="gap-5">
             {changeLanguageView(isTabletOrMobileScreen)}
-            <button onClick={() => {
-              if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-              } else {
-                document.documentElement.classList.add('dark');
-              }
-            }}>
-              <MoonIcon className="w-6 h-6 dark:fill-white fill-grey-1" />
-            </button>
             {notificationDropdown(isTabletOrMobileScreen)}
             {userOptions()}
           </Row>
@@ -455,17 +482,40 @@ const Nav = () => {
                 >
                   <h3 className="dark:text-white text-grey-1 font-medium">{t("auth:logout")}</h3>
                 </Button>
-                <Row className="gap-4 items-center justify-center">
-                  <Col className="dark:bg-grey-3 bg-offWhite-3 dark:text-white text-grey-1 text-sm rounded-md font-medium items-center flex-1 px-6">
-                    {changeLanguageView(!isTabletOrMobileScreen)}
-                  </Col>
-
                   <NavLink
                     href="/settings"
                     NavIcon={Cog6ToothIcon}
                     navTitle="settings"
                     className="rounded-md dark:bg-grey-3 bg-offWhite-3 dark:text-white text-grey-1 justify-center flex-1"
                   />
+                <Row className="gap-4 items-center justify-center">
+                  <Col className="dark:bg-grey-3 bg-offWhite-3 dark:text-white text-grey-1 text-sm rounded-md font-medium items-center flex-1 px-6">
+                    {changeLanguageView(!isTabletOrMobileScreen)}
+                  </Col>
+                    <button onClick={() => {
+                      if (document.documentElement.classList.contains('dark')) {
+                        document.documentElement.classList.remove('dark');
+                        setCurrentTheme("light")
+                        localStorage.setItem("theme", "light");
+                      } else {
+                        document.documentElement.classList.add('dark');
+                        setCurrentTheme("dark")
+                        localStorage.setItem("theme", "dark");
+                      }
+                  }} className="dark:bg-grey-3 bg-offWhite-3 dark:text-white text-grey-1 text-sm rounded-md font-medium items-center justify-center flex-1 px-6 md:hidden flex h-[39px]">
+                      {
+                        currentTheme === "light" ?
+                        <Row className="gap-2 items-center">
+                          <MoonIcon className="w-6 h-6  fill-grey-1" />
+                          <p className="text-sm font-bold">{t("common:dark")}</p>
+                        </Row>
+                          :
+                        <Row className="gap-2 items-center">
+                          <SunIcon className="w-6 h-6  fill-white" />
+                          <p className="text-sm font-bold">{t("common:light")}</p>
+                        </Row>
+                      }
+                    </button>
                 </Row>
               </Col>
             ) : (
@@ -478,11 +528,11 @@ const Nav = () => {
                 </Link>
                 <Link
                   href="/login"
-                  className="bg-grey-3 py-3 text-white text-sm rounded-md font-medium w-full text-center"
+                  className="dark:bg-grey-3 bg-offWhite-3 py-3 dark:text-white text-grey-1 text-sm rounded-md font-medium w-full text-center"
                 >
                   {t("common:login")}
                 </Link>
-                <Col className="bg-grey-3 text-white text-sm rounded-md font-medium w-full items-center">
+                <Col className="dark:bg-grey-3 bg-offWhite-3 dark:text-white text-grey-1 text-sm rounded-md font-medium w-full items-center">
                   {changeLanguageView(!isTabletOrMobileScreen)}
                 </Col>
               </Col>

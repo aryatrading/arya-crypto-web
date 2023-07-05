@@ -38,32 +38,32 @@ const Market: FC = () => {
 
   useEffect(() => {
     fetchAssets(search, count, fId);
-  }, [count, search]);
+  }, [count, fId, search]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // useEffect(() => {
-  //   getMarketCap()
-  //     .then(({ data: { data } }) => {
-  //       const USD = data.quote.USD;
-  //       setMarketCapDetails({
-  //         vol24: USD.total_volume_24h,
-  //         vol24Percentage: USD.total_volume_24h_yesterday_percentage_change,
-  //         marketCap: USD.total_market_cap,
-  //         marketCapPercentage: USD.total_market_cap_yesterday_percentage_change,
-  //         BTCDominance: data.btc_dominance,
-  //         BTCDominancePercentage: data.btc_dominance_24h_percentage_change,
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       if (MODE_DEBUG) {
-  //         console.error(error);
-  //       }
-  //     });
-  // }, []);
+  useEffect(() => {
+    getMarketCap()
+      .then(({ data: { data } }) => {
+        const USD = data.quote.USD;
+        setMarketCapDetails({
+          vol24: USD.total_volume_24h,
+          vol24Percentage: USD.total_volume_24h_yesterday_percentage_change,
+          marketCap: USD.total_market_cap,
+          marketCapPercentage: USD.total_market_cap_yesterday_percentage_change,
+          BTCDominance: data.btc_dominance,
+          BTCDominancePercentage: data.btc_dominance_24h_percentage_change,
+        });
+      })
+      .catch((error) => {
+        if (MODE_DEBUG) {
+          console.error(error);
+        }
+      });
+  }, []);
 
   const assets = useCallback(() => {
     if (typeof window !== "undefined") {
@@ -79,10 +79,10 @@ const Market: FC = () => {
     <div className="h-full w-full " onScroll={handleScroll}>
       <Col className="flex items-center justify-center flex-1">
         <Col className="h-32 mb-40 mt-36 md:mt-0 lg:mb-20 flex justify-center w-full">
-          <p className="text-center  text-[#F9FAFB] font-medium text-4xl mb-10">
+          <p className="text-center  dark:text-white text-black-1 font-medium text-4xl mb-10">
             {tab === "all" ? t("cryptocurrencies") : t("favorites")}
           </p>
-          {/* {tab === "all" ? (
+          {tab === "all" ? (
             <Row className="w-full items-center justify-center gap-8 flex flex-col lg:flex-row">
               <MarketStats
                 bgColor={clsx(
@@ -126,7 +126,7 @@ const Market: FC = () => {
                 title={t("btcDominance")}
               />
             </Row>
-          ) : null} */}
+          ) : null}
           <SearchInput
             onchange={(e: string) => setSearch(e)}
             placeholder={t("search")}
@@ -137,15 +137,15 @@ const Market: FC = () => {
             title={t("all")}
             onClick={() => setTab("all")}
             border="rounded-l-md"
-            bgColor={tab === "all" ? "bg-blue-3" : "bg-grey-2"}
-            textColor={tab === "all" ? "text-blue-2" : "text-white"}
+            bgColor={tab === "all" ? "dark:bg-blue-3 bg-blue-1" : "dark:bg-grey-2 bg-offWhite-3"}
+            textColor={tab === "all" ? "dark:text-blue-2 text-white" : "dark:text-white text-grey-1"}
           />
           <ShadowButton
             title={t("favorites")}
             onClick={() => setTab("favorites")}
             border="rounded-r-md"
-            bgColor={tab === "all" ? "bg-grey-2" : "bg-blue-3"}
-            textColor={tab === "all" ? "text-white" : "text-blue-2"}
+            bgColor={tab === "all" ? "dark:bg-grey-2 bg-offWhite-3" : "dark:bg-blue-3 bg-blue-1"}
+            textColor={tab === "all" ? "dark:text-white text-grey-1" : "dark:text-blue-2 text-white"}
             iconSvg={<StarIcon className="w-4 h-4 fill-yellow-1 stroke-0" />}
           />
         </Row>
