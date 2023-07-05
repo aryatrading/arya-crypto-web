@@ -5,14 +5,12 @@ export function PortfolioDefault(props: SVGProps<SVGSVGElement>) {
     <svg viewBox="0 0 21 21" fill="none" {...props}>
       <path
         d="M10.5 20a9.5 9.5 0 100-19 9.5 9.5 0 000 19z"
-        stroke={props?.color || "#6B7280"}
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M16.833 17.361L10.5 10.5V1M10.5 10.5H20"
-        stroke={props?.color || "#6B7280"}
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
