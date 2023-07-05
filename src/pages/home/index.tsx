@@ -82,6 +82,16 @@ const HomePage = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (clientInitialized) {
+            if (id != null) {
+                push('/dashboard');
+            } else {
+                push('/');
+            }
+        }
+    }, [clientInitialized, id, push]);
+
     const onClick = useCallback((route: string) => {
         if (clientInitialized) {
             if (id == null) {
