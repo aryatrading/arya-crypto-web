@@ -23,7 +23,7 @@ export const fetchSymbolsList = async (
     const { data } = await response.json();
     for (let i = 0; i < data.length; i++) {
       _s.push({
-        symbol: data[i].symbol?.toUpperCae() + "/USD",
+        symbol: data[i].symbol?.toUpperCase() + "/USD",
         exchange: exchange ?? "binance",
       });
     }

@@ -20,7 +20,6 @@ import { Order } from "../../../types/trade";
 import { getAsset } from "../../../services/redux/assetSlice";
 import { getOpenOrdersApi } from "../../../services/controllers/asset";
 import { useTranslation } from "react-i18next";
-import { useResponsive } from "../../../context/responsive.context";
 import { formatNumber } from "../../../utils/helpers/prices";
 
 const AssetExitStrategy = () => {
@@ -103,7 +102,7 @@ const AssetExitStrategy = () => {
         header: TrailingHeaderOptions,
       },
     ];
-  }, [orders]);
+  }, [orders, t]);
 
   return (
     <Col className="w-full gap-6">
@@ -136,7 +135,7 @@ const AssetExitStrategy = () => {
                   <thead className="bg-black-2 ">
                     <tr className="text-grey-1 font-medium text-base">
                       {header.map((option: string) => (
-                        <th className="py-4 first:rounded-l-lg last:rounded-r-lg">
+                        <th key={_.uniqueId()} className="py-4 first:rounded-l-lg last:rounded-r-lg">
                           {option}
                         </th>
                       ))}

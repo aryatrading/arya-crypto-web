@@ -24,6 +24,7 @@ import { PieChartIcon } from "../../../../svg/pieChartIcon";
 import { Col, Row } from "../../../../shared/layout/flex";
 import { Trans, useTranslation } from "next-i18next";
 import Input from "../../../../shared/inputs/Input";
+import { MODE_DEBUG } from "../../../../../utils/constants/config";
 
 function getShiftedDayDate(prevDay: Date, shiftInDays: number) {
     return new Date(prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate() + shiftInDays);
@@ -68,7 +69,6 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
     const getHistoricalData = useCallback(() => {
         if (smartAllocationHoldings?.length) {
-
             const symbols = smartAllocationHoldings.map(getAssetSymbol);
             setIsLoading(true);
             getAssetsHistoricalData(symbols, simulationPeriod, customPeriodStartDate, customPeriodEndDate).then((res) => {
@@ -93,7 +93,9 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     });
 
                     setAssetsHistoricalData(assetsHistoricalData);
-                    console.log(assetsHistoricalData)
+                    if(MODE_DEBUG){
+                        console.log(assetsHistoricalData)
+                    }
                 }
             }).finally(() => {
                 setIsLoading(false);
@@ -170,8 +172,9 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 setWeightsPoints.push({ time, value: setWeightValue });
 
             }
-
-            console.log({ currentWeightsPoints })
+            if(MODE_DEBUG){
+                console.log({ currentWeightsPoints })
+            }
             setCurrentWeightsData(currentWeightsPoints);
             setSetWeightsData(setWeightsPoints);
 

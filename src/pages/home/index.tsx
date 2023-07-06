@@ -18,6 +18,7 @@ import LottieData from '../../../public/assets/images/publicPages/home/home.json
 import { useAuthModal } from '../../context/authModal.context';
 
 import styles from './index.module.scss';
+import _ from 'lodash';
 
 const RowItem = ({ content }: any) => {
     return (
@@ -112,7 +113,7 @@ const HomePage = () => {
                         <Col className='gap-4'>
                             {[t('points.1'), t('points.2'), t('points.3')].map(e => {
                                 return (
-                                    <RowItem content={e} />
+                                    <RowItem key={_.uniqueId()} content={e} />
                                 );
                             })}
                         </Col>

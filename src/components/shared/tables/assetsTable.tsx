@@ -16,6 +16,7 @@ import { useMediaQuery } from "react-responsive";
 import { useAuthUser } from "next-firebase-auth";
 import {
   addAssetToWatchlist,
+  fetchAssets,
   removeAssetFromWatchlist,
 } from "../../../services/controllers/market";
 
@@ -28,7 +29,6 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
   const { t } = useTranslation(["market"]);
   const _assetprice = useSelector(selectAssetLivePrice);
   const authUser = useAuthUser();
-  const _btc = _assetprice["btc"] * _assetprice["usdt"];
 
   const isTabletOrMobileScreen = useMediaQuery({
     query: `(max-width:950px)`,
@@ -100,7 +100,11 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
       // TRIGGER THE BACKEND IF USER IS LOGGED IN
       if (authUser.email) {
         await removeAssetFromWatchlist(asset.id ?? 1);
+        await addAssetToWatchlist(asset.id ?? 1);
       }
+
+      await fetchAssets("", 100);
+
       return localStorage.setItem(
         FAVORITES_LIST,
         JSON.stringify(_list.filter((elm: number) => elm !== asset.id))
@@ -113,6 +117,8 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
       if (authUser.email) {
         await addAssetToWatchlist(asset.id ?? 1);
       }
+
+      await fetchAssets("", 100);
 
       return localStorage.setItem(FAVORITES_LIST, JSON.stringify(_list));
     }

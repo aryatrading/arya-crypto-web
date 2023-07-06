@@ -1,6 +1,6 @@
 {
     "pricingPlans": "Tarifs",
-    "automateYourCryptocurrencyStrategy": "Automatisez votre stratégie en matière de crypto-monnaies avec un plan qui vous convient.",
+    "automateYourCryptocurrencyStrategy": "Automatisez votre stratégie crypto avec un plan adapté à vos besoins : gratuit (fonctionnalités limitées) ou payant (fonctionnalités complètes).",
     "basic": "De base",
     "FREE": "GRATUIT",
     "singleExchangeTracking": "1 Exchange connecté",
@@ -24,5 +24,8 @@
     "technicalSupport": "Support technique",
     "weHaveSupportTeamReadyToAnswerAnyQuestions": "Nous disposons d'une équipe de support prête à répondre à toutes vos questions.",
     "monthlyPay": "Paiement mensuel",
-    "yearlyPay": "Paiement annuel"
+    "yearlyPay": "Paiement annuel",
+    "yearmo": "€13.73",
+    "month": "€18.31",
+    "yearly": "€164.77"
 }

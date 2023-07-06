@@ -28,7 +28,6 @@ import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/router";
 
 const Trade: FC = () => {
-
   const dispatch = useDispatch();
   const selectedExchange = useSelector(selectSelectedExchange);
   let trade = useSelector(getTrade);
@@ -67,7 +66,6 @@ const Trade: FC = () => {
     getHistoryOrders(trade.asset_name, selectedExchange?.provider_id ?? 1);
     getAssetCurrentPrice(trade.asset_name ?? "btc");
   }, [selectedExchange?.provider_id, trade.asset_name, trade.symbol_name]);
-
 
   const tradetabs = useMemo(() => {
     return [
@@ -196,7 +194,7 @@ const Trade: FC = () => {
   }, [trade.asset_name, trade.symbol_name]);
 
   return (
-    <Col className="flex justify-start w-full gap-6">
+    <Col className="flex justify-center w-full gap-6">
       <ExchangeSwitcher hideExchangeStats={true} canSelectOverall={false} />
       <AssetTradeDropdown />
 
@@ -204,7 +202,7 @@ const Trade: FC = () => {
         <div className="lg:w-2/3 flex-none">{renderTradingView}</div>
 
         <div className="w-full">
-          <Col className=" bg-black-2 rounded-md gap-5 px-5 py-5">
+          <Col className=" bg-black-2 justify-center  rounded-md gap-5 px-5 py-5">
             <div className="w-full flex justify-center">{renderTabs()}</div>
             {renderTradeContent()}
           </Col>
@@ -219,7 +217,7 @@ const Trade: FC = () => {
           </Button>
         </div>
       </div>
-      <Tabs className="text-blue-1 font-bold text-lg border-b-2 border-blue-1">
+      <Tabs className="text-blue-1 font-bold text-lg border-b-2 border-blue-1 mb-10">
         <TabList className="border-b-[1px] border-grey-3 mb-2">
           <Row className="gap-6">
             <Tab className="font-semibold text-sm outline-none cursor-pointer w-full text-center">

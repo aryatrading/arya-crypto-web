@@ -259,10 +259,10 @@ const EditSmartAllocation: FC = () => {
                                 </Row>
                             </td>
                             <td>
-                                <Col className="gap-2">
-                                    <Row className="gap-1 items-center">
+                                <Col className="gap-2 px-2 w-full">
+                                    <Row className="gap-2 items-center justify-between">
                                         <input
-                                            className="bg-grey-3 focus-within:outline focus-within:outline-1 focus-within:outline-grey-1 w-16 h-10 text-center rounded-md text-sm p-0 disabled:border-0"
+                                            className="w-full bg-grey-3 focus-within:outline focus-within:outline-1 focus-within:outline-grey-1 w-16 h-10 text-center rounded-md text-sm p-0 disabled:border-0"
                                             value={percentageFormat(setWeight * 100)}
                                             type="number"
                                             onChange={(event) => {
@@ -572,12 +572,12 @@ const EditSmartAllocation: FC = () => {
                         <CutoutDoughnutChart
                             title={t<any>("currentWeight")}
                             chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" }))}
-                            className="w-[160px] md:w-[262px]"
+                            className="w-[160px] lg:w-[262px]"
                         />
                         <CutoutDoughnutChart
                             title={t<any>("setWeight")}
                             chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: smartAllocationTotalEvaluation * (asset.weight ?? 0), coinSymbol: asset.name ?? "" }))}
-                            className="w-[160px] md:w-[262px]"
+                            className="w-[160px] lg:w-[262px]"
                         />
                     </Row>
                 </Col>

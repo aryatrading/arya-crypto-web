@@ -70,5 +70,7 @@
     "trailing": "Trailing",
     "stopLoss": "Stop Loss",
     "autoRebalancing": "Auto-Rebalancing",
-    "premium": "Premium"
+    "premium": "Premium",
+    "emptyTradeTable": "You have no open orders",
+    "emptyTradeHistory": "You have no order history"
 }
