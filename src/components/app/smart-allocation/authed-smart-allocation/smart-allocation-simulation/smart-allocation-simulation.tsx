@@ -24,6 +24,7 @@ import { PieChartIcon } from "../../../../svg/pieChartIcon";
 import { Col, Row } from "../../../../shared/layout/flex";
 import { Trans, useTranslation } from "next-i18next";
 import Input from "../../../../shared/inputs/Input";
+import { MODE_DEBUG } from "../../../../../utils/constants/config";
 
 function getShiftedDayDate(prevDay: Date, shiftInDays: number) {
     return new Date(prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate() + shiftInDays);
@@ -48,7 +49,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
     const [selectedChart, setSelectedChart] = useState<"doughnut" | "graph">("graph");
     const [customPeriodStartDate, setCustomPeriodStartDate] = useState<Date>(getShiftedDayDate(new Date(), -1));
     const [customPeriodEndDate, setCustomPeriodEndDate] = useState<Date>(new Date());
-
+    const [validSymbols, setValidSymbols] = useState<String[]>([])
 
     const { t } = useTranslation(["smart-allocation"]);
 
@@ -75,9 +76,11 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 const data = res.data;
                 if (data) {
                     const assetsHistoricalData: { [k: string]: chartDataType[] } = {};
-                    symbols.forEach(symbol => {
+                    const symbolWithData = symbols.filter((symbol)=>data[symbol]?.values)
+                    setValidSymbols(symbolWithData.map((symbol)=>symbol.split('/')[0].toLowerCase()))
+                    symbolWithData.forEach(symbol => {
                         const assetData = data[symbol];
-                        const values = assetData.values.map((value) => {
+                        const values = assetData.values.map((value:any) => {
                             const item: chartDataType = {
                                 value: parseFloat(value.open),
                                 close: parseFloat(value.close),
@@ -93,7 +96,6 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     });
 
                     setAssetsHistoricalData(assetsHistoricalData);
-                    console.log(assetsHistoricalData)
                 }
             }).finally(() => {
                 setIsLoading(false);
@@ -109,6 +111,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
     const calculateLineChartsData = useCallback(() => {
         if (assetsHistoricalData && smartAllocationHoldings?.length) {
+            const holdingsWithHistoricalData = smartAllocationHoldings.filter((holding)=>validSymbols.includes(holding.asset_details?.asset_name?.toLowerCase()||''))
             const currentWeightsPoints: chartDataType[] = [];
             const setWeightsPoints: chartDataType[] = [];
 
@@ -125,14 +128,16 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 }
             } = {};
 
-            const totalCurrentWeight = smartAllocationHoldings.map((a) => a.current_weight).reduce((prev, curr) => ((prev ?? 0) + (curr ?? 0))) ?? 1;
+            const totalCurrentWeight = holdingsWithHistoricalData.map((a) => a.current_weight).reduce((prev, curr) => ((prev ?? 0) + (curr ?? 0))) ?? 1;
 
-            smartAllocationHoldings.forEach((holding) => {
-
+            holdingsWithHistoricalData.forEach((holding) => {
                 const currentWeight = (holding.current_weight ?? 0) / totalCurrentWeight;
                 const setWeight = holding.weight ?? 0;
 
                 const assetSymbol = getAssetSymbol(holding);
+                if(!assetsHistoricalData[assetSymbol]){
+                    return
+                }
                 const firstPointValue = assetsHistoricalData[assetSymbol][0].value ?? 0;
 
                 quantities[assetSymbol] = {
@@ -171,7 +176,9 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
             }
 
-            console.log({ currentWeightsPoints })
+            if(MODE_DEBUG){
+                console.log({ currentWeightsPoints })
+            }
             setCurrentWeightsData(currentWeightsPoints);
             setSetWeightsData(setWeightsPoints);
 
@@ -179,7 +186,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
             setSetWeightsDrawdown(setWeightsDrawdown);
         }
 
-    }, [assetsHistoricalData, getAssetSymbol, initialValue, smartAllocationHoldings]);
+    }, [assetsHistoricalData, getAssetSymbol, initialValue, smartAllocationHoldings, validSymbols]);
 
     useEffect(() => {
         calculateLineChartsData();

@@ -12,6 +12,7 @@ import { Testimonials } from "../../shared/Testimonials";
 import { useAuthModal } from "../../../context/authModal.context";
 
 import styles from "./index.module.scss";
+import _ from "lodash";
 
 const RowItem = ({ content }: any) => {
   return (
@@ -74,7 +75,7 @@ export const TradingSalesPage = () => {
               t("salesPage.points.2"),
               t("salesPage.points.3"),
             ].map((e) => {
-              return <RowItem content={e} />;
+              return <RowItem key={_.uniqueId()} content={e} />;
             })}
           </Col>
           <Row className="md:gap-8 gap-2 flex-col md:flex-row">

@@ -42,10 +42,12 @@ import { LineChartIcon } from "../../svg/lineChartIcon";
 import LineChart from "../../shared/charts/graph/graph";
 import { PieChartIcon } from "../../svg/pieChartIcon";
 import { Col, Row } from "../../shared/layout/flex";
+import SwitchInput from "../../shared/form/inputs/switch/switch";
 
 import styles from "./dashboard.module.scss";
 
 const Dashboard: FC = () => {
+  const [showSmallHoldings, setShowSmallHoldings] = useState<boolean>(false);
   const [isLoadingPortfolioSnapshots, setIsLoadingPortfolioSnapshots] =
     useState<boolean>(false);
   const [isLoadingPortfolioHoldings, setIsLoadingPortfolioHoldings] =
@@ -378,6 +380,10 @@ const Dashboard: FC = () => {
       }
     } else {
       return portfolioHoldings.map((asset, index) => {
+        if (
+          (asset?.free ?? 0) *
+          (asset?.asset_details?.current_price ?? 0) < 1 && showSmallHoldings
+        ) return null;
         const isPriceChangePositive = (asset?.pnl?.percentage ?? 0) > 0;
         const signal = isPriceChangePositive ? "+" : "-";
 
@@ -534,6 +540,7 @@ const Dashboard: FC = () => {
     t,
     tableExchangesImages,
     tableLoadingSkeleton,
+    showSmallHoldings,
   ]);
 
   const table = useMemo(() => {
@@ -550,8 +557,21 @@ const Dashboard: FC = () => {
   const holdingsTable = useMemo(() => {
     return (
       <Col className="w-full gap-5">
-        <Row className="items-center justify-between w-full">
-          <h3 className="text-2xl font-semibold">{t("yourHoldings")}</h3>
+        <Row className="items-center w-full">
+
+          <h3 className="text-2xl font-semibold flex-1">{t("yourHoldings")}</h3>
+
+          <Row className="items-center justify-center gap-4 me-8">
+            <h3 className="font-bold">{t('hideSmallBalance')}</h3>
+            <SwitchInput checked={!!showSmallHoldings} onClick={() => {
+              if (showSmallHoldings) {
+                setShowSmallHoldings(false)
+              } else {
+                setShowSmallHoldings(true);
+              }
+            }} />
+          </Row>
+
           <Link
             href="/trade"
             className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1"
@@ -565,7 +585,7 @@ const Dashboard: FC = () => {
         {table}
       </Col >
     );
-  }, [t, table]);
+  }, [showSmallHoldings, t, table]);
 
   const connectedExchangesWithProviders = useMemo(
     () => connectedExchanges?.filter((exchange) => exchange.provider_id),
@@ -581,9 +601,6 @@ const Dashboard: FC = () => {
       </Col>
     );
   } else {
-    const connectedExchangesWithProviders = connectedExchanges?.filter(
-      (exchange) => exchange.provider_id
-    );
     if (connectedExchangesWithProviders?.length) {
       return (
         <Col className="w-full gap-10 lg:gap-16 pb-20 items-center md:items-start justify-start">
@@ -593,7 +610,13 @@ const Dashboard: FC = () => {
         </Col>
       );
     } else {
-      return <NoConnectedExchangePage />;
+      const DummyViw = () => (
+        <Col className="w-full gap-10 lg:gap-16 pb-20 items-center md:items-start justify-start">
+          <ExchangeSwitcher />
+          {charts}
+        </Col>
+      );
+      return <NoConnectedExchangePage Component={DummyViw} />;
     }
   }
 };

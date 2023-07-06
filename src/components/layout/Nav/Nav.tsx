@@ -210,10 +210,8 @@ const Nav = () => {
   );
 
   const changeLanguageView = useCallback(
-    (hide: boolean) => {
-      if (locale == null || hide) {
-        return;
-      }
+    () => {
+      
       if (locale === "en") {
         return (
           <Button
@@ -224,9 +222,7 @@ const Nav = () => {
           >
             <Row className="gap-4 items-center justify-center">
               <FRIcon />
-              {isTabletOrMobileScreen && (
-                <span className="text-sm font-bold">{t("common:french")}</span>
-              )}
+              <span className="text-sm font-bold lg:hidden">{t("common:french")}</span>
             </Row>
           </Button>
         );
@@ -241,7 +237,7 @@ const Nav = () => {
             <Row className="gap-4 items-center justify-center">
               <ENIcon />
               {isTabletOrMobileScreen && (
-                <span className="text-sm font-bold">{t("common:english")}</span>
+                <span className="text-sm font-bold lg:hidden">{t("common:english")}</span>
               )}
             </Row>
           </Button>
@@ -393,19 +389,21 @@ const Nav = () => {
     ]
   );
 
+  const logoHref = useMemo(() => id != null ? "/dashboard" : "/", [id]);
+
   return (
     <Col className="w-full bg-black-2 border-b border-gray-800 shadow-md  fixed lg:relative z-40">
       <Row className="container w-full py-3 justify-between">
         <Row className="xl:gap-16 md:gap-10 items-center">
-          <Link href={"/home"}>
+          <Link href={logoHref}>
             <Image src={logoIcon} alt="Arya Logo" />
           </Link>
           {navLinks("gap-6 h-full hidden lg:flex")}
         </Row>
         <Row className="gap-3 justify-center items-center">
           <SearchAssetInput t={t} />
-          <Row className="gap-5">
-            {changeLanguageView(isTabletOrMobileScreen)}
+          <Row className="gap-5 hidden lg:flex">
+            {locale&&changeLanguageView()}
             {notificationDropdown(isTabletOrMobileScreen)}
             {userOptions()}
           </Row>
@@ -447,9 +445,9 @@ const Nav = () => {
                   <h3 className="text-white font-medium">{t("auth:logout")}</h3>
                 </Button>
                 <Row className="gap-4 items-center justify-center">
-                  <Col className="bg-grey-3 text-white text-sm rounded-md font-medium items-center flex-1 px-6">
-                    {changeLanguageView(!isTabletOrMobileScreen)}
-                  </Col>
+                 {locale&&<Col className="bg-grey-3 text-white text-sm rounded-md font-medium items-center flex-1 px-6">
+                    {changeLanguageView()}
+                  </Col>}
 
                   <NavLink
                     href="/settings"
@@ -473,9 +471,9 @@ const Nav = () => {
                 >
                   {t("common:login")}
                 </Link>
-                <Col className="bg-grey-3 text-white text-sm rounded-md font-medium w-full items-center">
-                  {changeLanguageView(!isTabletOrMobileScreen)}
-                </Col>
+                {locale&&<Col className="bg-grey-3 text-white text-sm rounded-md font-medium w-full items-center">
+                  {changeLanguageView()}
+                </Col>}
               </Col>
             )}
           </Col>

@@ -29,5 +29,6 @@
         "weProtectYouAndYourCryptoAssetsFromExternalThreats": "Nous assurons votre protection ainsi que celle de vos cryptomonnaies contre les menaces extérieures.",
         "bestPractices": "Mise à jour",
         "weFollowTheMostAdvancedSecurityProcedures": "Nous appliquons des mesures de sécurité avancées pour assurer la plus grande sûreté possible de votre compte."
-    }
+    },
+    "hideSmallBalance": "Cacher les petits soldes"
 }

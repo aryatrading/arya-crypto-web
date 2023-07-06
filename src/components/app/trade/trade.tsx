@@ -27,7 +27,7 @@ import { ShadowButton } from "../../shared/buttons/shadow_button";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/router";
 
-const Trade: FC = () => {
+const Trade: FC = ({ dummy }: any) => {
   const dispatch = useDispatch();
   const selectedExchange = useSelector(selectSelectedExchange);
   let trade = useSelector(getTrade);
@@ -40,6 +40,7 @@ const Trade: FC = () => {
   const [laoding, setLoading] = useState(false);
 
   useEffect(() => {
+    if (dummy) return;
     initiateTrade((s as string) ?? "BTC", selectedExchange?.provider_id ?? 1);
 
     (async () => {
@@ -59,13 +60,14 @@ const Trade: FC = () => {
     return () => {
       dispatch(clearTrade());
     };
-  }, [dispatch, s, selectedExchange, setLoading, t]);
+  }, [dispatch, dummy, s, selectedExchange, setLoading, t]);
 
   useEffect(() => {
+    if (dummy) return;
     getAssetOpenOrders(trade.symbol_name, selectedExchange?.provider_id ?? 1);
     getHistoryOrders(trade.asset_name, selectedExchange?.provider_id ?? 1);
     getAssetCurrentPrice(trade.asset_name ?? "btc");
-  }, [selectedExchange?.provider_id, trade.asset_name, trade.symbol_name]);
+  }, [dummy, selectedExchange?.provider_id, trade.asset_name, trade.symbol_name]);
 
   const tradetabs = useMemo(() => {
     return [
@@ -170,8 +172,8 @@ const Trade: FC = () => {
                 index === 0
                   ? "rounded-l-md"
                   : index === tradetabs.length - 1
-                  ? "rounded-r-md"
-                  : ""
+                    ? "rounded-r-md"
+                    : ""
               }
               bgColor={activeTab === elm.key ? "bg-blue-3" : "bg-grey-2"}
               textColor={activeTab === elm.key ? "text-blue-2" : "text-grey-1"}
@@ -217,7 +219,7 @@ const Trade: FC = () => {
           </Button>
         </div>
       </div>
-      <Tabs className="text-blue-1 font-bold text-lg border-b-2 border-blue-1">
+      <Tabs className="text-blue-1 font-bold text-lg border-b-2 border-blue-1 mb-10">
         <TabList className="border-b-[1px] border-grey-3 mb-2">
           <Row className="gap-6">
             <Tab className="font-semibold text-sm outline-none cursor-pointer w-full text-center">
