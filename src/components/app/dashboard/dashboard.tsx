@@ -601,9 +601,6 @@ const Dashboard: FC = () => {
       </Col>
     );
   } else {
-    const connectedExchangesWithProviders = connectedExchanges?.filter(
-      (exchange) => exchange.provider_id
-    );
     if (connectedExchangesWithProviders?.length) {
       return (
         <Col className="w-full gap-10 lg:gap-16 pb-20 items-center md:items-start justify-start">
@@ -613,7 +610,13 @@ const Dashboard: FC = () => {
         </Col>
       );
     } else {
-      return <NoConnectedExchangePage />;
+      const DummyViw = () => (
+        <Col className="w-full gap-10 lg:gap-16 pb-20 items-center md:items-start justify-start">
+          <ExchangeSwitcher />
+          {charts}
+        </Col>
+      );
+      return <NoConnectedExchangePage Component={DummyViw} />;
     }
   }
 };

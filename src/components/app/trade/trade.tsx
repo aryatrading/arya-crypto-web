@@ -27,7 +27,7 @@ import { ShadowButton } from "../../shared/buttons/shadow_button";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/router";
 
-const Trade: FC = () => {
+const Trade: FC = ({ dummy }: any) => {
   const dispatch = useDispatch();
   const selectedExchange = useSelector(selectSelectedExchange);
   let trade = useSelector(getTrade);
@@ -40,6 +40,7 @@ const Trade: FC = () => {
   const [laoding, setLoading] = useState(false);
 
   useEffect(() => {
+    if (dummy) return;
     initiateTrade((s as string) ?? "BTC", selectedExchange?.provider_id ?? 1);
 
     (async () => {
@@ -59,13 +60,14 @@ const Trade: FC = () => {
     return () => {
       dispatch(clearTrade());
     };
-  }, [dispatch, s, selectedExchange, setLoading, t]);
+  }, [dispatch, dummy, s, selectedExchange, setLoading, t]);
 
   useEffect(() => {
+    if (dummy) return;
     getAssetOpenOrders(trade.symbol_name, selectedExchange?.provider_id ?? 1);
     getHistoryOrders(trade.asset_name, selectedExchange?.provider_id ?? 1);
     getAssetCurrentPrice(trade.asset_name ?? "btc");
-  }, [selectedExchange?.provider_id, trade.asset_name, trade.symbol_name]);
+  }, [dummy, selectedExchange?.provider_id, trade.asset_name, trade.symbol_name]);
 
   const tradetabs = useMemo(() => {
     return [
