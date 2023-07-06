@@ -137,8 +137,10 @@ const AuthedSmartAllocation: FC = () => {
     }, [initSmartAllocationHoldings, selectedExchange?.provider_id]);
 
     useEffect(() => {
-        fetchExitStrategy()
-    }, [fetchExitStrategy])
+        if (selectedExchange?.provider_id) {
+            fetchExitStrategy()
+        }
+    }, [fetchExitStrategy, selectedExchange?.provider_id])
 
     const noAllocation = useMemo(() => {
         if (smartAllocationExists === false) {
