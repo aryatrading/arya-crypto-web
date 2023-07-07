@@ -41,15 +41,25 @@ export const fetchSymbolsList = async (
 
 // GET ASSETS LIST FROM OUT BACKEND
 export const fetchAssets = async (
-  search?: string,
   limit: number = 20,
-  firebaseId?: string
+  search?: string,
+  firebaseId?: string,
+  dontSave?:boolean
 ) => {
+  let params:{limit:number,offset:number,search?:string,firebaseId?:string} = {
+    limit,
+    offset:0,
+  }
+  if(search){
+    params.search=search
+  }
+  if(firebaseId){
+    params.firebaseId=firebaseId
+  }
   const { data } = await axiosInstance.get(
-    `utils/assets?limit=${limit}&offset=0${search ? `&search=${search}` : ""}${
-      firebaseId ? `&firebase_id=${firebaseId}` : ""
-    }`
-  );
+    `utils/assets`,{
+      params
+    });
 
   let _assets: AssetType[] = [];
 
@@ -93,7 +103,9 @@ export const fetchAssets = async (
       });
     }
   }
-  store?.dispatch(storeMrkAssets(_assets));
+  if(!dontSave){
+    store?.dispatch(storeMrkAssets(_assets));
+  }
 
   return _assets;
 };
