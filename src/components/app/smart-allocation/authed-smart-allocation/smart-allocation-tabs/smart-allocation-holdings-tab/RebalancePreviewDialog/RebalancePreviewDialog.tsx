@@ -80,10 +80,11 @@ const RebalancePreviewDialog = ({ holdingData }: { holdingData: SmartAllocationA
                     holdingData.map((asset) => {
                         const { asset_details, current_value, expected_value } = asset
                         const asset_data = asset_details?.asset_data
+                        console.log(asset_data,current_value,expected_value)
 
                         let percentage = 0
                         let buy = false
-                        if (current_value && expected_value) {
+                        if (current_value !== undefined && expected_value !== undefined) {
                             if (current_value < expected_value) {
                                 buy = true
                                 let buyAmount = expected_value - current_value
@@ -94,6 +95,7 @@ const RebalancePreviewDialog = ({ holdingData }: { holdingData: SmartAllocationA
                                 percentage = Math.abs(Math.round((sellAmount / maxMovement) * 100))
                             }
                         }
+                        console.log(percentage)
                         return <div className='grid grid-cols-5 rounded-lg items-stretch justify-between text-center font-medium md:font-semibold'>
                             <div className='col-span-1 py-4 px-4'>
                                 <AssetRow icon={asset_data?.image} name={asset_data?.name} symbol={asset_data?.symbol} />
