@@ -20,7 +20,7 @@ interface AssetDropdownTypes {
 }
 
 export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) => {
-    const { searchTerm, isSearching, filteredAssets, debouncedSearch, assetLivePrice, setSearchTerm, placeHolderAsset } = useAssetSearch({ placeHolderCount:5});
+    const { searchTerm, isSearching, filteredAssets, debouncedSearch, assetLivePrice, setSearchTerm, placeHolderAsset } = useAssetSearch({ placeHolderCount:5, assetCount: 5});
     const [focused, setFocused] = useState<boolean>();
     const { push } = useRouter();
 
