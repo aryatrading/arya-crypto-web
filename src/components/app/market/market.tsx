@@ -3,21 +3,16 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
-import clsx from "clsx";
-
 import { Col, Row } from "../../shared/layout/flex";
-import MarketStats from "../../shared/containers/marketStats";
 import { AssetsTable } from "../../shared/tables/assetsTable";
 import { SearchInput } from "../../shared/inputs/searchInputs";
 import { ShadowButton } from "../../shared/buttons/shadow_button";
 import { selectMarketAssets } from "../../../services/redux/marketSlice";
 import {
-  fetchAssets,
-  getMarketCap,
+  fetchAssets
 } from "../../../services/controllers/market";
-import { FAVORITES_LIST, MODE_DEBUG } from "../../../utils/constants/config";
+import { FAVORITES_LIST } from "../../../utils/constants/config";
 import { firebaseId } from "../../../services/redux/userSlice";
-import { formatNumber } from "../../../utils/helpers/prices";
 
 const Market: FC = () => {
   const { t } = useTranslation(["market"]);
