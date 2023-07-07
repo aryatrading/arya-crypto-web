@@ -18,6 +18,7 @@ export const SearchInput: FC<SearchInputProps> = ({
       <input
         type="text"
         id="simple-search"
+        autoComplete="off"
         className="text-base text-start block w-full overflow-auto p-2.5 bg-grey-2 placeholder-grey-1 h-[48px] justify-center text-white border-none focus:ring-0 focus:outline-none focus:border-0"
         placeholder={placeholder}
         required
