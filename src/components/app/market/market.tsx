@@ -37,8 +37,8 @@ const Market: FC = () => {
   };
 
   useEffect(() => {
-    fetchAssets(search, count, fId);
-  }, [count, search]);
+    fetchAssets(100);
+  }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
