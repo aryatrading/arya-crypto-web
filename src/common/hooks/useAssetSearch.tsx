@@ -87,10 +87,9 @@ const useAssetSearch = ({showShowOnlyTradableAssets, placeHolderCount,assetCount
                 setIsSearching(false);
                 return
             }
-            fetchAssets(assetCount,searchTerm,'',false)
+            fetchAssets(assetCount,searchTerm,'',true)
                 .then((res) => {
-                    if (res)
-                        setFilteredAssets(res);
+                    setFilteredAssets(res||[]);
                 })
                 .catch((error) => {
                     setFetchingError(true);

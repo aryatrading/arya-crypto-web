@@ -23,22 +23,9 @@ const Market: FC = () => {
   // const [marketCapDetails, setMarketCapDetails] = useState<any>({});
   const fId = useSelector(firebaseId);
 
-  const handleScroll = useCallback(() => {
-    const bottom =
-      Math.ceil(window.innerHeight + window.scrollY) >=
-      document.documentElement.scrollHeight;
-
-    if (bottom) setCount(count + 100);
-  }, [count]);
-
   useEffect(() => {
-    fetchAssets(count,search, fId);
+    fetchAssets(count,search,fId)
   }, [count, fId, search]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
 
   // useEffect(() => {
   //   getMarketCap()
@@ -71,7 +58,7 @@ const Market: FC = () => {
   }, [_assets, tab]);
 
   return (
-    <div className="h-full w-full " onScroll={handleScroll}>
+    <div className="h-full w-full ">
       <Col className="flex items-center justify-center flex-1">
         <Col className="h-32 mb-40 mt-36 md:mt-0 lg:mb-20 flex justify-center w-full">
           <p className="text-center  text-[#F9FAFB] font-medium text-4xl mb-10">

@@ -8,9 +8,10 @@ import { Col, Row } from "../layout/flex";
 import LoadingSpinner from "../loading-spinner/loading-spinner";
 import CloseIcon from "../../svg/Shared/CloseIcon";
 import Button from "../buttons/button";
+import useAssetSearch from "../../../common/hooks/useAssetSearch";
+import { formatNumber } from "../../../utils/helpers/prices";
 
 import styles from './index.module.scss';
-import useAssetSearch from "../../../common/hooks/useAssetSearch";
 
 interface AssetDropdownTypes {
     onClick?: (x: any) => void,
@@ -19,7 +20,7 @@ interface AssetDropdownTypes {
 }
 
 export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) => {
-    const { searchTerm, isSearching, filteredAssets, debouncedSearch, assetLivePrice, setSearchTerm, placeHolderAsset } = useAssetSearch({ placeHolderCount:5});
+    const { searchTerm, isSearching, filteredAssets, debouncedSearch, assetLivePrice, setSearchTerm, placeHolderAsset } = useAssetSearch({ placeHolderCount:5, assetCount: 5});
     const [focused, setFocused] = useState<boolean>();
     const { push } = useRouter();
 
@@ -82,7 +83,7 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
                                                     <PlayIcon className={`w-2 h-2  fill-green-1 -rotate-90 stroke-0`} />
                                                     : null
                                         }
-                                        <p className={clsx({ "text-red-1": coin.pnl < 0, "text-green-1": coin.pnl > 0, "text-grey-1": coin.pnl === 0 }, "font-bold text-xs tracking-[1px]")}>${assetLivePrice[coin?.symbol || ''] || coin?.currentPrice}</p>
+                                        <p className={clsx({ "text-red-1": coin.pnl < 0, "text-green-1": coin.pnl > 0, "text-grey-1": coin.pnl === 0 }, "font-bold text-xs tracking-[1px]")}>${formatNumber(assetLivePrice[coin?.symbol || ''] || coin?.currentPrice)}</p>
                                     </Row>
                                 </Row>
                             </Button>
