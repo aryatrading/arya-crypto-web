@@ -34,6 +34,7 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
                             type="text"
                             id="searchInput"
                             maxLength={20}
+                            autoComplete="off"
                             placeholder={t('coin:searchAsset').toString()}
                             onFocus={() => setTimeout(() => setFocused(true), 500)}
                             onBlur={() => {
