@@ -16,7 +16,7 @@ const NoConnectedExchangePage = ({ Component }: { Component?: any }) => {
 
   return (
     <Col className="relative w-full h-screen items-center justify-center">
-      <Col className="gap-5 items-center justify-center z-40 bg-black-2 px-14 rounded-lg pb-32 mb-40">
+      <Col className="gap-5 items-center justify-center z-40 bg-black-2 px-14 rounded-lg pb-10 mb-40">
         <AddExchange
           onPressExchange={(data: any) => {
             setExchange(data);
