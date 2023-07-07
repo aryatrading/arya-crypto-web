@@ -9,7 +9,6 @@ import clsx from "clsx";
 
 import {
   selectConnectedExchanges,
-  selectExchangeStoreStatus,
   selectSelectedExchange,
 } from "../../../services/redux/exchangeSlice";
 import NoConnectedExchangePage from "../../shared/no-exchange-connected-page/no-exchange-connected-page";
@@ -65,7 +64,6 @@ const Dashboard: FC = () => {
     "doughnut"
   );
 
-  const exchangeStoreStatus = useSelector(selectExchangeStoreStatus);
   const selectedExchange = useSelector(selectSelectedExchange);
   const connectedExchanges = useSelector(selectConnectedExchanges);
 
@@ -561,9 +559,9 @@ const Dashboard: FC = () => {
 
           <h3 className="text-2xl font-semibold flex-1">{t("yourHoldings")}</h3>
 
-          <Row className="items-center justify-center gap-4 me-8">
+          <Row className="items-center justify-center gap-4 me-8 md:flex hidden">
             <h3 className="font-bold">{t('hideSmallBalance')}</h3>
-            <SwitchInput checked={!!showSmallHoldings} onClick={() => {
+            <SwitchInput checked={!!showSmallHoldings} bigSize onClick={() => {
               if (showSmallHoldings) {
                 setShowSmallHoldings(false)
               } else {
@@ -582,6 +580,16 @@ const Dashboard: FC = () => {
             </p>
           </Link >
         </Row >
+        <Row className="items-center gap-4 me-8 md:hidden flex">
+          <h3 className="font-bold text-sm">{t('hideSmallBalance')}</h3>
+          <SwitchInput checked={!!showSmallHoldings} onClick={() => {
+            if (showSmallHoldings) {
+              setShowSmallHoldings(false)
+            } else {
+              setShowSmallHoldings(true);
+            }
+          }} />
+        </Row>
         {table}
       </Col >
     );

@@ -25,32 +25,32 @@ const Market: FC = () => {
   const [search, setSearch] = useState("");
   const _assets = useSelector(selectMarketAssets);
   const [count, setCount] = useState(100);
-  const [marketCapDetails, setMarketCapDetails] = useState<any>({});
+  // const [marketCapDetails, setMarketCapDetails] = useState<any>({});
   const fId = useSelector(firebaseId);
 
   useEffect(() => {
     fetchAssets(count,search,fId)
   }, [count, fId, search]);
 
-  useEffect(() => {
-    getMarketCap()
-      .then(({ data: { data } }) => {
-        const USD = data.quote.USD;
-        setMarketCapDetails({
-          vol24: USD.total_volume_24h,
-          vol24Percentage: USD.total_volume_24h_yesterday_percentage_change,
-          marketCap: USD.total_market_cap,
-          marketCapPercentage: USD.total_market_cap_yesterday_percentage_change,
-          BTCDominance: data.btc_dominance,
-          BTCDominancePercentage: data.btc_dominance_24h_percentage_change,
-        });
-      })
-      .catch((error) => {
-        if (MODE_DEBUG) {
-          console.error(error);
-        }
-      });
-  }, []);
+  // useEffect(() => {
+  //   getMarketCap()
+  //     .then(({ data: { data } }) => {
+  //       const USD = data.quote.USD;
+  //       setMarketCapDetails({
+  //         vol24: USD.total_volume_24h,
+  //         vol24Percentage: USD.total_volume_24h_yesterday_percentage_change,
+  //         marketCap: USD.total_market_cap,
+  //         marketCapPercentage: USD.total_market_cap_yesterday_percentage_change,
+  //         BTCDominance: data.btc_dominance,
+  //         BTCDominancePercentage: data.btc_dominance_24h_percentage_change,
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       if (MODE_DEBUG) {
+  //         console.error(error);
+  //       }
+  //     });
+  // }, []);
 
   const assets = useCallback(() => {
     if (typeof window !== "undefined") {
@@ -69,7 +69,7 @@ const Market: FC = () => {
           <p className="text-center  text-[#F9FAFB] font-medium text-4xl mb-10">
             {tab === "all" ? t("cryptocurrencies") : t("favorites")}
           </p>
-          {tab === "all" ? (
+          {/* {tab === "all" ? (
             <Row className="w-full items-center justify-center gap-8 flex flex-col lg:flex-row">
               <MarketStats
                 bgColor={clsx(
@@ -113,7 +113,7 @@ const Market: FC = () => {
                 title={t("btcDominance")}
               />
             </Row>
-          ) : null}
+          ) : null} */}
           <SearchInput
             onchange={(e: string) => setSearch(e)}
             placeholder={t("search")}
