@@ -11,7 +11,7 @@ const socket = new W3CWebSocket(channel);
 
 export const openConnection = (exchange: string) => {
   socket.onopen = async () => {
-    let _assets = await fetchAssets("", 100);
+    let _assets = await fetchAssets(100);
 
     let _list = await fetchSymbolsList(_assets, exchange);
 

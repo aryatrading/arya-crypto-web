@@ -133,7 +133,7 @@ export const EntryTrade: FC = () => {
           </TabList>
         </Tabs>
       </div>
-      {isPremium ? null : <PremiumBanner />}
+      {(!isPremium&&tabIndex===1) ? <PremiumBanner />:null}
       <p className="font-bold text-sm">
         {t("available")}: {formatNumber(trade.available_quantity)}{" "}
         {trade?.entry_order?.type === "SELL"

@@ -14,7 +14,7 @@
   "subscribeToPro": "Subscribe to Premium",
   "date": "Date",
   "total": "Total",
-  "exchangeTitle": "Select a exchange to connect",
+  "exchangeTitle": "Connect an exchange to get started",
   "exchangeHint": "ARYA Crypto will not access to transfer or withdraw your assets. Each exchange connects with encrypted API keys",
   "exchangeFutureInfo": "More exchanges to be added soon!",
   "changePasswordMsg": "Password changed successfully!",

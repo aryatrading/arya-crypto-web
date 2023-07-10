@@ -27,7 +27,7 @@ interface IAssetSelectorProps {
 }
 
 const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClick = false, fullModal = false, showShowOnlyTradableAssets = false }: IAssetSelectorProps) => {
-  const { fetchingError, filteredAssets, isSearching, debouncedSearch, assetLivePrice, showDialog, setShowDialog, transitions } = useAssetSearch({ fullModal, showShowOnlyTradableAssets });
+  const { fetchingError, filteredAssets, isSearching, debouncedSearch, assetLivePrice, showDialog, setShowDialog, transitions, placeHolderAsset} = useAssetSearch({ showShowOnlyTradableAssets,placeHolderCount:fullModal?20:5 });
 
   const { t } = useTranslation(['common', 'coin']);
 
@@ -45,9 +45,13 @@ const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClic
     return <Col className='w-full h-full'>
       {
         (filteredAssets === null) ?
-          <Row className='w-full justify-center items-center h-20 gap-4 font-semibold text-xl text-grey-1'>
-            {t('searchforAsset')}
-          </Row> :
+          placeHolderAsset.map((asset) => {
+            return <Button onClick={() => onPress(asset)} key={_.uniqueId()} className='flex w-full justify-between py-3 px-2 items-center hover:bg-grey-3 hover:rounded-md'>
+              <AssetRow icon={asset.iconUrl} name={asset.name} symbol={asset.symbol} className='font-semibold' />
+              <span className={`text-xs font-bold tracking-[1px] md:text-sm ms-10 md:ms-0 ${(asset.pnl < 0) ? 'text-red-1' : 'text-green-1'}`}>{formatNumber(assetLivePrice?.[asset?.symbol?.toLowerCase() || ''] || asset.currentPrice, true)}</span>
+            </Button>
+          })
+          :
           filteredAssets?.length ?
             filteredAssets.map((asset) => {
               return <Button onClick={() => onPress(asset)} key={_.uniqueId()} className='flex w-full justify-between py-3 px-2 items-center hover:bg-grey-3 hover:rounded-md'>
@@ -61,7 +65,7 @@ const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClic
       }
     </Col>
   }
-    , [assetLivePrice, dismissOnClick, filteredAssets, onClick, setShowDialog, t])
+    , [assetLivePrice, dismissOnClick, filteredAssets, onClick, placeHolderAsset, setShowDialog, t])
 
 
   return (

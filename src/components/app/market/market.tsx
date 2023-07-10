@@ -3,21 +3,16 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
-import clsx from "clsx";
-
 import { Col, Row } from "../../shared/layout/flex";
-import MarketStats from "../../shared/containers/marketStats";
 import { AssetsTable } from "../../shared/tables/assetsTable";
 import { SearchInput } from "../../shared/inputs/searchInputs";
 import { ShadowButton } from "../../shared/buttons/shadow_button";
 import { selectMarketAssets } from "../../../services/redux/marketSlice";
 import {
-  fetchAssets,
-  getMarketCap,
+  fetchAssets
 } from "../../../services/controllers/market";
-import { FAVORITES_LIST, MODE_DEBUG } from "../../../utils/constants/config";
+import { FAVORITES_LIST } from "../../../utils/constants/config";
 import { firebaseId } from "../../../services/redux/userSlice";
-import { formatNumber } from "../../../utils/helpers/prices";
 
 const Market: FC = () => {
   const { t } = useTranslation(["market"]);
@@ -25,25 +20,12 @@ const Market: FC = () => {
   const [search, setSearch] = useState("");
   const _assets = useSelector(selectMarketAssets);
   const [count, setCount] = useState(100);
-  const [marketCapDetails, setMarketCapDetails] = useState<any>({});
+  // const [marketCapDetails, setMarketCapDetails] = useState<any>({});
   const fId = useSelector(firebaseId);
 
-  const handleScroll = () => {
-    const bottom =
-      Math.ceil(window.innerHeight + window.scrollY) >=
-      document.documentElement.scrollHeight;
-
-    if (bottom) setCount(count + 100);
-  };
-
   useEffect(() => {
-    fetchAssets(search, count, fId);
-  }, [count, search]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    fetchAssets(count,search,fId)
+  }, [count, fId, search]);
 
   // useEffect(() => {
   //   getMarketCap()
@@ -76,7 +58,7 @@ const Market: FC = () => {
   }, [_assets, tab]);
 
   return (
-    <div className="h-full w-full " onScroll={handleScroll}>
+    <div className="h-full w-full ">
       <Col className="flex items-center justify-center flex-1">
         <Col className="h-32 mb-40 mt-36 md:mt-0 lg:mb-20 flex justify-center w-full">
           <p className="text-center  text-[#F9FAFB] font-medium text-4xl mb-10">
