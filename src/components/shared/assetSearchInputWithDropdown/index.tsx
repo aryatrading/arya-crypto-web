@@ -8,9 +8,10 @@ import { Col, Row } from "../layout/flex";
 import LoadingSpinner from "../loading-spinner/loading-spinner";
 import CloseIcon from "../../svg/Shared/CloseIcon";
 import Button from "../buttons/button";
+import useAssetSearch from "../../../common/hooks/useAssetSearch";
+import { formatNumber } from "../../../utils/helpers/prices";
 
 import styles from './index.module.scss';
-import useAssetSearch from "../../../common/hooks/useAssetSearch";
 
 interface AssetDropdownTypes {
     onClick?: (x: any) => void,
@@ -19,7 +20,7 @@ interface AssetDropdownTypes {
 }
 
 export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) => {
-    const { searchTerm, isSearching, filteredAssets, debouncedSearch, assetLivePrice, setSearchTerm } = useAssetSearch({ fullModal: false });
+    const { searchTerm, isSearching, filteredAssets, debouncedSearch, assetLivePrice, setSearchTerm, placeHolderAsset } = useAssetSearch({ placeHolderCount:5, assetCount: 5});
     const [focused, setFocused] = useState<boolean>();
     const { push } = useRouter();
     const ref = useRef<any>();
@@ -36,6 +37,7 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
                             id="searchInput"
                             ref={ref}
                             maxLength={20}
+                            autoComplete="off"
                             placeholder={t('coin:searchAsset').toString()}
                             onFocus={() => setTimeout(() => setFocused(true), 500)}
                             onBlur={() => {
@@ -58,40 +60,72 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
             </Col>
             {focused && <Col className={clsx({ "w-full": trigger, "w-[400px]": !trigger }, "max-h-[300px] dark:bg-grey-2 bg-offWhite-3 top-16 right-0 absolute items-center rounded-md overflow-auto p-4 z-50", trigger ? null : styles.list)}>
                 {isSearching ? <LoadingSpinner /> :
-                    filteredAssets?.length === 0 ?
-                        <span className="w-full mx-4 text-center dark:text-white text-grey-1">{t('asset:empty')}<br /><br />{searchTerm}</span>
-                        :
-                        filteredAssets?.map(coin => {
-                            return (
-                                <Button className="min-h-[44px] py-1 px-2 cursor-pointer z-50 w-full dark:hover:bg-grey-3 hover:bg-offWhite-2 hover:rounded-lg" onClick={() => {
-                                    if (onClick) {
-                                        onClick(coin);
-                                    } else {
-                                        push(`/asset?symbol=${coin?.symbol?.toLowerCase()}`);
-                                    }
-                                }}>
-                                    <Row className="items-center gap-3 h-full">
-                                        <Image src={coin?.iconUrl || ''} alt={coin?.name?.toLocaleLowerCase() + "_icon"} width={22} height={22} />
-                                        <Row className="gap-2 items-center flex-1">
-                                            <p className="capitalize font-extrabold text-sm inline dark:text-white text-black-1">{coin?.name}</p>
-                                            <p className="capitalize font-medium text-xs text-grey-1">{coin?.symbol}</p>
-                                        </Row>
-                                        <Row className="items-center justify-center gap-1">
-                                            {
-                                                coin.pnl < 0
-                                                    ?
-                                                    <PlayIcon className="w-2 h-2 fill-red-1 rotate-90 stroke-0" />
-                                                    :
-                                                    coin.pnl > 0 ?
-                                                        <PlayIcon className={`w-2 h-2  fill-green-1 -rotate-90 stroke-0`} />
-                                                        : null
-                                            }
-                                            <p className={clsx({ "text-red-1": coin.pnl < 0, "text-green-1": coin.pnl > 0, "text-grey-1": coin.pnl === 0 }, "font-bold text-xs tracking-[1px]")}>${assetLivePrice[coin?.symbol || ''] || coin?.currentPrice}</p>
-                                        </Row>
+                    filteredAssets=== null ?
+                    placeHolderAsset?.map(coin => {
+                        return (
+                            <Button className="min-h-[44px] py-1 px-2 cursor-pointer z-50 w-full dark:hover:bg-grey-3 hover:bg-offWhite-2 hover:rounded-lg" onClick={() => {
+                                if (onClick) {
+                                    onClick(coin);
+                                } else {
+                                    push(`/asset?symbol=${coin?.symbol?.toLowerCase()}`);
+                                }
+                            }}>
+                                <Row className="items-center gap-3 h-full">
+                                    <Image src={coin?.iconUrl || ''} alt={coin?.name?.toLocaleLowerCase() + "_icon"} width={22} height={22} />
+                                    <Row className="gap-2 items-center flex-1">
+                                        <p className="capitalize font-extrabold text-sm inline dark:text-white text-black-1">{coin?.name}</p>
+                                        <p className="capitalize font-medium text-xs text-grey-1">{coin?.symbol}</p>
                                     </Row>
-                                </Button>
-                            );
-                        })
+                                    <Row className="items-center justify-center gap-1">
+                                        {
+                                            coin.pnl < 0
+                                                ?
+                                                <PlayIcon className="w-2 h-2 fill-red-1 rotate-90 stroke-0" />
+                                                :
+                                                coin.pnl > 0 ?
+                                                    <PlayIcon className={`w-2 h-2  fill-green-1 -rotate-90 stroke-0`} />
+                                                    : null
+                                        }
+                                        <p className={clsx({ "text-red-1": coin.pnl < 0, "text-green-1": coin.pnl > 0, "text-grey-1": coin.pnl === 0 }, "font-bold text-xs tracking-[1px]")}>${formatNumber(assetLivePrice[coin?.symbol || ''] || coin?.currentPrice)}</p>
+                                    </Row>
+                                </Row>
+                            </Button>
+                        );
+                    }):
+                    filteredAssets.length?
+                    filteredAssets?.map(coin => {
+                        return (
+                            <Button className="min-h-[44px] py-1 px-2 cursor-pointer z-50 w-full hover:bg-grey-3 hover:rounded-lg" onClick={() => {
+                                if (onClick) {
+                                    onClick(coin);
+                                } else {
+                                    push(`/asset?symbol=${coin?.symbol?.toLowerCase()}`);
+                                }
+                            }}>
+                                <Row className="items-center gap-3 h-full">
+                                    <Image src={coin?.iconUrl || ''} alt={coin?.name?.toLocaleLowerCase() + "_icon"} width={22} height={22} />
+                                    <Row className="gap-2 items-center flex-1">
+                                        <p className="capitalize font-extrabold text-sm inline">{coin?.name}</p>
+                                        <p className="capitalize font-medium text-xs text-grey-1">{coin?.symbol}</p>
+                                    </Row>
+                                    <Row className="items-center justify-center gap-1">
+                                        {
+                                            coin.pnl < 0
+                                                ?
+                                                <PlayIcon className="w-2 h-2 fill-red-1 rotate-90 stroke-0" />
+                                                :
+                                                coin.pnl > 0 ?
+                                                    <PlayIcon className={`w-2 h-2  fill-green-1 -rotate-90 stroke-0`} />
+                                                    : null
+                                        }
+                                        <p className={clsx({ "text-red-1": coin.pnl < 0, "text-green-1": coin.pnl > 0, "text-grey-1": coin.pnl === 0 }, "font-bold text-xs tracking-[1px]")}>${assetLivePrice[coin?.symbol || ''] || coin?.currentPrice}</p>
+                                    </Row>
+                                </Row>
+                            </Button>
+                        );
+                    }):
+                    <span className="w-full mx-4 text-center">{t('asset:empty')}<br /><br />{searchTerm}</span>
+                        
                 }
                 {!trigger && <p className="capitalize font-extrabold text-base underline underline-offset-2 text-grey-1 cursor-pointer z-50 text-center mt-10" onClick={() => {
                     push('/market');

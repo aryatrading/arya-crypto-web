@@ -557,7 +557,7 @@ const Dashboard: FC = () => {
 
           <h3 className="text-2xl font-semibold flex-1 dark:text-white text-black-1">{t("yourHoldings")}</h3>
 
-          <Row className="items-center justify-center gap-4 me-8">
+          <Row className="items-center justify-center gap-4 me-8 md:flex hidden">
             <h3 className="font-bold dark:text-white text-grey-1">{t('hideSmallBalance')}</h3>
             <SwitchInput checked={!!showSmallHoldings} onClick={() => {
               if (showSmallHoldings) {
@@ -578,6 +578,16 @@ const Dashboard: FC = () => {
             </p>
           </Link >
         </Row >
+        <Row className="items-center gap-4 me-8 md:hidden flex">
+          <h3 className="font-bold text-sm">{t('hideSmallBalance')}</h3>
+          <SwitchInput checked={!!showSmallHoldings} onClick={() => {
+            if (showSmallHoldings) {
+              setShowSmallHoldings(false)
+            } else {
+              setShowSmallHoldings(true);
+            }
+          }} />
+        </Row>
         {table}
       </Col >
     );
@@ -597,9 +607,6 @@ const Dashboard: FC = () => {
       </Col>
     );
   } else {
-    const connectedExchangesWithProviders = connectedExchanges?.filter(
-      (exchange) => exchange.provider_id
-    );
     if (connectedExchangesWithProviders?.length) {
       return (
         <Col className="w-full gap-10 lg:gap-16 pb-20 items-center md:items-start justify-start">
@@ -609,7 +616,13 @@ const Dashboard: FC = () => {
         </Col>
       );
     } else {
-      return <NoConnectedExchangePage />;
+      const DummyViw = () => (
+        <Col className="w-full gap-10 lg:gap-16 pb-20 items-center md:items-start justify-start">
+          <ExchangeSwitcher />
+          {charts}
+        </Col>
+      );
+      return <NoConnectedExchangePage Component={DummyViw} />;
     }
   }
 };

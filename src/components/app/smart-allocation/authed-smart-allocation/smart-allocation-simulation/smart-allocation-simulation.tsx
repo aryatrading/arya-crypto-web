@@ -2,6 +2,7 @@ import { FC, useCallback, useContext, useEffect, useMemo, useState } from "react
 import { Time, UTCTimestamp } from "lightweight-charts";
 import Link from "next/link";
 import moment from "moment";
+import { useRouter } from "next/router";
 import clsx from "clsx";
 
 import RebalancePreviewDialog from "../smart-allocation-tabs/smart-allocation-holdings-tab/RebalancePreviewDialog/RebalancePreviewDialog";
@@ -24,6 +25,7 @@ import { PieChartIcon } from "../../../../svg/pieChartIcon";
 import { Col, Row } from "../../../../shared/layout/flex";
 import { Trans, useTranslation } from "next-i18next";
 import Input from "../../../../shared/inputs/Input";
+import { MODE_DEBUG } from "../../../../../utils/constants/config";
 
 function getShiftedDayDate(prevDay: Date, shiftInDays: number) {
     return new Date(prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate() + shiftInDays);
@@ -35,7 +37,7 @@ function applyLocalTimezoneOffset(timestamp: number) {
     return timestamp - 2 * timestampOffset;
 }
 
-const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationAssetType[], isLoadingSmartAllocationHoldings: boolean }> = ({ smartAllocationHoldings, isLoadingSmartAllocationHoldings }) => {
+const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationAssetType[], isLoadingSmartAllocationHoldings: boolean, blured?: boolean }> = ({ smartAllocationHoldings, isLoadingSmartAllocationHoldings, blured }) => {
 
     const [simulationPeriod, setSimulationPeriod] = useState<EnumSmartAllocationSimulationPeriod>(EnumSmartAllocationSimulationPeriod["1m"]);
     const [initialValue, setInitialValue] = useState<number>(10_000);
@@ -48,9 +50,11 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
     const [selectedChart, setSelectedChart] = useState<"doughnut" | "graph">("graph");
     const [customPeriodStartDate, setCustomPeriodStartDate] = useState<Date>(getShiftedDayDate(new Date(), -1));
     const [customPeriodEndDate, setCustomPeriodEndDate] = useState<Date>(new Date());
-
+    const [validSymbols, setValidSymbols] = useState<String[]>([])
 
     const { t } = useTranslation(["smart-allocation"]);
+
+    const { push } = useRouter();
 
     const { isTabletOrMobileScreen } = useResponsive();
 
@@ -75,9 +79,11 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 const data = res.data;
                 if (data) {
                     const assetsHistoricalData: { [k: string]: chartDataType[] } = {};
-                    symbols.forEach(symbol => {
+                    const symbolWithData = symbols.filter((symbol)=>data[symbol]?.values)
+                    setValidSymbols(symbolWithData.map((symbol)=>symbol.split('/')[0].toLowerCase()))
+                    symbolWithData.forEach(symbol => {
                         const assetData = data[symbol];
-                        const values = assetData.values.map((value) => {
+                        const values = assetData.values.map((value:any) => {
                             const item: chartDataType = {
                                 value: parseFloat(value.open),
                                 close: parseFloat(value.close),
@@ -93,7 +99,6 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                     });
 
                     setAssetsHistoricalData(assetsHistoricalData);
-                    console.log(assetsHistoricalData)
                 }
             }).finally(() => {
                 setIsLoading(false);
@@ -109,6 +114,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
     const calculateLineChartsData = useCallback(() => {
         if (assetsHistoricalData && smartAllocationHoldings?.length) {
+            const holdingsWithHistoricalData = smartAllocationHoldings.filter((holding)=>validSymbols.includes(holding.asset_details?.asset_name?.toLowerCase()||''))
             const currentWeightsPoints: chartDataType[] = [];
             const setWeightsPoints: chartDataType[] = [];
 
@@ -125,14 +131,16 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 }
             } = {};
 
-            const totalCurrentWeight = smartAllocationHoldings.map((a) => a.current_weight).reduce((prev, curr) => ((prev ?? 0) + (curr ?? 0))) ?? 1;
+            const totalCurrentWeight = holdingsWithHistoricalData.map((a) => a.current_weight).reduce((prev, curr) => ((prev ?? 0) + (curr ?? 0))) ?? 1;
 
-            smartAllocationHoldings.forEach((holding) => {
-
+            holdingsWithHistoricalData.forEach((holding) => {
                 const currentWeight = (holding.current_weight ?? 0) / totalCurrentWeight;
                 const setWeight = holding.weight ?? 0;
 
                 const assetSymbol = getAssetSymbol(holding);
+                if(!assetsHistoricalData[assetSymbol]){
+                    return
+                }
                 const firstPointValue = assetsHistoricalData[assetSymbol][0].value ?? 0;
 
                 quantities[assetSymbol] = {
@@ -171,7 +179,9 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
 
             }
 
-            console.log({ currentWeightsPoints })
+            if (MODE_DEBUG) {
+                console.log({ currentWeightsPoints })
+            }
             setCurrentWeightsData(currentWeightsPoints);
             setSetWeightsData(setWeightsPoints);
 
@@ -179,29 +189,32 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
             setSetWeightsDrawdown(setWeightsDrawdown);
         }
 
-    }, [assetsHistoricalData, getAssetSymbol, initialValue, smartAllocationHoldings]);
+    }, [assetsHistoricalData, getAssetSymbol, initialValue, smartAllocationHoldings, validSymbols]);
 
     useEffect(() => {
         calculateLineChartsData();
     }, [calculateLineChartsData]);
 
-    const weightsDoughnutCharts = useCallback(({ chartTitle, chartData, drawdown, maxProfit }: { chartTitle: string, chartData: doughnutChartDataType[], drawdown: number, maxProfit: number }) => {
+    const weightsDoughnutCharts = useCallback(({ chartTitle, chartData, drawdown, maxProfit, isBlured }: { chartTitle: string, chartData: doughnutChartDataType[], drawdown: number, maxProfit: number, isBlured?: boolean }) => {
         const riskValue = initialValue - drawdown;
         const returnValue = maxProfit - initialValue;
         const returnRiskRatio = returnValue / riskValue;
         const riskPercentage = riskValue / initialValue;
         const returnPercentage = returnValue / initialValue;
         const isLowRisk = returnRiskRatio > 0;
-
         return (
-            <Col className="items-center w-[165px] md:flex-row md:flex-1 gap-5 md:h-full shrink-0">
+            <Col className="items-center w-[165px] md:flex-row md:flex-1 gap-5 md:h-full shrink-0 relative">
+                {isBlured && <Link href="/smart-allocation/edit" className="flex items-center justify-center px-10 sm:top-auto top-1/4 left-[10%] h-[54px] dark:bg-blue-3 bg-blue-1 text-white absolute z-50 self-center rounded-lg">
+                    {t('createPortfolio')}
+                </Link>}
+
                 <CutoutDoughnutChart
                     title={chartTitle}
                     chartData={chartData}
-                    className="w-[160px] md:w-[262px] md:min-w-[130px]"
+                    className={clsx({ "blur-2xl": isBlured }, "w-[160px] md:w-[262px] md:min-w-[130px]")}
                     isLoading={isLoadingSmartAllocationHoldings}
                 />
-                {<Col className="justify-center gap-5 px-2">
+                {<Col className={clsx({ "blur-2xl": isBlured }, "justify-center gap-5 px-2")}>
                     <Row className="gap-5 flex-wrap">
                         <Col>
                             <p className="text-sm font-bold">{t("drawdown")}</p>
@@ -232,20 +245,25 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 })}
                 {weightsDoughnutCharts({
                     chartTitle: t("setWeight"),
-                    chartData: smartAllocationHoldings?.filter(stableCoinsFilter)?.map(asset => ({ label: asset?.name ?? "", value: (asset.current_value ?? 0) / (asset.current_weight ?? 0) * (asset.weight ?? 0), coinSymbol: asset.name ?? "" })) ?? [],
-                    drawdown: setWeightsDrawdown ?? initialValue,
-                    maxProfit: setWeightsData[setWeightsData.length - 1]?.value ?? 0,
+                    chartData:
+                        blured ?
+                            smartAllocationHoldings?.filter(stableCoinsFilter)?.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" })) ?? []
+                            :
+                            smartAllocationHoldings?.filter(stableCoinsFilter)?.map(asset => ({ label: asset?.name ?? "", value: (asset.current_value ?? 0) / (asset.current_weight ?? 0) * (asset.weight ?? 0), coinSymbol: asset.name ?? "" })) ?? [],
+                    drawdown: blured ? currentWeightsDrawdown ?? initialValue : setWeightsDrawdown ?? initialValue,
+                    maxProfit: blured ? currentWeightsData[currentWeightsData.length - 1]?.value ?? 0 : setWeightsData[setWeightsData.length - 1]?.value ?? 0,
+                    isBlured: blured
                 })}
             </Row>
         )
-    }, [weightsDoughnutCharts, t, smartAllocationHoldings, currentWeightsDrawdown, initialValue, currentWeightsData, setWeightsDrawdown, setWeightsData]);
+    }, [weightsDoughnutCharts, t, smartAllocationHoldings, currentWeightsDrawdown, initialValue, currentWeightsData, blured, setWeightsDrawdown, setWeightsData]);
 
     const reBalanceNow = useMemo(() => {
         return (
             <Col className="w-full md:max-w-[300px] flex-1 gap-5 justify-center">
                 <Row className="md:flex-col w-full gap-4 text-center">
                     <Link href="smart-allocation/edit" className="w-full flex items-center justify-center bg-blue-1 h-12 px-5 rounded-md text-sm font-bold">{t('editPortfolio')}</Link>
-                    <RebalancePreviewDialog holdingData={smartAllocationHoldings?.filter((asset) => asset.name?.toLowerCase() !== USDTSymbol.toLowerCase()) ?? []} />
+                    {!blured && <RebalancePreviewDialog holdingData={smartAllocationHoldings?.filter((asset) => asset.name?.toLowerCase() !== USDTSymbol.toLowerCase()) ?? []} />}
                 </Row>
                 <Col className="gap-4">
                     {rebalancingFrequency && <>

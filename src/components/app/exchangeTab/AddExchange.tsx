@@ -28,7 +28,7 @@ const AddExchange = (props: AddExchangeTypes) => {
 
   const classes = props.modal
     ? "items-center w-full py-4 gap-6 bg-black-1"
-    : "items-center mt-[100px] gap-6";
+    : "items-center mt-10 gap-6";
 
   const gridView = useMemo(() => {
     const isOdd = (allProviders?.length || 0) % 2 === 1;

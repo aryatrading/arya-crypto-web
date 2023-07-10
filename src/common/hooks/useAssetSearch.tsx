@@ -9,13 +9,15 @@ import { AssetType } from '../../types/asset';
 import { selectSelectedExchange } from '../../services/redux/exchangeSlice';
 
 
-const useAssetSearch = ({ fullModal, showShowOnlyTradableAssets }: { fullModal: boolean, showShowOnlyTradableAssets?: boolean }) => {
+const useAssetSearch = ({showShowOnlyTradableAssets, placeHolderCount,assetCount=20 }: {showShowOnlyTradableAssets?: boolean, placeHolderCount?:number, assetCount?:number }) => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [showDialog, setShowDialog] = useState<boolean>(false);
     const [fetchingError, setFetchingError] = useState<boolean>(false);
     const [filteredAssets, setFilteredAssets] = useState<AssetType[] | null>(null);
     const [tradableAssets, setTradableAssets] = useState<AssetType[] | null>(null);
     const [isSearching, setIsSearching] = useState<boolean>(false);
+    const [placeHolderAsset, setPlaceHolderAsset] = useState<AssetType[]>([])
+
 
     const { assetLivePrice } = useSelector((state: any) => state.market);
     const selectedExchange = useSelector(selectSelectedExchange);
@@ -64,15 +66,30 @@ const useAssetSearch = ({ fullModal, showShowOnlyTradableAssets }: { fullModal: 
         }
     }, [searchTerm, showShowOnlyTradableAssets, tradableAssets]);
 
+    useEffect(()=>{
+        setIsSearching(true)
+        fetchAssets(placeHolderCount,'','',true).then((res)=>{
+            if(res){
+                setPlaceHolderAsset(res)
+            }
+        }).finally(()=>{
+            setIsSearching(false)
+        })
+    },[placeHolderCount])
+
 
     const fetchFilteredAssets = useCallback(() => {
         if (!showShowOnlyTradableAssets) {
             setIsSearching(true);
             setFilteredAssets(null);
-            fetchAssets(searchTerm, searchTerm.length <= 0 ? fullModal ? 20 : 5 : 100)
+            if(!searchTerm){
+                setFilteredAssets(null)
+                setIsSearching(false);
+                return
+            }
+            fetchAssets(assetCount,searchTerm,'',true)
                 .then((res) => {
-                    if (res)
-                        setFilteredAssets(res);
+                    setFilteredAssets(res||[]);
                 })
                 .catch((error) => {
                     setFetchingError(true);
@@ -84,7 +101,7 @@ const useAssetSearch = ({ fullModal, showShowOnlyTradableAssets }: { fullModal: 
                     setIsSearching(false);
                 })
         }
-    }, [fullModal, searchTerm, showShowOnlyTradableAssets]);
+    }, [assetCount, searchTerm, showShowOnlyTradableAssets]);
 
     const debouncedSearch = useMemo(() => {
         return _.debounce(handleSearch, 500);
@@ -105,7 +122,7 @@ const useAssetSearch = ({ fullModal, showShowOnlyTradableAssets }: { fullModal: 
         fetchTradableAssets();
     }, [fetchTradableAssets]);
 
-    return { fetchingError, isSearching, filteredAssets, searchTerm, fetchFilteredAssets, debouncedSearch, assetLivePrice, showDialog, setShowDialog, transitions, setSearchTerm }
+    return { fetchingError, isSearching, filteredAssets, searchTerm, fetchFilteredAssets, debouncedSearch, assetLivePrice, showDialog, setShowDialog, transitions, setSearchTerm, placeHolderAsset}
 }
 
 export default useAssetSearch

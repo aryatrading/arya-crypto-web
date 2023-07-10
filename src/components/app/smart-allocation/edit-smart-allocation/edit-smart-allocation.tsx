@@ -259,8 +259,8 @@ const EditSmartAllocation: FC = () => {
                                 </Row>
                             </td>
                             <td>
-                                <Col className="gap-2">
-                                    <Row className="gap-1 items-center">
+                                <Col className="gap-2 px-2 w-full">
+                                    <Row className="gap-2 items-center justify-between">
                                         <input
                                             className="bg-grey-3 focus-within:outline focus-within:outline-1 focus-within:outline-grey-1 w-16 h-10 text-center rounded-md text-sm p-0 disabled:border-0"
                                             value={percentageFormat(setWeight * 100)}
@@ -366,7 +366,7 @@ const EditSmartAllocation: FC = () => {
     const assetSelector = useMemo(() => {
         return (
             <AssetSelector
-                trigger={<Button className="w-full md:w-max px-5 min-w-[5rem] bg-blue-1 h-11 rounded-md">{t('common:addAsset')}</Button>}
+                trigger={<Button className="w-full md:w-max px-5 min-w-[5rem] bg-blue-1 h-11 rounded-md font-semibold">{t('common:addAsset')}</Button>}
                 onClick={onSelectAsset}
                 showShowOnlyTradableAssets={true}
             />
@@ -406,8 +406,7 @@ const EditSmartAllocation: FC = () => {
                         <td colSpan={6} />
                         <td>
                             <Row className="w-full justify-between gap-4 items-center font-bold text-white">
-                                <Row className="flex-1 justify-between items-center">
-                                    {assetSelector}
+                                <Row className="flex-1 justify-end items-center">
                                     <p>{t('common:total')}</p>
                                 </Row>
                                 <p className={clsx({ "text-green-1": is100Percent, "text-red-1": !is100Percent }, "w-12 text-center")}>{percentageFormat((totalPercentage * 100))}%</p>
@@ -420,7 +419,7 @@ const EditSmartAllocation: FC = () => {
                 </tfoot>
             )
         }
-    }, [assetSelector, isTabletOrMobileScreen, smartAllocationHoldings, smartAllocationTotalEvaluation, t]);
+    }, [isTabletOrMobileScreen, smartAllocationHoldings, smartAllocationTotalEvaluation, t]);
 
     const table = useMemo(() => {
         if (!isLoadingSmartAllocationHoldings) {
@@ -563,23 +562,29 @@ const EditSmartAllocation: FC = () => {
                         </Row>
                         <Col className="justify-between gap-5">
                             <ExchangeSwitcher canSelectOverall={false} />
-                            <Button className="h-11 w-36 rounded-md bg-blue-1" onClick={onSaveSmartAllocation} isLoading={isSavingSmartAllocation}>
-                                {t('common:preview')}
-                            </Button>
+                            
                         </Col>
                     </Col>
-                    <Row className="flex-[2] justify-evenly h-44 md:h-[300px] gap-5">
-                        <CutoutDoughnutChart
-                            title={t<any>("currentWeight")}
-                            chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" }))}
-                            className="w-[160px] md:w-[262px]"
-                        />
-                        <CutoutDoughnutChart
-                            title={t<any>("setWeight")}
-                            chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: smartAllocationTotalEvaluation * (asset.weight ?? 0), coinSymbol: asset.name ?? "" }))}
-                            className="w-[160px] md:w-[262px]"
-                        />
-                    </Row>
+                    <Col className="flex-[2] gap-10">
+                        <Row className="w-full justify-evenly h-44 md:h-[300px] gap-5">
+                            <CutoutDoughnutChart
+                                title={t<any>("currentWeight")}
+                                chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: asset.current_value ?? 0, coinSymbol: asset.name ?? "" }))}
+                                className="w-[160px] lg:w-[262px]"
+                            />
+                            <CutoutDoughnutChart
+                                title={t<any>("setWeight")}
+                                chartData={smartAllocationHoldings.map(asset => ({ label: asset?.name ?? "", value: smartAllocationTotalEvaluation * (asset.weight ?? 0), coinSymbol: asset.name ?? "" }))}
+                                className="w-[160px] lg:w-[262px]"
+                            />
+                        </Row>
+                        <Row className="w-full justify-end gap-5">
+                            {assetSelector}
+                            <Button className="h-11 w-36 rounded-md bg-blue-1 font-semibold" onClick={onSaveSmartAllocation} isLoading={isSavingSmartAllocation}>
+                                {t('common:preview')}
+                            </Button>
+                        </Row>
+                    </Col>
                 </Col>
                 {table}
                 {isTabletOrMobileScreen && assetSelector}
