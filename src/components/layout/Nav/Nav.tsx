@@ -417,7 +417,7 @@ const Nav = () => {
               showDialogTitle={false}
               dismissOnClick
               onClick={({ symbol }) => {
-                push(`/asset?symbol=${symbol?.toLowerCase()}`);
+                push(`/asset?s=${symbol?.toLowerCase()}`);
               }}
               fullModal
             />

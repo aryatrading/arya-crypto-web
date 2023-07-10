@@ -64,7 +64,7 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
                                 if (onClick) {
                                     onClick(coin);
                                 } else {
-                                    push(`/asset?symbol=${coin?.symbol?.toLowerCase()}`);
+                                    push(`/asset?s=${coin?.symbol?.toLowerCase()}`);
                                 }
                             }}>
                                 <Row className="items-center gap-3 h-full">
@@ -96,7 +96,7 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
                                 if (onClick) {
                                     onClick(coin);
                                 } else {
-                                    push(`/asset?symbol=${coin?.symbol?.toLowerCase()}`);
+                                    push(`/asset?s=${coin?.symbol?.toLowerCase()}`);
                                 }
                             }}>
                                 <Row className="items-center gap-3 h-full">
