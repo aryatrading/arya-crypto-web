@@ -404,7 +404,7 @@ const Dashboard: FC = () => {
             >
               <td>
                 <Link
-                  href={`/asset?symbol=${asset.asset_details?.symbol}`}
+                  href={`/asset?s=${asset.asset_details?.symbol}`}
                   className="flex flex-Col items-center"
                 >
                   <Image
@@ -452,7 +452,7 @@ const Dashboard: FC = () => {
             >
               <td>
                 <Link
-                  href={`/asset?symbol=${asset.asset_details?.symbol}`}
+                  href={`/asset?s=${asset.asset_details?.symbol}`}
                   className="flex flex-row items-center"
                 >
                   <Image
