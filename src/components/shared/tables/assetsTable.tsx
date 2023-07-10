@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { AssetType } from "../../../types/asset";
 import { Col, Row } from "../layout/flex";
 import { useSelector } from "react-redux";
@@ -82,7 +82,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
 
       if (_parsed?.includes(asset.id ?? ""))
         return `w-4 h-4 fill-yellow-1 stroke-0`;
-      else return `w-4 h-4 stroke-1`;
+      else return `w-4 h-4 stroke-1 dark:stroke-white stroke-black-1`;
     }
   };
 
@@ -128,7 +128,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
     <Col className="flex items-center justify-center flex-1 gap-10 w-full">
       <table className={styles.table}>
         <thead>
-          <tr>
+          <tr className="dark:bg-black-1 bg-offWhite-3">
             {header.map((elm, index) => {
               return (
                 <th
@@ -148,12 +148,12 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
               return (
                 <tr
                   key={index}
-                  className="hover:bg-black-2/25 hover:bg-grey-4 cursor-pointer"
+                  className="dark:hover:bg-black-2/25 hover:bg-grey-1/25 cursor-pointer border-b-2 dark:border-b-black-2 border-b-offWhite-3"
                   onClick={() => router.push(`/asset?s=${elm.symbol}`)}
                 >
                   <th
                     scope="row"
-                    className="px-6 py-4 font-bold leading-6 text-white"
+                    className="px-6 py-4 font-bold leading-6 dark:text-white text-black-1"
                   >
                     {elm.rank}
                   </th>
@@ -179,7 +179,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
                     </Row>
                   </td>
                   {!isTabletOrMobileScreen && !isMobileScreen ? (
-                    <td className="leading-6 text-white text-right font-semibold">
+                    <td className="leading-6 dark:text-white text-black-1 text-right font-semibold">
                       {formatNumber(
                         _assetprice[elm.symbol ?? ""] ?? elm.currentPrice,
                         true
@@ -189,10 +189,10 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
 
                   {!isTabletOrMobileScreen ? (
                     <>
-                      <td className="font-medium leading-6 text-white text-right">
+                      <td className="font-medium leading-6 dark:text-white text-black-1 text-right">
                         {formatNumber(elm.mrkCap ?? 0, true)}
                       </td>
-                      <td className="font-medium leading-6 text-white text-right">
+                      <td className="font-medium leading-6 dark:text-white text-black-1 text-right">
                         {formatNumber(elm.volume ?? 0, true)}
                       </td>
                     </>

@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useTranslation } from "next-i18next";
 import Link, { LinkProps } from "next/link";
 import React, { useState } from "react";
@@ -8,23 +9,24 @@ interface INavLink extends LinkProps {
   navTitle?: string;
   Hover?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   active?: boolean;
-  className?: string
+  className?: string;
+  theme?: "light" | "dark";
 }
 
-const NavLink = ({ NavIcon, navTitle, Hover, active = false, className, ...props }: INavLink) => {
+const NavLink = ({ NavIcon, navTitle, Hover, active = false, className, theme, ...props }: INavLink) => {
   const [isHover, setIsHover] = useState(false)
   const { t } = useTranslation(['common']);
 
   return (
     <Link
       {...props}
-      className={twMerge("transition-all group flex justify-start items-center gap-3 lg:justify-center py-3 px-6 lg:p-0 lg:border-b-0", `${!!Hover && 'border-b-2 border-grey-3'}`, className)}
+      className={twMerge("transition-all group flex justify-start items-center gap-3 lg:justify-center py-3 px-6 lg:p-0 lg:border-b-0", `${!!Hover && 'border-b-2 dark:border-grey-3 border-offWhite-3'}`, className)}
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => { setIsHover(false) }}
     >
-      {(!!Hover && (isHover || active)) ? <Hover className="transition-all w-5 h-5" /> : <NavIcon className="transition-all w-5 h-5" />}
+      {(!!Hover && (isHover || active)) ? <Hover className="transition-all w-5 h-5" /> : <NavIcon className={clsx({ "stroke-grey-1 fill-transparent": theme === "dark" , "stroke-transparent fill-black-1": navTitle === "trade" && theme === "light", "stroke-black-1 fill-transparent": theme === "light" && navTitle !== "trade" }, "transition-all w-5 h-5")} />}
       {!!navTitle && (
-        <h2 className={twMerge("transition-all text-grey-1 font-semibold text-sm", `${(!!Hover && (isHover || active)) && 'text-blue-1'}`)}>
+        <h2 className={twMerge("transition-all font-semibold text-sm", theme == null && "dark:text-white", `${(!!Hover && (isHover || active)) && 'text-blue-1'}`, (!active && !isHover) && "dark:text-grey-1 text-black-1")}>
           {t(navTitle)}
         </h2>
       )}

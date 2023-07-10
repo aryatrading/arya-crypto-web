@@ -13,7 +13,7 @@ export const SearchInput: FC<SearchInputProps> = ({
   placeholder,
 }) => {
   return (
-    <Row className="flex items-center bg-grey-2 rounded-lg px-4 gap-1 self-center mt-8 w-full md:w-[343px]">
+    <Row className="flex items-center dark:bg-grey-2 bg-offWhite-3 rounded-lg px-4 gap-1 self-center mt-8 w-full md:w-[343px]">
       <SearchIcon className="w-4 h-4 stroke-grey-1" />
       <input
         type="text"

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import { MagnifyingGlassIcon, PlayIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -23,17 +23,19 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
     const { searchTerm, isSearching, filteredAssets, debouncedSearch, assetLivePrice, setSearchTerm, placeHolderAsset } = useAssetSearch({ placeHolderCount:5, assetCount: 5});
     const [focused, setFocused] = useState<boolean>();
     const { push } = useRouter();
+    const ref = useRef<any>();
 
     return (
         <Col className={clsx({ "hidden": !trigger }, "relative md:flex")}>
             <Col>
                 {trigger ? trigger({ searchTerm, debouncedSearch, setSearchTerm, setFocused }) :
-                    <Row className="bg-transparent h-[40px] px-0 items-center md:bg-grey-3 md:px-4 rounded-md overflow-hidden">
-                        <MagnifyingGlassIcon width="20px" color="#6B7280" />
+                    <Row className="bg-transparent h-[40px] px-0 items-center dark:md:bg-grey-3 md:bg-offWhite-3 md:px-4 rounded-md overflow-hidden">
+                        <MagnifyingGlassIcon width="20px" className="stroke-grey-1" />
                         <input
-                            className={clsx({ "w-[350px]": searchTerm !== null, "pr-8": searchTerm !== '' }, "font-bold text-sm text-white bg-transparent flex-1 pl-2 focus:outline-none focus:border-transparent focus:ring-0 border-transparent", searchTerm !== '' ? null : styles['input-wrapper'])}
+                            className={clsx({ "w-[350px]": searchTerm !== null, "pr-8": searchTerm !== '' }, "font-bold text-sm dark:text-white text-grey-1 bg-transparent flex-1 pl-2 focus:outline-none focus:border-transparent focus:ring-0 border-transparent", searchTerm !== '' ? null : styles['input-wrapper'])}
                             type="text"
                             id="searchInput"
+                            ref={ref}
                             maxLength={20}
                             autoComplete="off"
                             placeholder={t('coin:searchAsset').toString()}
@@ -46,21 +48,22 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
                             }}
                             onChange={debouncedSearch} />
 
-                        {searchTerm !== '' && <Button className="p-1.5 bg-black-1ed-xl absolute right-4" onClick={() => {
+                        {searchTerm !== '' && <Button className="p-1.5 dark:bg-black-1 bg-grey-1 rounded-xl absolute right-4" onClick={() => {
                             setFocused(false);
                             setSearchTerm('');
+                            ref.current.value = '';
                         }}>
-                            <CloseIcon className="stroke-current text-[#89939F] w-2 h-2" />
+                            <CloseIcon className="stroke-current dark:text-[#89939F] text-white w-2 h-2" />
                         </Button>}
                     </Row>
                 }
             </Col>
-            {focused && <Col className={clsx({ "w-full": trigger, "w-[400px]": !trigger }, "max-h-[300px] bg-grey-2 top-16 right-0 absolute items-center rounded-md overflow-auto p-4 z-50", trigger ? null : styles.list)}>
+            {focused && <Col className={clsx({ "w-full": trigger, "w-[400px]": !trigger }, "max-h-[300px] dark:bg-grey-2 bg-offWhite-3 top-16 right-0 absolute items-center rounded-md overflow-auto p-4 z-50", trigger ? null : styles.list)}>
                 {isSearching ? <LoadingSpinner /> :
                     filteredAssets=== null ?
                     placeHolderAsset?.map(coin => {
                         return (
-                            <Button className="min-h-[44px] py-1 px-2 cursor-pointer z-50 w-full hover:bg-grey-3 hover:rounded-lg" onClick={() => {
+                            <Button className="min-h-[44px] py-1 px-2 cursor-pointer z-50 w-full dark:hover:bg-grey-3 hover:bg-offWhite-2 hover:rounded-lg" onClick={() => {
                                 if (onClick) {
                                     onClick(coin);
                                 } else {
@@ -70,7 +73,7 @@ export const SearchAssetInput = ({ onClick, t, trigger }: AssetDropdownTypes) =>
                                 <Row className="items-center gap-3 h-full">
                                     <Image src={coin?.iconUrl || ''} alt={coin?.name?.toLocaleLowerCase() + "_icon"} width={22} height={22} />
                                     <Row className="gap-2 items-center flex-1">
-                                        <p className="capitalize font-extrabold text-sm inline">{coin?.name}</p>
+                                        <p className="capitalize font-extrabold text-sm inline dark:text-white text-black-1">{coin?.name}</p>
                                         <p className="capitalize font-medium text-xs text-grey-1">{coin?.symbol}</p>
                                     </Row>
                                     <Row className="items-center justify-center gap-1">

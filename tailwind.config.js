@@ -54,7 +54,9 @@ export const theme = {
         8: '#C7C7C7',
       },
       offWhite: {
-        1: "#E2EAFF"
+        1: "#E2EAFF",
+        2: "#FAFBFD",
+        3: "#F0F2F5"
       },
       black: {
         1: "#030712",

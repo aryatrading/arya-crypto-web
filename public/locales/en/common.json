@@ -72,5 +72,7 @@
     "autoRebalancing": "Auto-Rebalancing",
     "premium": "Premium",
     "emptyTradeTable": "You have no open orders",
-    "emptyTradeHistory": "You have no order history"
+    "emptyTradeHistory": "You have no order history",
+    "light": "Light",
+    "dark": "Dark"
 }

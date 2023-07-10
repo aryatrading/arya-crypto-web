@@ -7,7 +7,6 @@
         @apply text-grey-1;
 
         tr {
-            @apply bg-black-2;
 
             th:first-child {
                 @apply rounded-l-lg;
@@ -21,8 +20,6 @@
 
     tbody {
         tr {
-            border-bottom: 1px solid theme('colors.grey.5');
-
             &:first-child {
                 td {
                     height: 50px;

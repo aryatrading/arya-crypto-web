@@ -3,15 +3,13 @@ import { SVGProps } from "react";
 export function MarketDefault(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 22 21" fill="none" {...props}>
-      <circle cx={11.461} cy={10.5} r={9.5} stroke="#6B7280" strokeWidth={2} />
+      <circle cx={11.461} cy={10.5} r={9.5} strokeWidth={2} />
       <rect
         x={10.361}
         y={6.88}
         width={2.2}
         height={7.24}
         rx={1.1}
-        fill="#6B7280"
-        stroke="#6B7280"
         strokeWidth={2}
       />
     </svg>
@@ -40,7 +38,7 @@ export function MarketHover(props: SVGProps<SVGSVGElement>) {
         width="4.2"
         height="9.24"
         rx="2.1"
-        fill="#121212"
+        className="dark:fill-black-2 fill-white"
       />
     </svg>
   );

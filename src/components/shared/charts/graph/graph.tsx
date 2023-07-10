@@ -129,7 +129,7 @@ const LineChart: FC<GraphChartType> = ({
         },
         horzLines: {
           visible: !isMobileOnly,
-          color: "#1F2A41",
+          color: "#6B7280",
         },
       },
       crosshair: {

@@ -53,8 +53,8 @@ export const TimeseriesPicker: FC<TimeseriesProps> = ({
                 />
               ) : null
             }
-            bgColor={active === elm.key ? "bg-blue-3" : "bg-grey-2"}
-            textColor={active === elm.key ? "text-blue-2" : "text-grey-1"}
+            bgColor={active === elm.key ? "dark:bg-blue-3 bg-blue-1" : "dark:bg-grey-2 bg-offWhite-3"}
+            textColor={active === elm.key ? "dark:text-blue-2 text-white" : "text-grey-1"}
             textSize={`font-medium text-xs ${elm.icon && `hidden md:block`}`}
           />
         );

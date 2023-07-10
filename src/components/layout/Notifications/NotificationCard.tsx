@@ -19,12 +19,12 @@ function NotificationCard({ notification, type, isLastItem }: any) {
                                 <p className={clsx(titleColor(notification.notification_type), "text-sm font-medium")}>{notification.title}</p>
                                 <p className="text-sm text-grey-1 font-medium">{moment(new Date(notification.created_time || '')).fromNow()}</p>
                             </Row>
-                            <p className="text-sm text-white font-medium max-w-full">{notification.body}</p>
+                            <p className="text-sm dark:text-white text-black-1 font-medium max-w-full">{notification.body}</p>
                         </Col>
                     </Row>
                     {notification.is_seen === 'false' && <Col className="w-3 h-3 rounded-lg bg-red-1 absolute z-10 right-8" />}
                 </DropdownMenu.Item>
-                <DropdownMenu.Separator className="w-full h-[1px] bg-grey-3 my-4" />
+                <DropdownMenu.Separator className="w-full h-[1px] dark:bg-grey-3 bg-offWhite-3 my-4" />
             </Col>
         );
     }

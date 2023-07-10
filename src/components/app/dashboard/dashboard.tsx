@@ -238,10 +238,8 @@ const Dashboard: FC = () => {
                   onClick={() => onSeriesClick(elm)}
                   border={index === 0 ? "rounded-l-md" : ""}
                   iconSvg={null}
-                  bgColor={activeSeries === elm.key ? "bg-blue-3" : "bg-grey-2"}
-                  textColor={
-                    activeSeries === elm.key ? "text-blue-2" : "text-grey-1"
-                  }
+                  bgColor={activeSeries === elm.key ? "dark:bg-blue-3 bg-blue-1" : "dark:bg-grey-2 bg-offWhite-3"}
+                  textColor={activeSeries === elm.key ? "dark:text-blue-2 text-white" : "text-grey-1"}
                   textSize={`font-medium text-xs`}
                 />
               );
@@ -253,7 +251,7 @@ const Dashboard: FC = () => {
                   setSelectedChart("graph");
                 }}
                 border="rounded-r-md"
-                bgColor={"bg-black-2"}
+                bgColor="dark:bg-black-2 bg-offWhite-3"
                 textColor={"text-blue-1"}
               />
             ) : (<ShadowButton
@@ -262,7 +260,7 @@ const Dashboard: FC = () => {
                 <PieChartIcon stroke={"#558AF2"} />
               }
               border="rounded-r-md"
-              bgColor={"bg-black-2"}
+              bgColor="dark:bg-black-2 bg-offWhite-3"
               textColor={"text-blue-1"}
             />
             )}
@@ -315,7 +313,7 @@ const Dashboard: FC = () => {
     if (isTabletOrMobileScreen) {
       return (
         <thead>
-          <tr>
+          <tr className="bg-offWhite-3 dark:bg-black-2">
             <th className="text-left">{t("common:amount")}</th>
             <th className="text-right">{t("common:24hP/L")}</th>
             <th className="text-right">{t("common:price")}</th>
@@ -325,7 +323,7 @@ const Dashboard: FC = () => {
     } else {
       return (
         <thead>
-          <tr>
+          <tr className="bg-offWhite-3 dark:bg-black-2">
             <th className="text-left">{t("common:name")}</th>
             <th className="text-left">{t("common:weight")}</th>
             <th className="text-right">{t("common:amount")}</th>
@@ -370,7 +368,7 @@ const Dashboard: FC = () => {
       } else {
         return (
           <tr>
-            <td colSpan={7} className="row-span-full">
+            <td colSpan={7} className="row-span-full dark:text-white text-black-1">
               {t("common:noAssets")}
             </td>
           </tr>
@@ -399,7 +397,7 @@ const Dashboard: FC = () => {
         if (isTabletOrMobileScreen) {
           return (
             <tr
-              className="hover:bg-black-2/25 hover:bg-blend-darken cursor-pointer"
+              className="dark:hover:bg-black-2/25 hover:bg-offWhite-3/25 border-b-2 hover:bg-blend-darken cursor-pointer dark:border-grey-5 border-offWhite-3"
               key={asset.name}
             >
               <td>
@@ -416,10 +414,10 @@ const Dashboard: FC = () => {
                   />
                   <Col className="text-sm font-semibold">
                     <Row className="gap-2">
-                      <p className="">{asset.name}</p>
-                      <p>{formatNumber(asset.free ?? 0)}</p>
+                      <p className="dark:text-white text-black-1">{asset.name}</p>
+                      <p className="dark:text-white text-black-1">{formatNumber(asset.free ?? 0)}</p>
                     </Row>
-                    <p>
+                    <p className="dark:text-white text-grey-1">
                       $
                       {formatNumber(
                         (asset?.free ?? 0) *
@@ -439,7 +437,7 @@ const Dashboard: FC = () => {
                   }
                 />
               </td>
-              <td className="text-right font-semibold">
+              <td className="text-right font-semibold dark:text-white text-black-1">
                 ${formatNumber(asset?.asset_details?.current_price ?? 0)}
               </td>
             </tr>
@@ -447,7 +445,7 @@ const Dashboard: FC = () => {
         } else {
           return (
             <tr
-              className="hover:bg-black-2/25 hover:bg-blend-darken cursor-pointer"
+              className="dark:hover:bg-black-2/25 hover:bg-grey-1/25 border-b-2 hover:bg-blend-darken cursor-pointer dark:border-grey-5 border-offWhite-3"
               key={asset.name}
             >
               <td>
@@ -462,7 +460,7 @@ const Dashboard: FC = () => {
                     width={23}
                     height={23}
                   />
-                  <p className="font-semibold mr-1">
+                  <p className="font-semibold mr-1 dark:text-white text-black-1">
                     {asset?.asset_details?.name}
                   </p>
                   <span className="text-sm text-grey-1 font-semibold">
@@ -473,8 +471,8 @@ const Dashboard: FC = () => {
               </td>
               <td>
                 <Row className="justify-between items-center w-[120px]">
-                  <p>{percentageFormat(asset.weight ?? 0)}%</p>
-                  <Row className="h-[5px] rounded-full w-[50px] bg-white">
+                  <p className="dark:text-white text-black-1">{percentageFormat(asset.weight ?? 0)}%</p>
+                  <Row className="h-[5px] rounded-full w-[50px] dark:bg-white bg-offWhite-3">
                     <Row
                       className={`h-full rounded-full`}
                       style={{
@@ -485,20 +483,20 @@ const Dashboard: FC = () => {
                   </Row>
                 </Row>
               </td>
-              <td className="text-right">
+              <td className="text-right dark:text-white text-black-1">
                 {formatNumber(asset.free ?? 0)} {asset.name}
               </td>
-              <td className="text-right">
+              <td className="text-right dark:text-white text-black-1">
                 ${formatNumber(asset?.asset_details?.current_price ?? 0)}
               </td>
-              <td className="text-right">
+              <td className="text-right dark:text-white text-black-1">
                 $
                 {formatNumber(
                   (asset?.free ?? 0) *
                   (asset?.asset_details?.current_price ?? 0)
                 )}
               </td>
-              <td className="text-right">
+              <td className="text-right dark:text-white text-black-1">
                 <Row className="items-center justify-end ">
                   <Row
                     className={clsx(
@@ -557,11 +555,11 @@ const Dashboard: FC = () => {
       <Col className="w-full gap-5">
         <Row className="items-center w-full">
 
-          <h3 className="text-2xl font-semibold flex-1">{t("yourHoldings")}</h3>
+          <h3 className="text-2xl font-semibold flex-1 dark:text-white text-black-1">{t("yourHoldings")}</h3>
 
           <Row className="items-center justify-center gap-4 me-8 md:flex hidden">
-            <h3 className="font-bold">{t('hideSmallBalance')}</h3>
-            <SwitchInput checked={!!showSmallHoldings} bigSize onClick={() => {
+            <h3 className="font-bold dark:text-white text-grey-1">{t('hideSmallBalance')}</h3>
+            <SwitchInput checked={!!showSmallHoldings} onClick={() => {
               if (showSmallHoldings) {
                 setShowSmallHoldings(false)
               } else {
@@ -572,7 +570,7 @@ const Dashboard: FC = () => {
 
           <Link
             href="/trade"
-            className="flex items-center gap-1 p-2 rounded-md bg-blue-3 text-blue-1"
+            className="flex items-center gap-1 p-2 rounded-md dark:bg-blue-3 bg-blue-1 dark:text-blue-1 text-white"
           >
             <PlusIcon width={15} />
             <p className="font-bold me-1">
