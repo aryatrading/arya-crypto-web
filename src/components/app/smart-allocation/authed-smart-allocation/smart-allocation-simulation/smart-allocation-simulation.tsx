@@ -132,10 +132,11 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
             } = {};
 
             const totalCurrentWeight = holdingsWithHistoricalData.map((a) => a.current_weight).reduce((prev, curr) => ((prev ?? 0) + (curr ?? 0))) ?? 1;
+            const totalSetWeight = holdingsWithHistoricalData.map((a) => a.weight).reduce((prev, curr) => ((prev ?? 0) + (curr ?? 0))) ?? 1;
 
             holdingsWithHistoricalData.forEach((holding) => {
                 const currentWeight = (holding.current_weight ?? 0) / totalCurrentWeight;
-                const setWeight = holding.weight ?? 0;
+                const setWeight = (holding.weight ?? 0) / totalSetWeight;
 
                 const assetSymbol = getAssetSymbol(holding);
                 if(!assetsHistoricalData[assetSymbol]){
