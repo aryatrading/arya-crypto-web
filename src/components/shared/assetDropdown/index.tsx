@@ -60,7 +60,7 @@ export const AssetDropdown = ({
   );
 
   useEffect(() => {
-    fetchAssets(keyword, resultLimit)
+    fetchAssets(resultLimit,keyword)
       .then((response) => {
         if (response){
           if (removeAsset) {

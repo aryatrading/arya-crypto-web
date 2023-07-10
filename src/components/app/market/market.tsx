@@ -3,21 +3,16 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
-import clsx from "clsx";
-
 import { Col, Row } from "../../shared/layout/flex";
-import MarketStats from "../../shared/containers/marketStats";
 import { AssetsTable } from "../../shared/tables/assetsTable";
 import { SearchInput } from "../../shared/inputs/searchInputs";
 import { ShadowButton } from "../../shared/buttons/shadow_button";
 import { selectMarketAssets } from "../../../services/redux/marketSlice";
 import {
-  fetchAssets,
-  getMarketCap,
+  fetchAssets
 } from "../../../services/controllers/market";
-import { FAVORITES_LIST, MODE_DEBUG } from "../../../utils/constants/config";
+import { FAVORITES_LIST } from "../../../utils/constants/config";
 import { firebaseId } from "../../../services/redux/userSlice";
-import { formatNumber } from "../../../utils/helpers/prices";
 
 const Market: FC = () => {
   const { t } = useTranslation(["market"]);
@@ -25,45 +20,32 @@ const Market: FC = () => {
   const [search, setSearch] = useState("");
   const _assets = useSelector(selectMarketAssets);
   const [count, setCount] = useState(100);
-  const [marketCapDetails, setMarketCapDetails] = useState<any>({});
+  // const [marketCapDetails, setMarketCapDetails] = useState<any>({});
   const fId = useSelector(firebaseId);
 
-  const handleScroll = () => {
-    const bottom =
-      Math.ceil(window.innerHeight + window.scrollY) >=
-      document.documentElement.scrollHeight;
-
-    if (bottom) setCount(count + 100);
-  };
-
   useEffect(() => {
-    fetchAssets(search, count, fId);
-  }, [count, search]);
+    fetchAssets(count,search,fId)
+  }, [count, fId, search]);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    getMarketCap()
-      .then(({ data: { data } }) => {
-        const USD = data.quote.USD;
-        setMarketCapDetails({
-          vol24: USD.total_volume_24h,
-          vol24Percentage: USD.total_volume_24h_yesterday_percentage_change,
-          marketCap: USD.total_market_cap,
-          marketCapPercentage: USD.total_market_cap_yesterday_percentage_change,
-          BTCDominance: data.btc_dominance,
-          BTCDominancePercentage: data.btc_dominance_24h_percentage_change,
-        });
-      })
-      .catch((error) => {
-        if (MODE_DEBUG) {
-          console.error(error);
-        }
-      });
-  }, []);
+  // useEffect(() => {
+  //   getMarketCap()
+  //     .then(({ data: { data } }) => {
+  //       const USD = data.quote.USD;
+  //       setMarketCapDetails({
+  //         vol24: USD.total_volume_24h,
+  //         vol24Percentage: USD.total_volume_24h_yesterday_percentage_change,
+  //         marketCap: USD.total_market_cap,
+  //         marketCapPercentage: USD.total_market_cap_yesterday_percentage_change,
+  //         BTCDominance: data.btc_dominance,
+  //         BTCDominancePercentage: data.btc_dominance_24h_percentage_change,
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       if (MODE_DEBUG) {
+  //         console.error(error);
+  //       }
+  //     });
+  // }, []);
 
   const assets = useCallback(() => {
     if (typeof window !== "undefined") {
@@ -76,13 +58,13 @@ const Market: FC = () => {
   }, [_assets, tab]);
 
   return (
-    <div className="h-full w-full " onScroll={handleScroll}>
+    <div className="h-full w-full ">
       <Col className="flex items-center justify-center flex-1">
         <Col className="h-32 mb-40 mt-36 md:mt-0 lg:mb-20 flex justify-center w-full">
           <p className="text-center  text-[#F9FAFB] font-medium text-4xl mb-10">
             {tab === "all" ? t("cryptocurrencies") : t("favorites")}
           </p>
-          {tab === "all" ? (
+          {/* {tab === "all" ? (
             <Row className="w-full items-center justify-center gap-8 flex flex-col lg:flex-row">
               <MarketStats
                 bgColor={clsx(
@@ -126,7 +108,7 @@ const Market: FC = () => {
                 title={t("btcDominance")}
               />
             </Row>
-          ) : null}
+          ) : null} */}
           <SearchInput
             onchange={(e: string) => setSearch(e)}
             placeholder={t("search")}

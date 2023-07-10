@@ -407,19 +407,21 @@ const Nav = () => {
             {notificationDropdown(isTabletOrMobileScreen)}
             {userOptions()}
           </Row>
-          <AssetSelector
-            trigger={
-              <Button className="md:hidden">
-                <SearchIcon />
-              </Button>
-            }
-            showDialogTitle={false}
-            dismissOnClick
-            onClick={({ symbol }) => {
-              push(`/asset?symbol=${symbol?.toLowerCase()}`);
-            }}
-            fullModal
-          />
+          <div className="md:hidden">
+            <AssetSelector
+              trigger={
+                <Button>
+                  <SearchIcon />
+                </Button>
+              }
+              showDialogTitle={false}
+              dismissOnClick
+              onClick={({ symbol }) => {
+                push(`/asset?symbol=${symbol?.toLowerCase()}`);
+              }}
+              fullModal
+            />
+          </div>
           {notificationDropdown(!isTabletOrMobileScreen)}
           <Button
             onClick={() => setCollapse(!collapse)}

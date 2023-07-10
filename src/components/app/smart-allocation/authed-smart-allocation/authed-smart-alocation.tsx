@@ -2,7 +2,6 @@ import { FC, createContext, useCallback, useEffect, useMemo, useState } from "re
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
-import { useRouter } from "next/router";
 
 import { ISmartAllocationContext, SmartAllocationAssetType, SmartAllocationExitStrategyType } from "../../../../types/smart-allocation.types";
 import SmartAllocationHoldingsTab from "./smart-allocation-tabs/smart-allocation-holdings-tab/smart-allocation-holdings-tab";
@@ -35,8 +34,6 @@ export const SmartAllocationContext = createContext<ISmartAllocationContext>({
 const AuthedSmartAllocation: FC = () => {
 
     const { t } = useTranslation(['smart-allocation']);
-
-    const router = useRouter()
 
     const [isLoadingExitStrategy, setIsLoadingExitStrategy] = useState<boolean>(false);
     const [isLoadingSmartAllocationHoldings, setIsLoadingSmartAllocationHoldings] = useState<boolean>(false);
@@ -80,7 +77,7 @@ const AuthedSmartAllocation: FC = () => {
                 } else {
                     setRebalancingDate(null);
                 }
-                if (holdings && data.exists) {
+                if (holdings) {
 
                     const totalValue = getTotalAssetsValue(holdings);
 
@@ -142,27 +139,6 @@ const AuthedSmartAllocation: FC = () => {
         }
     }, [fetchExitStrategy, selectedExchange?.provider_id])
 
-    const noAllocation = useMemo(() => {
-        if (smartAllocationExists === false) {
-            router.push("/smart-allocation/edit");
-        } else {
-            return (
-                <Col className="w-full md:items-center justify-center col-span-full gap-10">
-                    <ExchangeSwitcher canSelectOverall={false} />
-                    <Row className="justify-center  mt-40">
-                        <Col className="items-center gap-5">
-                            <Col className="items-center gap-5">
-                                <ExclamationTriangleIcon color="yellow" width={50} />
-                                <p className="text-2xl max-w-xs md:max-w-none font-semibold text-center md:text-start">{t("somethingWentWrongWhileFetchingYourSmartAllocation")}</p>
-                            </Col>
-                            <p className="text-grey-1 text-center md:text-start">{fetchingHoldingsError}</p>
-                        </Col>
-                    </Row>
-                </Col>
-            )
-        }
-    }, [fetchingHoldingsError, router, smartAllocationExists, t]);
-
     const tabs = useMemo(() => {
         return (
             <Tabs className="w-full font-light" selectedTabClassName="text-blue-1 font-bold text-lg border-b-2 border-blue-1 pb-3">
@@ -186,11 +162,32 @@ const AuthedSmartAllocation: FC = () => {
                 <Row className="w-full justify-between items-end">
                     <ExchangeSwitcher canSelectOverall={false} />
                 </Row>
-                <SmartAllocationSimulation smartAllocationHoldings={smartAllocationHoldings} isLoadingSmartAllocationHoldings={isLoadingSmartAllocationHoldings} />
+                <SmartAllocationSimulation blured={smartAllocationExists === false} smartAllocationHoldings={smartAllocationHoldings} isLoadingSmartAllocationHoldings={isLoadingSmartAllocationHoldings} />
                 {tabs}
             </Col>
         )
-    }, [isLoadingSmartAllocationHoldings, smartAllocationHoldings, tabs]);
+    }, [isLoadingSmartAllocationHoldings, smartAllocationExists, smartAllocationHoldings, tabs]);
+
+    const noAllocation = useMemo(() => {
+        if (smartAllocationExists === false) {
+            return withAllocation;
+        } else {
+            return (
+                <Col className="w-full md:items-center justify-center col-span-full gap-10">
+                    <ExchangeSwitcher canSelectOverall={false} />
+                    <Row className="justify-center  mt-40">
+                        <Col className="items-center gap-5">
+                            <Col className="items-center gap-5">
+                                <ExclamationTriangleIcon color="yellow" width={50} />
+                                <p className="text-2xl max-w-xs md:max-w-none font-semibold text-center md:text-start">{t("somethingWentWrongWhileFetchingYourSmartAllocation")}</p>
+                            </Col>
+                            <p className="text-grey-1 text-center md:text-start">{fetchingHoldingsError}</p>
+                        </Col>
+                    </Row>
+                </Col>
+            )
+        }
+    }, [fetchingHoldingsError, smartAllocationExists, t, withAllocation]);
 
     const connectedExchangesWithProviders = useMemo(() => connectedExchanges?.filter(exchange => exchange.provider_id), [connectedExchanges]);
 

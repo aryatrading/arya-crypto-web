@@ -103,7 +103,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
         await addAssetToWatchlist(asset.id ?? 1);
       }
 
-      await fetchAssets("", 100);
+      await fetchAssets(100);
 
       return localStorage.setItem(
         FAVORITES_LIST,
@@ -118,7 +118,7 @@ export const AssetsTable: FC<AssetsTableProps> = ({ assets }) => {
         await addAssetToWatchlist(asset.id ?? 1);
       }
 
-      await fetchAssets("", 100);
+      await fetchAssets(100);
 
       return localStorage.setItem(FAVORITES_LIST, JSON.stringify(_list));
     }
