@@ -204,11 +204,9 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
         const isLowRisk = returnRiskRatio > 0;
         return (
             <Col className="items-center w-[165px] md:flex-row md:flex-1 gap-5 md:h-full shrink-0 relative">
-                {isBlured && <button className="px-10 sm:top-auto top-1/4 left-[10%] h-[54px] dark:bg-blue-3 bg-blue-1 text-white absolute z-50 self-center rounded-lg" onClick={() => {
-                    push("/smart-allocation/edit");
-                }}>
-                    <p>{t('createPortfolio')}</p>
-                </button>}
+                {isBlured && <Link href="/smart-allocation/edit" className="flex items-center justify-center px-10 sm:top-auto top-1/4 left-[10%] h-[54px] dark:bg-blue-3 bg-blue-1 text-white absolute z-50 self-center rounded-lg">
+                    {t('createPortfolio')}
+                </Link>}
 
                 <CutoutDoughnutChart
                     title={chartTitle}
@@ -234,7 +232,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 </Col>}
             </Col>
         )
-    }, [initialValue, isLoading, isLoadingSmartAllocationHoldings, push, t]);
+    }, [initialValue, isLoading, isLoadingSmartAllocationHoldings, t]);
 
     const doughnutCharts = useMemo(() => {
         return (
@@ -265,7 +263,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
             <Col className="w-full md:max-w-[300px] flex-1 gap-5 justify-center">
                 <Row className="md:flex-col w-full gap-4 text-center">
                     <Link href="smart-allocation/edit" className="w-full flex items-center justify-center bg-blue-1 h-12 px-5 rounded-md text-sm font-bold">{t('editPortfolio')}</Link>
-                    <RebalancePreviewDialog holdingData={smartAllocationHoldings?.filter((asset) => asset.name?.toLowerCase() !== USDTSymbol.toLowerCase()) ?? []} />
+                    {!blured && <RebalancePreviewDialog holdingData={smartAllocationHoldings?.filter((asset) => asset.name?.toLowerCase() !== USDTSymbol.toLowerCase()) ?? []} />}
                 </Row>
                 <Col className="gap-4">
                     {rebalancingFrequency && <>

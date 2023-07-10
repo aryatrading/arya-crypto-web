@@ -45,9 +45,6 @@ const AssetSelector = ({ onClick, trigger, showDialogTitle = true, dismissOnClic
     return <Col className='w-full h-full'>
       {
         (filteredAssets === null) ?
-          // <Row className='w-full justify-center items-center h-20 gap-4 font-semibold text-xl text-grey-1'>
-          //   {t('searchforAsset')}
-          // </Row> 
           placeHolderAsset.map((asset) => {
             return <Button onClick={() => onPress(asset)} key={_.uniqueId()} className='flex w-full justify-between py-3 px-2 items-center hover:bg-grey-3 hover:rounded-md'>
               <AssetRow icon={asset.iconUrl} name={asset.name} symbol={asset.symbol} className='font-semibold' />

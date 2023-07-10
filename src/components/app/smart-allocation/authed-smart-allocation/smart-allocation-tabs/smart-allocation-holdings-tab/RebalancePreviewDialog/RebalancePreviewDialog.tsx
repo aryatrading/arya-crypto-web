@@ -80,7 +80,6 @@ const RebalancePreviewDialog = ({ holdingData }: { holdingData: SmartAllocationA
                     holdingData.map((asset) => {
                         const { asset_details, current_value, expected_value } = asset
                         const asset_data = asset_details?.asset_data
-                        console.log(asset_data,current_value,expected_value)
 
                         let percentage = 0
                         let buy = false
