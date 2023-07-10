@@ -89,7 +89,7 @@ const EditSmartAllocation: FC = () => {
                             ...holding,
                             current_value: getAssetCurrentValue(holding, holding.stable ? 1 : holding.asset_details?.asset_data?.current_price ?? 0),
                             current_weight: currentWeight,
-                            weight: holding.weight ? (holding.weight??0) * (1 - stableCoinsWeight): holding.stable && holding.name !== USDTSymbol ? currentWeight : 0,
+                            weight: holding.weight ? (holding.weight ?? 0) * (1 - stableCoinsWeight) : holding.stable && holding.name !== USDTSymbol ? currentWeight : 0,
                         };
                     }));
                 }
@@ -297,8 +297,8 @@ const EditSmartAllocation: FC = () => {
                                     value={asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0}
                                     className={
                                         (asset.asset_details?.asset_data?.price_change_percentage_24h ?? 0) <= 0
-                                        ? "bg-red-2 text-red-1"
-                                        : "bg-green-2 text-green-1"
+                                            ? "bg-red-2 text-red-1"
+                                            : "bg-green-2 text-green-1"
                                     }
                                 />
                             </td>
@@ -356,12 +356,17 @@ const EditSmartAllocation: FC = () => {
                                 current_price: selectedAsset.currentPrice,
                             }
                         }
-                    })
+                    });
+                    toast.success(t("addedAsset", { assetName: selectedAsset.name }));
+                } else {
+                    toast.warning(t("stableCoinsCanNotBeAddedToSmartAllocation"));
                 }
+            } else {
+                toast.info(t("assetIsAlreadyAdded", { assetName: selectedAsset.name }));
             }
             return newState;
         })
-    }, []);
+    }, [t]);
 
     const assetSelector = useMemo(() => {
         return (
@@ -562,7 +567,7 @@ const EditSmartAllocation: FC = () => {
                         </Row>
                         <Col className="justify-between gap-5">
                             <ExchangeSwitcher canSelectOverall={false} />
-                            
+
                         </Col>
                     </Col>
                     <Col className="flex-[2] gap-10">

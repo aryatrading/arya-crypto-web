@@ -124,5 +124,8 @@
             }
         },
         "getStarted": "Commencer"
-    }
+    },
+    "addedAsset": "Ajouté {{assetName}}",
+    "assetIsAlreadyAdded": "{{assetName}} est déjà ajouté",
+    "stableCoinsCanNotBeAddedToSmartAllocation": "Les pièces stables ne peuvent pas être ajoutées à l'allocation intelligente."
 }
