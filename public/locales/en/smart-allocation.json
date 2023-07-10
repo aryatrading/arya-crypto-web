@@ -124,5 +124,8 @@
             }
         },
         "getStarted": "Get Started"
-    }
+    },
+    "addedAsset": "Added {{assetName}}",
+    "assetIsAlreadyAdded": "{{assetName}} is already added",
+    "stableCoinsCanNotBeAddedToSmartAllocation": "Stable coins can not be added to smart allocation"
 }
