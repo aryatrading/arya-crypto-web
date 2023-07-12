@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import Image from 'next/image'
 import clsx from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
 import { Col, Row } from '../layout/flex'
 import { AssetType } from '../../../types/asset'
 import { useResponsive } from '../../../context/responsive.context'
+import AssetImage from '../images/AssetImage'
 
 export interface IAssetRowProps {
     icon: AssetType['iconUrl'],
@@ -26,7 +26,7 @@ const AssetRow = ({ icon, name, symbol, className, showIcon }: IAssetRowProps) =
                         <p className='font-bold text-sm'>{name?.slice(0, 1)}</p>
                     </Col>
                     :
-                    <Image
+                    <AssetImage
                         className={clsx({ "hidden": isTabletOrMobileScreen && !showIcon, "block": showIcon, }, "w-5 h-5 rounded-full md:w-7 md:h-7")}
                         src={icon}
                         alt={`${name}-icon`}

@@ -13,13 +13,13 @@ import {
   PlayIcon,
 } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
-import Image from "next/image";
 import clsx from "clsx";
 
 import { Col, Row } from "../layout/flex";
 import { fetchAssets } from "../../../services/controllers/market";
 import { AssetType } from "../../../types/asset";
 import LoadingSpinner from "../loading-spinner/loading-spinner";
+import AssetImage from "../images/AssetImage";
 
 interface AssetDropdownTypes {
   onClick: (x: any) => void;
@@ -101,7 +101,7 @@ export const AssetDropdown = ({
           }}
         >
           <Row className="items-center gap-3 h-full">
-            <Image
+            <AssetImage
               src={data.iconUrl}
               alt={data?.name?.toLocaleLowerCase() + "_icon"}
               width={22}
