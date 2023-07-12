@@ -3,7 +3,6 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { useTranslation } from "next-i18next";
 import { useSelector } from "react-redux";
 import { twMerge } from "tailwind-merge";
-import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
 
@@ -44,6 +43,7 @@ import { Col, Row } from "../../shared/layout/flex";
 import SwitchInput from "../../shared/form/inputs/switch/switch";
 
 import styles from "./dashboard.module.scss";
+import AssetImage from "../../shared/images/AssetImage";
 
 const Dashboard: FC = () => {
   const [showSmallHoldings, setShowSmallHoldings] = useState<boolean>(false);
@@ -407,7 +407,7 @@ const Dashboard: FC = () => {
                   href={`/asset?symbol=${asset.asset_details?.symbol}`}
                   className="flex flex-Col items-center"
                 >
-                  <Image
+                  <AssetImage
                     className="mr-4"
                     src={asset?.asset_details?.image ?? ""}
                     alt=""
@@ -455,7 +455,7 @@ const Dashboard: FC = () => {
                   href={`/asset?symbol=${asset.asset_details?.symbol}`}
                   className="flex flex-row items-center"
                 >
-                  <Image
+                  <AssetImage
                     className="mr-4"
                     src={asset?.asset_details?.image ?? ""}
                     alt=""

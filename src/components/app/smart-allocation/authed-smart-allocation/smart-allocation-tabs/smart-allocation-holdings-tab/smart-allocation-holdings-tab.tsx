@@ -1,6 +1,5 @@
 import { FC, useMemo } from "react";
 import { useTranslation } from "next-i18next";
-import Image from "next/image";
 import clsx from "clsx";
 import Link from "next/link";
 import { Col, Row } from "../../../../../shared/layout/flex";
@@ -14,6 +13,7 @@ import { useResponsive } from "../../../../../../context/responsive.context";
 import { getCoinColor } from "../../../../../../utils/helpers/coinsColors";
 import { chartDefaultColorsHex } from "../../../../../../utils/constants/customColors";
 import { TableRowSkeleton } from "../../../../../shared/skeletons/skeletons";
+import AssetImage from "../../../../../shared/images/AssetImage";
 
 const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationAssetType[], isLoading: boolean }> = ({ smartAllocationHoldings, isLoading }) => {
 
@@ -125,7 +125,7 @@ const SmartAllocationHoldingsTab: FC<{ smartAllocationHoldings: SmartAllocationA
                             <td>{index + 1}</td>
                             <td>
                                 <Row className="gap-3 items-center">
-                                    <Image src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
+                                    <AssetImage src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
                                     <p>{asset.asset_details?.asset_data?.name}</p>
                                     <span className="text-sm text-grey-1">{asset.name}</span>
                                 </Row>

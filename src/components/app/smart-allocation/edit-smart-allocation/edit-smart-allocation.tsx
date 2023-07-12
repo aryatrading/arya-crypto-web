@@ -4,7 +4,6 @@ import { useTranslation } from "next-i18next"
 import { useSelector } from "react-redux"
 import { useRouter } from "next/router"
 import { toast } from "react-toastify"
-import Image from "next/image"
 import Link from "next/link"
 import clsx from "clsx"
 
@@ -32,6 +31,7 @@ import { AssetType } from "../../../../types/asset"
 import { USDTSymbol } from "../../../../utils/constants/market"
 import NoConnectedExchangePage from "../../../shared/no-exchange-connected-page/no-exchange-connected-page"
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline"
+import AssetImage from "../../../shared/images/AssetImage"
 
 
 const EditSmartAllocation: FC = () => {
@@ -287,7 +287,7 @@ const EditSmartAllocation: FC = () => {
                         <tr key={asset.name}>
                             <td>
                                 <Row className="gap-3 items-center">
-                                    <Image src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
+                                    <AssetImage src={asset?.asset_details?.asset_data?.image ?? ""} alt="" width={23} height={23} />
                                     <p>{asset.asset_details?.asset_data?.name}</p>
                                     <span className="text-sm text-grey-1">{asset.name}</span>
                                 </Row>

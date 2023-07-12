@@ -1,8 +1,9 @@
 import { FC, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Time, UTCTimestamp } from "lightweight-charts";
+import { Trans, useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import moment from "moment";
-import { useRouter } from "next/router";
 import clsx from "clsx";
 
 import RebalancePreviewDialog from "../smart-allocation-tabs/smart-allocation-holdings-tab/RebalancePreviewDialog/RebalancePreviewDialog";
@@ -19,13 +20,12 @@ import { ShadowButton } from "../../../../shared/buttons/shadow_button";
 import { TextSkeleton } from "../../../../shared/skeletons/skeletons";
 import { USDTSymbol } from "../../../../../utils/constants/market";
 import { SmartAllocationContext } from "../authed-smart-alocation";
+import { MODE_DEBUG } from "../../../../../utils/constants/config";
 import LineChart from "../../../../shared/charts/graph/graph";
 import { LineChartIcon } from "../../../../svg/lineChartIcon";
 import { PieChartIcon } from "../../../../svg/pieChartIcon";
 import { Col, Row } from "../../../../shared/layout/flex";
-import { Trans, useTranslation } from "next-i18next";
 import Input from "../../../../shared/inputs/Input";
-import { MODE_DEBUG } from "../../../../../utils/constants/config";
 
 function getShiftedDayDate(prevDay: Date, shiftInDays: number) {
     return new Date(prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate() + shiftInDays);
@@ -289,7 +289,7 @@ const SmartAllocationSimulation: FC<{ smartAllocationHoldings?: SmartAllocationA
                 </Col>
             </Col>
         )
-    }, [exitStrategyData, rebalancingDate, rebalancingFrequency, smartAllocationHoldings, t])
+    }, [blured, exitStrategyData, rebalancingDate, rebalancingFrequency, smartAllocationHoldings, t])
 
     const graphLegend = useMemo(() => {
         return (
